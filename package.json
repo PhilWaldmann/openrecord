@@ -20,7 +20,7 @@
         "test": "./test"
     },
     "scripts": {
-        "test": "./node_modules/.bin/mocha --recursive --watch"
+        "test": "./node_modules/.bin/mocha --reporter spec --recursive"
     },
     "engines": {
         "node": ">=0.8.7"
