@@ -2,7 +2,12 @@
     "name": "openrecord",
     "version": "0.1.0",
     "description": "Active record like ORM for nodejs",
+    "keywords": ["squid", "proxy", "filter", "url", "redirect_programm"],
     "author": "Philipp Waldmann <philipp.waldmann@s-team.at>",
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/PhilWaldmann/openrecord.git"
+    },
     "dependencies": {
         "async": ">= 0.2.x",
         "glob": ">= 3.2.x",
