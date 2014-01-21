@@ -4,126 +4,6 @@ var Store = require('../../lib/store');
 
 describe('Validation', function(){
   
-  describe('validatesPresenceOf()', function(){
-    var store = new Store();
-
-    store.Model('User', function(){
-      this.attribute('email', String);
-      this.validatesPresenceOf('email');  
-    });
-  
-    var User = store.Model('User');
-    var valid = new User({email:'philw@gmx.net'});
-    var invalid = new User();
-    
-    it('exists', function(){
-      should.exist(valid.isValid);
-      valid.isValid.should.be.a.Function;
-    });
-    
-    it('returns true on valid records', function(done){
-      valid.isValid(function(valid){
-        valid.should.be.true;
-        done();
-      });
-    });
-    
-    it('returns false on invalid records', function(done){
-      invalid.isValid(function(valid){
-        valid.should.be.false;
-        done();
-      });
-    });
-    
-    it('returns the right error message', function(done){
-      invalid.isValid(function(valid){
-        invalid.should.have.property('email');
-        done();
-      });
-    });
-    
-  });
-  
-  
-  
-  describe('validatesConfirmationOf()', function(){
-    var store = new Store();
-
-    store.Model('User', function(){
-      this.attribute('password', String);
-      this.attribute('password_confirmation', String);
-      this.validatesConfirmationOf('password');  
-    });
-  
-    var User = store.Model('User');
-    var valid = new User({password:'my!secret?password', password_confirmation:'my!secret?password'});
-    var invalid = new User({password:'1234', password_connfirmation:'abc'});
-    
-    
-    it('returns true on valid records', function(done){
-      valid.isValid(function(valid){
-        valid.should.be.true;
-        done();
-      });
-    });
-    
-    it('returns false on wrong confirmation', function(done){
-      invalid.isValid(function(valid){
-        valid.should.be.false;
-        done();
-      });
-    });   
-    
-    it('returns the right error message', function(done){
-      invalid.isValid(function(valid){
-        invalid.errors.should.have.property('password');
-        done();
-      });
-    });  
-    
-  });
-    
-   
-   
-  describe('validatesFormatOf()', function(){
-    var store = new Store();
-
-    store.Model('User', function(){
-      this.attribute('mail', String);
-      this.validatesFormatOf('mail', 'email');  
-    });
-  
-    var User = store.Model('User');
-    var valid = new User({mail:'philw@gmx.net'});
-    var invalid = new User({mail:'not.a.valid@email!'});
-    
-    
-    it('returns true on valid records', function(done){
-      valid.isValid(function(valid){
-        valid.should.be.true;
-        done();
-      });
-    });
-    
-    it('returns false on invalid records', function(done){
-      invalid.isValid(function(valid){
-        valid.should.be.false;
-        done();
-      });
-    });   
-    
-    it('returns the right error message', function(done){
-      invalid.isValid(function(valid){
-        invalid.errors.should.have.property('mail');
-        done();
-      });
-    });  
-    
-  });
-  
-  
-  
-  
   describe('validates()', function(){
     var store = new Store();
 
@@ -169,6 +49,55 @@ describe('Validation', function(){
         done();
       });
     });  
+    
+    
+    
+    
+    
+    
+    describe('base validation', function(){
+      
+      var store = new Store();
+
+      store.Model('User', function(){
+        this.attribute('login', String);
+        this.attribute('email', String);
+    
+        this.validates(function(){
+          var valid = this.login != this.email;
+          if(!valid) this.errors.add('Login and E-Mail are not allowed to be the same value');
+          return valid;
+        });  
+      });
+
+      var User = store.Model('User');
+      var valid = new User({login:'phil', email:'philipp@email.com'});
+      var invalid = new User({login:'philipp@email.com', email:'philipp@email.com'});
+  
+  
+      it('returns true on valid records', function(done){
+        valid.isValid(function(valid){
+          valid.should.be.true;
+          done();
+        });
+      });
+  
+      it('returns false on invalid records', function(done){
+        invalid.isValid(function(valid){
+          valid.should.be.false;
+          done();
+        });
+      });   
+  
+      it('returns the right error message', function(done){
+        invalid.isValid(function(valid){
+          invalid.errors.should.not.have.property('login');
+          invalid.errors.should.have.property('base');
+          done();
+        });
+      }); 
+      
+    })
     
   }); 
   
