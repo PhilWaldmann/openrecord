@@ -8,10 +8,10 @@ test-mocha:
 	@NODE_ENV=test ./node_modules/.bin/mocha --reporter $(REPORTER) --recursive
 
 test-cov:
-	@NODE_ENV=test ./node_modules/.bin/mocha --require blanket -R html-cov > coverage.html
+	@NODE_ENV=test ./node_modules/.bin/mocha --require blanket --recursive -R html-cov > coverage.html
 
 test-coveralls:
-	./node_modules/.bin/mocha --require blanket --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
+	./node_modules/.bin/mocha --require blanket --recursive --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
 	
 	
 clean: 
