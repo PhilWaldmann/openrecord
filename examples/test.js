@@ -17,7 +17,7 @@ sqlite.ready(function(){
   
   
   var phil = User.new({
-    email: 'philw@gmx.net',
+    email: 'philipp@email.com',
     login: 'admin',
     first_name: 'Philipp',
     posts:[{
