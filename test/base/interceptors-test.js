@@ -89,7 +89,7 @@ describe('Interceptors', function(){
     phil = new User();
     
     it('gets the right params', function(done){
-      phil.callInterceptors('beforeTest', 'A', 'B', function(result){
+      phil.callInterceptors('beforeTest', ['A', 'B'], function(result){
         result.should.be.false;
         done();
       });
@@ -119,7 +119,7 @@ describe('Interceptors', function(){
     phil = new User();
     
     it('gets the right params', function(done){
-      phil.callInterceptors('beforeTest', 'A', function(){
+      phil.callInterceptors('beforeTest', ['A'], function(){
         done();
       });
     });
@@ -150,7 +150,7 @@ describe('Interceptors', function(){
     phil = new User();
     
     it('is false', function(done){
-      phil.callInterceptors('beforeTest', 'A', function(result){
+      phil.callInterceptors('beforeTest', ['A'], function(result){
         result.should.be.false;
         done();
       });
@@ -186,7 +186,7 @@ describe('Interceptors', function(){
     phil = new User();
     
     it('is true', function(done){
-      phil.callInterceptors('beforeSuccessTest', 'arg1', function(result){
+      phil.callInterceptors('beforeSuccessTest', ['arg1'], function(result){
         result.should.be.true;
         done();
       });

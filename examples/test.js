@@ -10,18 +10,32 @@ var sqlite = new Store({
 
 
 sqlite.Model('User', require('./models/user'));
-//sqlite.Model('Post', require('./models/post'));
-
+sqlite.Model('Post', require('./models/post'));
+sqlite.Model('Thread', require('./models/thread'));
 /*
 CREATE TABLE users(
   id  INTEGER PRIMARY KEY AUTOINCREMENT,
   login TEXT NOT NULL,
   email TEXT
 );
+
+CREATE TABLE posts(
+  id  INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  thread_id INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  message TEXT
+);
+
+CREATE TABLE threads(
+  id  INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  title TEXT NOT NULL
+);
 */
 
 sqlite.ready(function(){
-  
+  console.log('-- READY --');
   
   var phil = User.new({
     email: 'philipp@email.com',
@@ -33,27 +47,14 @@ sqlite.ready(function(){
       title:'Peter'
     }]
   });
-  
-  
-  User.find(12) //id=12
-  User.find(12, 3) //id IN (12, 3)
-  User.find([12, 3]) //id IN (12, 3)
-  
-  User.where({login:null}).exec(console.log); //login is null
-  User.where({login:'phil'}).exec(console.log); //login = 'phil'
-  User.where({login_like:'phil%'}).exec(console.log); //login LIKE 'phil%
-  User.where({login_ilike:'/phil.+/'}).exec(console.log); //login SIMILAR TO '/phil.+/'
-  User.where({login:['phil', 'michl']}).exec(console.log); //login IN ('phil', 'michl')
-  User.where('login = ?', 'phil').exec(console.log); //login = 'phil'
-  User.where(['login = ?', 'phil']).exec(console.log); //login = 'phil'
-  User.where('login IN (?)', ['phil', 'michl']).exec(console.log); //login IN('phil', 'michl')
-  User.where('login = :login', {login:'phil'}).exec(console.log); //login = 'phil'
-  User.where({posts:{name:'First Post'}}).exec(console.log); //posts.name='First Post'
- 
- 
-  
-  
-  
+  //return;
+    
+  User.exec(console.log);
+
+  User.include('posts', 'threads').where({posts:{id:[1, 2, 3]}}).limit(100).exec(function(records){
+    console.log('------>', records);
+  });
+    
   
   /*
   
