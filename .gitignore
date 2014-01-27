@@ -1,0 +1,10 @@
+*.log
+*.csv
+
+logs
+
+npm-debug.log
+node_modules
+
+coverage.html
+.coveralls.yml
