@@ -15,6 +15,7 @@ OpenRecord
 npm install openrecord
 ```
 
+
 ## Features
 
 * Async schema definition
@@ -28,30 +29,32 @@ npm install openrecord
 * Chaining
 * ...
 
+
 ## Roadmap
 
-### 0.2.0
+#### 0.2.0
 * Documentation 
 * finish sql methods
 
-### 0.3.0
+#### 0.3.0
 * Better error handling
 * sql unit tests
 
-### 0.4.0
+#### 0.4.0
 * basic postgres support
 * migrations
 
-### 0.5.0
+#### 0.5.0
 * add mysql support
 * full multiple primary keys support
 
-### 0.6.0
+#### 0.6.0
 * finish .every() callback issues
 * better postgres support (hstore, ect.)
 
-### 0.7.0
+#### 0.7.0
 * custom plugin support
+
 
 ## Usage
 
@@ -84,14 +87,15 @@ sql.ready(function(){
   User.active().where({posts: {title_like:'openrecord' }}).include('posts').exec(function(records){
     console.log(records);
   });
-
 });
 
 ```
 
+
 ## [Documentation](http://philwaldmann.github.io/openrecord/)
+
 
 ## Contributing
 
-If you've found a bug please report it via the [issues](/issues) page. Please make sure to add a unit test with the bug report!
+If you've found a bug please report it via the [issues](https://github.com/PhilWaldmann/openrecord/issues) page. Please make sure to add a unit test with the bug report!
 Before submit pull request make sure all tests still passed. 
