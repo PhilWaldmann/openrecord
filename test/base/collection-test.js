@@ -76,7 +76,7 @@ describe('Collection', function(){
   
   
   
-  describe('.all', function(){    
+  describe('.every', function(){    
 
     var Chain = User.chain();
     Chain.add({login:'phil'});
@@ -84,18 +84,18 @@ describe('Collection', function(){
     Chain.add({login:'michl'});
        
     
-    it('all.login', function(){
-      Chain.all.login.should.be.eql(['phil', 'admin', 'michl']);
+    it('every.login', function(){
+      Chain.every.login.should.be.eql(['phil', 'admin', 'michl']);
     });
     
-    it('all.login=', function(){
-      Chain.all.login = 'matt';
-      Chain.all.login.should.be.eql(['matt', 'matt', 'matt']);
+    it('every.login=', function(){
+      Chain.every.login = 'matt';
+      Chain.every.login.should.be.eql(['matt', 'matt', 'matt']);
     }); 
     
         
-    it('all.set()', function(){
-      Chain.all.set('login', 'max');
+    it('every.set()', function(){
+      Chain.every.set('login', 'max');
       Chain[0].login.should.be.equal('max');
       Chain[1].login.should.be.equal('max');
       Chain[2].login.should.be.equal('max');
