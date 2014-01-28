@@ -101,7 +101,7 @@ describe('Store: Base', function(){
       });
     
       store.Model('B', function(done){
-        setTimeout(done, 30);
+        setTimeout(done, 10);
       });  
     
       store.Model('C', function(done){
@@ -113,7 +113,7 @@ describe('Store: Base', function(){
       });  
     
       store.Model('E', function(done){
-        setTimeout(done, 30);
+        setTimeout(done, 10);
       });  
     
       store.Model('F', function(done){

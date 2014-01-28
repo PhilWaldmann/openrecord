@@ -30,7 +30,7 @@ CREATE TABLE multiple_keys(
 */
 
 
-describe('SQLite3 Attributes', function(){
+describe('SQLite3: Attributes', function(){
   var store = new Store({
     type: 'sqlite3',
     file: __dirname + '/database.sqlite'

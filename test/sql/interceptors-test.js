@@ -2,7 +2,7 @@ var should = require('should');
 
 var Store = require('../../lib/store');
 
-describe('SQL Interceptors', function(){
+describe('SQL: Interceptors', function(){
   var store = new Store({
     type: 'sql'    
   });
