@@ -42,6 +42,70 @@ describe('Chainable', function(){
     });
 
   });
+  
+  
+  describe('setInternal(), getInternal(), addInternal()', function(){
+  
+    var ChainedUser = User.chain();
+  
+    it('has method setInternal()', function(){
+      ChainedUser.setInternal.should.be.a.Function;
+    });
+    
+    it('has method getInternal()', function(){
+      ChainedUser.getInternal.should.be.a.Function;
+    });
+    
+    it('has method addInternal()', function(){
+      ChainedUser.addInternal.should.be.a.Function;
+    });
+    
+    ChainedUser.setInternal('my_attr', 'my_value');
+    
+    it('getInternal() returns the right value', function(){
+      ChainedUser.getInternal('my_attr').should.be.equal('my_value');
+    });
+    
+    ChainedUser.setInternal('my_attr2', 'my_old_value');
+    ChainedUser.setInternal('my_attr2', 'my_new_value');
+    
+    it('getInternal() returns the right value after some changes', function(){
+      ChainedUser.getInternal('my_attr2').should.be.equal('my_new_value');
+    });
+    
+    it('getInternal() returns null on unknown attributes', function(){
+      should.not.exist(ChainedUser.getInternal('unknown_attr'));
+    });
+    
+    ChainedUser.setInternal('my_attr3', {a:2, b:3});
+    
+    it('getInternal() returns objects', function(){
+      ChainedUser.getInternal('my_attr3').should.be.eql({a:2, b:3});
+    });
+
+    ChainedUser.addInternal('my_attr4', 'A');
+    
+    it('getInternal() returns an array', function(){
+      ChainedUser.getInternal('my_attr4').should.be.eql(['A']);
+    });
+    
+    ChainedUser.addInternal('my_attr5', 'A');
+    ChainedUser.addInternal('my_attr5', 'B');
+    
+    it('getInternal() returns an array', function(){
+      ChainedUser.getInternal('my_attr5').should.be.eql(['A', 'B']);
+    });
+    
+    
+    ChainedUser.addInternal('my_attr6', 'A');
+    ChainedUser.addInternal('my_attr6', ['B', 'C']);
+    ChainedUser.addInternal('my_attr6', ['D']);
+    
+    it('concatenates arrays', function(){
+      ChainedUser.getInternal('my_attr6').should.be.eql(['A', 'B', 'C', 'D']);
+    });
+
+  });
 
 });
 

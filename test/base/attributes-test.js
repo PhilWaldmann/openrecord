@@ -146,4 +146,36 @@ describe('Attributes', function(){
      });     
    });
   
+  
+   describe('cast()', function(){
+     it('has method', function(){
+       User.definition.cast.should.be.a.Function;
+     });
+     
+     it('casts one value', function(){
+       User.definition.cast('my_number', '1000').should.be.equal(1000);
+     });
+     
+     it('casts an array', function(){
+       User.definition.cast('my_number', ['1000', '88', 45]).should.be.eql([1000, 88, 45]);
+     }); 
+     
+     it('casts unknown attribute', function(){
+       User.definition.cast('unknown_attr', ['1000', '88', 45]).should.be.eql(['1000', '88', 45]);
+     });     
+   });
+   
+   
+   describe('unknown type', function(){
+     it('throws an Error', function(next){
+       store.Model('Test', function(){
+         var self = this;
+         (function(){
+           self.attribute('my_attr', 'unknown_type');
+         }).should.throw();
+         next();
+       })
+     });
+   });
+  
 });

@@ -3,10 +3,16 @@ var should = require('should');
 var Store = require('../lib/store');
 
 describe('Store: Base', function(){
-
+  
   describe('is a function', function(){
     Store.should.be.a.Function;
   });
+  
+  it('throws an error on unknown type', function(){
+    (function(){
+      new Store({type:'unknown'});
+    }).should.throw();
+  });  
   
   describe('without config', function(){
     var store = new Store();
@@ -77,6 +83,63 @@ describe('Store: Base', function(){
       store.ready(function(){
         should.exist(store.Model('User'));
         should.exist(store.Model('Post'));
+        done();
+      });
+    });
+    
+  });
+  
+  
+  
+  describe('ready() with more models', function(){
+    
+    it('will be called after all models are ready', function(done){
+      var store = new Store();
+      
+      store.Model('A', function(done){
+        done();
+      });
+    
+      store.Model('B', function(done){
+        setTimeout(done, 30);
+      });  
+    
+      store.Model('C', function(done){
+        setTimeout(done, 10);
+      });  
+    
+      store.Model('D', function(done){
+        setTimeout(done, 20);
+      });  
+    
+      store.Model('E', function(done){
+        setTimeout(done, 30);
+      });  
+    
+      store.Model('F', function(done){
+        setTimeout(done, 10);
+      });  
+      
+      store.ready(function(){
+        should.exist(store.Model('A'));
+        should.exist(store.Model('B'));
+        should.exist(store.Model('C'));
+        should.exist(store.Model('D'));
+        should.exist(store.Model('E'));
+        should.exist(store.Model('F'));
+        done();
+      });
+    });
+    
+  });
+  
+  
+  
+  describe('ready() with any models', function(){
+    var store = new Store();
+    
+    it('will be called after all models are ready', function(done){
+      store.ready(function(){
         done();
       });
     });

@@ -115,4 +115,36 @@ describe('Relations', function(){
             
   });
   
+  
+  
+  
+  
+  
+  describe('async loading', function(){
+    var store = new Store();
+
+    store.Model('User', function(next){
+      this.hasMany('posts');
+      setTimeout(next, 10);
+    });
+    
+    store.Model('Post', function(next){
+      this.belongsTo('user');
+      setTimeout(next, 20);
+    });
+  
+        
+    it('all relations are loaded', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        var Post = store.Model('Post');
+        
+        User.definition.relations.should.have.property('posts');
+        Post.definition.relations.should.have.property('user');
+      });
+      next();
+    });
+            
+  });
+  
 });

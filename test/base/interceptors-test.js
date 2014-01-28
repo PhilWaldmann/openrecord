@@ -33,7 +33,19 @@ describe('Interceptors', function(){
         this.myInterceptor.should.be.a.Function;
         done();
       });
-    });        
+    }); 
+    
+    
+    it('throws an error on an undefined interceptor', function(done){
+      store.Model('NewModel', function(){
+        var self = this;
+        (function(){
+          self.addInterceptor('unknownInterceptor', function(){});
+        }).should.throw();
+        
+        done();
+      });
+    });       
     
   });
   
@@ -187,6 +199,32 @@ describe('Interceptors', function(){
     
     it('is true', function(done){
       phil.callInterceptors('beforeSuccessTest', ['arg1'], function(result){
+        result.should.be.true;
+        done();
+      });
+    });
+    
+  });
+  
+  
+  
+  
+  
+  describe('call (without any interceptors)', function(){
+    var store = new Store();
+    var phil;
+    
+    store.addInterceptor('beforeTest');
+    
+    store.Model('User', function(){              
+  
+    });
+          
+    var User = store.Model('User');
+    phil = new User();
+    
+    it('is true', function(done){
+      phil.callInterceptors('beforeTest', ['A'], function(result){
         result.should.be.true;
         done();
       });

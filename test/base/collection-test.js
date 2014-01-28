@@ -21,6 +21,11 @@ describe('Collection', function(){
     should.exist(Chain.remove);
   });
   
+  it('chained model has each()', function(){
+    should.exist(Chain.each);
+  });
+  
+  
   
   describe('add()', function(){
     Chain.add({login:'phil', unknown_attr:'test'});
@@ -54,8 +59,34 @@ describe('Collection', function(){
       Chain.length.should.be.equal(2);
     });
     
+    it('works by passing in a record', function(){
+      Chain.remove(Chain[0]);
+      Chain.length.should.be.equal(1);
+    });
+    
     it('index is corrext', function(){
-      Chain[1].login.should.be.equal('michl');
+      Chain[0].login.should.be.equal('michl');
+    });
+    
+  });
+  
+  
+  
+  describe('each()', function(){
+    
+    var Chain = User.chain();
+    Chain.add({login:'phil'});
+    Chain.add({login:'admin'});
+    Chain.add({login:'michl'});
+  
+    it('loops all records', function(){
+      var tmp = []
+      Chain.each(function(index, record){
+        tmp.push(record);
+      });
+      
+      tmp[0].should.be.equal(Chain[0]);
+      tmp.length.should.be.eql(Chain.length);
     });
     
   });
