@@ -2,6 +2,8 @@ OpenRecord
 ==========
 
 [![Build Status](https://travis-ci.org/PhilWaldmann/openrecord.png)](https://travis-ci.org/PhilWaldmann/openrecord)
+[![Node.ci](https://node.ci/report/github/PhilWaldmann/openrecord/master.png)]
+(https://node.ci/projects/github/PhilWaldmann/openrecord/master)
 [![Coverage Status](https://coveralls.io/repos/PhilWaldmann/openrecord/badge.png)](https://coveralls.io/r/PhilWaldmann/openrecord)
 [![npm package version](https://badge.fury.io/js/openrecord.png)](https://npmjs.org/package/openrecord)
 [![Dependency Status](https://david-dm.org/PhilWaldmann/openrecord.png)](https://david-dm.org/PhilWaldmann/openrecord)
