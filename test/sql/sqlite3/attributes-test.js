@@ -3,43 +3,36 @@ var should = require('should');
 var Store = require('../../../lib/store');
 
 
-/*
-> database.sqlite
-
-CREATE TABLE attribute_tests(
-    text_attribute  TEXT,   
-    numeric_attribute NUMERIC,
-    integer_attribute  INTEGER,
-    real_attribute  REAL,   
-    blob_attribute BLOB    
-);
-
-
-CREATE TABLE users(
-    id  INTEGER PRIMARY KEY AUTOINCREMENT,   
-    login TEXT NOT NULL,
-    email TEXT
-);
-
-CREATE TABLE multiple_keys(
-    id  INTEGER,   
-    id2 INTEGER,
-    PRIMARY KEY(id, id2)
-);
-
-*/
-
 
 describe('SQLite3: Attributes', function(){
-  var store = new Store({
-    type: 'sqlite3',
-    file: __dirname + '/database.sqlite'
-  });
-
-  store.Model('AttributeTest', function(){});
-  store.Model('User', function(){});
-  store.Model('MultipleKey', function(){});
+  var db, store;
+  var db_file = __dirname + '/attributes_test.sqlite3';
   
+  
+  
+  before(function(next){
+    beforeSql(db_file, [
+      'CREATE TABLE attribute_tests(text_attribute  TEXT, numeric_attribute NUMERIC, integer_attribute  INTEGER, real_attribute  REAL, blob_attribute BLOB)',
+      'CREATE TABLE users(id  INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT NOT NULL, email TEXT)',
+      'CREATE TABLE multiple_keys(id  INTEGER, id2 INTEGER, PRIMARY KEY(id, id2))'
+    ], next);
+  });
+  
+  before(function(){
+    store = new Store({
+      type: 'sqlite3',
+      file: db_file
+    });
+
+    store.Model('AttributeTest', function(){});
+    store.Model('User', function(){});
+    store.Model('MultipleKey', function(){});
+  });
+  
+  after(function(){
+    afterSql(db_file);
+  });
+    
   
   it('have all attributes loaded', function(done){
     store.ready(function(){    
