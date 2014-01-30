@@ -3,17 +3,29 @@ var should = require('should');
 var Store = require('../../../lib/store');
 
 describe('SQLite3: Data Types', function(){
-  var store = new Store({
-    type: 'sqlite3',
-    file: __dirname + '/database.sqlite' 
+  var store;
+  var db_file = __dirname + '/data_types_test.sqlite3';
+  
+  
+  
+  before(function(next){
+    beforeSql(db_file, [
+      'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, my_blob BLOB, my_integer INTEGER, my_real REAL)',
+    ], next);
   });
   
-  store.Model('User', function(){
-    this.attribute('my_blob', 'BLOB');
-    this.attribute('my_integer', 'INTEGER');
-    this.attribute('my_real', 'REAL');
+  before(function(){
+    store = new Store({
+      type: 'sqlite3',
+      file: db_file
+    });
+
+    store.Model('User', function(){});
   });
   
+  after(function(){
+    afterSql(db_file);
+  });  
   
   
   

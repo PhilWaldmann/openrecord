@@ -14,7 +14,7 @@ global.beforeSql = function(file, sql, next){
     })(sql[i]);
   }
   
-  async.parallel(tmp, next);
+  async.series(tmp, next);
 };
 
 global.afterSql = function(file){

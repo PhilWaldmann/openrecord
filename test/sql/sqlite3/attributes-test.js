@@ -5,7 +5,7 @@ var Store = require('../../../lib/store');
 
 
 describe('SQLite3: Attributes', function(){
-  var db, store;
+  var store;
   var db_file = __dirname + '/attributes_test.sqlite3';
   
   
@@ -32,6 +32,9 @@ describe('SQLite3: Attributes', function(){
   after(function(){
     afterSql(db_file);
   });
+    
+    
+    
     
   
   it('have all attributes loaded', function(done){
