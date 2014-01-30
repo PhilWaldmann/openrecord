@@ -104,6 +104,13 @@ describe('Relations', function(){
     });
     
     
+    it('assignment of null does not creates a new model', function(){
+      post.user = null;
+
+      should.not.exist(post.user);
+    });
+    
+    
     it('assignment of a record works', function(){
       var user = new User({login:'admin'});
 

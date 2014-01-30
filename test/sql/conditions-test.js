@@ -135,7 +135,7 @@ describe('SQL: Conditions', function(){
           table: 'users',
           field: 'login',
           operator: 'like',
-          value: 'phil'
+          value: '%phil%'
         }]);
       });
     });
@@ -154,7 +154,7 @@ describe('SQL: Conditions', function(){
           table: 'users',
           field: 'login',
           operator: 'like',
-          value: 'phil'
+          value: '%phil%'
         },{
           type: 'hash',
           table: 'users',
@@ -179,7 +179,7 @@ describe('SQL: Conditions', function(){
           table: 'users',
           field: 'login',
           operator: 'like',
-          value: 'phil'
+          value: '%phil%'
         },{
           type: 'hash',
           table: 'users',
