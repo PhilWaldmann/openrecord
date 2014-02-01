@@ -160,7 +160,6 @@ describe('SQLite3: Includes', function(){
         var User = store.Model('User');
         //joins the threads table....
         User.include({threads: 'posts'}).where({threads:{title_like:'first'}}).order('users.id').exec(function(result){
-          console.log(require('util').inspect(result), {depth:10});
           result[0].login.should.be.equal('michl');
           result[0].posts.length.should.be.equal(0);
           result[0].threads.length.should.be.equal(1);
