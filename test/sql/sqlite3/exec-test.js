@@ -2,7 +2,7 @@ var should = require('should');
 
 var Store = require('../../../lib/store');
 
-describe('SQLite3: Joins', function(){
+describe('SQLite3: Exec', function(){
   var store;
   var db_file = __dirname + '/exec_test.sqlite3';
   
@@ -52,7 +52,7 @@ describe('SQLite3: Joins', function(){
       store.ready(function(){
         var Stop = store.Model('Stop');
         Stop.where({login_like: 'phi'}).exec(function(result){
-          should.not.exists(null);
+          should.not.exists(result);
           next();
         });  
       });

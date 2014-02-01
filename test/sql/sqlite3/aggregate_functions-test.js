@@ -49,6 +49,26 @@ describe('SQLite3: Aggregate Functions', function(){
         });
       });      
     });
+    
+    it('returns the right result without a param (*)', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        User.count().exec(function(result){
+          result.count.should.be.equal(5);
+          next();
+        });
+      });      
+    });
+    
+    it('works with conditions', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        User.count('salary').where({salary_gt: 500}).exec(function(result){
+          result.count.should.be.equal(1);
+          next();
+        });
+      });      
+    });
   });
   
   
@@ -67,6 +87,16 @@ describe('SQLite3: Aggregate Functions', function(){
         var User = store.Model('User');
         User.sum('salary').exec(function(result){
           result.sum.should.be.equal(2000);
+          next();
+        });
+      });      
+    });
+    
+    it('works with conditions', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        User.sum('salary').where({salary_gt: 500}).exec(function(result){
+          result.sum.should.be.equal(1000);
           next();
         });
       });      
@@ -93,6 +123,16 @@ describe('SQLite3: Aggregate Functions', function(){
         });
       });      
     });
+    
+    it('works with conditions', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        User.max('salary').where({salary_gt: 500}).exec(function(result){
+          result.max.should.be.equal(1000);
+          next();
+        });
+      });      
+    });
   });
   
   
@@ -111,6 +151,16 @@ describe('SQLite3: Aggregate Functions', function(){
         var User = store.Model('User');
         User.min('salary').exec(function(result){
           result.min.should.be.equal(100);
+          next();
+        });
+      });      
+    });
+    
+    it('works with conditions', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        User.min('salary').where({salary_gt: 500}).exec(function(result){
+          result.min.should.be.equal(1000);
           next();
         });
       });      
