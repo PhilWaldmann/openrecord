@@ -101,23 +101,23 @@ describe('Store: Base', function(){
       });
     
       store.Model('B', function(done){
-        setTimeout(done, 10);
+        setTimeout(done, 1);
       });  
     
       store.Model('C', function(done){
-        setTimeout(done, 10);
+        setTimeout(done, 5);
       });  
     
       store.Model('D', function(done){
-        setTimeout(done, 20);
+        setTimeout(done, 10);
       });  
     
       store.Model('E', function(done){
-        setTimeout(done, 10);
+        setTimeout(done, 7);
       });  
     
       store.Model('F', function(done){
-        setTimeout(done, 10);
+        setTimeout(done, 5);
       });  
       
       store.ready(function(){
