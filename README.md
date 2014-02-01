@@ -23,7 +23,7 @@ npm install openrecord
 * Async schema definition
 * Automatic field definition loading
 * Relations
-* Eager loading
+* Nested Eager loading
 * Validations
 * Scopes
 * Before and after hooks
