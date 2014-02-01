@@ -60,7 +60,12 @@ describe('Relations', function(){
     var store = new Store();
 
     store.Model('User', function(){
+      this.hasMany('websites');
       this.attribute('login', String); 
+    });
+    
+    store.Model('Website', function(){
+      this.attribute('url', String); 
     });
     
     store.Model('Post', function(){
@@ -73,6 +78,18 @@ describe('Relations', function(){
     var post = new Post({
       title:'title A', 
       user: {login:'phil'}
+    });
+    
+    var nested_post = new Post({
+      title:'title A', 
+      user: {
+        login:'phil',
+        websites:[{
+          url: 'http://www.s-team.at'
+        },{
+          url: 'http://github.com'
+        }]
+      }
     });
     
     
@@ -118,6 +135,11 @@ describe('Relations', function(){
 
       post.user.login.should.be.equal('admin');
       post.user.should.be.equal(user);
+    });
+    
+    it('assignment of nested records works', function(){
+      nested_post.user.login.should.be.equal('phil');
+      nested_post.user.websites.length.should.be.equal(2);
     });
             
   });

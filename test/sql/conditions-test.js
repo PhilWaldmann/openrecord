@@ -33,7 +33,8 @@ describe('SQL: Conditions', function(){
           table: 'users',
           field: 'my_primary_key',
           operator: '=',
-          value: 2
+          value: 2,
+          name_tree: []
         }]);
       });
     });
@@ -53,7 +54,8 @@ describe('SQL: Conditions', function(){
           table: 'users',
           field: 'my_primary_key',
           operator: '=',
-          value: [2, 3, 4, 5]
+          value: [2, 3, 4, 5],
+          name_tree: []
         }]);
       });
     });
@@ -78,13 +80,15 @@ describe('SQL: Conditions', function(){
           table: 'posts',
           field: 'my_primary_key1',
           operator: '=',
-          value: 4
+          value: 4,
+          name_tree: []
         },{
           type: 'hash',
           table: 'posts',
           field: 'my_primary_key2',
           operator: '=',
-          value: 899
+          value: 899,
+          name_tree: []
         }]);
       });
     });
@@ -117,7 +121,8 @@ describe('SQL: Conditions', function(){
           table: 'users',
           field: 'login',
           operator: '=',
-          value: 'phil'
+          value: 'phil',
+          name_tree: []
         }]);
       });
     });
@@ -135,7 +140,8 @@ describe('SQL: Conditions', function(){
           table: 'users',
           field: 'login',
           operator: 'like',
-          value: '%phil%'
+          value: '%phil%',
+          name_tree: []
         }]);
       });
     });
@@ -154,13 +160,15 @@ describe('SQL: Conditions', function(){
           table: 'users',
           field: 'login',
           operator: 'like',
-          value: '%phil%'
+          value: '%phil%',
+          name_tree: []
         },{
           type: 'hash',
           table: 'users',
           field: 'id',
           operator: '=',
-          value: [2, 3]
+          value: [2, 3],
+          name_tree: []
         }]);
       });
     });
@@ -179,13 +187,15 @@ describe('SQL: Conditions', function(){
           table: 'users',
           field: 'login',
           operator: 'like',
-          value: '%phil%'
+          value: '%phil%',
+          name_tree: []
         },{
           type: 'hash',
           table: 'users',
           field: 'id',
           operator: '=',
-          value: [2, 3]
+          value: [2, 3],
+          name_tree: []
         }]);
       });
     });
@@ -204,7 +214,8 @@ describe('SQL: Conditions', function(){
           table: 'posts',
           field: 'id',
           operator: '=',
-          value: [1, 2, 3]
+          value: [1, 2, 3],
+          name_tree: ['posts']
         }]);
       });
     });
