@@ -42,6 +42,17 @@ describe('SQLite3: Conditions', function(){
     });
     
     
+    it('finds nothing', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        User.find(99).exec(function(result){
+          should.not.exist(result);
+          next();
+        });
+      });      
+    });
+    
+    
     it('finds phil with id 1', function(next){
       store.ready(function(){
         var User = store.Model('User');

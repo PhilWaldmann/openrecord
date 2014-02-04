@@ -166,6 +166,67 @@ describe('Attributes', function(){
    });
    
    
+   describe('hasChanges()', function(){
+     var user = new User({
+       my_str: 'phil'
+     });
+     
+     it('has method', function(){
+       user.hasChanges.should.be.a.Function;
+     });
+     
+     it('returns true on changes', function(){
+       user.hasChanges().should.be.equal(true);
+     });    
+   });
+   
+   
+   describe('getChanges()', function(){
+     var user = new User({
+       my_str: 'phil'
+     });
+     
+     it('has method', function(){
+       user.getChanges.should.be.a.Function;
+     });
+     
+     it('returns a changes array', function(){
+       user.getChanges().should.be.eql({my_str: [null, 'phil']});
+     });    
+   });
+   
+   
+   describe('getChangedValues()', function(){
+     var user = new User({
+       my_str: 'phil'
+     });
+     
+     it('has method', function(){
+       user.getChangedValues.should.be.a.Function;
+     });
+     
+     it('returns a changes hash', function(){
+       user.getChangedValues().should.be.eql({my_str: 'phil'});
+     });    
+   });
+   
+   
+   describe('resetChanges()', function(){
+     var user = new User({
+       my_str: 'phil'
+     });
+     
+     it('has method', function(){
+       user.resetChanges.should.be.a.Function;
+     });
+     
+     it('returns a changes hash', function(){
+       user.resetChanges();
+       user.hasChanges().should.be.eql(false);
+     });    
+   });
+   
+   
    describe('unknown type', function(){
      it('throws an Error', function(next){
        store.Model('Test', function(){

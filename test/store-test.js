@@ -146,4 +146,21 @@ describe('Store: Base', function(){
     
   });
   
+  
+  
+  describe('loads models via models:"path/*" config', function(){
+    var store = new Store({
+      models: __dirname + '/fixtures/models/*.js'
+    });
+    
+    it('models are loaded', function(next){
+      store.ready(function(){
+        should.exist(store.Model('User'));
+        should.exist(store.Model('CamelCasedModel'));
+        next();
+      });
+    });
+    
+  });
+  
 });

@@ -29,6 +29,8 @@ describe('SQLite3: Create', function(){
     store.Model('Post', function(){
       this.belongsTo('user');
       this.belongsTo('thread');
+      
+      this.validatesPresenceOf('message');
     });
     store.Model('Thread', function(){
       this.belongsTo('user');
@@ -111,6 +113,35 @@ describe('SQLite3: Create', function(){
             result.login.should.be.equal('admin');
             result.threads.length.should.be.equal(2);
             result.threads[0].posts.length.should.be.equal(2);
+            next();
+          });
+          
+        });  
+      });
+    });
+    
+    
+    it('does not write on validation errors', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.create({
+          login: 'max',
+          email: 'max@mail.com',
+          threads:[{
+            title: 'Thread one',
+            posts:[{
+              message: 'Blubb'
+            },{
+              message: null
+            }]
+          },{
+            title: 'Thread two'
+          }]
+        }, function(result){
+          result.should.be.equal(false);
+                  
+          User.where({login:'max'}).include({threads:'posts'}).limit(1).exec(function(result){
+            should.not.exist(result);
             next();
           });
           
