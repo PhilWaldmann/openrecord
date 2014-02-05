@@ -47,6 +47,21 @@ describe('SQLite3: Create', function(){
   
   describe('create()', function(){
     
+    it('has the right context', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.create({
+          login: 'my_login',
+          email: 'my_mail@mail.com'
+        }, function(result){
+          this.login.should.be.equal('my_login');
+          result.should.be.true;
+          next();
+        });  
+      });
+    });
+    
+    
     it('writes a new record', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
