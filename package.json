@@ -1,6 +1,6 @@
 {
     "name": "openrecord",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "description": "Active record like ORM for nodejs",
     "keywords": ["squid", "proxy", "filter", "url", "redirect_programm"],
     "author": "Philipp Waldmann <philipp.waldmann@s-team.at>",
