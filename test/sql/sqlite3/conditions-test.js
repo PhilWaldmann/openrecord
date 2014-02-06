@@ -113,6 +113,45 @@ describe('SQLite3: Conditions', function(){
   
   
   
+  
+  describe('get()', function(){
+    
+    it('finds with one id returns the right sql', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.get(1).toSql().should.be.equal('select * from "users" where "users"."id" = 1 limit 1 offset 0');
+        next();
+      });
+    });
+    
+    
+    it('finds someting', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        User.get(1).exec(function(result){
+          should.exist(result);
+          next();
+        });
+      });      
+    });
+    
+    /* TODO: ASYNC Error handling
+    it('throws an error', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        (function() {
+          User.get(99).exec(function(result){
+            //next();
+          });
+        }).should.throw();        
+      });      
+    });
+     */   
+  });
+  
+  
+  
+  
   describe('where()', function(){
     
     it('where with like returns the right sql', function(next){ 
