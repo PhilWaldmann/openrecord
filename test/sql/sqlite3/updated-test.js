@@ -40,13 +40,15 @@ describe('SQLite3: Update', function(){
       });
       
       this.beforeSave(function(){
+        this.save.should.be.a.Function;
         return this.login != '_max';
       });
-      /*
+      
       this.afterSave(function(){
+        this.save.should.be.a.Function;
         return this.login != '_maxi';
       });  
-      */
+      
     });
     store.Model('Post', function(){
       this.belongsTo('user');
@@ -102,7 +104,7 @@ describe('SQLite3: Update', function(){
     });
   });
   
-  /*
+   
   describe('beforeSave()', function(){
     it('gets called', function(next){ 
       store.ready(function(){
@@ -118,7 +120,7 @@ describe('SQLite3: Update', function(){
     });
   });
   
-  
+ 
   describe('afterSave()', function(){
     it('gets called', function(next){ 
       store.ready(function(){
@@ -138,7 +140,7 @@ describe('SQLite3: Update', function(){
       });
     });
   });
-  */
+  
   
   
   

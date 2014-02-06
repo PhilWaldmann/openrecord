@@ -27,19 +27,23 @@ describe('SQLite3: Create', function(){
       this.hasMany('threads');
       
       this.beforeCreate(function(){
+        this.save.should.be.a.Function;
         return this.login != 'max';
       });
       
       this.afterCreate(function(){
+        this.save.should.be.a.Function;
         return this.login != 'maxi';
       });  
       
-      /*
+      
       this.beforeSave(function(){
+        this.save.should.be.a.Function;
         return this.login != '_max';
       });
-      */
+      
       this.afterSave(function(){
+        this.save.should.be.a.Function;
         return this.login != '_maxi';
       });      
       
@@ -97,7 +101,7 @@ describe('SQLite3: Create', function(){
     });
   });
   
-  /*
+  
   describe('beforeSave()', function(){
     it('gets called', function(next){ 
       store.ready(function(){
@@ -111,7 +115,7 @@ describe('SQLite3: Create', function(){
       });
     });
   });
-  */
+  
   
   describe('afterSave()', function(){
     it('gets called', function(next){ 
@@ -139,6 +143,7 @@ describe('SQLite3: Create', function(){
     it('has the right context', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
+        
         User.create({
           login: 'my_login',
           email: 'my_mail@mail.com'
