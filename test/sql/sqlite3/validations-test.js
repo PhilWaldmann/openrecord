@@ -25,6 +25,11 @@ describe('SQLite3: Joins', function(){
 
     store.Model('User', function(){
       this.validatesUniquenessOf('login', 'email');
+      
+      this.beforeValidation(function(){
+        this.save.should.be.a.Function;
+        return this.login != 'max';
+      });
     });
     store.Model('MultipleKey', function(){
       this.validatesUniquenessOf('name');
@@ -35,7 +40,35 @@ describe('SQLite3: Joins', function(){
     afterSql(db_file);
   });
   
+  
+  describe('beforeValidation()', function(){
+    it('gets called on create', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.create({
+          login:'max'
+        }, function(result){
+          result.should.be.false;
+          next();
+        });        
+      });
+    });
     
+    
+    it('gets called on update', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.find(1, function(phil){
+          phil.login = 'max';
+          phil.save(function(result){
+            result.should.be.false;
+            next();
+          });
+        });      
+      });
+    });
+  });
+  
   
   
   describe('validatesUniquenessOf()', function(){

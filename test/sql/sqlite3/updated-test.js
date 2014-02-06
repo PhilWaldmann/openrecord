@@ -28,6 +28,25 @@ describe('SQLite3: Update', function(){
     store.Model('User', function(){
       this.hasMany('posts');
       this.hasMany('threads');
+      
+      this.beforeUpdate(function(){
+        this.save.should.be.a.Function;
+        return this.login != 'max';
+      });
+      
+      this.beforeUpdate(function(){
+        this.save.should.be.a.Function;
+        return this.login != 'maxi';
+      });
+      
+      this.beforeSave(function(){
+        return this.login != '_max';
+      });
+      /*
+      this.afterSave(function(){
+        return this.login != '_maxi';
+      });  
+      */
     });
     store.Model('Post', function(){
       this.belongsTo('user');
@@ -45,6 +64,81 @@ describe('SQLite3: Update', function(){
   after(function(){
     afterSql(db_file);
   });
+  
+  
+  describe('beforeUpdate()', function(){
+    it('gets called', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.find(1, function(phil){
+          phil.login = 'max';
+          phil.save(function(result){
+            result.should.be.false;
+            next();
+          });
+        });      
+      });
+    });
+  });
+  
+  
+  describe('afterUpdate()', function(){
+    it('gets called', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.find(1, function(phil){
+          phil.login = 'maxi';
+          phil.save(function(result){
+            result.should.be.false;
+            
+            User.where({login:'maxi'}).count().exec(function(result){
+              result.count.should.be.equal(0);
+              next();
+            });
+            
+          });
+        });      
+      });
+    });
+  });
+  
+  /*
+  describe('beforeSave()', function(){
+    it('gets called', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.find(1, function(phil){
+          phil.login = '_max';
+          phil.save(function(result){
+            result.should.be.false;
+            next();
+          });
+        });      
+      });
+    });
+  });
+  
+  
+  describe('afterSave()', function(){
+    it('gets called', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.find(1, function(phil){
+          phil.login = '_maxi';
+          phil.save(function(result){
+            result.should.be.false;
+            
+            User.where({login:'_maxi'}).count().exec(function(result){
+              result.count.should.be.equal(0);
+              next();
+            });
+            
+          });
+        });      
+      });
+    });
+  });
+  */
   
   
   

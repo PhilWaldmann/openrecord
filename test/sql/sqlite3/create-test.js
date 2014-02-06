@@ -25,6 +25,24 @@ describe('SQLite3: Create', function(){
     store.Model('User', function(){
       this.hasMany('posts');
       this.hasMany('threads');
+      
+      this.beforeCreate(function(){
+        return this.login != 'max';
+      });
+      
+      this.afterCreate(function(){
+        return this.login != 'maxi';
+      });  
+      
+      /*
+      this.beforeSave(function(){
+        return this.login != '_max';
+      });
+      */
+      this.afterSave(function(){
+        return this.login != '_maxi';
+      });      
+      
     });
     store.Model('Post', function(){
       this.belongsTo('user');
@@ -41,6 +59,77 @@ describe('SQLite3: Create', function(){
   
   after(function(){
     afterSql(db_file);
+  });
+  
+  
+  
+  describe('beforeCreate()', function(){
+    it('gets called', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.create({
+          login: 'max'
+        }, function(result){
+          result.should.be.false;
+          next();
+        });      
+      });
+    });
+  });
+  
+  
+  describe('afterCreate()', function(){
+    it('gets called', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.create({
+          login: 'maxi'
+        }, function(result){
+          result.should.be.false;
+          
+          User.where({login:'maxi'}).count().exec(function(result){
+            result.count.should.be.equal(0);
+            next();
+          });
+          
+        });      
+      });
+    });
+  });
+  
+  /*
+  describe('beforeSave()', function(){
+    it('gets called', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.create({
+          login: '_max'
+        }, function(result){
+          result.should.be.false;
+          next();
+        });      
+      });
+    });
+  });
+  */
+  
+  describe('afterSave()', function(){
+    it('gets called', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.create({
+          login: '_maxi'
+        }, function(result){
+          result.should.be.false;
+          
+          User.where({login:'_maxi'}).count().exec(function(result){
+            result.count.should.be.equal(0);
+            next();
+          });
+          
+        });      
+      });
+    });
   });
   
   

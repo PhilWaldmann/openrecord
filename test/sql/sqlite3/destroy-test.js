@@ -28,6 +28,17 @@ describe('SQLite3: Destroy', function(){
     store.Model('User', function(){
       this.hasMany('posts');
       this.hasMany('threads');
+      
+      this.beforeDestroy(function(){
+        this.save.should.be.a.Function;
+        return this.login != 'max';
+      });
+      
+      this.afterDestroy(function(){
+        this.save.should.be.a.Function;
+        return this.login != 'maxi';
+      });
+      
     });
     store.Model('Post', function(){
       this.belongsTo('user');
@@ -46,6 +57,42 @@ describe('SQLite3: Destroy', function(){
     afterSql(db_file);
   });
   
+  
+  describe('beforeDestroy()', function(){
+    it('gets called', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.find(1, function(phil){
+          phil.login = 'max';
+          phil.destroy(function(result){
+            result.should.be.false;
+            next();
+          });
+        });      
+      });
+    });
+  });
+  
+  describe('afterDestroy()', function(){
+    it('gets called', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.find(1, function(phil){
+          phil.login = 'maxi';
+          phil.destroy(function(result){
+            result.should.be.false;
+            
+            User.find(1, function(phil){
+              should.exist(phil);
+              phil.login.should.be.equal('phil');
+              next();
+            }); 
+            
+          });
+        });      
+      });
+    });
+  });
   
   
   describe('destroy()', function(){
