@@ -40,6 +40,12 @@ describe('Context', function(){
     it('has the right context on model scope', function(){
       User.setContext(my_context).context.should.be.equal(my_context);
     });
+    
+    
+    it('does not change the context', function(){
+      User.setContext(my_context).new({login: 'phil'});
+      my_context.should.be.eql({foo:'bar'});
+    });
 
   });
 
