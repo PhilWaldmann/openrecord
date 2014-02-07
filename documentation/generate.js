@@ -2,7 +2,13 @@ var markdox = require('markdox');
 var glob = require('glob');
 
 
-
+markdox.parse(__dirname + '/../lib/stores/sql/limit.js', function(err, result){
+  var limit = result[0];
+  markdox.generate([limit], {
+    output: __dirname + '/limit.md',
+    template: __dirname + '/template.ejs'
+  });
+});
 
 function documentation(class_name){
   
