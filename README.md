@@ -36,10 +36,6 @@ npm install openrecord
 
 ## Roadmap
 
-#### 0.2.0
-* ~~Base Documentation~~
-* ~~finish base sql methods~~
-
 #### 0.3.0
 * Better error handling
 * ~~sql unit tests~~
@@ -58,6 +54,7 @@ npm install openrecord
 
 #### 0.7.0
 * custom plugin support
+* more examples
 
 
 ## Usage
