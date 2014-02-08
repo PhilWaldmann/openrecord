@@ -13,7 +13,8 @@ var tmp = [];
 
 
 files = glob.sync('./lib/*.js');
-files = files.concat(glob.sync('./lib/*/*.js'));
+files = files.concat(glob.sync('./lib/base/*.js'));
+files = files.concat(glob.sync('./lib/stores/**/*.js'));
 files = files.concat(glob.sync('./examples/**/*.js'));
 
 
@@ -130,6 +131,7 @@ async.series(tmp, function(){
     (function(name, docs){
           
       name = name.split('.')[0];
+      name = name.replace('/', '_');
       
       tmp.push(function(next){
         var filename = __dirname + '/docs/' + name + '.md';
@@ -160,7 +162,7 @@ async.series(tmp, function(){
   
   
   async.parallel(tmp, function(){
-    var copy = ['Home.md', 'Installation.md'];
+    var copy = ['Home.md', 'Installation.md', 'Setup.md'];
     
     for(var i in copy){
       var file_path = __dirname + '/docs/' + copy[i];
