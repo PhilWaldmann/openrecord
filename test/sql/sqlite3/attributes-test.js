@@ -15,7 +15,8 @@ describe('SQLite3: Attributes', function(){
       'CREATE TABLE attribute_tests(text_attribute  TEXT, numeric_attribute NUMERIC, integer_attribute  INTEGER, real_attribute  REAL, blob_attribute BLOB)',
       'CREATE TABLE attribute_lowercase_tests(text_attribute  text, numeric_attribute numeric, integer_attribute  integer, real_attribute  real, blob_attribute blob)',
       'CREATE TABLE users(id  INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT NOT NULL, email TEXT)',
-      'CREATE TABLE multiple_keys(id  INTEGER, id2 INTEGER, PRIMARY KEY(id, id2))'
+      'CREATE TABLE multiple_keys(id  INTEGER, id2 INTEGER, PRIMARY KEY(id, id2))',
+      'INSERT INTO users(login, email) VALUES("phil", "phil@mail.com")'
     ], next);
   });
   
@@ -153,6 +154,20 @@ describe('SQLite3: Attributes', function(){
       });    
       
     });
+  });
+  
+  
+  it('loaded record to not have any changes', function(next){
+    store.ready(function(){
+      var User = store.Model('User');
+      User.find(1).exec(function(result){
+        should.exist(result);
+        console.log(result.getChanges());
+        result.hasChanges().should.be.false;
+        result.login.should.be.equal('phil');
+        next();
+      });
+    });   
   });
   
   

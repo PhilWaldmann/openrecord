@@ -13,6 +13,8 @@ test-cov:
 test-coveralls:
 	./node_modules/.bin/mocha --require blanket --recursive --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
 	
+docs:
+	node documentation/generate.js
 	
 clean: 
 	rm coverage.html

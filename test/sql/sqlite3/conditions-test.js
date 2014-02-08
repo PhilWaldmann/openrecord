@@ -36,7 +36,7 @@ describe('SQLite3: Conditions', function(){
     it('finds with one id returns the right sql', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
-        User.find(1).toSql().should.be.equal('select * from "users" where "users"."id" = 1 limit 1 offset 0');
+        User.find(1).toSql().should.be.equal('select * from "users" where "users"."id" = 1 limit 1');
         next();
       });
     });
@@ -119,7 +119,7 @@ describe('SQLite3: Conditions', function(){
     it('finds with one id returns the right sql', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
-        User.get(1).toSql().should.be.equal('select * from "users" where "users"."id" = 1 limit 1 offset 0');
+        User.get(1).toSql().should.be.equal('select * from "users" where "users"."id" = 1 limit 1');
         next();
       });
     });

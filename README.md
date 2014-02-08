@@ -96,7 +96,7 @@ sql.ready(function(){
 ```
 
 
-## [Documentation](http://philwaldmann.github.io/openrecord/)
+## [Documentation](https://github.com/PhilWaldmann/openrecord/wiki)
 
 
 ## Contributing

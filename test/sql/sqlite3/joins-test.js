@@ -77,10 +77,37 @@ describe('SQLite3: Joins', function(){
     });
     
     
-    it('join returns the right sql', function(next){ 
+    it('leftJoin returns the right sql', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
-        User.left_join('posts').toSql().should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"');
+        User.leftJoin('posts').toSql().should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"');
+        next();
+      });
+    });
+    
+    
+    it('rightJoin returns the right sql', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.rightJoin('posts').toSql().should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" right join "posts" on "users"."id" = "posts"."user_id"');
+        next();
+      });
+    });
+    
+    
+    it('innerJoin returns the right sql', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.innerJoin('posts').toSql().should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" inner join "posts" on "users"."id" = "posts"."user_id"');
+        next();
+      });
+    });
+    
+    
+    it('outerJoin returns the right sql', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.outerJoin('posts').toSql().should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" outer join "posts" on "users"."id" = "posts"."user_id"');
         next();
       });
     });

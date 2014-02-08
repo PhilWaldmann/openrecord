@@ -1,47 +1,73 @@
-# <?= docfiles[0].model ?>
-
 <? docfiles.forEach(function(doc) { ?>
-  
+
   <? doc.javadoc.forEach(function(comment) { ?>
-    <? if (!comment.ignore) { ?>
-      <? if (comment.name) { ?>
-        <? if (comment.isMethod || comment.isFunction) { ?>
-          ## <?= comment.name ?>(<?= comment.paramStr ?>)
-        <? } else { ?>
-          ## <?= comment.name ?>
+    <? if (comment.raw.example) { ?>
+      <?= comment.description ?>
+      
+      ```js
+      <?= comment.raw.code ?>
+      ```
+    <? }else{ ?>
+  
+      <? if (!comment.ignore) { ?>
+        <? if (comment.name) { ?>
+          <? if (comment.isMethod || comment.isFunction) { ?>
+            # <?= comment.name ?>()
+          <? } else { ?>
+            # <?= comment.name ?>
+          <? } ?>
         <? } ?>
-      <? } ?>
         
-        <?= comment.description ?>
+          <?= comment.description ?>
 
-        <? if (comment.deprecated) { ?>
-          **Deprecated**
+          <? if (comment.deprecated) { ?>
+            **Deprecated**
+          <? } ?>
+
+          <? if (comment.author) { ?>
+            Author: <?- comment.author ?>
+          <? } ?>
+
+          <? if (comment.version) { ?>
+            Version: <?= comment.version ?>
+          <? } ?>
+
+          <? if (comment.see) { ?>
+            See: [<?= comment.see ?>](<?= comment.see.replace('.', '#') ?>)
+          <? } ?>
+
+        <? if (comment.paramTags.length > 0) { ?>
+          #### Params: 
+          <? comment.paramTags.forEach(function(paramTag) { ?>
+            <? if(paramTag.joinedTypes.toLowerCase() == 'or'){ ?>
+            or
+            <? }else{ ?>* **<?= paramTag.joinedTypes ?>** *<?= paramTag.name ?>* <?= paramTag.description ?><? } ?><? }) ?>
         <? } ?>
 
-        <? if (comment.author) { ?>
-          Author: <?- comment.author ?>
+        <? if (comment.raw.options) { ?>
+          #### Options: 
+          <? comment.raw.options.forEach(function(optionsTag) { ?>
+            * **<?= optionsTag.types.join('|') ?>** *<?= optionsTag.name ?>* <?= optionsTag.description ?><? }) ?>
         <? } ?>
 
-        <? if (comment.version) { ?>
-          Version: <?= comment.version ?>
+        <? if (comment.returnTags.length > 0) { ?>
+          #### Return:
+          <? comment.returnTags.forEach(function(returnTag) { ?>
+            <? if(returnTag.joinedTypes.toLowerCase() == 'or'){ ?>
+              or
+            <? }else{ ?>* **<?= returnTag.joinedTypes ?>** <?= returnTag.description ?><? } ?>
+          <? }) ?>
         <? } ?>
-
-        <? if (comment.see) { ?>
-          See: <?= comment.see ?>
+        
+        <? if (comment.raw.callback) { ?>
+          #### Callback: 
+          <? comment.raw.callback.forEach(function(callbackTag) { ?>
+            <? if(callbackTag.types.join('|').toLowerCase() == 'or'){ ?>
+            or
+            <? }else{ ?>* **<?= callbackTag.types.join('|') ?>** *<?= callbackTag.name ?>* <?= callbackTag.description ?><? } ?><? }) ?>
+            * _**this**_: [<?= comment.raw.callback.scope ?>](<?= comment.raw.callback.scope ?>)
         <? } ?>
-
-      <? if (comment.paramTags.length > 0) { ?>
-        ### Params: 
-        <? comment.paramTags.forEach(function(paramTag) { ?>
-          * **<?= paramTag.joinedTypes ?>** *<?= paramTag.name ?>* <?= paramTag.description ?>
-        <? }) ?>
-      <? } ?>
-
-      <? if (comment.returnTags.length > 0) { ?>
-        ### Return:
-        <? comment.returnTags.forEach(function(returnTag) { ?>
-          * **<?= returnTag.joinedTypes ?>** <?= returnTag.description ?>
-        <? }) ?>
+        
       <? } ?>
     <? } ?>
   <? }) ?>
