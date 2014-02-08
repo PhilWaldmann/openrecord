@@ -21,7 +21,8 @@
         "sqlite3": ">= 2.2.x",
         "coveralls": ">= 2.6.x",
         "mocha-lcov-reporter": ">= 0.0.x",
-        "blanket": ">= 1.1.x"
+        "blanket": ">= 1.1.x",
+        "markdox": ">= 0.1.x"
     },
     "main": "./lib/store",
     "directories": {
