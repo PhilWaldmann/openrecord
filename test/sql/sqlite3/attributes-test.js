@@ -162,7 +162,6 @@ describe('SQLite3: Attributes', function(){
       var User = store.Model('User');
       User.find(1).exec(function(result){
         should.exist(result);
-        console.log(result.getChanges());
         result.hasChanges().should.be.false;
         result.login.should.be.equal('phil');
         next();

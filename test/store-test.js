@@ -12,7 +12,7 @@ describe('Store: Base', function(){
     (function(){
       new Store({type:'unknown'});
     }).should.throw();
-  });  
+  });
   
   describe('without config', function(){
     var store = new Store();
