@@ -2,7 +2,7 @@ var sqlite = require('sqlite3');
 var fs = require('fs');
 var async = require('async');
 
-global.beforeSql = function(file, sql, next){
+global.beforeSQLite = function(file, sql, next){
   db = new sqlite.Database(file);
   
   var tmp = [];
@@ -17,6 +17,6 @@ global.beforeSql = function(file, sql, next){
   async.series(tmp, next);
 };
 
-global.afterSql = function(file){
+global.afterSQLite = function(file){
   fs.unlinkSync(file);
 };

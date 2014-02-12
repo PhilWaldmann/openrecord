@@ -4,12 +4,12 @@ var Store = require('../../../lib/store');
 
 describe('SQLite3: Data Types', function(){
   var store;
-  var db_file = __dirname + '/data_types_test.sqlite3';
+  var database = __dirname + '/data_types_test.sqlite3';
   
   
   
   before(function(next){
-    beforeSql(db_file, [
+    beforeSQLite(database, [
       'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, my_blob BLOB, my_integer INTEGER, my_real REAL)',
     ], next);
   });
@@ -17,14 +17,14 @@ describe('SQLite3: Data Types', function(){
   before(function(){
     store = new Store({
       type: 'sqlite3',
-      file: db_file
+      file: database
     });
 
     store.Model('User', function(){});
   });
   
   after(function(){
-    afterSql(db_file);
+    afterSQLite(database);
   });  
   
   

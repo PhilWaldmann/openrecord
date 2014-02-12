@@ -4,12 +4,12 @@ var Store = require('../../../lib/store');
 
 describe('SQLite3: Aggregate Functions', function(){
   var store;
-  var db_file = __dirname + '/aggregate_function_test.sqlite3';
+  var database = __dirname + '/aggregate_function_test.sqlite3';
   
   
   
   before(function(next){
-    beforeSql(db_file, [
+    beforeSQLite(database, [
       'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, salary INTEGER)',
       'INSERT INTO users(salary) VALUES(100), (200), (400), (300), (1000)'
     ], next);
@@ -18,14 +18,14 @@ describe('SQLite3: Aggregate Functions', function(){
   before(function(){
     store = new Store({
       type: 'sqlite3',
-      file: db_file
+      file: database
     });
 
     store.Model('User', function(){});
   });
   
   after(function(){
-    afterSql(db_file);
+    afterSQLite(database);
   });
   
     

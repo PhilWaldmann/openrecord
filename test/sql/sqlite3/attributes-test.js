@@ -6,12 +6,12 @@ var Store = require('../../../lib/store');
 
 describe('SQLite3: Attributes', function(){
   var store;
-  var db_file = __dirname + '/attributes_test.sqlite3';
+  var database = __dirname + '/attributes_test.sqlite3';
   
   
   
   before(function(next){
-    beforeSql(db_file, [
+    beforeSQLite(database, [
       'CREATE TABLE attribute_tests(text_attribute  TEXT, numeric_attribute NUMERIC, integer_attribute  INTEGER, real_attribute  REAL, blob_attribute BLOB)',
       'CREATE TABLE attribute_lowercase_tests(text_attribute  text, numeric_attribute numeric, integer_attribute  integer, real_attribute  real, blob_attribute blob)',
       'CREATE TABLE users(id  INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT NOT NULL, email TEXT)',
@@ -23,7 +23,7 @@ describe('SQLite3: Attributes', function(){
   before(function(){
     store = new Store({
       type: 'sqlite3',
-      file: db_file
+      file: database
     });
 
     store.Model('AttributeTest', function(){});
@@ -33,7 +33,7 @@ describe('SQLite3: Attributes', function(){
   });
   
   after(function(){
-    afterSql(db_file);
+    afterSQLite(database);
   });
     
     

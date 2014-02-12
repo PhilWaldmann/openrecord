@@ -4,12 +4,12 @@ var Store = require('../../../lib/store');
 
 describe('SQLite3: Create', function(){
   var store;
-  var db_file = __dirname + '/create_test.sqlite3';
+  var database = __dirname + '/create_test.sqlite3';
   
   
   
   before(function(next){
-    beforeSql(db_file, [
+    beforeSQLite(database, [
       'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
       'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
       'CREATE TABLE threads(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT)'
@@ -19,7 +19,7 @@ describe('SQLite3: Create', function(){
   before(function(){
     store = new Store({
       type: 'sqlite3',
-      file: db_file
+      file: database
     });
 
     store.Model('User', function(){
@@ -62,7 +62,7 @@ describe('SQLite3: Create', function(){
   });
   
   after(function(){
-    afterSql(db_file);
+    afterSQLite(database);
   });
   
   

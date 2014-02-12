@@ -4,18 +4,18 @@ var Store = require('../../../lib/store');
 
 describe('SQLite3: Exec', function(){
   var store;
-  var db_file = __dirname + '/exec_test.sqlite3';
+  var database = __dirname + '/exec_test.sqlite3';
   
   
   
   before(function(next){
-    beforeSql(db_file, [], next);
+    beforeSQLite(database, [], next);
   });
   
   before(function(){
     store = new Store({
       type: 'sqlite3',
-      file: db_file
+      file: database
     });
 
     store.Model('User', function(){});
@@ -28,7 +28,7 @@ describe('SQLite3: Exec', function(){
   });
   
   after(function(){
-    afterSql(db_file);
+    afterSQLite(database);
   });
   
   

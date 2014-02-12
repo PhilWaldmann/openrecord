@@ -4,12 +4,12 @@ var Store = require('../../../lib/store');
 
 describe('SQLite3: Conditions', function(){
   var store;
-  var db_file = __dirname + '/conditions_test.sqlite3';
+  var database = __dirname + '/conditions_test.sqlite3';
   
   
   
   before(function(next){
-    beforeSql(db_file, [
+    beforeSQLite(database, [
       'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
       'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01")'
     ], next);
@@ -18,14 +18,14 @@ describe('SQLite3: Conditions', function(){
   before(function(){
     store = new Store({
       type: 'sqlite3',
-      file: db_file
+      file: database
     });
 
     store.Model('User', function(){});
   });
   
   after(function(){
-    afterSql(db_file);
+    afterSQLite(database);
   });
   
     
