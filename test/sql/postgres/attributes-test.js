@@ -20,6 +20,7 @@ describe('Postgres: Attributes', function(){
   
   before(function(){
     store = new Store({
+      host: 'localhost',
       type: 'postgres',
       database: database,
       user: 'postgres',

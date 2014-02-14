@@ -1,3 +1,5 @@
+require('./__helper');
+
 var should = require('should');
 
 var Store = require('../../../lib/store');
@@ -6,6 +8,8 @@ describe('SQLite3: Create', function(){
   var store;
   var database = __dirname + '/create_test.sqlite3';
   
+  //global user variable for test "beforeCreate() with a find() inside"
+  var Post
   
   
   before(function(next){
@@ -26,9 +30,17 @@ describe('SQLite3: Create', function(){
       this.hasMany('posts');
       this.hasMany('threads');
       
-      this.beforeCreate(function(){
+      this.beforeCreate(function(transaction, done){
         this.save.should.be.a.Function;
-        return this.login != 'max';
+        done.should.be.a.Function;
+        
+        if(this.login == 'find_inside'){
+          Post.find(1).transaction(transaction).exec(function(){
+            done(true);
+          });
+        }else{
+          done(this.login != 'max')
+        }
       });
       
       this.afterCreate(function(){
@@ -75,6 +87,24 @@ describe('SQLite3: Create', function(){
           login: 'max'
         }, function(result){
           result.should.be.false;
+          next();
+        });      
+      });
+    });
+  });
+  
+  
+  describe('beforeCreate() with a find() inside', function(){
+    this.timeout(5000);
+    
+    it('gets called', function(next){ 
+      store.ready(function(){
+        Post = store.Model('Post'); //for the beforeCreate Hook
+        var User = store.Model('User');
+        User.create({
+          login: 'find_inside'
+        }, function(result){
+          result.should.be.true;
           next();
         });      
       });
