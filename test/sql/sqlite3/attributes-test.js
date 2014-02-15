@@ -32,6 +32,7 @@ describe('SQLite3: Attributes', function(){
       this.attribute('not_in_the_database', String);
     });
     store.Model('MultipleKey', function(){});
+    store.Model('UnknownTable', function(){});
   });
   
   after(function(){
@@ -39,7 +40,15 @@ describe('SQLite3: Attributes', function(){
   });
     
     
-    
+  
+  it('does not load attributes', function(done){
+    store.ready(function(){    
+      var UnknownTable = store.Model('UnknownTable');
+      UnknownTable.definition.attributes.should.be.eql({});    
+      done();
+    });
+  });
+  
     
   
   it('have all attributes loaded', function(done){

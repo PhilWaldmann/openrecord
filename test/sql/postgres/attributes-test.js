@@ -30,6 +30,9 @@ describe('Postgres: Attributes', function(){
     store.Model('AttributeTest', function(){});
     store.Model('User', function(){});
     store.Model('MultipleKey', function(){});
+    store.Model('UnknownTable', function(){});
+    
+    store.on('exception', function(){});
   });
   
   after(function(next){
@@ -37,7 +40,15 @@ describe('Postgres: Attributes', function(){
   });
     
     
-    
+  
+  it('does not load attributes', function(done){
+    store.ready(function(){    
+      var UnknownTable = store.Model('UnknownTable');
+      UnknownTable.definition.attributes.should.be.eql({});    
+      done();
+    });
+  });
+  
     
   
   it('have all attributes loaded', function(done){
