@@ -28,7 +28,9 @@ describe('SQLite3: Attributes', function(){
 
     store.Model('AttributeTest', function(){});
     store.Model('AttributeLowercaseTest', function(){});
-    store.Model('User', function(){});
+    store.Model('User', function(){
+      this.attribute('not_in_the_database', String);
+    });
     store.Model('MultipleKey', function(){});
   });
   
@@ -167,6 +169,26 @@ describe('SQLite3: Attributes', function(){
         next();
       });
     });   
+  });
+  
+  
+  
+  
+  it('has automatic validation', function(done){
+    store.ready(function(){    
+      var User = store.Model('User');
+      var phil = User.new({
+        login:'michl',
+        not_in_the_database: 'foo'
+      });
+      
+      phil.save(function(success){
+        success.should.be.true;
+        phil.id.should.be.equal(2);
+        done();
+      });    
+      
+    });
   });
   
   
