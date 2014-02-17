@@ -169,6 +169,33 @@ describe('SQLite3: Update', function(){
     });
     
     
+    
+    it('updates a single record and set a value to null', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.find(3, function(admin){
+          admin.login.should.be.equal('admin');
+          
+          admin.login = 'administrator';
+          admin.email = null
+          admin.save(function(result){
+            result.should.be.equal(true);
+            
+            User.where({login:'administrator'}).limit(1).exec(function(administrator){
+              administrator.login.should.be.equal('administrator');
+              administrator.id.should.be.equal(admin.id);
+              should.not.exist(administrator.email);
+              next();
+            });            
+            
+          });
+          
+        });  
+      });
+    });
+    
+    
+    
     it('updates a nested records', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
