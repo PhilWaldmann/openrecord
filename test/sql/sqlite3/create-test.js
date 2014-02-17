@@ -204,6 +204,24 @@ describe('SQLite3: Create', function(){
     });
     
     
+    it('writes a new record, but ignores the id (auto increment)', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.create({
+          id: 99,
+          login: 'philipp',
+          email: 'philipp@mail.com'
+        }, function(result){
+          result.should.be.equal(true);
+          User.where({login:'philipp'}).limit(1).exec(function(result){
+            result.id.should.not.be.equal(99);
+            next();
+          });          
+        });  
+      });
+    });
+    
+    
     it('writes a new record with subrecords', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
