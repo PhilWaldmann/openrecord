@@ -36,7 +36,7 @@ describe('validatesPresenceOf()', function(){
   
   it('returns the right error message', function(done){
     invalid.isValid(function(valid){
-      invalid.should.have.property('email');
+      invalid.errors.should.have.property('email');
       done();
     });
   });
@@ -75,7 +75,7 @@ describe('validatesPresenceOf()', function(){
     
     it('returns the right error message', function(done){
       invalid.isValid(function(valid){
-        invalid.should.have.property('email');
+        invalid.errors.should.have.property('email');
         done();
       });
     });
