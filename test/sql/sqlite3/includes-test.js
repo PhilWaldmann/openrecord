@@ -68,10 +68,10 @@ describe('SQLite3: Includes', function(){
       });
     });
     
-    it('single include results in a sql join', function(next){ 
+    it('include does not join tables', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
-        User.include('posts').toSql().should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"');
+        User.include('posts').toSql().should.be.equal('select * from "users"');
         next();
       });
     });
@@ -160,10 +160,46 @@ describe('SQLite3: Includes', function(){
         var User = store.Model('User');
         //joins the threads table....
         User.include({threads: 'posts'}).where({threads:{title_like:'first'}}).order('users.id').exec(function(result){
-          result[0].login.should.be.equal('michl');
+          result[0].login.should.be.equal('phil');
           result[0].posts.length.should.be.equal(0);
+          result[0].threads.length.should.be.equal(0);
+          
+          result[1].login.should.be.equal('michl');
+          result[1].posts.length.should.be.equal(0);
+          result[1].threads.length.should.be.equal(1);
+          result[1].threads[0].posts.length.should.be.equal(3);
+          next();
+        });
+      });
+    });
+    
+    
+    it('Loads the user but no posts', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        //joins the threads table....
+        User.include('posts').where({posts:{message_like:'unknown'}}).order('users.id').exec(function(result){
+          result.length.should.be.equal(3);
+          result[0].posts.length.should.be.equal(0);
+          result[1].posts.length.should.be.equal(0);
+          result[2].posts.length.should.be.equal(0);
+          next();
+        });
+      });
+    });
+    
+    
+    it('Loads the user and their threads but no posts', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        //joins the threads table....
+        User.include({threads: 'posts'}).where({threads:{posts:{message_like:'unknown'}}}).order('users.id').exec(function(result){
+          result.length.should.be.equal(3);
           result[0].threads.length.should.be.equal(1);
-          result[0].threads[0].posts.length.should.be.equal(3);
+          result[0].threads[0].posts.length.should.be.equal(0);
+          result[1].threads.length.should.be.equal(1);
+          result[1].threads[0].posts.length.should.be.equal(0);
+          result[2].threads.length.should.be.equal(0);
           next();
         });
       });
