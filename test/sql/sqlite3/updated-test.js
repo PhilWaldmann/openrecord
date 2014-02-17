@@ -180,6 +180,8 @@ describe('SQLite3: Update', function(){
           michl.login = 'michael';
           michl.posts[0].message = 'michaels post';
           
+          michl.posts[0].__exists.should.be.true;
+          
           michl.save(function(result){
             result.should.be.equal(true);
             
@@ -188,7 +190,7 @@ describe('SQLite3: Update', function(){
               michael.id.should.be.equal(michl.id);
               michael.posts[0].message.should.be.equal('michaels post');
               michael.posts[0].id.should.be.equal(michl.posts[0].id);
-              
+              michael.posts.length.should.be.equal(1);
               next();
             });            
             
