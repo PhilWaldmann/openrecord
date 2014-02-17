@@ -14,3 +14,22 @@ global.beforePG = function(db, sql, next){
 global.afterPG = function(db, next){
   next();
 };
+
+global.testPG = function(name, queries){
+  var db = name + '_test';
+  require('../__shared/' + name + '-test')(
+    'Postgres', 
+    function(next){
+      beforePG(db, queries, next);
+    },
+    function(next){
+      afterPG(db, next);
+    },
+    {
+      host: 'localhost',
+      type: 'postgres',
+      database: db,
+      user: 'postgres',
+      password: ''
+  });
+}

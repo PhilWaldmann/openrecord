@@ -3,6 +3,8 @@ var fs = require('fs');
 var async = require('async');
 
 global.beforeSQLite = function(file, sql, next){
+  afterSQLite(file);
+  
   db = new sqlite.Database(file);
   
   var tmp = [];
@@ -18,5 +20,23 @@ global.beforeSQLite = function(file, sql, next){
 };
 
 global.afterSQLite = function(file){
-  fs.unlinkSync(file);
+  if(fs.existsSync(file)) fs.unlinkSync(file);
 };
+
+
+global.testSQLite = function(name, queries){
+  var db = name + '_test';
+  
+  require('../__shared/' + name + '-test')(
+    'SQLite3', 
+    function(next){
+      beforeSQLite(db, queries, next);
+    },
+    function(){
+      afterSQLite(db);
+    },
+    {
+      type: 'sqlite3',
+      file: db
+  });
+}

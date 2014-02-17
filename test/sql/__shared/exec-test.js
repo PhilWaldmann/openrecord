@@ -1,39 +1,28 @@
 var should = require('should');
-
 var Store = require('../../../lib/store');
 
-describe('SQLite3: Exec', function(){
-  var store;
-  var database = __dirname + '/exec_test.sqlite3';
-  
-  
-  
-  before(function(next){
-    beforeSQLite(database, [], next);
-  });
-  
-  before(function(){
-    store = new Store({
-      type: 'sqlite3',
-      file: database
-    });
 
-    store.Model('User', function(){});
-    store.Model('Stop', function(){
-      this.beforeFind(function(){
-        return false;
-      })
+module.exports = function(title, beforeFn, afterFn, store_conf){
+  
+  describe(title + ': Exec', function(){
+    var store;
+  
+    before(beforeFn);
+    after(afterFn);
+  
+  
+    before(function(){
+      store = new Store(store_conf);
+      store.on('exception', function(){});
+      
+      store.Model('User', function(){});
+      store.Model('Stop', function(){
+        this.beforeFind(function(){
+          return false;
+        })
+      });
     });
     
-  });
-  
-  after(function(){
-    afterSQLite(database);
-  });
-  
-  
-  
-  describe('exec()', function(){
     /* //async error?!?!
     it('throws an error on unknown table', function(next){ 
       store.ready(function(){
@@ -57,11 +46,7 @@ describe('SQLite3: Exec', function(){
         });  
       });
     });
-
-
-
-         
+    
+    
   });
-  
-  
-});
+};

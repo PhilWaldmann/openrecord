@@ -13,10 +13,7 @@ describe('SQLite3: Attributes', function(){
   before(function(next){
     beforeSQLite(database, [
       'CREATE TABLE attribute_tests(text_attribute  TEXT, numeric_attribute NUMERIC, integer_attribute  INTEGER, real_attribute  REAL, blob_attribute BLOB)',
-      'CREATE TABLE attribute_lowercase_tests(text_attribute  text, numeric_attribute numeric, integer_attribute  integer, real_attribute  real, blob_attribute blob)',
-      'CREATE TABLE users(id  INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT NOT NULL, email TEXT)',
-      'CREATE TABLE multiple_keys(id  INTEGER, id2 INTEGER, PRIMARY KEY(id, id2))',
-      'INSERT INTO users(login, email) VALUES("phil", "phil@mail.com")'
+      'CREATE TABLE attribute_lowercase_tests(text_attribute  text, numeric_attribute numeric, integer_attribute  integer, real_attribute  real, blob_attribute blob)'
     ], next);
   });
   
@@ -28,27 +25,13 @@ describe('SQLite3: Attributes', function(){
 
     store.Model('AttributeTest', function(){});
     store.Model('AttributeLowercaseTest', function(){});
-    store.Model('User', function(){
-      this.attribute('not_in_the_database', String);
-    });
-    store.Model('MultipleKey', function(){});
-    store.Model('UnknownTable', function(){});
   });
   
   after(function(){
     afterSQLite(database);
   });
     
-    
-  
-  it('does not load attributes', function(done){
-    store.ready(function(){    
-      var UnknownTable = store.Model('UnknownTable');
-      UnknownTable.definition.attributes.should.be.eql({});    
-      done();
-    });
-  });
-  
+      
     
   
   it('have all attributes loaded', function(done){
@@ -114,91 +97,6 @@ describe('SQLite3: Attributes', function(){
     
       done();
     });
-  });
-  
-  
-  
-  it('has the right primary_key', function(done){
-    store.ready(function(){    
-      var User = store.Model('User');
-
-      var primary_keys = User.definition.primary_keys;
-      primary_keys.should.be.eql(['id']);
-    
-      done();
-    });
-  });
-  
-  it('has multiple primary_keys', function(done){
-    store.ready(function(){    
-      var MultipleKey = store.Model('MultipleKey');
-
-      var primary_keys = MultipleKey.definition.primary_keys;
-      primary_keys.should.be.eql(['id', 'id2']);
-    
-      done();
-    });
-  });
-  
-  
-  it('has NOT NULL attributes', function(done){
-    store.ready(function(){    
-      var User = store.Model('User');
-
-      var attributes = User.definition.attributes;
-      attributes.login.notnull.should.be.true;
-    
-      done();
-    });
-  });
-  
-  
-  it('has automatic validation', function(done){
-    store.ready(function(){    
-      var User = store.Model('User');
-      var phil = User.new();
-      
-      phil.isValid(function(valid){
-        valid.should.be.false;
-        phil.errors.should.have.property('login');
-        done();
-      });    
-      
-    });
-  });
-  
-  
-  it('loaded record to not have any changes', function(next){
-    store.ready(function(){
-      var User = store.Model('User');
-      User.find(1).exec(function(result){
-        should.exist(result);
-        result.hasChanges().should.be.false;
-        result.login.should.be.equal('phil');
-        next();
-      });
-    });   
-  });
-  
-  
-  
-  
-  it('has automatic validation', function(done){
-    store.ready(function(){    
-      var User = store.Model('User');
-      var phil = User.new({
-        login:'michl',
-        not_in_the_database: 'foo'
-      });
-      
-      phil.save(function(success){
-        success.should.be.true;
-        phil.id.should.be.equal(2);
-        done();
-      });    
-      
-    });
-  });
-  
+  });  
   
 });
