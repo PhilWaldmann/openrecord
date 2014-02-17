@@ -1,3 +1,5 @@
+require('./__helper');
+
 testSQLite('aggregate_function', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, salary INTEGER)',
   'INSERT INTO users(salary) VALUES(100), (200), (400), (300), (1000)'

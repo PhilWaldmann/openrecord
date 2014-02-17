@@ -1,3 +1,5 @@
+require('./__helper');
+
 testPG('aggregate_function', [
   'CREATE TABLE users(id serial primary key, salary INTEGER)',
   'INSERT INTO users(salary) VALUES(100), (200), (400), (300), (1000)'
