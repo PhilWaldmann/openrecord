@@ -13,7 +13,9 @@ describe('SQLite3: Joins', function(){
       'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',      
       'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01")',
       'CREATE TABLE multiple_keys(id  INTEGER, id2 INTEGER, name TEXT, PRIMARY KEY(id, id2))',      
-      'INSERT INTO multiple_keys(id, id2, name) VALUES(1, 1, "phil"), (1, 2, "michl"), (2, 1, "admin")'
+      'INSERT INTO multiple_keys(id, id2, name) VALUES(1, 1, "phil"), (1, 2, "michl"), (2, 1, "admin")',
+      'CREATE TABLE with_scopes(id  INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, scope_id INTEGER)',
+      'INSERT INTO with_scopes(name, scope_id) VALUES("phil", 1), ("michl", 1), ("phil", 2)',
     ], next);
   });
   
@@ -33,6 +35,9 @@ describe('SQLite3: Joins', function(){
     });
     store.Model('MultipleKey', function(){
       this.validatesUniquenessOf('name');
+    });
+    store.Model('WithScope', function(){
+      this.validatesUniquenessOf('name', {scope: 'scope_id'});
     });
   });
   
@@ -172,6 +177,77 @@ describe('SQLite3: Joins', function(){
         
       });
     });
+    
+    
+    
+    it('returns false with scopes (create)', function(next){ 
+      store.ready(function(){
+        var WithScope = store.Model('WithScope');
+        var phil = WithScope.new({
+          name:'phil',
+          scope_id: 1
+        });
+        
+        phil.isValid(function(valid){
+          valid.should.be.false;
+          next();
+        });
+        
+      });
+    });
+    
+    it('returns true with scopes (create)', function(next){ 
+      store.ready(function(){
+        var WithScope = store.Model('WithScope');
+        var phil = WithScope.new({
+          name:'michl',
+          scope_id: 2
+        });
+        
+        phil.isValid(function(valid){
+          valid.should.be.true;
+          next();
+        });
+        
+      });
+    });
+    
+    
+    it('returns false with scopes (update)', function(next){ 
+      store.ready(function(){
+        var WithScope = store.Model('WithScope');
+        var phil = WithScope.new({
+          id:2,
+          name:'phil',
+          scope_id: 1
+        });
+        
+        phil.isValid(function(valid){
+          valid.should.be.false;
+          next();
+        });
+        
+      });
+    });
+    
+    it('returns true with scopes (update)', function(next){ 
+      store.ready(function(){
+        var WithScope = store.Model('WithScope');
+        var phil = WithScope.new({
+          id:1,
+          name:'phil',
+          scope_id: 1
+        });
+        
+        phil.isValid(function(valid){
+          valid.should.be.true;
+          next();
+        });
+        
+      });
+    });
+    
+    
      
   });
   
