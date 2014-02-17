@@ -73,11 +73,11 @@ describe('SQLite3: Attributes', function(){
 
       var attrs = AttributeTest.definition.attributes;
       
-      attrs.text_attribute.type.name.indexOf('text').should.not.be.equal(-1);
-      attrs.numeric_attribute.type.name.indexOf('numeric').should.not.be.equal(-1);
-      attrs.integer_attribute.type.name.indexOf('integer').should.not.be.equal(-1);
-      attrs.real_attribute.type.name.indexOf('real').should.not.be.equal(-1);
-      attrs.blob_attribute.type.name.indexOf('blob').should.not.be.equal(-1);
+      attrs.text_attribute.type.name.should.be.equal('text');
+      attrs.numeric_attribute.type.name.should.be.equal('real');
+      attrs.integer_attribute.type.name.should.be.equal('integer');
+      attrs.real_attribute.type.name.should.be.equal('real');
+      attrs.blob_attribute.type.name.should.be.equal('text');
     
       done();
     });
@@ -106,11 +106,11 @@ describe('SQLite3: Attributes', function(){
 
       var attrs = AttributeLowercaseTest.definition.attributes;
       
-      attrs.text_attribute.type.name.indexOf('text').should.not.be.equal(-1);
-      attrs.numeric_attribute.type.name.indexOf('numeric').should.not.be.equal(-1);
-      attrs.integer_attribute.type.name.indexOf('integer').should.not.be.equal(-1);
-      attrs.real_attribute.type.name.indexOf('real').should.not.be.equal(-1);
-      attrs.blob_attribute.type.name.indexOf('blob').should.not.be.equal(-1);
+      attrs.text_attribute.type.name.should.be.equal('text');
+      attrs.numeric_attribute.type.name.should.be.equal('real');
+      attrs.integer_attribute.type.name.should.be.equal('integer');
+      attrs.real_attribute.type.name.should.be.equal('real');
+      attrs.blob_attribute.type.name.should.be.equal('text');
     
       done();
     });
