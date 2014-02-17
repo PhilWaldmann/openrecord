@@ -20,6 +20,7 @@ npm install openrecord
 
 ## Features
 
+* SQLite3 and Postgres support
 * Async schema definition
 * Automatic field definition loading
 * Relations
@@ -36,12 +37,9 @@ npm install openrecord
 
 ## Roadmap
 
-#### 0.3.0
-* Better error handling
-* ~~sql unit tests~~
 
 #### 0.4.0
-* basic postgres support
+* Better error handling
 * migrations
 
 #### 0.5.0
