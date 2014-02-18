@@ -89,6 +89,45 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     });
     
     
+    it('create multiple relational records with relation = record', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        var Post = store.Model('Post');
+        User.find(4).include('posts').exec(function(user){
+          user.posts.length.should.be.equal(0);
+          
+          user.posts = Post.new({thread_id:1, message: 'with ='})
+          
+          user.save(function(success){
+            Post.where({user_id:user.id}).count().exec(function(result){
+              result.count.should.be.equal(1);
+              next();
+            });
+          });
+        });
+      });
+    });
+    
+    it('create multiple relational records with relation = record', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        var Post = store.Model('Post');
+        User.find(5).include('posts').exec(function(user){
+          user.posts.length.should.be.equal(0);
+          
+          user.posts = [Post.new({thread_id:1, message: 'with = [] 1'}), Post.new({thread_id:1, message: 'with = [] 2'})]
+          
+          user.save(function(success){
+            Post.where({user_id:user.id}).count().exec(function(result){
+              result.count.should.be.equal(2);
+              next();
+            });
+          });
+        });
+      });
+    });
+    
+    
     it('set a belongs_to record with =', function(next){ 
       store.ready(function(){
         var Thread = store.Model('Thread');
