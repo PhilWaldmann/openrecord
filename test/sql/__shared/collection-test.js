@@ -48,20 +48,39 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
     });
     
-    
-    it('create multiple relational records with relation.new()', function(next){ 
+    it('create a relational record with relation.add()', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
         var Post = store.Model('Post');
         User.find(2).include('posts').exec(function(user){
           user.posts.length.should.be.equal(1);
           
+          user.posts.add(Post.new({thread_id:1, message: 'yet another post'}));
+          
+          user.save(function(success){
+            Post.where({user_id:user.id}).count().exec(function(result){
+              result.count.should.be.equal(2);
+              next();
+            });
+          });
+        });
+      });
+    });
+    
+    
+    it('create multiple relational records with relation.new()', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        var Post = store.Model('Post');
+        User.find(3).include('posts').exec(function(user){
+          user.posts.length.should.be.equal(0);
+          
           user.posts.new({thread_id:1, message: 'michls post2'});
           user.posts.new({thread_id:1, message: 'post 3'});
           
           user.save(function(success){
             Post.where({user_id:user.id}).count().exec(function(result){
-              result.count.should.be.equal(3);
+              result.count.should.be.equal(2);
               next();
             });
           });
