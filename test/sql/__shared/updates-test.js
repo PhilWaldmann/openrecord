@@ -162,13 +162,14 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.find(3, function(admin){
             admin.login.should.be.equal('admin');
           
-            admin.login = 'administrator';
+            admin.login = 'sysadmin';
             admin.email = null
+
             admin.save(function(result){
               result.should.be.equal(true);
             
-              User.where({login:'administrator'}).limit(1).exec(function(administrator){
-                administrator.login.should.be.equal('administrator');
+              User.where({login:'sysadmin'}).limit(1).exec(function(administrator){
+                administrator.login.should.be.equal('sysadmin');
                 administrator.id.should.be.equal(admin.id);
                 should.not.exist(administrator.email);
                 next();
