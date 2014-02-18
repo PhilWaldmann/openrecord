@@ -212,6 +212,30 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });  
         });
       });
+      
+      
+      it('create only nested record', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          var Post = store.Model('Post');
+          User.find(3).include('posts').exec(function(admin){
+            admin.posts.length.should.be.equal(0);
+          
+            admin.posts.add({thread_id:4, message: 'admin was here'});
+                    
+            admin.save(function(result){
+              result.should.be.equal(true);
+            
+              Post.where({user_id:3}).count().exec(function(result){
+                result.count.should.be.equal(1);
+                next();
+              });            
+            
+            });
+          
+          });  
+        });
+      });
     
     
     
