@@ -142,11 +142,23 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
       
+      
       it('returns null values as well', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
           User.find(4).join('posts').exec(function(marlene){
             marlene.posts[0].attributes.should.have.property('message');
+            next();
+          });
+        });
+      });
+      
+      it('returns false values as well', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.find(4).join('threads').exec(function(marlene){
+            marlene.threads[0].attributes.should.have.property('archived');
+            marlene.threads[0].archived.should.be.false;
             next();
           });
         });
