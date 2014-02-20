@@ -15,6 +15,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store = new Store(store_conf);
 
       store.Model('User', function(){
+        this.belongsTo('nothing');
         this.hasMany('posts');
         this.hasMany('threads');
       
@@ -165,6 +166,22 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             email: 'my_mail@mail.com'
           }, function(result){
             this.login.should.be.equal('my_login');
+            result.should.be.true;
+            next();
+          });  
+        });
+      });
+      
+      
+      it('works on a chain', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+        
+          User.setContext({foo:'bar'}).create({
+            login: 'my_login2',
+            email: 'my_mail@mail.com'
+          }, function(result){
+            this.login.should.be.equal('my_login2');
             result.should.be.true;
             next();
           });  
