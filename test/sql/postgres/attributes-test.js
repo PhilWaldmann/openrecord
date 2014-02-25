@@ -69,7 +69,13 @@ describe('Postgres: all Attributes', function(){
         record.boolean_attribute.should.be.equal(true);
         record.binary_attribute.should.be.eql(new Buffer('some binary data', 'utf-8'));
         record.date_attribute.toString().should.be.equal('2014-02-18');
-        record.datetime_attribute.toJSON().should.be.equal('2014-02-18T14:45:02.000Z');
+        
+        if(new Date().getTimezoneOffset() == -60){ //my local test timezone
+          record.datetime_attribute.toJSON().should.be.equal('2014-02-18T14:45:02.000Z');
+        }else{ //travis-ci timezone
+          record.datetime_attribute.toJSON().should.be.equal('2014-02-18T15:45:02.000Z');
+        }
+        
         record.time_attribute.toString().should.be.equal('15:45:01');
         done();
       });
