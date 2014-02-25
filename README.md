@@ -38,11 +38,9 @@ npm install openrecord
 ## Roadmap
 
 
-#### 0.4.0
-* Better error handling
-* migrations
 
 #### 0.5.0
+* Better error handling
 * add mysql support
 * full multiple primary keys support
 

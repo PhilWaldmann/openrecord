@@ -66,6 +66,8 @@ testPG('joins', [
   "INSERT INTO threads(user_id, title, archived) VALUES(4, 'x marlenes thread', false)"
 ]);
 
+testPG('migrations_fresh', []);
+
 testPG('updates', [
   'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',

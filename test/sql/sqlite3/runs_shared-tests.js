@@ -65,6 +65,8 @@ testSQLite('joins', [
   'INSERT INTO threads(user_id, title, archived) VALUES(4, "x marlenes thread", "false")'
 ]);
 
+testSQLite('migrations_fresh', []);
+
 testSQLite('updates', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',

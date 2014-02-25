@@ -13,6 +13,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
   
     before(function(){
       store = new Store(store_conf);
+      store.setMaxListeners(0);
       store.on('exception', function(){});
       
       store.Model('User', function(){});
