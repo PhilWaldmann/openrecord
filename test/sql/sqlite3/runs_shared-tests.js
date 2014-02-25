@@ -67,6 +67,12 @@ testSQLite('joins', [
 
 testSQLite('migrations_fresh', []);
 
+testSQLite('migrations', [
+  'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT NOT NULL, first_name TEXT)',
+  'CREATE TABLE openrecord_migrations(name TEXT)',
+  'INSERT INTO openrecord_migrations VALUES("20140223120815_create_users")'
+]);
+
 testSQLite('updates', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',

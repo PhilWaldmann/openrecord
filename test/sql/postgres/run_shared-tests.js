@@ -68,6 +68,12 @@ testPG('joins', [
 
 testPG('migrations_fresh', []);
 
+testPG('migrations', [
+  'CREATE TABLE users(id serial primary key, login TEXT NOT NULL, first_name TEXT)',
+  'CREATE TABLE openrecord_migrations(name TEXT)',
+  "INSERT INTO openrecord_migrations VALUES('20140223120815_create_users')"
+]);
+
 testPG('updates', [
   'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
