@@ -136,16 +136,15 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('updates a single record', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.find(1, function(phil){
-            phil.login.should.be.equal('phil');
+          User.find(4, function(admin){
           
-            phil.login = 'philipp';
-            phil.save(function(result){
+            admin.login = 'philipp';
+            admin.save(function(result){
               result.should.be.equal(true);
             
               User.where({login:'philipp'}).limit(1).exec(function(philipp){
                 philipp.login.should.be.equal('philipp');
-                philipp.id.should.be.equal(phil.id);
+                philipp.id.should.be.equal(admin.id);
                 next();
               });            
             
