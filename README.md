@@ -32,6 +32,7 @@ npm install openrecord
 * Before and After Hooks
 * Events
 * Chaining
+* Migrations
 * ...
 
 
