@@ -22,7 +22,10 @@ global.testPG = function(name, queries){
     function(next){
       beforePG(db, queries, next);
     },
-    function(next){
+    function(next, store){
+      store.close(function(){
+        
+      });
       afterPG(db, next);
     },
     {

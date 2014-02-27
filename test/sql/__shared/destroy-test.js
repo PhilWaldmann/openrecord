@@ -8,7 +8,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     var store;
   
     before(beforeFn);
-    after(afterFn);
+    after(function(next){
+      afterFn(next, store);
+    });
   
   
     before(function(){
@@ -39,6 +41,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.Model('Thread', function(){
         this.belongsTo('user');
         this.hasMany('posts');
+        this.beforeDestroy(function(){
+          return this.title != 'do not destroy';
+        });
       });
       
     });
@@ -119,10 +124,73 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });  
         });
       });
-             
+      
     });
     
     
+    
+    
+    describe('delete_all()', function(){
+      it('delets all records without calling beforeDestroy or afterDestroy', function(next){ 
+        store.ready(function(){
+          var Thread = store.Model('Thread');
+          Thread.where({title_like: 'delete'}).delete_all(function(success, affected){
+            success.should.be.equal(true);
+            affected.should.be.equal(2);
+          
+            Thread.where({title_like: 'delete'}).count().exec(function(result){
+              result.count.should.be.equal(0);
+              next();
+            });
+          
+          });
+        });
+      });
+    });
+    
+    
+    describe('destroy_all()', function(){
+      it('delets all records with calling beforeDestroy or afterDestroy', function(next){ 
+        store.ready(function(){
+          var Thread = store.Model('Thread');
+          Thread.where({title_like: 'destroy'}).destroy_all(function(success, affected){
+            success.should.be.equal(true);
+            affected.should.be.equal(1);
+          
+            Thread.where({title_like: 'destroy'}).count().exec(function(result){
+              result.count.should.be.equal(1);
+              next();
+            });
+          
+          });
+        });
+      });
+      
+      
+      it('delets all records of a relation', function(next){ 
+        store.ready(function(){
+          var Thread = store.Model('Thread');
+          var Post = store.Model('Post');
+          
+          Thread.find(1, function(thread){
+            should.exist(thread);
+                        
+            thread.posts.delete_all(function(success, affected){
+              success.should.be.equal(true);
+              affected.should.be.equal(3);
+              
+              Post.where({thread_id:thread.id}).count().exec(function(result){
+                result.count.should.be.equal(0);
+                next();
+              });
+              
+            });
+          
+          });
+        });
+      });
+    });
+
     
   });
 };

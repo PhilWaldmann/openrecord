@@ -32,8 +32,9 @@ global.testSQLite = function(name, queries){
     function(next){
       beforeSQLite(db, queries, next);
     },
-    function(){
+    function(next){
       afterSQLite(db);
+      next();
     },
     {
       type: 'sqlite3',

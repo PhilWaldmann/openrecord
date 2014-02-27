@@ -8,7 +8,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     var store;
   
     before(beforeFn);
-    after(afterFn);
+    after(function(next){
+      afterFn(next, store);
+    });
   
   
     before(function(){

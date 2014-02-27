@@ -8,7 +8,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     var store;
   
     before(beforeFn);
-    after(afterFn);
+    after(function(next){
+      afterFn(next, store);
+    });
   
   
     before(function(){
@@ -150,6 +152,19 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
     });
     
+    
+    
+    it('load all related records', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.find(3).exec(function(user){
+          user.threads.exec(function(threads){
+            threads.length.should.be.equal(1);
+            next();
+          });
+        });
+      });
+    });
     
   });
 };

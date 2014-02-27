@@ -24,6 +24,7 @@ npm install openrecord
 * Async schema definition
 * Automatic field definition loading
 * Relations
+* Nested Cascade delete
 * Nested Eager Loading
 * Nested Creates
 * Nested Updates
@@ -36,20 +37,14 @@ npm install openrecord
 * ...
 
 
-## Roadmap
+## Roadmap to 1.0.0
 
-
-
-#### 0.6.0
-* Better error handling
+* better documentation
+* better error handling
 * add mysql support
 * full multiple primary keys support
-
-#### 0.7.0
 * finish .every() callback issues
 * better postgres support (hstore, ect.)
-
-#### 0.8.0
 * custom plugin support
 * more examples
 
