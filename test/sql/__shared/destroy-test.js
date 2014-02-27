@@ -103,6 +103,22 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     
+    
+      it('has the right scope', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.find(2, function(michl){
+            michl.login.should.be.equal('michl');
+          
+            michl.destroy(function(result){
+              result.should.be.equal(true);
+              michl.should.be.equal(this);
+              next();
+            });
+          
+          });  
+        });
+      });
              
     });
     
