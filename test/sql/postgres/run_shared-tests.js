@@ -50,9 +50,11 @@ testPG('includes', [
   'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
   'CREATE TABLE threads(id serial primary key, user_id INTEGER, title TEXT)',
+  'CREATE TABLE avatars(id serial primary key, user_id INTEGER, url TEXT)',
   "INSERT INTO users(login, email, created_at) VALUES('phil', 'phil@mail.com', '2014-01-05'), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', '2014-01-01')",
   "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post')",
-  "INSERT INTO threads(user_id, title) VALUES(2, 'first thread'), (1, 'second thread')"
+  "INSERT INTO threads(user_id, title) VALUES(2, 'first thread'), (1, 'second thread')",
+  "INSERT INTO avatars(user_id, url) VALUES(1, 'http://awesome-avatar.com/avatar.png'), (1, 'http://awesome-avatar.com/foo.png')"
 ]);
 
 
@@ -60,10 +62,12 @@ testPG('joins', [
   'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
   'CREATE TABLE threads(id serial primary key, user_id INTEGER, title TEXT, archived BOOLEAN)',
+  'CREATE TABLE avatars(id serial primary key, user_id INTEGER, url TEXT)',
   "INSERT INTO users(login, email, created_at) VALUES('phil', 'phil@mail.com', '2014-01-05'), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', '2014-01-01'), ('marlene', 'marlene@mail.com', '2014-01-01')",
   "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post'), (4, 4, NULL)",
   "INSERT INTO threads(user_id, title) VALUES(2, 'first thread'), (1, 'second thread')",
-  "INSERT INTO threads(user_id, title, archived) VALUES(4, 'x marlenes thread', false)"
+  "INSERT INTO threads(user_id, title, archived) VALUES(4, 'x marlenes thread', false)",
+  "INSERT INTO avatars(user_id, url) VALUES(1, 'http://awesome-avatar.com/avatar.png'), (1, 'http://awesome-avatar.com/foo.png')"
 ]);
 
 testPG('migrations_fresh', []);

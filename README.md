@@ -40,16 +40,16 @@ npm install openrecord
 
 
 
-#### 0.5.0
+#### 0.6.0
 * Better error handling
 * add mysql support
 * full multiple primary keys support
 
-#### 0.6.0
+#### 0.7.0
 * finish .every() callback issues
 * better postgres support (hstore, ect.)
 
-#### 0.7.0
+#### 0.8.0
 * custom plugin support
 * more examples
 

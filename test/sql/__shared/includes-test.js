@@ -18,6 +18,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.Model('User', function(){
         this.hasMany('posts');
         this.hasMany('threads');
+        this.hasOne('avatar');
+      });
+      store.Model('Avatar', function(){
+        this.belongsTo('user');
       });
       store.Model('Post', function(){
         this.belongsTo('user');
@@ -187,6 +191,20 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result[1].threads.length.should.be.equal(1);
             result[1].threads[0].posts.length.should.be.equal(0);
             result[2].threads.length.should.be.equal(0);
+            next();
+          });
+        });
+      });
+      
+      
+      it('returns the right results on hasOne relations', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.include('avatar').exec(function(result){
+            result.length.should.be.equal(3);
+            result[0].avatar.url.should.be.equal('http://awesome-avatar.com/avatar.png');
+            should.not.exist(result[1].avatar);
+            should.not.exist(result[2].avatar);
             next();
           });
         });
