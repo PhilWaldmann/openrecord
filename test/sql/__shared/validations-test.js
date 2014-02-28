@@ -4,7 +4,7 @@ var Store = require('../../../lib/store');
 
 module.exports = function(title, beforeFn, afterFn, store_conf){
   
-  describe(title + ': Empty', function(){
+  describe(title + ': Validation', function(){
     var store;
   
     before(beforeFn);

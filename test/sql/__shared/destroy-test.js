@@ -146,25 +146,6 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
         });
       });
-    });
-    
-    
-    describe('destroy_all()', function(){
-      it('delets all records with calling beforeDestroy or afterDestroy', function(next){ 
-        store.ready(function(){
-          var Thread = store.Model('Thread');
-          Thread.where({title_like: 'destroy'}).destroy_all(function(success, affected){
-            success.should.be.equal(true);
-            affected.should.be.equal(1);
-          
-            Thread.where({title_like: 'destroy'}).count().exec(function(result){
-              result.count.should.be.equal(1);
-              next();
-            });
-          
-          });
-        });
-      });
       
       
       it('delets all records of a relation', function(next){ 
@@ -184,6 +165,26 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
                 next();
               });
               
+            });
+          
+          });
+        });
+      });
+    });
+    
+    
+    describe('destroy_all()', function(){
+      it('delets all records with calling beforeDestroy or afterDestroy', function(next){ 
+        store.ready(function(){
+          var Thread = store.Model('Thread');
+
+          Thread.where({title_like: 'destroy'}).destroy_all(function(success, affected){
+            success.should.be.equal(true);
+            affected.should.be.equal(1);
+          
+            Thread.where({title_like: 'destroy'}).count().exec(function(result){
+              result.count.should.be.equal(1);
+              next();
             });
           
           });
