@@ -10,6 +10,7 @@ describe('SQL: Conditions', function(){
   store.Model('User', function(){
     this.attribute('my_primary_key', Number, {primary: true});
     this.attribute('login', String);
+    this.hasMany('posts');
   });
   
   
@@ -17,6 +18,7 @@ describe('SQL: Conditions', function(){
   store.Model('Post', function(){
     this.attribute('my_primary_key1', Number, {primary: true});
     this.attribute('my_primary_key2', Number, {primary: true});
+    this.attribute('message', String);
   });
   
   
@@ -324,7 +326,8 @@ describe('SQL: Conditions', function(){
           Chained.getInternal('conditions').should.be.eql([{
             type: 'raw',
             args: [],
-            query: 'login IS NULL'
+            query: 'login IS NULL',
+            name_tree: []
           }]);
           next();
         });
@@ -349,7 +352,8 @@ describe('SQL: Conditions', function(){
           Chained.getInternal('conditions').should.be.eql([{
             type: 'raw',
             args: ['phil'],
-            query: 'login = ?'
+            query: 'login = ?',
+            name_tree: []
           }]);
           next();
         });
@@ -375,7 +379,8 @@ describe('SQL: Conditions', function(){
           Chained.getInternal('conditions').should.be.eql([{
             type: 'raw',
             args: ['phil'],
-            query: 'login = ?'
+            query: 'login = ?',
+            name_tree: []
           }]);
           next();
         });
@@ -401,7 +406,8 @@ describe('SQL: Conditions', function(){
           Chained.getInternal('conditions').should.be.eql([{
             type: 'raw',
             args: ['phil'],
-            query: 'login = ?'
+            query: 'login = ?',
+            name_tree: []
           }]);
           next();
         });
@@ -427,7 +433,35 @@ describe('SQL: Conditions', function(){
           Chained.getInternal('conditions').should.be.eql([{
             type: 'raw',
             args: ['phil'],
-            query: 'login = ?'
+            query: 'login = ?',
+            name_tree: []
+          }]);
+          next();
+        });
+      });
+    });
+    
+    
+    describe('with array and hash placeholder on a relation', function(){
+    
+      it('has conditions', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          var Chained = User.where({posts:['message = :message', {message: 'hello'}]});
+          Chained.getInternal('conditions').length.should.be.equal(1);
+          next();
+        });
+      });
+      
+      it('has the right conditions', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          var Chained = User.where({posts:['message = :message', {message: 'hello'}]});  
+          Chained.getInternal('conditions').should.be.eql([{
+            type: 'raw',
+            args: ['hello'],
+            query: 'message = ?',
+            name_tree: ['posts']
           }]);
           next();
         });

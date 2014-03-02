@@ -21,6 +21,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         this.hasMany('posts');
         this.hasMany('threads');
         this.hasOne('avatar');
+        this.hasMany('unread_posts');
+        this.hasMany('unread', {through:'unread_posts'});
+        this.hasMany('unread_threads', {through:'unread', relation:'thread'});
       });
       store.Model('Avatar', function(){
         this.belongsTo('user');
@@ -28,11 +31,16 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.Model('Post', function(){
         this.belongsTo('user');
         this.belongsTo('thread');
+        this.belongsTo('thread_autor', {through:'thread', relation:'user'});
       });
       store.Model('Thread', function(){
         this.belongsTo('user');
         this.hasMany('posts');
       });
+      store.Model('UnreadPost', function(){
+        this.belongsTo('user');
+        this.belongsTo('unread', {model: 'Post'});
+      });  
     });
     
     
@@ -119,7 +127,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('join with a belongsTo relation', function(next){ 
         store.ready(function(){
           var Post = store.Model('Post');
-          Post.join('user').toSql().should.be.equal('select "posts"."id" as "f0", "posts"."user_id" as "f1", "posts"."thread_id" as "f2", "posts"."message" as "f3", "users"."id" as "f4", "users"."login" as "f5", "users"."email" as "f6", "users"."created_at" as "f7" from "posts" left join "users" on "posts"."user_id" = "users"."id"');
+          Post.join('user').toSql().should.be.equal('select "posts"."id" as "f0", "posts"."user_id" as "f1", "posts"."thread_id" as "f2", "posts"."message" as "f3", "user"."id" as "f4", "user"."login" as "f5", "user"."email" as "f6", "user"."created_at" as "f7" from "posts" left join "users" as "user" on "posts"."user_id" = "user"."id"');
           next();
         });
       });
@@ -212,7 +220,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('returns the right results on nested joins with the same table twice', function(next){ 
         store.ready(function(){
           var Thread = store.Model('Thread');
-          Thread.join({posts: 'user'}, 'user').order('title', 'users.id').exec(function(result){   
+          Thread.join({posts: 'user'}, 'user').order('title', 'user.id').exec(function(result){   
             result[0].title.should.be.equal('first thread');
             result[0].posts.length.should.be.equal(3);
             result[0].posts[0].user.login.should.be.equal('phil');
@@ -232,7 +240,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('returns the right results on nested joins with nested conditions', function(next){ 
         store.ready(function(){
           var Thread = store.Model('Thread');
-          Thread.join({posts: 'user'}, 'user').where({posts:{user:{login_like:'phi'}}}, {title_like: 'first'}).order('title', 'users.id').exec(function(result){          
+          Thread.join({posts: 'user'}, 'user').where({posts:{user:{login_like:'phi'}}}, {title_like: 'first'}).order('title', 'user.id').exec(function(result){          
             result[0].title.should.be.equal('first thread');
             result[0].posts.length.should.be.equal(2);
             result[0].posts[0].user.login.should.be.equal('phil');
@@ -248,7 +256,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('returns the right results on deep nested joins with nested conditions', function(next){ 
         store.ready(function(){
           var Thread = store.Model('Thread');
-          Thread.join({posts: {user:'posts'}}, 'user').where({posts:{user:{login_like:'phi'}}}, {title_like: 'first'}).order('title', 'users.id').exec(function(result){   
+          Thread.join({posts: {user:'posts'}}, 'user').where({posts:{user:{login_like:'phi'}}}, {title_like: 'first'}).order('title', 'user.id').exec(function(result){   
             result[0].title.should.be.equal('first thread');
             result[0].posts.length.should.be.equal(2);
             result[0].posts[0].user.login.should.be.equal('phil');
@@ -271,6 +279,90 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             should.not.exist(result[1].avatar);
             should.not.exist(result[2].avatar);
             should.not.exist(result[3].avatar);
+            next();
+          });
+        });
+      });
+     
+      it('returns the right results on hasMany through', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.join('unread').order('users.id').exec(function(result){   
+            result.length.should.be.equal(4);
+            result[0].unread.length.should.be.equal(1);
+            result[1].unread.length.should.be.equal(0);
+            result[2].unread.length.should.be.equal(0);
+            result[3].unread.length.should.be.equal(0);
+            next();
+          });
+        });
+      });
+      
+      
+      it('returns the right results on nested hasMany through', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.join('unread_threads').order('users.id').exec(function(result){   
+            result.length.should.be.equal(4);
+            result[0].unread_threads.length.should.be.equal(1);
+            result[0].unread_threads[0].title.should.be.equal('second thread');
+            result[1].unread_threads.length.should.be.equal(0);
+            result[2].unread_threads.length.should.be.equal(0);
+            result[3].unread_threads.length.should.be.equal(0);
+            next();
+          });
+        });
+      });
+      
+      it('returns the right results on belongsTo through', function(next){ 
+        store.ready(function(){
+          var Post = store.Model('Post');
+          Post.join('thread_autor').order('posts.id').exec(function(result){
+            result.length.should.be.equal(5);
+            result[0].thread_autor.login.should.be.equal('michl');
+            result[1].thread_autor.login.should.be.equal('michl');
+            result[2].thread_autor.login.should.be.equal('phil');
+            result[3].thread_autor.login.should.be.equal('michl');
+            should.not.exist(result[4].thread_autor);
+            next();
+          });
+        });
+      });
+      
+      
+      it('returns the right results on sub nested hasMany through', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.join({threads:{user:'unread_threads'}}).order('users.id').exec(function(result){   
+            result.length.should.be.equal(4);
+            result[0].unread_threads.length.should.be.equal(0);
+            result[1].unread_threads.length.should.be.equal(0);
+            result[2].unread_threads.length.should.be.equal(0);
+            
+            result[0].threads.length.should.be.equal(1);
+            result[1].threads.length.should.be.equal(1);            
+            result[2].threads.length.should.be.equal(0);
+            
+            result[0].threads[0].user.unread_threads.length.should.be.equal(1);
+            result[1].threads[0].user.unread_threads.length.should.be.equal(0); 
+            
+            next();
+          });
+        });
+      });
+      
+      
+      it('returns the right results on sub nested hasMany through with conditions', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.join({threads:{user:'unread_threads'}}).where({threads:{user:{unread_threads:{title_like:'second'}}}}).order('users.id').exec(function(result){
+            result.length.should.be.equal(1);
+            result[0].unread_threads.length.should.be.equal(0);
+            
+            result[0].threads.length.should.be.equal(1);
+            
+            result[0].threads[0].user.unread_threads.length.should.be.equal(1);
+            
             next();
           });
         });

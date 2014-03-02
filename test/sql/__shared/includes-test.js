@@ -21,6 +21,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         this.hasMany('posts');
         this.hasMany('threads');
         this.hasOne('avatar');
+        this.hasMany('unread_posts');
+        this.hasMany('unread', {through:'unread_posts'});
+        this.hasMany('unread_threads', {through:'unread', relation:'thread'});
       });
       store.Model('Avatar', function(){
         this.belongsTo('user');
@@ -28,11 +31,16 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.Model('Post', function(){
         this.belongsTo('user');
         this.belongsTo('thread');
+        this.belongsTo('thread_autor', {through:'thread', relation:'user'});
       });
       store.Model('Thread', function(){
         this.belongsTo('user');
         this.hasMany('posts');
       });
+      store.Model('UnreadPost', function(){
+        this.belongsTo('user');
+        this.belongsTo('unread', {model: 'Post'});
+      });  
     });
     
     
@@ -211,7 +219,115 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
         });
       });
-         
+      
+      
+      it('returns the right results on hasMany through', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.include('unread').order('users.id').exec(function(result){   
+            result.length.should.be.equal(3);
+            result[0].unread.length.should.be.equal(1);
+            result[1].unread.length.should.be.equal(0);
+            result[2].unread.length.should.be.equal(0);
+            next();
+          });
+        });
+      });
+      
+      
+      it('returns the right results on nested hasMany through', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.include('unread_threads').order('users.id').exec(function(result){   
+            result.length.should.be.equal(3);
+            result[0].unread_threads.length.should.be.equal(1);
+            result[0].unread_threads[0].title.should.be.equal('second thread');
+            result[1].unread_threads.length.should.be.equal(0);
+            result[2].unread_threads.length.should.be.equal(0);
+            next();
+          });
+        });
+      });
+      
+      it('returns the right results on belongsTo through', function(next){ 
+        store.ready(function(){
+          var Post = store.Model('Post');
+          Post.include('thread_autor').order('posts.id').exec(function(result){
+            result.length.should.be.equal(4);
+            result[0].thread_autor.login.should.be.equal('michl');
+            result[1].thread_autor.login.should.be.equal('michl');
+            result[2].thread_autor.login.should.be.equal('phil');
+            result[3].thread_autor.login.should.be.equal('michl');
+            next();
+          });
+        });
+      });
+      
+      
+      it('returns the right results on sub nested hasMany through', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.include({threads:{user:'unread_threads'}}).order('users.id').exec(function(result){   
+            result.length.should.be.equal(3);
+            result[0].unread_threads.length.should.be.equal(0);
+            result[1].unread_threads.length.should.be.equal(0);
+            result[2].unread_threads.length.should.be.equal(0);
+            
+            result[0].threads.length.should.be.equal(1);
+            result[1].threads.length.should.be.equal(1);            
+            result[2].threads.length.should.be.equal(0);
+            
+            result[0].threads[0].user.unread_threads.length.should.be.equal(1);
+            result[1].threads[0].user.unread_threads.length.should.be.equal(0); 
+            
+            next();
+          });
+        });
+      });
+       
+       
+      it('returns the right results on sub nested hasMany through with conditions', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.include({threads:{user:'unread_threads'}}).where({threads:{user:{unread_threads:{title_like:'unknown'}}}}).order('users.id').exec(function(result){
+            result.length.should.be.equal(3);
+            result[0].unread_threads.length.should.be.equal(0);
+            result[1].unread_threads.length.should.be.equal(0);
+            result[2].unread_threads.length.should.be.equal(0);
+            
+            result[0].threads.length.should.be.equal(1);
+            result[1].threads.length.should.be.equal(1);            
+            result[2].threads.length.should.be.equal(0);
+            
+            result[0].threads[0].user.unread_threads.length.should.be.equal(0);
+            result[1].threads[0].user.unread_threads.length.should.be.equal(0); 
+            
+            next();
+          });
+        });
+      });
+      
+      it('returns the right results on sub nested hasMany through with custom conditions', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.include({threads:{user:'unread_threads'}}).where({threads:{user:{unread_threads:["title like ?", 'second%']}}}).order('users.id').exec(function(result){
+            result.length.should.be.equal(3);
+            result[0].unread_threads.length.should.be.equal(0);
+            result[1].unread_threads.length.should.be.equal(0);
+            result[2].unread_threads.length.should.be.equal(0);
+            
+            result[0].threads.length.should.be.equal(1);
+            result[1].threads.length.should.be.equal(1);            
+            result[2].threads.length.should.be.equal(0);
+            
+            result[0].threads[0].user.unread_threads.length.should.be.equal(1);
+            result[1].threads[0].user.unread_threads.length.should.be.equal(0); 
+            
+            next();
+          });
+        });
+      });
+       
     });
     
     

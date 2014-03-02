@@ -2,8 +2,7 @@ OpenRecord
 ==========
 
 [![Build Status](http://travis-ci.org/PhilWaldmann/openrecord.png)](https://travis-ci.org/PhilWaldmann/openrecord)
-[![Node.ci](http://node.ci/report/github/PhilWaldmann/openrecord/master.png)]
-(http://node.ci/projects/github/PhilWaldmann/openrecord/master)
+[![Node.ci](http://node.ci/report/github/PhilWaldmann/openrecord/master.png)](http://node.ci/projects/github/PhilWaldmann/openrecord/master)
 [![Coverage Status](http://coveralls.io/repos/PhilWaldmann/openrecord/badge.png)](https://coveralls.io/r/PhilWaldmann/openrecord)
 [![npm package version](http://badge.fury.io/js/openrecord.png)](https://npmjs.org/package/openrecord)
 [![Dependency Status](http://david-dm.org/PhilWaldmann/openrecord.png)](https://david-dm.org/PhilWaldmann/openrecord)
@@ -23,7 +22,7 @@ npm install openrecord
 * SQLite3 and Postgres support
 * Async schema definition
 * Automatic field definition loading
-* Relations
+* Relations (hasMany, hasOne, belongsTo with through)
 * Nested Cascade delete
 * Nested Eager Loading
 * Nested Creates

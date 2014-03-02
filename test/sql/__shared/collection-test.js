@@ -21,14 +21,26 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.Model('User', function(){
         this.hasMany('posts');
         this.hasMany('threads');
+        this.hasOne('avatar');
+        this.hasMany('unread_posts');
+        this.hasMany('unread', {through:'unread_posts'});
+        this.hasMany('unread_threads', {through:'unread', relation:'thread'});
+      });
+      store.Model('Avatar', function(){
+        this.belongsTo('user');
       });
       store.Model('Post', function(){
         this.belongsTo('user');
         this.belongsTo('thread');
+        this.belongsTo('thread_autor', {through:'thread', relation:'user'});
       });
       store.Model('Thread', function(){
         this.belongsTo('user');
         this.hasMany('posts');
+      });
+      store.Model('UnreadPost', function(){
+        this.belongsTo('user');
+        this.belongsTo('unread', {model: 'Post'});
       });
       
     });
@@ -153,6 +165,70 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     });
     
     
+    it('set a hasOne record with =', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        var Avatar = store.Model('Avatar');
+        User.find(1).exec(function(user){
+          
+          user.avatar = Avatar.new({url:'http://better-avatar.com/strong.png'});
+          user.save(function(success){
+            success.should.be.true;
+            Avatar.where({url_like: 'better'}).include('user').limit(1).exec(function(avatar){
+              avatar.url.should.be.equal('http://better-avatar.com/strong.png');
+              avatar.user.id.should.be.equal(user.id);
+              next();
+            });
+          });
+        });
+      });
+    });
+    
+    
+    it('add multiple records on a hasMany through relation via add(1, 2)', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        var Post = store.Model('Post');
+        User.find(1).exec(function(user){
+          
+          user.unread.add([1, 2]);
+          
+          user.save(function(success){
+            success.should.be.true;
+            User.find(1).include('unread').exec(function(phil){
+              phil.unread.length.should.be.equal(3);
+              phil.unread.every.id.should.be.eql([3, 1, 2]);
+              next();
+            });
+          });
+        });
+      });
+    });
+    
+    /* 
+    it('add a records on a hasMany through relation via new()', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        var Post = store.Model('Post');
+        User.find(2).include('unread').exec(function(user){
+          user.unread.length.should.be.equal(0);
+          
+          user.unread.new({thread_id:3, user_id:3, message: 'unread message'});
+          
+          user.save(function(success){
+            success.should.be.true;
+            User.find(2).include('unread').exec(function(michl){
+              michl.unread.length.should.be.equal(1);
+              user.unread[0].attributes.user_id.should.be.equal(3);
+              user.unread[0].attributes.thread_id.should.be.equal(3);
+              user.unread[0].attributes.message.should.be.equal('unread message');
+              next();
+            });
+          });
+        });
+      });
+    });
+    */
     
     it('load all related records', function(next){ 
       store.ready(function(){
@@ -165,6 +241,6 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
+        
   });
 };
