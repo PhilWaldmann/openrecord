@@ -20,6 +20,7 @@
         "mocha": ">= 1.13.0",
         "should": ">= 1.3.0",
         "sqlite3": ">= 2.2.x",
+        "mysql": ">=2.1.x",
         "pg": ">= 2.11.x",
         "coveralls": ">= 2.6.x",
         "mocha-lcov-reporter": ">= 0.0.x",
