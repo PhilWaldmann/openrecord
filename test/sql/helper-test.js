@@ -192,6 +192,18 @@ describe('SQL: Helper', function(){
         next();
       });      
     });
+    
+    it('works with null values', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        var result = Helper.sanitizeCondition(User, {title: null});
+        result.length.should.be.equal(1);
+        result[0].name_tree.should.be.eql([]);
+        result[0].table.should.be.eql('users');
+        (result[0].value === null).should.be.true;
+        next();
+      });      
+    });
   });
   
 });

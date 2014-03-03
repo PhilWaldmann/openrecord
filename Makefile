@@ -5,7 +5,7 @@ test: test-mocha
 test-all: clean test-mocha test-cov
 
 test-mocha:
-	@NODE_ENV=test ./node_modules/.bin/mocha --reporter $(REPORTER) --recursive
+	@NODE_ENV=test ./node_modules/.bin/mocha --reporter $(REPORTER) --recursive --grep "Collection create a relational record with relation.add"
 	# --grep Postgres
 
 test-cov:
