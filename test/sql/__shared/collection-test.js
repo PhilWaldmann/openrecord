@@ -205,7 +205,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
     });
     
-    /* 
+    
     it('add a records on a hasMany through relation via new()', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
@@ -228,7 +228,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    */
+    
     
     it('load all related records', function(next){ 
       store.ready(function(){
