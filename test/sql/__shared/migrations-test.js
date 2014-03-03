@@ -49,7 +49,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           AttributeTest.definition.attributes.binary_attr.type.name.should.be.equal('buffer'); //SHOULD BY binary...
           AttributeTest.definition.attributes.date_attr.type.name.should.be.equal('date');
           AttributeTest.definition.attributes.datetime_attr.type.name.should.be.equal('datetime');
-          AttributeTest.definition.attributes.time_attr.type.name.should.be.equal('string'); //SHOULD BE time
+          AttributeTest.definition.attributes.time_attr.type.name.should.be.equal('time');
         }else{
           AttributeTest.definition.attributes.string_attr.type.name.should.be.equal('text');
           AttributeTest.definition.attributes.text_attr.type.name.should.be.equal('text');
