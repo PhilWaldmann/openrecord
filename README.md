@@ -38,6 +38,7 @@ npm install openrecord
 
 ## Roadmap to 1.0.0
 
+* attributes rework
 * better documentation
 * better error handling
 * full multiple primary keys support
