@@ -1,6 +1,10 @@
 {
     "name": "openrecord",
+<<<<<<< HEAD
     "version": "0.8.0", 
+=======
+    "version": "0.7.5",
+>>>>>>> FETCH_HEAD
     "description": "Active record like ORM for nodejs",
     "keywords": ["orm", "record", "sql", "sqlite3", "postgres", "pg", "mysql", "database", "activerecord"],
     "author": "Philipp Waldmann <philipp.waldmann@s-team.at>",
