@@ -40,7 +40,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.Model('UnreadPost', function(){
         this.belongsTo('user');
         this.belongsTo('unread', {model: 'Post'});
-      });  
+      });
+      store.Model('PolyThing', function(){
+        this.belongsTo('member', {polymorph: true});
+      });
     });
     
     
@@ -365,6 +368,17 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             
             next();
           });
+        });
+      });
+      
+      
+      it('throws an error on polymorphic join', function(next){
+        store.ready(function(){
+          var PolyThing = store.Model('PolyThing');
+          (function(){
+            PolyThing.join('member');
+          }).should.throw();
+          next();
         });
       });
      

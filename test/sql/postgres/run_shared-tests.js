@@ -83,11 +83,13 @@ testPG('includes', [
   'CREATE TABLE threads(id serial primary key, user_id INTEGER, title TEXT)',
   'CREATE TABLE avatars(id serial primary key, user_id INTEGER, url TEXT)',
   'CREATE TABLE unread_posts(id serial primary key, user_id INTEGER, post_id INTEGER)',
+  'CREATE TABLE poly_things(id serial primary key, member_id integer, member_type text, user_id integer)',
   "INSERT INTO users(login, email, created_at) VALUES('phil', 'phil@mail.com', '2014-01-05'), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', '2014-01-01')",
   "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post')",
   "INSERT INTO threads(user_id, title) VALUES(2, 'first thread'), (1, 'second thread')",
   "INSERT INTO avatars(user_id, url) VALUES(1, 'http://awesome-avatar.com/avatar.png'), (1, 'http://awesome-avatar.com/foo.png')",
-  "INSERT INTO unread_posts(user_id, post_id) VALUES(1, 3)"
+  "INSERT INTO unread_posts(user_id, post_id) VALUES(1, 3)",
+  "INSERT INTO poly_things (member_id, member_type, user_id) VALUES (1, 'Post', 1), (1, 'Thread', 1), (2, 'Thread', 2), (1, 'Avatar', 2)"
 ]);
 
 
@@ -107,6 +109,7 @@ testPG('joins', [
   'CREATE TABLE threads(id serial primary key, user_id INTEGER, title TEXT, archived BOOLEAN)',
   'CREATE TABLE avatars(id serial primary key, user_id INTEGER, url TEXT)',
   'CREATE TABLE unread_posts(id serial primary key, user_id INTEGER, post_id INTEGER)',
+  'CREATE TABLE poly_things(id serial primary key, member_id integer, member_type text)',
   "INSERT INTO users(login, email, created_at) VALUES('phil', 'phil@mail.com', '2014-01-05'), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', '2014-01-01'), ('marlene', 'marlene@mail.com', '2014-01-01')",
   "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post'), (4, 4, NULL)",
   "INSERT INTO threads(user_id, title) VALUES(2, 'first thread'), (1, 'second thread')",

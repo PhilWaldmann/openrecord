@@ -14,6 +14,8 @@ describe('SQL: Helper', function(){
     this.hasMany('unread_posts');
     this.hasMany('unread', {through:'unread_posts'});
     this.hasMany('unread_threads', {through:'unread', relation:'thread'});
+    this.hasMany('poly_things');
+    this.hasMany('members', {through:'poly_things', relation:'member'});
   });
   
   store.Model('Thread', function(){
@@ -32,6 +34,11 @@ describe('SQL: Helper', function(){
     this.attribute('id', Number, {primary: true});
     this.belongsTo('user');
     this.belongsTo('unread', {model: 'Post'});
+  });
+  
+  store.Model('PolyThing', function(){
+    this.attribute('id', Number, {primary: true});
+    this.belongsTo('member', {polymorph: true});
   });
   
 
@@ -162,6 +169,31 @@ describe('SQL: Helper', function(){
         should.not.exist(result[4].as);
         result[5].name_tree.should.be.eql(['unread_posts', 'unread', 'thread', 'user', 'unread_posts', 'unread']);
         result[5].as.should.be.eql(['unread_posts', 'unread', 'thread', 'user', 'unread']);
+        next();
+      });      
+    });
+    
+    
+    it('works with nested polymorphic relation', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        var result = Helper.sanitizeRelations(User, {members:'user'});
+        result.length.should.be.equal(2);
+        result[0].name_tree.should.be.eql(['poly_things']);
+        result[1].name_tree.should.be.eql(['poly_things', 'member']);
+        result[1].sub_relations.should.be.eql('user');
+        next();
+      });      
+    });
+    
+    it('works with nested polymorphic relations', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        var result = Helper.sanitizeRelations(User, {members:['user', 'thread']});
+        result.length.should.be.equal(2);
+        result[0].name_tree.should.be.eql(['poly_things']);
+        result[1].name_tree.should.be.eql(['poly_things', 'member']);
+        result[1].sub_relations.should.be.eql(['user', 'thread']);
         next();
       });      
     });

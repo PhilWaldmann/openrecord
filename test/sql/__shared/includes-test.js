@@ -24,6 +24,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         this.hasMany('unread_posts');
         this.hasMany('unread', {through:'unread_posts'});
         this.hasMany('unread_threads', {through:'unread', relation:'thread'});
+        this.hasMany('poly_things');
+        this.hasMany('members', {through:'poly_things', relation:'member'});
       });
       store.Model('Avatar', function(){
         this.belongsTo('user');
@@ -40,7 +42,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.Model('UnreadPost', function(){
         this.belongsTo('user');
         this.belongsTo('unread', {model: 'Post'});
-      });  
+      });
+      store.Model('PolyThing', function(){
+        this.belongsTo('member', {polymorph: true});
+      });
     });
     
     
@@ -323,6 +328,87 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result[0].threads[0].user.unread_threads.length.should.be.equal(1);
             result[1].threads[0].user.unread_threads.length.should.be.equal(0); 
             
+            next();
+          });
+        });
+      });
+      
+      
+      it('returns a polymorphic relation', function(next){
+        store.ready(function(){
+          var PolyThing = store.Model('PolyThing');
+          var Post = store.Model('Post');
+          var Thread = store.Model('Thread');
+          var Avatar = store.Model('Avatar');
+          PolyThing.include('member').order('poly_things.id').exec(function(result){
+            result.length.should.be.equal(4);
+            result[0].member.should.be.an.instanceOf(Post);
+            result[1].member.should.be.an.instanceOf(Thread);
+            result[2].member.should.be.an.instanceOf(Thread);
+            result[3].member.should.be.an.instanceOf(Avatar);
+            next();
+          });
+        });
+      });
+      
+      
+      it('returns a nested polymorphic relation', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          var Post = store.Model('Post');
+          var Thread = store.Model('Thread');
+          var Avatar = store.Model('Avatar');
+          User.include({poly_things:'member'}).order('users.id').exec(function(result){
+            result.length.should.be.equal(3);
+            result[0].poly_things.length.should.be.equal(2);
+            result[1].poly_things.length.should.be.equal(2);
+            result[0].poly_things[0].member.should.be.an.instanceOf(Post);
+            result[0].poly_things[1].member.should.be.an.instanceOf(Thread);
+            result[1].poly_things[0].member.should.be.an.instanceOf(Thread);
+            result[1].poly_things[1].member.should.be.an.instanceOf(Avatar);
+            result[2].poly_things.length.should.be.equal(0);
+            next();
+          });
+        });
+      });
+      
+            
+      it('returns a hasMany through polymorphic relation', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          var Post = store.Model('Post');
+          var Thread = store.Model('Thread');
+          var Avatar = store.Model('Avatar');
+          User.include('members').order('users.id').exec(function(result){
+            result.length.should.be.equal(3);
+            result[0].members.length.should.be.equal(2);
+            result[1].members.length.should.be.equal(2);
+            result[0].members[0].should.be.an.instanceOf(Post);
+            result[0].members[1].should.be.an.instanceOf(Thread);
+            result[1].members[0].should.be.an.instanceOf(Thread);
+            result[1].members[1].should.be.an.instanceOf(Avatar);
+            result[2].members.length.should.be.equal(0);
+            next();
+          });
+        });
+      });
+       
+       
+      it('returns a hasMany through polymorphic relation with sub includes', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          var Post = store.Model('Post');
+          var Thread = store.Model('Thread');
+          var Avatar = store.Model('Avatar');
+          User.include({members: ['user']}).order('users.id').exec(function(result){
+            result.length.should.be.equal(3);
+            result[0].members.length.should.be.equal(2);
+            result[1].members.length.should.be.equal(2);
+            result[0].members[0].user.login.should.be.equal('phil');
+            result[0].members[1].user.login.should.be.equal('michl');
+            result[1].members[0].user.login.should.be.equal('phil');
+            result[1].members[1].user.login.should.be.equal('phil');
+            result[2].members.length.should.be.equal(0);
             next();
           });
         });
