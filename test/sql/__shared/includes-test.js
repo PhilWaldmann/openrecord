@@ -24,11 +24,12 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         this.hasMany('unread_posts');
         this.hasMany('unread', {through:'unread_posts'});
         this.hasMany('unread_threads', {through:'unread', relation:'thread'});
-        this.hasMany('poly_things');
+        this.hasMany('poly_things', {as:'member'});
         this.hasMany('members', {through:'poly_things', relation:'member'});
       });
       store.Model('Avatar', function(){
         this.belongsTo('user');
+        this.hasMany('poly_things', {as:'member'});
       });
       store.Model('Post', function(){
         this.belongsTo('user');
@@ -409,6 +410,19 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result[1].members[0].user.login.should.be.equal('phil');
             result[1].members[1].user.login.should.be.equal('phil');
             result[2].members.length.should.be.equal(0);
+            next();
+          });
+        });
+      });
+       
+      it('returns a the polymorphic relation from the other side', function(next){
+        store.ready(function(){
+          var Avatar = store.Model('Avatar');
+          Avatar.find(1).include('poly_things').exec(function(result){
+            result.id.should.be.equal(1);
+            result.poly_things.length.should.be.equal(1);
+            result.poly_things[0].member_type.should.be.equal('Avatar');
+            result.poly_things[0].member_id.should.be.equal(result.id);
             next();
           });
         });

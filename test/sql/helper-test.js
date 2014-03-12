@@ -238,4 +238,66 @@ describe('SQL: Helper', function(){
     });
   });
   
+  
+  
+  describe('nameTreeToRelation()', function(){
+    it('works with one element', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        var result = Helper.nameTreeToRelation(['aa']);
+        result.should.be.equal('aa');        
+        next();
+      });      
+    });
+    
+    it('works with two elements', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        var result = Helper.nameTreeToRelation(['aa', 'bb']);
+        result.should.be.eql({aa:'bb'});        
+        next();
+      });      
+    });
+    
+    it('works with three elements', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        var result = Helper.nameTreeToRelation(['aa', 'bb', 'cc']);
+        result.should.be.eql({aa:{bb:'cc'}});   
+        next();
+      });      
+    });
+  });
+  
+  
+  
+  describe('nameTreeToCondition()', function(){
+    it('works with one element', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        var result = Helper.nameTreeToCondition(['aa'], {foo:'bar'});
+        result.should.be.eql({aa:{foo:'bar'}});        
+        next();
+      });      
+    });
+    
+    it('works with two elements', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        var result = Helper.nameTreeToCondition(['aa', 'bb'], {foo:'bar'});
+        result.should.be.eql({aa:{bb:{foo:'bar'}}});        
+        next();
+      });      
+    });
+    
+    it('works with three elements', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        var result = Helper.nameTreeToCondition(['aa', 'bb', 'cc'], {foo:'bar'});
+        result.should.be.eql({aa:{bb:{cc:{foo:'bar'}}}});   
+        next();
+      });      
+    });
+  });
+  
 });

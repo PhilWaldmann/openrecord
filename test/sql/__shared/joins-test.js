@@ -27,6 +27,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
       store.Model('Avatar', function(){
         this.belongsTo('user');
+        this.hasMany('poly_things', {as:'member'});
       });
       store.Model('Post', function(){
         this.belongsTo('user');
@@ -379,6 +380,19 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             PolyThing.join('member');
           }).should.throw();
           next();
+        });
+      });
+      
+      it('returns a the polymorphic relation from the other side', function(next){
+        store.ready(function(){
+          var Avatar = store.Model('Avatar');
+          Avatar.find(1).join('poly_things').exec(function(result){
+            result.id.should.be.equal(1);
+            result.poly_things.length.should.be.equal(1);
+            result.poly_things[0].member_type.should.be.equal('Avatar');
+            result.poly_things[0].member_id.should.be.equal(result.id);
+            next();
+          });
         });
       });
      
