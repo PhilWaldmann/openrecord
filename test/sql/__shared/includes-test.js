@@ -24,7 +24,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         this.hasMany('unread_posts');
         this.hasMany('unread', {through:'unread_posts'});
         this.hasMany('unread_threads', {through:'unread', relation:'thread'});
-        this.hasMany('poly_things', {as:'member'});
+        this.hasMany('poly_things');
         this.hasMany('members', {through:'poly_things', relation:'member'});
       });
       store.Model('Avatar', function(){
@@ -361,6 +361,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           var Avatar = store.Model('Avatar');
           User.include({poly_things:'member'}).order('users.id').exec(function(result){
             result.length.should.be.equal(3);
+            console.log(result[0]);
             result[0].poly_things.length.should.be.equal(2);
             result[1].poly_things.length.should.be.equal(2);
             result[0].poly_things[0].member.should.be.an.instanceOf(Post);
