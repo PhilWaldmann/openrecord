@@ -361,7 +361,6 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           var Avatar = store.Model('Avatar');
           User.include({poly_things:'member'}).order('users.id').exec(function(result){
             result.length.should.be.equal(3);
-            console.log(result[0]);
             result[0].poly_things.length.should.be.equal(2);
             result[1].poly_things.length.should.be.equal(2);
             result[0].poly_things[0].member.should.be.an.instanceOf(Post);
