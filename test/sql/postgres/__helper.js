@@ -1,9 +1,9 @@
 var exec = require('child_process').exec;
 
 global.beforePG = function(db, sql, next){
-  exec('psql -c "SELECT pid FROM pg_stat_activity where pid <> pg_backend_pid()" -U postgres', function(err, result){
+  /*exec('psql -c "SELECT pid FROM pg_stat_activity where pid <> pg_backend_pid()" -U postgres', function(err, result){
     console.log('Connected', result);
-  });
+  });*/
   exec('psql -c "DROP DATABASE ' + db + '" -U postgres', function(err, result){
     exec('psql -c "create database ' + db + '" -U postgres', function(err, result){
       console.log(err, result);
