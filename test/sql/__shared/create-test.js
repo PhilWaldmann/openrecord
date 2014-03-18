@@ -22,7 +22,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         this.hasMany('posts');
         this.hasMany('threads');
       
-        this.beforeCreate(function(transaction, done){
+        this.beforeCreate(function(record, transaction, done){
           this.save.should.be.a.Function;
           done.should.be.a.Function;
         
