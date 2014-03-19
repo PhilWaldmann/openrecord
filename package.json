@@ -25,7 +25,7 @@
         "coveralls": ">= 2.6.x",
         "mocha-lcov-reporter": ">= 0.0.x",
         "blanket": ">= 1.1.x",
-        "markdox": ">= 0.1.x"
+        "docu": "latest"
     },
     "main": "./lib/store",
     "directories": {
@@ -38,7 +38,8 @@
         }
     },
     "scripts": {
-        "test": "make test"
+        "test": "make test",
+        "postpublish": "make docs && make push-docs"
     },
     "engines": {
         "node": ">=0.8.7"
