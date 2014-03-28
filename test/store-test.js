@@ -163,4 +163,24 @@ describe('Store: Base', function(){
     
   });
   
+  
+  
+  describe('loads plugins via plugins:"path/*" config', function(){
+    var store = new Store({
+      plugins: __dirname + '/fixtures/plugins/*.js'
+    });
+    
+    it('plugins are loaded on the store', function(){
+      store.myStoreFunction.should.be.a.Function;
+    });
+    
+    it('plugins are loaded on the store', function(next){
+      store.Model('test', function(){
+        this.myDefinitionFunction.should.be.a.Function;
+        next();
+      });
+    });
+    
+  });
+  
 });
