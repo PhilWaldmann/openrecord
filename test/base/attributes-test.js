@@ -211,6 +211,21 @@ describe('Attributes', function(){
    });
    
    
+   describe('getChangedValues() with allowed_attributes', function(){
+     var user = new User({
+       my_str: 'phil',
+       my_number: 3,
+       my_bool: true
+     });
+     
+     user.allowed_attributes = ['my_number', 'my_bool'];
+          
+     it('returns a modified changes hash', function(){
+       user.getChangedValues().should.be.eql({my_number: 3, my_bool: true});
+     });    
+   });
+   
+   
    describe('resetChanges()', function(){
      var user = new User({
        my_str: 'phil'
