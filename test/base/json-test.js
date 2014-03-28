@@ -7,6 +7,9 @@ describe('JSON', function(){
 
   store.Model('User', function(){
     this.attribute('login');
+    this.attribute('a');
+    this.attribute('b');
+    this.attribute('c');
     this.hasMany('posts')
   });
   
@@ -19,8 +22,8 @@ describe('JSON', function(){
   
   var posts = [{title:'foo'}, {title: 'bar'}];
   
-  var phil = User.new({login: 'phil', foo: 'bar'});
-  var michl = User.new({login: 'michl', foo: 'bar', posts:posts});
+  var phil = User.new({login: 'phil', foo: 'bar', a:'A', b:'B', c:'C'});
+  var michl = User.new({login: 'michl', foo: 'bar', a:'A1', b:'B1', c:'C1', posts:posts});
   
   Collection = User.chain().add(phil).add(michl);
   
@@ -36,6 +39,12 @@ describe('JSON', function(){
       json.login.should.be.equal('phil');
       should.not.exist(json.foo);
       json.posts.should.be.eql([]);
+      json.should.be.eql({login:'phil', a:'A', b:'B', c:'C', posts:[]});
+    });
+    
+    it('returns only specified fields', function(){
+      var json = phil.toJson(['a', 'c', 'posts']);
+      json.should.be.eql({a:'A', c:'C', posts:[]});
     });
     
     it('returns a new object with relations', function(){
@@ -61,6 +70,11 @@ describe('JSON', function(){
       json.should.not.be.eql(Collection);
       json.should.be.instanceof(Array);
       json[0].login.should.be.equal('phil');
+    });
+    
+    it('returns only specified fields', function(){
+      var json = Collection.toJson(['a', 'c', 'posts']);
+      json.should.be.eql([{a:'A', c:'C', posts:[]}, {a:'A1', c:'C1', posts:[{title:'foo'}, {title:'bar'}]}]);
     });
     
     it('returns a new object with relations', function(){
