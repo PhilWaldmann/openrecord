@@ -33,6 +33,7 @@ npm install openrecord
 * Events
 * Chaining
 * Migrations
+* Plugin support
 * ...
 
 
@@ -44,7 +45,6 @@ npm install openrecord
 * full multiple primary keys support
 * finish .every() callback issues
 * better postgres support (hstore, ect.)
-* custom plugin support
 * more examples
 
 
