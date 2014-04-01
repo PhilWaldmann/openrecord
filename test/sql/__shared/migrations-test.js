@@ -29,7 +29,11 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         var Post = store.Model('Post');
         
         Post.definition.attributes.should.have.property('id');
-        Post.definition.attributes.should.have.property('message');
+        if(store.type == 'postgres' || store.type == 'mysql'){
+          Post.definition.attributes.should.have.property('message');
+        }else{
+          Post.definition.attributes.should.have.property('messages'); //SQLite3 Support in knex is not yet finished
+        }
         
         next();
       });

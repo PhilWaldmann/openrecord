@@ -41,6 +41,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         User.definition.attributes.should.have.property('id');
         User.definition.attributes.should.have.property('login');
         User.definition.attributes.should.have.property('first_name');
+        User.definition.attributes.should.have.property('last_name');
         next();
       });
     });
@@ -74,7 +75,12 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         var Post = store.Model('Post');
         
         Post.definition.attributes.should.have.property('id');
-        Post.definition.attributes.should.have.property('message');
+        
+        if(store.type == 'postgres' || store.type == 'mysql'){
+          Post.definition.attributes.should.have.property('message');
+        }else{
+          Post.definition.attributes.should.have.property('messages'); //SQLite3 Support in knex is not yet finished
+        }
         
         next();
       });
@@ -107,6 +113,51 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           AttributeTest.definition.attributes.time_attr.type.name.should.be.equal('text'); //SHOULD BE time
         }        
         
+        next();
+      });
+    });
+    
+    
+    
+    it('has all stampable() attributes', function(next){
+      store.ready(function(){
+        var Post = store.Model('Post');
+        Post.definition.attributes.should.have.property('updated_at');
+        Post.definition.attributes.should.have.property('created_at');
+        Post.definition.attributes.should.have.property('updater_id');
+        Post.definition.attributes.should.have.property('creator_id');
+        next();
+      });
+    });
+    
+    
+    it('has all polymorph() attributes', function(next){
+      store.ready(function(){
+        var Post = store.Model('Post');
+        Post.definition.attributes.should.have.property('foo_id');
+        Post.definition.attributes.should.have.property('foo_type');
+        next();
+      });
+    });
+    
+    
+    it('has all nestedSet() attributes', function(next){
+      store.ready(function(){
+        var Post = store.Model('Post');
+        Post.definition.attributes.should.have.property('left');
+        Post.definition.attributes.should.have.property('right');
+        Post.definition.attributes.should.have.property('depth');
+        Post.definition.attributes.should.have.property('parent_id');
+        next();
+      });
+    });
+    
+    
+    it('has all paranoid() attributes', function(next){
+      store.ready(function(){
+        var Post = store.Model('Post');
+        Post.definition.attributes.should.have.property('deleted_at');
+        Post.definition.attributes.should.have.property('deleter_id');
         next();
       });
     });
