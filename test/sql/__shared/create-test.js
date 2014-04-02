@@ -84,9 +84,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     });
   
   
-    describe('beforeCreate() with a find() inside', function(){
-      this.timeout(5000);
-    
+    describe('beforeCreate() with a find() inside', function(){    
       it('gets called', function(next){ 
         store.ready(function(){
           Post = store.Model('Post'); //for the beforeCreate Hook
