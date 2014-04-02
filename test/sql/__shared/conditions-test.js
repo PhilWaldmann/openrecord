@@ -210,6 +210,17 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });      
       });
       
+      it('finds phil and michl with array condition (IN (ids) login = ?)', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where(['login = ? OR id IN (?)', 'phil', [1, 2]]).exec(function(result){
+            result[0].login.should.be.equal('phil');
+            result[1].login.should.be.equal('michl');
+            next();
+          });
+        });      
+      });
+      
       it('finds phil and michl with array condition (IN (names))', function(next){
         store.ready(function(){
           var User = store.Model('User');
