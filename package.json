@@ -1,6 +1,6 @@
 {
     "name": "openrecord",
-    "version": "0.11.5",
+    "version": "0.11.7",
     "description": "Active record like ORM for nodejs",
     "keywords": ["orm", "record", "sql", "sqlite3", "postgres", "pg", "mysql", "database", "activerecord"],
     "author": "Philipp Waldmann <philipp.waldmann@s-team.at>",
@@ -21,6 +21,7 @@
         "sqlite3": ">= 2.2.x",
         "mysql": ">=2.1.x",
         "pg": ">= 2.11.x",
+				"restify": ">= 2.7.x",
         "coveralls": ">= 2.6.x",
         "mocha-lcov-reporter": ">= 0.0.x",
         "blanket": ">= 1.1.x",

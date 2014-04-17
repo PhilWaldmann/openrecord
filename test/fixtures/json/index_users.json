@@ -1,0 +1,11 @@
+{
+	"data":[{
+	  "id": 1,
+	  "login": "phil",
+	  "email": "phil@mail.com"
+	},{
+	  "id": 2,
+	  "login": "michl",
+	  "email": "michl@mail.com"
+	}]
+}
