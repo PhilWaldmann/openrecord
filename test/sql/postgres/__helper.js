@@ -6,7 +6,6 @@ global.beforePG = function(db, sql, next){
   });*/
   exec('psql -c "DROP DATABASE ' + db + '" -U postgres', function(err, result){
     exec('psql -c "create database ' + db + '" -U postgres', function(err, result){
-      console.log(err, result);
       exec('psql ' + db + ' -c "' + sql.join(';') + '" -U postgres', function(err, result){
         if(err) throw new Error(err);
         next();
@@ -24,6 +23,7 @@ global.testPG = function(name, queries){
   require('../__shared/' + name + '-test')(
     'Postgres', 
     function(next){
+      this.timeout(5000);
       beforePG(db, queries, next);
     },
     function(next, store){

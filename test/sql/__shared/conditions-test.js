@@ -187,6 +187,50 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
         });      
       });
+      
+      
+      it('finds phil with array condition (IN (name))', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where(['login IN (?)', ['phil']]).exec(function(result){
+            result[0].login.should.be.equal('phil');
+            next();
+          });
+        });      
+      });
+      
+      it('finds phil and michl with array condition (IN (ids))', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where(['id IN (?)', [1, 2]]).exec(function(result){
+            result[0].login.should.be.equal('phil');
+            result[1].login.should.be.equal('michl');
+            next();
+          });
+        });      
+      });
+      
+      it('finds phil and michl with array condition (IN (ids) login = ?)', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where(['login = ? OR id IN (?)', 'phil', [1, 2]]).exec(function(result){
+            result[0].login.should.be.equal('phil');
+            result[1].login.should.be.equal('michl');
+            next();
+          });
+        });      
+      });
+      
+      it('finds phil and michl with array condition (IN (names))', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where(['login IN (?)', ['phil', 'michl']]).exec(function(result){
+            result[0].login.should.be.equal('phil');
+            result[1].login.should.be.equal('michl');
+            next();
+          });
+        });      
+      });
     
     
       it('finds NOT michl and admin', function(next){

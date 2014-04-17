@@ -26,7 +26,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     it('has then() function', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
-        User.find(1).then.should.be.a.Function
+        User.find(1).exec().then.should.be.a.Function
         next();
       });
     });
@@ -35,7 +35,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     it('returns select results', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
-        User.find(1).then(function(result){
+        User.find(1).exec().then(function(result){
           result.should.be.instanceof(User);
           next();
         });
@@ -46,7 +46,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     it('returns select results multiple times', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
-        User.find(1).then(function(result){
+        User.find(1).exec(function(result){
           result.should.be.instanceof(User);
         }).then(function(result){
           result.should.be.instanceof(User);
@@ -59,9 +59,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     it('saves a record', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
-        User.find(1).then(function(result){
+        User.find(1).exec(function(result){
           result.login = 'test';
-          result.then(function(){
+          result.save().then(function(){
             next();
           });
         });
@@ -71,7 +71,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     it('destroys a record', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
-        User.find(2).then(function(result){
+        User.find(2).exec(function(result){
           result.destroy().then(function(){
             next();
           });
@@ -91,7 +91,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     it('calls onReject method on error', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
-        User.where('foo=blaa').then(function(result){
+        User.where('foo=blaa').exec(function(result){
           
         }, function(error){
           next();
@@ -103,7 +103,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     it('calls onReject methods on error', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
-        User.where('foo=blaa').then(function(result){
+        User.where('foo=blaa').exec(function(result){
           
         }, function(error){
           
@@ -117,7 +117,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     it('calls catch method on error', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
-        User.where('foo=blaa').catch(function(error){
+        User.where('foo=blaa').exec().catch(function(error){
           next();
         });
       });
@@ -160,6 +160,19 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
     });
     
+    
+    /*
+    it('calls second promise', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.then(function(records){
+          return User.count().then;
+        }).then(function(){
+          
+        });
+      });
+    });
+    */
     
   });
 };

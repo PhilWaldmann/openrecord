@@ -10,6 +10,7 @@ describe('Postgres: all Attributes', function(){
   
   
   before(function(next){
+    this.timeout(5000);
     beforePG(database, [
       'CREATE TABLE attribute_tests(char_attribute  varchar(255), float_attribute float, integer_attribute  integer, text_attribute text, boolean_attribute boolean, binary_attribute bytea, date_attribute date, datetime_attribute timestamp without time zone, time_attribute time)',
       "INSERT INTO attribute_tests VALUES('abcd', 2.3345, 3243, 'some text', true, 'some binary data', '2014-02-18', '2014-02-18 15:45:02', '15:45:01')"
@@ -69,8 +70,8 @@ describe('Postgres: all Attributes', function(){
         record.boolean_attribute.should.be.equal(true);
         record.binary_attribute.should.be.eql(new Buffer('some binary data', 'utf-8'));
         record.date_attribute.toString().should.be.equal('2014-02-18');
-        
-        if(new Date().getTimezoneOffset() == -60){ //my local test timezone
+
+        if(new Date().getTimezoneOffset() <= -60){ //my local test timezone
           record.datetime_attribute.toJSON().should.be.equal('2014-02-18T14:45:02.000Z');
         }else{ //travis-ci timezone
           record.datetime_attribute.toJSON().should.be.equal('2014-02-18T15:45:02.000Z');

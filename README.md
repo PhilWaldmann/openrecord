@@ -33,7 +33,7 @@ npm install openrecord
 * Events
 * Chaining
 * Migrations
-* Plugin Support
+* Plugin support
 * ...
 
 

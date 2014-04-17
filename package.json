@@ -1,6 +1,6 @@
 {
     "name": "openrecord",
-    "version": "0.10.1",
+    "version": "0.11.5",
     "description": "Active record like ORM for nodejs",
     "keywords": ["orm", "record", "sql", "sqlite3", "postgres", "pg", "mysql", "database", "activerecord"],
     "author": "Philipp Waldmann <philipp.waldmann@s-team.at>",
@@ -24,7 +24,8 @@
         "coveralls": ">= 2.6.x",
         "mocha-lcov-reporter": ">= 0.0.x",
         "blanket": ">= 1.1.x",
-        "docu": "latest"
+        "docu": "latest",
+        "bluebird": ">= 1.2.x"
     },
     "main": "./lib/store",
     "directories": {
@@ -38,7 +39,7 @@
     },
     "scripts": {
         "test": "make test",
-        "postpublish": "make docs && make push-docs"
+        "_postpublish": "make docs && make push-docs"
     },
     "engines": {
         "node": ">=0.8.7"

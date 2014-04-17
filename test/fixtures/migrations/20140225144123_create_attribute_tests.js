@@ -1,6 +1,12 @@
 module.exports = function(){
   this.createTable('attribute_tests', function(){
-    this.string('string_attr');
+    var self = this;
+    
+    this.run(function(){
+      self.string('string_attr');
+    });
+    
+    
     this.text('text_attr');
     this.integer('integer_attr');
     this.float('float_attr');
