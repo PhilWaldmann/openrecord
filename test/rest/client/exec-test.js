@@ -14,16 +14,34 @@ describe('REST Client: Exec', function(){
     this.attribute('email', String);
   });
   
-  it('loads records from the rest server', function(next){
+  /*
+  it('loads records from the rest server (index)', function(next){
     store.ready(function(){
       var User = store.Model('User');
       
       User.exec(function(results){
         results.length.should.be.equal(2);
         next();
+      }, function(err){
+        console.log(err);
+        next();
       });
     });      
   });
+  
+  
+  it('loads one record from the rest server (show)', function(next){
+    store.ready(function(){
+      var User = store.Model('User');
+      
+      User.find(1).exec(function(result){
+        result.id.should.be.equal(1);
+        result.login.should.be.equal('phil');
+        next();
+      });
+    });      
+  });
+  */
   
   
 });

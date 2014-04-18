@@ -134,9 +134,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('delets all records without calling beforeDestroy or afterDestroy', function(next){ 
         store.ready(function(){
           var Thread = store.Model('Thread');
-          Thread.where({title_like: 'delete'}).deleteAll(function(success, affected){
+          Thread.where({title_like: 'delete'}).deleteAll(function(success){
             success.should.be.equal(true);
-            affected.should.be.equal(2);
           
             Thread.where({title_like: 'delete'}).count().exec(function(result){
               result.count.should.be.equal(0);
@@ -156,9 +155,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           Thread.find(1, function(thread){
             should.exist(thread);
                         
-            thread.posts.deleteAll(function(success, affected){
+            thread.posts.deleteAll(function(success){
               success.should.be.equal(true);
-              affected.should.be.equal(3);
               
               Post.where({thread_id:thread.id}).count().exec(function(result){
                 result.count.should.be.equal(0);
@@ -178,9 +176,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var Thread = store.Model('Thread');
 
-          Thread.where({title_like: 'destroy'}).destroyAll(function(success, affected){
+          Thread.where({title_like: 'destroy'}).destroyAll(function(success){
             success.should.be.equal(true);
-            affected.should.be.equal(1);
           
             Thread.where({title_like: 'destroy'}).count().exec(function(result){
               result.count.should.be.equal(1);

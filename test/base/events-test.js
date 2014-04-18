@@ -108,31 +108,16 @@ describe('Events', function(){
   });
   
   
-  
   describe('Record', function(){
     describe('emit()', function(){
       var User = store.Model('User');
-      var record = new User({
-        login: 'phil'
-      });
+      var record = new User();
       
-      it('methods exists', function(){
-        record.emit.should.be.a.Function;
-        record.on.should.be.a.Function;
+      it('does not exists', function(){
+        should.not.exist(record.emit);
+        should.not.exist(record.on);
       });
-      
-      it('emit events', function(){
-        record.on('record_test_event', function(value){
-          this.should.be.equal(record);
-          value.should.be.equal('awesome');
-        });
-        record.emit('record_test_event', 'awesome');
-      });
-           
-      it('emit events to the Definition', function(done){
-        record.emit('record_to_definition_test_event', 'argument1', 'argument2', done);
-      });
-                
+            
     });
   });
   

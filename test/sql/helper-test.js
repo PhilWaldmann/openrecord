@@ -1,5 +1,5 @@
 var should = require('should');
-var Helper = require('../../lib/stores/sql/helper');
+var Helper = require('../../lib/persistence/helper');
 var Store = require('../../lib/store');
 
 describe('SQL: Helper', function(){

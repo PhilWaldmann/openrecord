@@ -38,13 +38,12 @@ describe('JSON', function(){
       json.should.not.be.eql(phil);
       json.login.should.be.equal('phil');
       should.not.exist(json.foo);
-      json.posts.should.be.eql([]);
-      json.should.be.eql({login:'phil', a:'A', b:'B', c:'C', posts:[]});
+      json.should.be.eql({login:'phil', a:'A', b:'B', c:'C'});
     });
     
     it('returns only specified fields', function(){
       var json = phil.toJson(['a', 'c', 'posts']);
-      json.should.be.eql({a:'A', c:'C', posts:[]});
+      json.should.be.eql({a:'A', c:'C'});
     });
     
     it('returns a new object with relations', function(){
@@ -74,7 +73,7 @@ describe('JSON', function(){
     
     it('returns only specified fields', function(){
       var json = Collection.toJson(['a', 'c', 'posts']);
-      json.should.be.eql([{a:'A', c:'C', posts:[]}, {a:'A1', c:'C1', posts:[{title:'foo'}, {title:'bar'}]}]);
+      json.should.be.eql([{a:'A', c:'C'}, {a:'A1', c:'C1', posts:[{title:'foo'}, {title:'bar'}]}]);
     });
     
     it('returns a new object with relations', function(){

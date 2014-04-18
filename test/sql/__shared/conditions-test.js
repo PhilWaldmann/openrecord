@@ -128,18 +128,19 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });      
       });
     
-      /* TODO: ASYNC Error handling
-      it('throws an error', function(next){
+      it('returns a RecordNotFound error', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          (function() {
-            User.get(99).exec(function(result){
-              //next();
-            });
-          }).should.throw();        
+          User.get(99).exec(function(result){
+            should.not.exist(result);
+          }).catch(function(err){
+            err.should.be.an.instanceOf(Error);
+            next();
+          });        
         });      
       });
-       */   
+      
+        
     });
   
   

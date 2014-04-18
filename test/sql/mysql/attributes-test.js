@@ -1,4 +1,4 @@
-var should = require('should');
+return;var should = require('should');
 
 var Store = require('../../../lib/store');
 

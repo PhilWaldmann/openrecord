@@ -26,19 +26,18 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
     });
     
-    /* //async error?!?!
     it('throws an error on unknown table', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
-        (function(){
-          User.where({login_like: 'phi'}).exec(function(){
-            
-          });
-        }).should.throw();        
-        next();
+        User.where({login_like: 'phi'}).exec(function(){
+          
+        }, function(err){
+          err.should.be.an.instanceof(Error);
+          next();
+        });
       });
     });
-    */
+    
     
     it('returns null', function(next){ 
       store.ready(function(){

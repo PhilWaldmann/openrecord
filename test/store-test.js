@@ -183,4 +183,24 @@ describe('Store: Base', function(){
     
   });
   
+  
+  describe('plugin overrides method', function(){
+    var store = new Store({
+      plugins: __dirname + '/fixtures/plugins/*.js'
+    });
+    
+    it('calls parent()', function(next){
+      store.Model('A', 'B', function(){
+        this.attribute('test', String);
+      });
+      
+      store.ready(function(){
+        var AB = store.Model('A', 'B');
+        AB.definition.attributes.should.have.property('test');
+        next();
+      });
+    });
+       
+  });
+  
 });
