@@ -1,4 +1,4 @@
-return;require('./__helper');
+require('./__helper');
 
 testMYSQL('aggregate_function', [
   'CREATE TABLE users(id serial primary key, salary INTEGER)',
