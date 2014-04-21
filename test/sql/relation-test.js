@@ -3,32 +3,36 @@ var should = require('should');
 var Store = require('../../lib/store');
 
 describe('SQL: Relations', function(){
-  var store = new Store({
-    type: 'sql'    
-  });
+  var store;  
   
-  store.Model('User', function(){
-    this.attribute('id', Number, {primary: true});
-    this.hasMany('posts');
-    this.hasMany('bar', {model:'Foo'});
-  });
-  store.Model('Post', function(){
-    this.attribute('id', Number, {primary: true});
-    this.attribute('user_id', Number);
-    this.attribute('foo_id', Number);
-    this.attribute('bazinga_id', Number);
-    this.belongsTo('user');
-    this.belongsTo('bar', {model:'Foo'});
-    this.belongsTo('bazinga', {model:'Baz'});
-  });
+  before(function(){
+    store = new Store({
+      type: 'sql'    
+    });
   
-  store.Model('Foo', function(){
-    this.attribute('id', Number, {primary: true});
-    this.attribute('user_id', Number);
-  });
+    store.Model('User', function(){
+      this.attribute('id', Number, {primary: true});
+      this.hasMany('posts');
+      this.hasMany('bar', {model:'Foo'});
+    });
+    store.Model('Post', function(){
+      this.attribute('id', Number, {primary: true});
+      this.attribute('user_id', Number);
+      this.attribute('foo_id', Number);
+      this.attribute('bazinga_id', Number);
+      this.belongsTo('user');
+      this.belongsTo('bar', {model:'Foo'});
+      this.belongsTo('bazinga', {model:'Baz'});
+    });
   
-  store.Model('Baz', function(){
-    this.attribute('id', Number, {primary: true});
+    store.Model('Foo', function(){
+      this.attribute('id', Number, {primary: true});
+      this.attribute('user_id', Number);
+    });
+  
+    store.Model('Baz', function(){
+      this.attribute('id', Number, {primary: true});
+    });
   });
   
   

@@ -36,47 +36,7 @@ describe('Events', function(){
           self.emit.should.be.a.Function;
           self.on.should.be.a.Function;
         });
-    
-        var scope = {scope:'test'};
-    
-        it('emit event with specific scope', function(done){
-          self.on('test_event', function(){
-            this.should.be.equal(scope);
-            done();
-          });
-        
-          self.emit(scope, 'test_event');
-        });
-      
-        it('emit event with specific scope and args', function(done){
-          self.on('test_event2', function(test){
-            test.should.be.equal('test');
-            done();
-          });
-        
-          self.emit(scope, 'test_event2', 'test');
-        });
-      
-        it('emit event without specific scope', function(done){
-          self.on('test_event3', function(test){
-            this.should.be.equal(self);
-            test.should.be.equal('test');
-            done();
-          });
-        
-          self.emit('test_event3', 'test');
-        });
-        
-        it('emit event without specific scope2', function(done){
-          self.on('test_event4', function(test){
-            this.should.be.equal(self);
-            test.should.be.equal('test2');
-            done();
-          });
-        
-          self.emit('test_event4', 'test2');
-        });
-      
+          
       });
       
     });

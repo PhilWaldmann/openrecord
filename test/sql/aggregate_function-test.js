@@ -3,15 +3,21 @@ var should = require('should');
 var Store = require('../../lib/store');
 
 describe('SQL: Aggregate Functions', function(){
-  var store = new Store({
-    type: 'sql'    
+  var store;
+  var User;
+  
+  before(function(){
+    store= new Store({
+      type: 'sql'    
+    });
+  
+    store.Model('User', function(){
+      this.attribute('salary', Number);
+    });
+  
+    User = store.Model('User');
   });
   
-  store.Model('User', function(){
-    this.attribute('salary', Number);
-  });
-  
-  var User = store.Model('User');
   
   
   describe('count()', function(){

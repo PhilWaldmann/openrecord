@@ -3,23 +3,28 @@ var should = require('should');
 var Store = require('../../lib/store');
 
 describe('SQL: Conditions', function(){
-  var store = new Store({
-    type: 'sql'    
+  var store;
+  
+  before(function(){
+    store = new Store({
+      type: 'sql'    
+    });
+  
+    store.Model('User', function(){
+      this.attribute('my_primary_key', Number, {primary: true});
+      this.attribute('login', String);
+      this.hasMany('posts');
+    });
+  
+  
+  
+    store.Model('Post', function(){
+      this.attribute('my_primary_key1', Number, {primary: true});
+      this.attribute('my_primary_key2', Number, {primary: true});
+      this.attribute('message', String);
+    });
   });
-  
-  store.Model('User', function(){
-    this.attribute('my_primary_key', Number, {primary: true});
-    this.attribute('login', String);
-    this.hasMany('posts');
-  });
-  
-  
-  
-  store.Model('Post', function(){
-    this.attribute('my_primary_key1', Number, {primary: true});
-    this.attribute('my_primary_key2', Number, {primary: true});
-    this.attribute('message', String);
-  });
+    
   
   
   describe('find()', function(){

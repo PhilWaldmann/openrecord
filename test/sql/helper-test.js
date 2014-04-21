@@ -3,43 +3,48 @@ var Helper = require('../../lib/persistence/helper');
 var Store = require('../../lib/store');
 
 describe('SQL: Helper', function(){
-  var store = new Store({
-    type: 'sql'    
+  var store;
+  
+  before(function(){
+    store = new Store({
+      type: 'sql'    
+    });
+  
+    store.Model('User', function(){
+      this.attribute('my_id', Number, {primary: true});    
+      this.hasMany('posts');
+      this.hasMany('threads');
+      this.hasMany('unread_posts');
+      this.hasMany('unread', {through:'unread_posts'});
+      this.hasMany('unread_threads', {through:'unread', relation:'thread'});
+      this.hasMany('poly_things');
+      this.hasMany('members', {through:'poly_things', relation:'member'});
+    });
+  
+    store.Model('Thread', function(){
+      this.attribute('id', Number, {primary: true});    
+      this.belongsTo('user');
+      this.hasMany('posts');
+    });
+  
+    store.Model('Post', function(){
+      this.attribute('aid', Number, {primary: true});    
+      this.belongsTo('user');
+      this.belongsTo('thread');
+    }); 
+  
+    store.Model('UnreadPost', function(){
+      this.attribute('id', Number, {primary: true});
+      this.belongsTo('user');
+      this.belongsTo('unread', {model: 'Post'});
+    });
+  
+    store.Model('PolyThing', function(){
+      this.attribute('id', Number, {primary: true});
+      this.belongsTo('member', {polymorph: true});
+    });
   });
   
-  store.Model('User', function(){
-    this.attribute('my_id', Number, {primary: true});    
-    this.hasMany('posts');
-    this.hasMany('threads');
-    this.hasMany('unread_posts');
-    this.hasMany('unread', {through:'unread_posts'});
-    this.hasMany('unread_threads', {through:'unread', relation:'thread'});
-    this.hasMany('poly_things');
-    this.hasMany('members', {through:'poly_things', relation:'member'});
-  });
-  
-  store.Model('Thread', function(){
-    this.attribute('id', Number, {primary: true});    
-    this.belongsTo('user');
-    this.hasMany('posts');
-  });
-  
-  store.Model('Post', function(){
-    this.attribute('aid', Number, {primary: true});    
-    this.belongsTo('user');
-    this.belongsTo('thread');
-  }); 
-  
-  store.Model('UnreadPost', function(){
-    this.attribute('id', Number, {primary: true});
-    this.belongsTo('user');
-    this.belongsTo('unread', {model: 'Post'});
-  });
-  
-  store.Model('PolyThing', function(){
-    this.attribute('id', Number, {primary: true});
-    this.belongsTo('member', {polymorph: true});
-  });
   
 
   

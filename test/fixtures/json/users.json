@@ -7,5 +7,9 @@
 	  "id": 2,
 	  "login": "michl",
 	  "email": "michl@mail.com"
+	},{
+	  "id": 3,
+	  "login": "admin",
+	  "email": "admin@mail.com"
 	}]
 }

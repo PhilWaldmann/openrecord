@@ -3,12 +3,16 @@ var should = require('should');
 var Store = require('../../lib/store');
 
 describe('SQL: Conditions', function(){
-  var store = new Store({
-    type: 'sql'    
-  });
+  var store;
   
-  store.Model('User', function(){});
-  store.Model('CamelCasedTableName', function(){});
+  before(function(){
+    store = new Store({
+      type: 'sql'    
+    });
+  
+    store.Model('User', function(){});
+    store.Model('CamelCasedTableName', function(){});
+  });
   
   
   it('has the right table name', function(next){
