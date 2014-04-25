@@ -224,7 +224,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.find(3).include('posts').exec(function(admin){
             admin.posts.length.should.be.equal(0);
           
-            admin.posts.add({thread_id:4, message: 'admin was here'});
+            admin.posts.add({thread_id:99, message: 'admin was here'});
                     
             admin.save(function(result){
               result.should.be.equal(true);
@@ -270,6 +270,137 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });  
         });
       });
+      
+      
+      
+      
+      it('updates relations via set()', function(next){ 
+        store.ready(function(){
+          var Thread = store.Model('Thread');
+          Thread.find(2).include('posts').exec(function(thread){
+            thread.title.should.be.equal('second thread');
+            thread.posts.length.should.be.equal(1);
+            thread.posts[0].message.should.be.equal('third');
+        
+            thread.set({
+              title:'second awesome thread',
+              posts:[{
+                id: 3,
+                message: 'third awesome post'
+              }]
+            });
+            
+            thread.save(function(result){
+              result.should.be.equal(true);
+          
+              Thread.find(2).include('posts').exec(function(thread){
+                thread.title.should.be.equal('second awesome thread');
+                thread.posts.length.should.be.equal(1);
+                thread.posts[0].message.should.be.equal('third awesome post');
+            
+                next();
+              });            
+          
+            });
+        
+          });  
+        });
+      });
+      
+      
+      
+      it('adds relations via set()', function(next){ 
+        store.ready(function(){
+          var Thread = store.Model('Thread');
+          Thread.find(3).include('posts').exec(function(thread){
+
+            thread.title.should.be.equal('another');
+            thread.posts.length.should.be.equal(0);
+        
+            thread.set({
+              title:'another awesome thread',
+              posts:[{
+                message: 'another awesome post'
+              }]
+            });
+            
+            thread.save(function(result){
+              result.should.be.equal(true);
+          
+              Thread.find(3).include('posts').exec(function(thread){
+                thread.title.should.be.equal('another awesome thread');
+                thread.posts.length.should.be.equal(1);
+                thread.posts[0].message.should.be.equal('another awesome post');
+            
+                next();
+              });            
+          
+            });
+        
+          });  
+        });
+      });
+      
+      
+      
+      it('updates relations via set() without including the relation', function(next){ 
+        store.ready(function(){
+          var Thread = store.Model('Thread');
+          Thread.find(4).exec(function(thread){
+            thread.title.should.be.equal('thread 4');
+                   
+            thread.set({
+              title:'awesome thread 4',
+              posts:[{
+                id: 5,
+                message: 'you got an update'
+              }]
+            });
+            
+            thread.save(function(result){
+              result.should.be.equal(true);
+          
+              Thread.find(4).include('posts').exec(function(thread){
+
+                thread.title.should.be.equal('awesome thread 4');
+                thread.posts.length.should.be.equal(1);
+                thread.posts[0].message.should.be.equal('you got an update');
+            
+                next();
+              });            
+          
+            });
+        
+          });  
+        });
+      });
+        
+        
+      it('updates a relation id with original relation loaded', function(next){ 
+        store.ready(function(){
+          var Thread = store.Model('Thread');
+          Thread.find(4).include('user').exec(function(thread){
+
+            thread.user.login.should.be.equal('phil');
+             
+            thread.user_id = 5;
+             
+            thread.save(function(result){
+              result.should.be.equal(true);
+          
+              Thread.find(4).include('user').exec(function(thread){
+
+                thread.user.login.should.be.equal('new_owner');
+            
+                next();
+              });            
+          
+            });
+        
+          });  
+        });
+      });
+        
              
     });
     

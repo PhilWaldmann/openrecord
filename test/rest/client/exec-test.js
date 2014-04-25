@@ -24,7 +24,7 @@ describe('REST Client: Exec', function(){
       var User = store.Model('User');
       
       User.exec(function(results){
-        results.length.should.be.equal(3);
+        results.length.should.be.above(2);
         next();
       }, function(err){
         should.not.exist(err);

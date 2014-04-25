@@ -144,6 +144,37 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     });
   
   
+    describe('limit()', function(){
+      it('finds the first 2 users', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.limit(2).order('id').exec(function(users){
+            users.length.should.be.equal(2);
+            
+            users[0].login.should.be.equal('phil');
+            users[1].login.should.be.equal('michl');
+            
+            next();
+          });          
+        });
+      });      
+    });
+    
+    describe('offset()', function(){
+      it('finds the last 2 users', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.offset(1).exec(function(users){
+            users.length.should.be.equal(2);
+            
+            users[0].login.should.be.equal('michl');
+            users[1].login.should.be.equal('admin');
+            
+            next();
+          });          
+        });
+      });      
+    });
   
   
     describe('where()', function(){

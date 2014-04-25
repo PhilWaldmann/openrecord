@@ -120,6 +120,51 @@ describe('Postgres: all Attributes', function(){
       });
     });
   });
+
+
+  it('write all values', function(done){
+    store.ready(function(){    
+      var AttributeTest = store.Model('AttributeTest');
+      var now = new Date();
+      
+      now.setHours(22);
+      now.setMinutes(3);
+      
+      AttributeTest.create({
+        char_attribute: 'aaaa',
+        float_attribute: 1.00001,
+        integer_attribute: 5555,
+        text_attribute: 'text',
+        boolean_attribute: true,
+        binary_attribute: new Buffer('abcdefghijklmnopqrstuvwxyz', 'utf-8'),
+        date_attribute: now,
+        datetime_attribute: now,
+        time_attribute: now,
+        hstore_attribute: {a:'11', b:'22'}
+      }, function(success){
+        success.should.be.true;
+        
+        AttributeTest.limit(1, 1).exec(function(record){
+
+          record.char_attribute.should.be.equal('aaaa');
+          record.float_attribute.should.be.equal(1.00001);
+          record.integer_attribute.should.be.equal(5555);
+          record.text_attribute.should.be.equal('text');
+          record.boolean_attribute.should.be.equal(true);
+          record.binary_attribute.should.be.eql(new Buffer('abcdefghijklmnopqrstuvwxyz', 'utf-8'));
+          record.date_attribute.toString().should.be.equal('2014-04-25');
+
+          record.datetime_attribute.toJSON().should.be.equal(now.toJSON());
+        
+          record.time_attribute.toString().should.be.equal('22:03'); //TODO: offer config options to return a specific format for date and time...
+          record.hstore_attribute.should.be.eql({a:'11', b:'22'});
+        
+          done();
+        });
+        
+      });
+    });
+  });
     
 });
 

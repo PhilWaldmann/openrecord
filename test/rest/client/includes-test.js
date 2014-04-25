@@ -36,7 +36,7 @@ describe('REST Client: Include', function(){
       var User = store.Model('User');
       
       User.include('posts').exec(function(results){
-        results.length.should.be.equal(3);
+        results.length.should.be.above(3);
         results[0].posts.length.should.be.equal(3);
         results[1].posts.length.should.be.equal(1);
         results[2].posts.length.should.be.equal(0);
@@ -60,7 +60,6 @@ describe('REST Client: Include', function(){
         results[1].user.id.should.be.equal(1);
         results[2].user.id.should.be.equal(1);
         results[3].user.id.should.be.equal(2);
-        should.not.exist(results[4].user);
         
         next();
       }, function(err){

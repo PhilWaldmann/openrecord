@@ -19,32 +19,29 @@ npm install openrecord
 
 ## Features
 
-* SQLite3, MySQL and Postgres support
+* SQLite3, MySQL, Postgres, REST support
 * Async schema definition
-* Automatic field definition loading
-* Relations (hasMany, hasOne, belongsTo with through)
+* Automatic field definition loading (SQL)
+* Relations (hasMany, hasOne, belongsTo with through, polymorph)
 * Nested Cascade delete
 * Nested Eager Loading
 * Nested Creates
 * Nested Updates
+* Nested Joins
 * Validations
 * Scopes
 * Before and After Hooks
 * Events
 * Chaining
+* Promises
 * Migrations
 * Plugin support
-* ...
+* ... with almost 900 tests 
 
 
 ## Roadmap to 1.0.0
 
-* attributes rework
 * better documentation
-* better error handling
-* full multiple primary keys support
-* finish .every() callback issues
-* better postgres support (hstore, ect.)
 * more examples
 
 
