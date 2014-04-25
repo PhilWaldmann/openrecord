@@ -12,8 +12,11 @@ describe('Postgres: all Attributes', function(){
   before(function(next){
     this.timeout(5000);
     beforePG(database, [
-      'CREATE TABLE attribute_tests(char_attribute  varchar(255), float_attribute float, integer_attribute  integer, text_attribute text, boolean_attribute boolean, binary_attribute bytea, date_attribute date, datetime_attribute timestamp without time zone, time_attribute time)',
-      "INSERT INTO attribute_tests VALUES('abcd', 2.3345, 3243, 'some text', true, 'some binary data', '2014-02-18', '2014-02-18 15:45:02', '15:45:01')"
+      'CREATE EXTENSION hstore',
+      'CREATE TABLE attribute_tests(char_attribute  varchar(255), float_attribute float, integer_attribute  integer, text_attribute text, boolean_attribute boolean, binary_attribute bytea, date_attribute date, datetime_attribute timestamp without time zone, time_attribute time, hstore_attribute hstore)',
+      'CREATE TABLE attribute_join_tests(attribute_test_id integer)',
+      "INSERT INTO attribute_tests VALUES('abcd', 2.3345, 3243, 'some text', true, 'some binary data', '2014-02-18', '2014-02-18 15:45:02', '15:45:01', hstore('key', 'value'))",
+      'INSERT INTO attribute_join_tests VALUES(3243)'
     ], next);
   });
   
@@ -26,7 +29,12 @@ describe('Postgres: all Attributes', function(){
       password: ''
     });
 
-    store.Model('AttributeTest', function(){});
+    store.Model('AttributeTest', function(){
+      this.hasMany('attribute_join_tests', {primary_key:'integer_attribute', foreign_key:'attribute_test_id'});
+    });
+    store.Model('AttributeJoinTest', function(){
+      this.belongsTo('attribute_test', {foreign_key:'integer_attribute'});
+    });
     
     store.on('exception', function(){});
   });
@@ -53,6 +61,7 @@ describe('Postgres: all Attributes', function(){
       attrs.should.have.property('date_attribute');
       attrs.should.have.property('datetime_attribute');
       attrs.should.have.property('time_attribute');
+      attrs.should.have.property('hstore_attribute');
     
       done();
     });
@@ -78,6 +87,35 @@ describe('Postgres: all Attributes', function(){
         }
         
         record.time_attribute.toString().should.be.equal('15:45'); //TODO: offer config options to return a specific format for date and time...
+        record.hstore_attribute.should.be.eql({key:'value'});
+        
+        done();
+      });
+    });
+  });
+  
+  
+  it('casts all values on a join', function(done){
+    store.ready(function(){    
+      var AttributeTest = store.Model('AttributeTest');
+      AttributeTest.join('attribute_join_tests').limit(1).exec(function(record){
+        record.char_attribute.should.be.equal('abcd');
+        record.float_attribute.should.be.equal(2.3345);
+        record.integer_attribute.should.be.equal(3243);
+        record.text_attribute.should.be.equal('some text');
+        record.boolean_attribute.should.be.equal(true);
+        record.binary_attribute.should.be.eql(new Buffer('some binary data', 'utf-8'));
+        record.date_attribute.toString().should.be.equal('2014-02-18');
+
+        if(new Date().getTimezoneOffset() <= -60){ //my local test timezone
+          record.datetime_attribute.toJSON().should.be.equal('2014-02-18T14:45:02.000Z');
+        }else{ //travis-ci timezone
+          record.datetime_attribute.toJSON().should.be.equal('2014-02-18T15:45:02.000Z');
+        }
+        
+        record.time_attribute.toString().should.be.equal('15:45'); //TODO: offer config options to return a specific format for date and time...
+        record.hstore_attribute.should.be.eql({key:'value'});
+        
         done();
       });
     });
