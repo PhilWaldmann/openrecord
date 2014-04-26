@@ -78,6 +78,11 @@ testMYSQL('destroy', [
 
 testMYSQL('exec', []);
 
+testMYSQL('group', [
+  'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
+  "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first'), (1, 1, 'second'), (3, 2, 'third'), (2, 2, 'first')"
+]);
+
 testMYSQL('includes', [
   'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
@@ -171,4 +176,11 @@ testMYSQL('validations', [
 testMYSQL('plugins/paranoid', [
   'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, deleted_at datetime)',
   "INSERT INTO users(login, email, deleted_at) VALUES('phil', 'phil@mail.com', NULL), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', NULL), ('marlene', 'marlene@mail.com', '2014-01-01'), ('hans', 'hans@mail.com', NULL)"
+]);
+
+testMYSQL('plugins/stampable', [
+  'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at datetime, updated_at datetime, creator_id integer, updater_id integer)',
+  'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT, created_at datetime, updated_at datetime, creator_id integer, updater_id integer)',
+  "INSERT INTO users(login, email, created_at) VALUES('phil', 'phil@mail.com', NULL), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', NULL), ('marlene', 'marlene@mail.com', '2014-01-01'), ('hans', 'hans@mail.com', NULL)",
+  "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post'), (5, 4, 'update me')"
 ]);

@@ -125,10 +125,8 @@ describe('Postgres: all Attributes', function(){
   it('write all values', function(done){
     store.ready(function(){    
       var AttributeTest = store.Model('AttributeTest');
-      var now = new Date();
+      var now = new Date('2014-04-25 20:03:00');
       
-      now.setHours(22);
-      now.setMinutes(3);
       
       AttributeTest.create({
         char_attribute: 'aaaa',
@@ -156,7 +154,7 @@ describe('Postgres: all Attributes', function(){
 
           record.datetime_attribute.toJSON().should.be.equal(now.toJSON());
         
-          record.time_attribute.toString().should.be.equal('22:03'); //TODO: offer config options to return a specific format for date and time...
+          record.time_attribute.toString().should.be.equal('20:03'); //TODO: offer config options to return a specific format for date and time...
           record.hstore_attribute.should.be.eql({a:'11', b:'22'});
         
           done();

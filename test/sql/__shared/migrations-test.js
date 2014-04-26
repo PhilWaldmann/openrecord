@@ -18,7 +18,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store = new Store(store_conf);
       store.setMaxListeners(0);
       
+      store.Model('User', function(){});
       store.Model('Post', function(){});
+      store.Model('Test', function(){});
       store.Model('AttributeTest', function(){});
     });
     
@@ -67,6 +69,30 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         }        
         
         next();
+      });
+    });
+    
+    
+    it('has created a view', function(next){
+      store.ready(function(){
+        var Test = store.Model('Test');
+        
+        Test.find(1).exec(function(user){
+          user.login.should.be.equal('phil');
+          next();
+        });
+      });
+    });
+    
+    
+    it('has seeded some records', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        
+        User.find(1).exec(function(user){
+          user.login.should.be.equal('phil');
+          next();
+        });
       });
     });
     
