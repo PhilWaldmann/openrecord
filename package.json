@@ -1,6 +1,6 @@
 {
     "name": "openrecord",
-    "version": "0.14.0",
+    "version": "0.14.1",
     "description": "Active record like ORM for nodejs",
     "keywords": ["orm", "record", "sql", "sqlite3", "postgres", "pg", "mysql", "database", "activerecord", "promise", "rest", "restify"],
     "author": "Philipp Waldmann <philipp.waldmann@s-team.at>",
