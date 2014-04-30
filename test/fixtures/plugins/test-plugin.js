@@ -8,7 +8,7 @@ exports.store = {
       callback = b;
       b = '';
     }
-    return this.parent(a+b, callback);
+    return this.callParent(a+b, callback);
   }
 };
 
