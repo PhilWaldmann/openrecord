@@ -12,10 +12,10 @@ describe('Postgres: all Attributes', function(){
   before(function(next){
     this.timeout(5000);
     beforePG(database, [
-      'CREATE EXTENSION hstore',
+      //'CREATE EXTENSION hstore',
       'CREATE TABLE attribute_tests(char_attribute  varchar(255), float_attribute float, integer_attribute  integer, text_attribute text, boolean_attribute boolean, binary_attribute bytea, date_attribute date, datetime_attribute timestamp without time zone, time_attribute time, hstore_attribute hstore)',
       'CREATE TABLE attribute_join_tests(attribute_test_id integer)',
-      "INSERT INTO attribute_tests VALUES('abcd', 2.3345, 3243, 'some text', true, 'some binary data', '2014-02-18', '2014-02-18 15:45:02', '15:45:01', hstore('key', 'value'))",
+      "INSERT INTO attribute_tests VALUES('abcd', 2.3345, 3243, 'some text', true, 'some binary data', '2014-02-18', '2014-02-18 15:45:02', '15:45:01', hstore(ARRAY['key', 'value', 'nested', '{\\\"key\\\": \\\"value\\\"}']))",
       'INSERT INTO attribute_join_tests VALUES(3243)'
     ], next);
   });
@@ -87,7 +87,7 @@ describe('Postgres: all Attributes', function(){
         }
         
         record.time_attribute.toString().should.be.equal('15:45'); //TODO: offer config options to return a specific format for date and time...
-        record.hstore_attribute.should.be.eql({key:'value'});
+        record.hstore_attribute.should.be.eql({key:'value', nested:{key: 'value'}});
         
         done();
       });
@@ -114,7 +114,7 @@ describe('Postgres: all Attributes', function(){
         }
         
         record.time_attribute.toString().should.be.equal('15:45'); //TODO: offer config options to return a specific format for date and time...
-        record.hstore_attribute.should.be.eql({key:'value'});
+        record.hstore_attribute.should.be.eql({key:'value', nested:{key: 'value'}});
         
         done();
       });
@@ -138,7 +138,7 @@ describe('Postgres: all Attributes', function(){
         date_attribute: now,
         datetime_attribute: now,
         time_attribute: now,
-        hstore_attribute: {a:'11', b:'22'}
+        hstore_attribute: {a:'11', b:'22', foo:{bar:['phil', 'michl']}}
       }, function(success){
         success.should.be.true;
         
@@ -155,7 +155,7 @@ describe('Postgres: all Attributes', function(){
           record.datetime_attribute.toJSON().should.be.equal(now.toJSON());
         
           record.time_attribute.toString().should.be.equal('20:03'); //TODO: offer config options to return a specific format for date and time...
-          record.hstore_attribute.should.be.eql({a:'11', b:'22'});
+          record.hstore_attribute.should.be.eql({a:'11', b:'22', foo:{bar:['phil', 'michl']}});
         
           done();
         });
