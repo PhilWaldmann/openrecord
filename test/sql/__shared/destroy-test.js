@@ -177,7 +177,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           var Thread = store.Model('Thread');
 
           Thread.where({title_like: 'destroy'}).destroyAll(function(success){
-            success.should.be.equal(true);
+            success.should.be.equal(false);
           
             Thread.where({title_like: 'destroy'}).count().exec(function(result){
               result.count.should.be.equal(1);

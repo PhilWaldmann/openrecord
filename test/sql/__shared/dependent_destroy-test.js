@@ -19,10 +19,13 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       
       store.Model('User', function(){
         this.hasMany('posts');
-        this.hasMany('threads');      
+        this.hasMany('threads');
+        this.beforeDestroy(function(){
+          return this.id != 2;
+        });
       });
       store.Model('Post', function(){
-        this.belongsTo('user');
+        this.belongsTo('user', {dependent:'destroy'});
         this.belongsTo('thread', {dependent:'destroy'});
         this.beforeDestroy(function(){
           return this.id != 1;
@@ -30,7 +33,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
       store.Model('Thread', function(){
         this.belongsTo('user');
-        this.hasMany('posts', {dependent:'destroy'});
+        this.hasMany('posts', {dependent:'destroy', validates:false});
       });
       
     });
@@ -69,6 +72,21 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
               should.not.exist(thread);
               next();
             });
+          });                 
+        });          
+      });
+    });
+    
+    
+    it('destroy belongsTo with failing relation destroy', function(next){ 
+      store.ready(function(){
+        var Thread = store.Model('Thread');
+        var Post = store.Model('Post');
+        
+        Post.find(5, function(post){   
+          post.destroy(function(result){
+            result.should.be.equal(false);
+            next();
           });                 
         });          
       });
