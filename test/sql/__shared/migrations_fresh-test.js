@@ -145,8 +145,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     it('has all nestedSet() attributes', function(next){
       store.ready(function(){
         var Post = store.Model('Post');
-        Post.definition.attributes.should.have.property('left');
-        Post.definition.attributes.should.have.property('right');
+        Post.definition.attributes.should.have.property('lft');
+        Post.definition.attributes.should.have.property('rgt');
         Post.definition.attributes.should.have.property('depth');
         Post.definition.attributes.should.have.property('parent_id');
         next();
