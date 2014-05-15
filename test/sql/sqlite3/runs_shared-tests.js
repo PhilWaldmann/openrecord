@@ -169,6 +169,11 @@ testSQLite('validations', [
 
 
 //plugins
+testSQLite('plugins/nested_set', [
+  'CREATE TABLE folders(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, parent_id INTEGER, lft INTEGER, rgt INTEGER, depth INTEGER)',
+  'INSERT INTO folders(name, parent_id, lft, rgt, depth) VALUES("A", 0, 0, 3, 0), ("A1", 1, 1, 2, 1), ("B", 0, 4, 13, 0), ("B1", 3, 5, 6, 1), ("B2", 3, 7, 12, 1), ("B2.1", 5, 8, 11, 2), ("B2.1.1", 6, 9, 10, 3)'
+]);
+
 testSQLite('plugins/paranoid', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, deleted_at TEXT)',
   'INSERT INTO users(login, email, deleted_at) VALUES("phil", "phil@mail.com", NULL), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", NULL), ("marlene", "marlene@mail.com", "2014-01-01"), ("hans", "hans@mail.com", NULL)'

@@ -176,5 +176,80 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });      
     });        
     
+    
+    it('moves an  element "up"', function(next){
+      store.ready(function(){
+        var Folder = store.Model('Folder');
+        Folder.find(1).exec(function(folder){ // => A
+
+          folder.moveToChildOf(3); // => B
+          
+          folder.save(function(success){
+            success.should.be.true;
+            
+            Folder.find(3).withAllChildren(2).order('lft').exec(function(folder){
+              folder.children.length.should.be.equal(3);
+              
+              folder.children[2].name.should.be.equal('A');
+              folder.children[2].lft.should.not.be.equal(0);
+              folder.children[2].rgt.should.not.be.equal(3);
+              folder.children[2].depth.should.be.equal(1);
+              
+              next();
+            });
+          });
+        });
+      });      
+    });
+    
+    
+    
+    it('moves an  element "down"', function(next){
+      store.ready(function(){
+        var Folder = store.Model('Folder');
+        Folder.find(6).exec(function(folder){ // => B2.1
+
+          folder.moveToChildOf(4); // => B1
+          
+          folder.save(function(success){
+            success.should.be.true;
+            
+            Folder.find(4).withAllChildren().order('lft').exec(function(folder){
+              folder.children.length.should.be.equal(2);
+              
+              folder.children[1].name.should.be.equal('B2.1');
+              folder.children[1].children.length.should.be.equal(2);
+              
+              next();
+            });
+          });
+        });
+      });      
+    });
+    
+    
+    it('deletes a node (and its child nodes)', function(next){
+      store.ready(function(){
+        var Folder = store.Model('Folder');
+        Folder.find(1).exec(function(folder){ // => A
+          
+          folder.destroy(function(success){
+            success.should.be.true;
+            
+            Folder.order('lft').exec(function(folders){
+              folders.length.should.be.equal(7);
+              
+              folders[0].name.should.be.equal('B');
+              folders[0].lft.should.be.equal(0);
+              folders[0].rgt.should.be.equal(13);
+              
+              next();
+            });
+          });
+        });
+      });      
+    });
+    
+    
   });
 };

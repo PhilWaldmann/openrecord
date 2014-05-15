@@ -36,6 +36,7 @@ npm install openrecord
 * Promises
 * Migrations
 * Plugin support
+* Build in plugins (stampable, paranoid, nested set)
 * ... with almost 900 tests 
 
 
