@@ -287,6 +287,17 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });      
       });
     
+    
+      it('finds nothing with empty array in condition (IS NULL))', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where({login: []}).exec(function(result){
+            result.length.should.be.equal(0);
+            next();
+          });
+        });      
+      });
+      
             
     });
   
