@@ -74,7 +74,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           
           user.save(function(success){
             Post.where({user_id:user.id}).count().exec(function(result){
-              result.count.should.be.equal(2);
+              result.should.be.equal(2);
               next();
             });
           });
@@ -95,7 +95,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           
           user.save(function(success){
             Post.where({user_id:user.id}).count().exec(function(result){
-              result.count.should.be.equal(2);
+              result.should.be.equal(2);
               next();
             });
           });
@@ -115,7 +115,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           
           user.save(function(success){
             Post.where({user_id:user.id}).count().exec(function(result){
-              result.count.should.be.equal(1);
+              result.should.be.equal(1);
               next();
             });
           });
@@ -134,7 +134,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           
           user.save(function(success){
             Post.where({user_id:user.id}).count().exec(function(result){
-              result.count.should.be.equal(2);
+              result.should.be.equal(2);
               next();
             });
           });

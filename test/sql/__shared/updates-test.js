@@ -83,7 +83,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
               result.should.be.false;
             
               User.where({login:'maxi'}).count().exec(function(result){
-                result.count.should.be.equal(0);
+                result.should.be.equal(0);
                 next();
               });
             
@@ -120,7 +120,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
               result.should.be.false;
             
               User.where({login:'_maxi'}).count().exec(function(result){
-                result.count.should.be.equal(0);
+                result.should.be.equal(0);
                 next();
               });
             
@@ -230,7 +230,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
               result.should.be.equal(true);
             
               Post.where({user_id:3}).count().exec(function(result){
-                result.count.should.be.equal(1);
+                result.should.be.equal(1);
                 next();
               });            
             

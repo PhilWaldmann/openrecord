@@ -138,7 +138,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             success.should.be.equal(true);
           
             Thread.where({title_like: 'delete'}).count().exec(function(result){
-              result.count.should.be.equal(0);
+              result.should.be.equal(0);
               next();
             });
           
@@ -159,7 +159,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
               success.should.be.equal(true);
               
               Post.where({thread_id:thread.id}).count().exec(function(result){
-                result.count.should.be.equal(0);
+                result.should.be.equal(0);
                 next();
               });
               
@@ -180,7 +180,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             success.should.be.equal(false);
           
             Thread.where({title_like: 'destroy'}).count().exec(function(result){
-              result.count.should.be.equal(1);
+              result.should.be.equal(1);
               next();
             });
           

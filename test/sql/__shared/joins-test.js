@@ -18,12 +18,13 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.setMaxListeners(0);
       
       store.Model('User', function(){
-        this.hasMany('posts');
-        this.hasMany('threads');
-        this.hasOne('avatar');
-        this.hasMany('unread_posts');
-        this.hasMany('unread', {through:'unread_posts'});
-        this.hasMany('unread_threads', {through:'unread', relation:'thread'});
+        this
+        .hasMany('posts')
+        .hasMany('threads')
+        .hasOne('avatar')
+        .hasMany('unread_posts')
+        .hasMany('unread', {through:'unread_posts'})
+        .hasMany('unread_threads', {through:'unread', relation:'thread'});
       });
       store.Model('Avatar', function(){
         this.belongsTo('user');

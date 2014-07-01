@@ -2,7 +2,18 @@ require('./__helper');
 
 testSQLite('aggregate_function', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, salary INTEGER)',
-  'INSERT INTO users(salary) VALUES(100), (200), (400), (300), (1000)'
+  'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
+  'INSERT INTO users(salary) VALUES(100), (200), (400), (300), (1000)',
+  'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")'
+]);
+
+testSQLite('allowed_attributes', [
+  'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, active BOOLEAN)',
+  'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
+  'CREATE TABLE threads(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT)',
+  'INSERT INTO users(login, email, active) VALUES("phil", "phil@mail.com", 1), ("michl", "michl@mail.com", 0), ("admin", "admin@mail.com", 1)',
+  'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")',
+  'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread")'
 ]);
 
 testSQLite('attributes', [

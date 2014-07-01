@@ -14,7 +14,7 @@ test-coveralls:
 	./node_modules/.bin/mocha --require blanket --recursive --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
 	
 docs:
-	./node_modules/.bin/docu --output documentation/wiki/Home.md "./lib/**/*.js" "./examples/**/*.js"
+	./node_modules/.bin/docu --input documentation/wiki/Home.md --output documentation/wiki/Test.md "./lib/**/*.js" "./examples/**/*.js"
 	
 push-docs: 
 	cd documentation/wiki && git add -A && git commit -m 'auto generated update' && git push origin master && cd ../..

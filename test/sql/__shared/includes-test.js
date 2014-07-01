@@ -427,6 +427,32 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
         });
       });
+      
+      
+      
+      it('returns a the result + the totalCount', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.limit(2).include(':totalCount').exec(function(result){
+            result.length.should.be.equal(2);
+            result.$totalCount.should.be.equal(3);
+            next();
+          });
+        });
+      });
+      
+      
+      it('returns a the result + the totalCount of posts', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.include('posts:totalCount').exec(function(result){
+            result.length.should.be.equal(3);
+            result.posts$totalCount.should.be.equal(4);
+            next();
+          });
+        });
+      });
+      
        
     });
     

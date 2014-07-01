@@ -17,7 +17,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store = new Store(store_conf);
       store.setMaxListeners(0);
 
-      store.Model('User', function(){});
+      store.Model('User', function(){
+        this.hasMany('posts');
+      });
+      store.Model('Post', function(){});
     });
   
         
@@ -36,7 +39,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.count('salary').exec(function(result){
-            result.count.should.be.equal(5);
+            result.should.be.equal(5);
             next();
           });
         });      
@@ -46,7 +49,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.count().exec(function(result){
-            result.count.should.be.equal(5);
+            result.should.be.equal(5);
             next();
           });
         });      
@@ -56,7 +59,17 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.count('salary').where({salary_gt: 500}).exec(function(result){
-            result.count.should.be.equal(1);
+            result.should.be.equal(1);
+            next();
+          });
+        });      
+      });
+      
+      it('works with joins', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.count('salary').join('posts').exec(function(result){
+            result.should.be.equal(7);
             next();
           });
         });      
@@ -78,7 +91,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.sum('salary').exec(function(result){
-            result.sum.should.be.equal(2000);
+            result.should.be.equal(2000);
             next();
           });
         });      
@@ -88,7 +101,17 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.sum('salary').where({salary_gt: 500}).exec(function(result){
-            result.sum.should.be.equal(1000);
+            result.should.be.equal(1000);
+            next();
+          });
+        });      
+      });
+      
+      it('works with joins', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.sum('salary').join('posts').exec(function(result){
+            result.should.be.equal(2200);
             next();
           });
         });      
@@ -110,7 +133,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.max('salary').exec(function(result){
-            result.max.should.be.equal(1000);
+            result.should.be.equal(1000);
             next();
           });
         });      
@@ -120,7 +143,17 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.max('salary').where({salary_gt: 500}).exec(function(result){
-            result.max.should.be.equal(1000);
+            result.should.be.equal(1000);
+            next();
+          });
+        });      
+      });
+      
+      it('works with joins', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.max('salary').join('posts').exec(function(result){
+            result.should.be.equal(1000);
             next();
           });
         });      
@@ -142,7 +175,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.min('salary').exec(function(result){
-            result.min.should.be.equal(100);
+            result.should.be.equal(100);
             next();
           });
         });      
@@ -152,7 +185,17 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.min('salary').where({salary_gt: 500}).exec(function(result){
-            result.min.should.be.equal(1000);
+            result.should.be.equal(1000);
+            next();
+          });
+        });      
+      });
+      
+      it('works with joins', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.min('salary').join('posts').exec(function(result){
+            result.should.be.equal(100);
             next();
           });
         });      
@@ -174,7 +217,27 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.avg('salary').exec(function(result){
-            result.avg.should.be.equal(400);
+            result.should.be.equal(400);
+            next();
+          });
+        });      
+      });
+    
+      it('works with conditions', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.avg('salary').where({salary_gt: 300}).exec(function(result){
+            result.should.be.equal(700);
+            next();
+          });
+        });      
+      });
+      
+      it('works with joins', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.avg('salary').join('posts').exec(function(result){
+            result.should.be.equal(400);
             next();
           });
         });      

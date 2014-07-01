@@ -2,9 +2,19 @@ require('./__helper');
 
 testMYSQL('aggregate_function', [
   'CREATE TABLE users(id serial primary key, salary INTEGER)',
-  'INSERT INTO users(salary) VALUES(100), (200), (400), (300), (1000)'
+  'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
+  'INSERT INTO users(salary) VALUES(100), (200), (400), (300), (1000)',
+  "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post')"
 ]);
 
+testMYSQL('allowed_attributes', [
+  'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, active boolean)',
+  'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
+  'CREATE TABLE threads(id serial primary key, user_id INTEGER, title TEXT)',
+  "INSERT INTO users(login, email, active) VALUES('phil', 'phil@mail.com', true), ('michl', 'michl@mail.com', false), ('admin', 'admin@mail.com', true)",
+  "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post')",
+  "INSERT INTO threads(user_id, title) VALUES(2, 'first thread'), (1, 'second thread')"
+]);
 
 testMYSQL('attributes', [
   'CREATE TABLE users(id serial primary key, login TEXT NOT NULL, email TEXT)',
