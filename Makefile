@@ -14,7 +14,15 @@ test-coveralls:
 	./node_modules/.bin/mocha --require blanket --recursive --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
 	
 docs:
-	./node_modules/.bin/docu --input documentation/wiki/Home.md --output documentation/wiki/Test.md "./lib/**/*.js" "./examples/**/*.js"
+	git clone git@github.com:PhilWaldmann/openrecord.wiki.git wiki
+	./node_modules/.bin/docu --input documentation/Home.md --output wiki/Home.md "./lib/**/*.js" "./examples/**/*.js"
+	cp documentation/_Sidebar.md wiki/_Sidebar.md
+	cd wiki
+	git add -A
+	git commit -m 'auto update'
+	git push
+	cd ..
+	rm -rf wiki
 	
 push-docs: 
 	cd documentation/wiki && git add -A && git commit -m 'auto generated update' && git push origin master && cd ../..

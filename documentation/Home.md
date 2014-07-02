@@ -117,7 +117,7 @@ var store = new OpenRecord({
 
 ```js
 store.ready(function(){
-	//store is ready})
+	//store is ready})
 ```
 The `ready` callback will be called after all [models](#model-definition) and [migrations](#migrations) are finished/ready.
 
@@ -136,14 +136,14 @@ Models could be defined synchronous or asynchronous. In the simplest form a mode
 
 ```js
 store.Model('MyModel', function(){
-	//definition goes here});
+	//definition goes here});
 ```
 
 Inside that function your are in the model definition scope. For example setting a [validation](#validations) is as easy as:
 
 ```js
 store.Model('MyModel', function(){
-	this.validatesPresenceOf('name');});
+	this.validatesPresenceOf('name');});
 ```
 
 ### Async
@@ -152,7 +152,7 @@ The model definition could also be done asynchronous. If you need to do some asy
 
 ```js
 store.Model('MyModel', function(done){
-	setTimeout(done, 100);});
+	setTimeout(done, 100);});
 ```
 
 ### Load from files
@@ -162,7 +162,7 @@ The model name will be automatically take from the file name so you just need to
 
 ```js
 module.exports = function(){
-	//definition goes here}
+	//definition goes here}
 ```
 
 Alternatively you could export a named function to set the model name manually!
@@ -203,33 +203,20 @@ Stores that automatically load and define your attributes (`sqlite3`, `postgres`
 
 The following validation methods are available for every store type:
 
-### validates()
 
 {{Definition.validates()}}
 	
-### validatesPresenceOf()
-
 {{Definition.validatesPresenceOf()}}
-
-### validatesConfirmationOf()
 
 {{Definition.validatesConfirmationOf()}}
 
-### validatesFormatOf()
-
 {{Definition.validatesFormatOf()}}
 
-### validatesLengthOf()
-
 {{Definition.validatesLengthOf()}}
-
-### validatesNumericalityOf()
 
 {{Definition.validatesNumericalityOf()}}
 
 The following validation methods are only available for sql store (`sqlite3`, `postgres` and `mysql`)
-
-### validatesUniquenessOf()
 
 {{Definition.validatesUniquenessOf()}}
 
@@ -243,15 +230,9 @@ A relation - except for a polymorphic relations - always needs a target model. T
 The relation will be initialized after the target model is ready - to automatically get the primary and foreign key. The default for the foreign key is `<model_name>_<primary_key>` - all lower case! You could manually set the `primary_key` and `foreign_key` if you need.
 
 
-### hasMany()
-
 {{Definition.hasMany()}}
 
-### hasOne()
-
 {{Definition.hasOne()}}
-
-### belongsTo()
 
 {{Definition.belongsTo()}}
 
@@ -272,7 +253,7 @@ Here is an example how to use the `beforeFind()` hook synchronous:
 module.exports = function(){
 	this.beforeFind(function(){
 		this.where({delete_at: null});
-		return true;			});
+		return true;			});
 }
 ```
 The above example will add a [condition](#conditions) (`delete_at` should be equal `null`) to every record search of that model. If you need to do some async stuff inside the hook, you could use it asynchronous. The very last param is a callback. If you put that callback into your function's parameters OpenRecord will treat that function asynchronous. _Same concept as model definition function!_
@@ -289,51 +270,27 @@ As you could see in the above example, returning anything else except `false` an
 
 The following hooks are available:
 
-### beforeFind()
-
 {{Definition.beforeFind()}}
-
-### afterFind()
 
 {{Definition.afterFind()}}
 
-### beforeValidation()
-
 {{Definition.beforeValidation()}}
-
-### afterValidation()
 
 {{Definition.afterValidation()}}
 
-### beforeSave()
-
 {{Definition.beforeSave()}}
-
-### afterSave()
 
 {{Definition.afterSave()}}
 
-### beforeCreate()
-
 {{Definition.beforeCreate()}}
-
-### afterCreate()
 
 {{Definition.afterCreate()}}
 
-### beforeUpdate()
-
 {{Definition.beforeUpdate()}}
-
-### afterUpdate()
 
 {{Definition.afterUpdate()}}
 
-### beforeDestroy()
-
 {{Definition.beforeDestroy()}}
-
-### afterDestroy()
 
 {{Definition.afterDestroy()}}
 
@@ -347,7 +304,7 @@ For example if you need to get all activated users (`activated` is `true`) in 99
 ```js
 module.exports = function(){
 	this.scope('activated', function(){
-		this.where({activated: true});	});
+		this.where({activated: true});	});
 }
 ```
 
@@ -360,8 +317,6 @@ User.activated().join()...
 Scopes are synchronous only and will provide automatic [chainability](#chaining) for you!
 
 
-### scope()
-
 {{Definition.scope()}}
 
 
@@ -372,7 +327,7 @@ Extending your model with custom methods is as easy as defining your method on t
 ```js
 module.exports = function(){
 	this.fullName = function(){
-		return this.first_name + ' ' + this.last_name;	}
+		return this.first_name + ' ' + this.last_name;	}
 }
 ```
 
@@ -399,8 +354,6 @@ module.exports = function(){
 }
 ```
 
-### autoJoin()
-
 {{Definition.autoJoin()}}
 
 ## Chaining
@@ -420,7 +373,7 @@ module.exports = function(){
 
 # Model
 
-Use the [ready()](#ready) method to get notified when your model is ready for usage. To retrieve the model you could either use the `Model()` as well.
+Use the [ready()](#ready) method to get notified when your model is ready for usage. To retrieve the model you could use the `Model()` as well.
 Just do the following to get your Model:
 
 ```js
@@ -431,104 +384,66 @@ If you've set the `global` config option to `true` OpenRecord automatically crea
 
 ## Find/Get
 
-OpenRecord has some really handy methods to search your store. To start a search
+OpenRecord has some really handy methods to search your store. To get the results call `exec()`
 
-### find()
+{{Model.exec()}}
 
 {{Model.find()}}
 	
-### get()
-
-{Model.get()}
-
-### exec()
-
-{Model.exec()}
+{{Model.get()}}
 
 
 ## Conditions
-
-### where()
 	
-{{Model.get()}}	
+{{Model.where()}}	
 
 ## Aggregate functions
-
-### count()
 	
-{{Model.count}}
-
-### sum()
+{{Model.count()}}
 
 {{Model.sum()}}
-
-### max()
 	
 {{Model.max()}}
-
-### min()
 
 {{Model.min()}}
 
 ## Joins
 
-### join()
-
 {{Model.join()}}
 
 ## Includes
-
-### include()
 
 {{Model.include()}}
 
 ## Limit/Offset
 
-### limit()
-
 {{Model.limit()}}
-
-### offset()
 
 {{Model.offset()}}
 
 ## Sorting
 
-### sort()
-
-{{Model.sort()}}
+{{Model.order()}}
 
 ## Group/Having
 
-### group()
-
 {{Model.group()}}
-
-### having()
 
 {{Model.having()}}
 
 ## Select
 
-### select()
-
 {{Model.select()}}
 
 ## Context
-
-### setContext()
 
 {{Model.setContext()}}
 
 ## Json
 
-### toJson()
-
-{{Model.toJson()}}
+{{Collection.toJson()}}
 
 ## Chaining
-
-### chain()
 
 {{Model.chain()}}
 
@@ -536,101 +451,75 @@ OpenRecord has some really handy methods to search your store. To start a search
 
 ## Delete/Destroy
 
-### delete()
-
 {{Model.delete()}}
-
-### destroy()
 
 {{Model.destroy()}}
 
 # Record
 ## Attributes
 
-### set()
-
 {{Record.set()}}
-
-### get()
 
 {{Record.get()}}
 
 Changes
 
-### hasChanges()
-
 {{Record.hasChanges()}}
-
-### hasChanged()
 
 {{Record.hasChanged()}}
 
-### getChanges()
-
 {{Record.getChanges()}}
 
-### getChangedValues()
-
 {{Record.getChangedValues()}}
-
-### resetChanges()
 
 {{Record.resetChanges()}}
 
 Allowed attributes
 
-Validations
-
-### validate()
+## Validations
 
 {{Record.validate()}}
 
-### isValid()
-
-{{Record.isValid()}}
-
-Errors
+Errors ... coming soon
 
 ## Relations
 
-Nested records
+Nested records ... coming soon
 
-## JSON
-
-### toJson()
+## Json
 
 {{Record.toJson()}}
 
 ## Create
 
-### new()
+{{Model.new()}}
 
-{{Record.new()}}
-
-### save()
+{{Model.create()}}
 
 {{Record.save()}}
 
-### create()
-
-{{Record.create()}}
-
 ## Update
-## Destroy
+Just change some attributes and OpenRecord will automatically detect the changed values.
 
-### destroy()
+```js
+user.login = 'phil';
+user.save(function(){
+  // ...
+}) 
+```
+## Destroy
 
 {{Record.destroy()}}
 
 ### Cascade
+Coming soon
 ## Transactions
 
-### transaction
-
-{{Record.transaction()}}
+{{Model.transaction()}}
 
 # Migrations
-
+Coming soon
 # Plugins
-## Structure
-## Internal Hooks
+Coming soon
+## Internal Structure
+Coming soon
