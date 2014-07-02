@@ -442,12 +442,46 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
       
       
-      it('returns a the result + the totalCount of posts', function(next){
+      it('returns the result + the totalCount of posts', function(next){
         store.ready(function(){
           var User = store.Model('User');
           User.include('posts:totalCount').exec(function(result){
             result.length.should.be.equal(3);
             result.posts$totalCount.should.be.equal(4);
+            next();
+          });
+        });
+      });
+      
+      it('returns the result as json + the totalCount', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.limit(2).include(':totalCount').asJson().exec(function(result){
+            result.length.should.be.equal(2);
+            this.$totalCount.should.be.equal(3);
+            next();
+          });
+        });
+      });
+      
+      it('returns the result + the totalCount with conditions', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.include(':totalCount').where({login_like: 'phil'}).exec(function(result){
+            result.length.should.be.equal(1);
+            result.$totalCount.should.be.equal(1);
+            next();
+          });
+        });
+      });
+      
+      
+      it('returns the result + the totalCount with conditions and joins', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.include(':totalCount').join('posts').where({login_like: 'phil'}).exec(function(result){
+            result.length.should.be.equal(1);
+            result.$totalCount.should.be.equal(1);
             next();
           });
         });
