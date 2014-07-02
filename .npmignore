@@ -1,8 +1,12 @@
 examples/
 documentation/
+wiki/
+test/
 
 npm-debug.log
 
 coverage.html
 .coveralls.yml
 .npmignore
+logo.png
+Makefile

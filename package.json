@@ -1,6 +1,6 @@
 {
     "name": "openrecord",
-    "version": "0.17.3",
+    "version": "1.0.0",
     "description": "Active record like ORM for nodejs",
     "keywords": ["orm", "record", "sql", "sqlite3", "postgres", "pg", "mysql", "database", "activerecord", "promise", "rest", "restify", "nested set"],
     "author": "Philipp Waldmann <philipp.waldmann@s-team.at>",
@@ -40,7 +40,7 @@
     },
     "scripts": {
         "test": "make test",
-        "_postpublish": "make docs && make push-docs"
+        "postpublish": "make docs && make push-docs"
     },
     "engines": {
         "node": ">=0.8.7"

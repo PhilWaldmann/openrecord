@@ -1,13 +1,15 @@
-OpenRecord
+![OpenRecord](logo.png)
 ==========
 
 [![Build Status](http://travis-ci.org/PhilWaldmann/openrecord.png)](https://travis-ci.org/PhilWaldmann/openrecord)
-[![Node.ci](http://node.ci/report/github/PhilWaldmann/openrecord/master.png)](http://node.ci/projects/github/PhilWaldmann/openrecord/master)
 [![Coverage Status](http://coveralls.io/repos/PhilWaldmann/openrecord/badge.png)](https://coveralls.io/r/PhilWaldmann/openrecord)
 [![npm package version](http://badge.fury.io/js/openrecord.png)](https://npmjs.org/package/openrecord)
 [![Dependency Status](https://gemnasium.com/PhilWaldmann/openrecord.svg)](https://gemnasium.com/PhilWaldmann/openrecord)
 
 > ActiveRecord like ORM for nodejs
+
+There are currently a hand full of ORMs for nodejs available - but there is no one with a nice syntax similar to ActiveRecord (Ruby).
+OpenRecord will change that!
 
 
 ## Installation
@@ -16,6 +18,7 @@ OpenRecord
 npm install openrecord
 ```
 
+## [Documentation](https://github.com/PhilWaldmann/openrecord/wiki)
 
 ## Features
 
@@ -39,11 +42,6 @@ npm install openrecord
 * Build in plugins (stampable, paranoid, nested set)
 * ... with almost 900 tests 
 
-
-## Roadmap to 1.0.0
-
-* better documentation
-* more examples
 
 
 ## Usage
@@ -80,9 +78,6 @@ sql.ready(function(){
 });
 
 ```
-
-
-## [Documentation](https://github.com/PhilWaldmann/openrecord/wiki)
 
 
 ## Contributing
