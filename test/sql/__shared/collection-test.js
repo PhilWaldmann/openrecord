@@ -25,6 +25,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         this.hasMany('unread_posts');
         this.hasMany('unread', {through:'unread_posts'});
         this.hasMany('unread_threads', {through:'unread', relation:'thread'});
+        this.hasMany('poly_things', {as:'member'});
       });
       store.Model('Avatar', function(){
         this.belongsTo('user');
@@ -33,14 +34,19 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         this.belongsTo('user');
         this.belongsTo('thread');
         this.belongsTo('thread_autor', {through:'thread', relation:'user'});
+        this.hasMany('poly_things', {as:'member'});
       });
       store.Model('Thread', function(){
         this.belongsTo('user');
         this.hasMany('posts');
+        this.hasMany('poly_things', {as:'member'});
       });
       store.Model('UnreadPost', function(){
         this.belongsTo('user');
         this.belongsTo('unread', {model: 'Post'});
+      });
+      store.Model('PolyThing', function(){
+        this.belongsTo('member', {polymorph: true});
       });
       
     });
@@ -197,7 +203,6 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             success.should.be.true;
             User.find(1).include('unread').exec(function(phil){
               phil.unread.length.should.be.equal(3);
-              phil.unread.every.id.should.be.eql([3, 1, 2]);
               next();
             });
           });
@@ -237,6 +242,29 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           user.threads.exec(function(threads){
             threads.length.should.be.equal(1);
             next();
+          });
+        });
+      });
+    });
+    
+    
+    
+    
+    it('adds a polymorphic record', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+
+        User.find(1).exec(function(user){
+          
+          user.poly_things.new({message: 'foo'});
+
+          user.save(function(success){
+            success.should.be.true;
+            User.find(1).include('poly_things').exec(function(phil){
+              phil.poly_things.length.should.be.equal(1);
+              phil.poly_things[0].message.should.be.eql('foo');
+              next();
+            });
           });
         });
       });

@@ -396,6 +396,23 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
         });
       });
+      
+      
+      it('does only one join, even join(table) was called twice', function(next){
+        store.ready(function(){
+          var Avatar = store.Model('Avatar');
+          Avatar.find(1).join('poly_things').join('poly_things').exec(function(result){
+            result.id.should.be.equal(1);
+            result.poly_things.length.should.be.equal(1);
+            result.poly_things[0].member_type.should.be.equal('Avatar');
+            result.poly_things[0].member_id.should.be.equal(result.id);
+            next();
+          }).catch(function(err){
+            should.not.exist(err);
+            next();
+          });
+        });
+      });
      
     });
     
