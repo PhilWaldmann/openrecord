@@ -5,7 +5,11 @@ test: test-mocha
 test-all: clean test-mocha test-cov
 
 test-mocha:
+<<<<<<< HEAD
 	@NODE_ENV=test ./node_modules/.bin/mocha --reporter $(REPORTER) --recursive --grep
+=======
+	@NODE_ENV=test ./node_modules/.bin/mocha --reporter $(REPORTER) --recursive
+>>>>>>> FETCH_HEAD
 
 test-cov:
 	@NODE_ENV=test ./node_modules/.bin/mocha --require blanket --recursive -R html-cov > coverage.html
