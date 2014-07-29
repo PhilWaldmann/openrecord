@@ -26,7 +26,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('casts BLOB to string', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          User.definition.cast('my_blob', 45454).should.be.equal('45454');      
+          User.definition.cast('my_blob', 45454, 'read').should.be.equal('45454');      
           next();
         });      
       });
@@ -35,7 +35,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('casts INTEGER to number', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          User.definition.cast('my_integer', '123.55').should.be.equal(123);      
+          User.definition.cast('my_integer', '123.55', 'read').should.be.equal(123);      
           next();
         });      
       });
@@ -45,7 +45,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('casts REAL to float', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          User.definition.cast('my_real', '123.55').should.be.equal(123.55);      
+          User.definition.cast('my_real', '123.55', 'read').should.be.equal(123.55);      
           next();
         });      
       });
