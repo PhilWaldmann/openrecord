@@ -86,7 +86,7 @@ describe('Postgres: all Attributes', function(){
           record.datetime_attribute.toJSON().should.be.equal('2014-02-18T15:45:02.000Z');
         }
         
-        record.time_attribute.toString().should.be.equal('15:45'); //TODO: offer config options to return a specific format for date and time...
+        record.time_attribute.toString().should.be.equal('15:45:01');
         record.hstore_attribute.should.be.eql({key:'value', nested:{key: 'value'}});
         
         done();
@@ -113,7 +113,7 @@ describe('Postgres: all Attributes', function(){
           record.datetime_attribute.toJSON().should.be.equal('2014-02-18T15:45:02.000Z');
         }
         
-        record.time_attribute.toString().should.be.equal('15:45'); //TODO: offer config options to return a specific format for date and time...
+        record.time_attribute.toString().should.be.equal('15:45:01');
         record.hstore_attribute.should.be.eql({key:'value', nested:{key: 'value'}});
         
         done();
@@ -154,7 +154,7 @@ describe('Postgres: all Attributes', function(){
 
           record.datetime_attribute.toJSON().should.be.equal(now.toJSON());
         
-          record.time_attribute.toString().should.be.equal('20:03'); //TODO: offer config options to return a specific format for date and time...
+          record.time_attribute.toString().should.be.equal('20:03:00');
           record.hstore_attribute.should.be.eql({a:'11', b:'22', foo:{bar:['phil', 'michl']}});
         
           done();
