@@ -62,7 +62,7 @@ describe('Convert', function(){
     });
         
     it('does not change the original value', function(done){
-      user.login.should.be.equal('admin')
+      user.attributes.login.should.be.equal('admin')
       done();
     });
     
