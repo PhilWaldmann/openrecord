@@ -25,7 +25,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
   
   
     describe('find()', function(){
-    
+      /*
       it('finds with one id returns the right sql', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
@@ -33,7 +33,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           next();
         });
       });
-    
+    */
     
       it('finds nothing', function(next){
         store.ready(function(){
@@ -66,7 +66,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });      
       });
     
-    
+      /*
       it('finds with multiple ids returns the right sql', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
@@ -74,7 +74,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           next();
         });
       });
-    
+    */
     
       it('finds phil and michl by id', function(next){
         store.ready(function(){
@@ -108,7 +108,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
   
   
     describe('get()', function(){
-    
+      /*
       it('finds with one id returns the right sql', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
@@ -116,7 +116,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           next();
         });
       });
-    
+    */
     
       it('finds someting', function(next){
         store.ready(function(){
