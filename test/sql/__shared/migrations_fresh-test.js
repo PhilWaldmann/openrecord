@@ -107,7 +107,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           AttributeTest.definition.attributes.text_attr.type.name.should.be.equal('text');
           AttributeTest.definition.attributes.integer_attr.type.name.should.be.equal('integer');
           AttributeTest.definition.attributes.float_attr.type.name.should.be.equal('real'); //SHOULD BE float
-          AttributeTest.definition.attributes.boolean_attr.type.name.should.be.equal('integer'); //SHOULD BE boolean
+          AttributeTest.definition.attributes.boolean_attr.type.name.should.be.equal('boolean');
           AttributeTest.definition.attributes.binary_attr.type.name.should.be.equal('text'); //SHOULD BE binary
           AttributeTest.definition.attributes.date_attr.type.name.should.be.equal('date');
           AttributeTest.definition.attributes.datetime_attr.type.name.should.be.equal('datetime');
