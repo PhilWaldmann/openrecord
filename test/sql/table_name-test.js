@@ -2,7 +2,7 @@ var should = require('should');
 
 var Store = require('../../lib/store');
 
-describe('SQL: Conditions', function(){
+describe('SQL: Table Name', function(){
   var store;
   
   before(function(){
