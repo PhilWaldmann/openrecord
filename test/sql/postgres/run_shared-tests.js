@@ -41,6 +41,11 @@ testPG('conditions', [
   "INSERT INTO users(login, email, created_at) VALUES('phil', 'phil@mail.com', '2014-01-05'), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', '2014-01-01')"
 ]);
 
+testPG('converter', [
+  'CREATE TABLE users(id serial primary key, my_blob TEXT, my_integer INTEGER, my_real float)',
+  "INSERT INTO users(my_blob, my_integer, my_real) VALUES('phil', 12, 44.66)"
+]);
+
 testPG('create', [
   'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
