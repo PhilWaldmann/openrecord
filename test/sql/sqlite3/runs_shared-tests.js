@@ -190,7 +190,14 @@ testSQLite('plugins/paranoid', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, deleted_at TEXT)',
   'INSERT INTO users(login, email, deleted_at) VALUES("phil", "phil@mail.com", NULL), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", NULL), ("marlene", "marlene@mail.com", "2014-01-01"), ("hans", "hans@mail.com", NULL)'
 ]);
-
+/* //there is currently a problem with knex?!
+testSQLite('plugins/sorted_list', [
+  'CREATE TABLE my_lists(id INTEGER PRIMARY KEY AUTOINCREMENT, name text, position integer)',
+  'CREATE TABLE my_scoped_lists(id INTEGER PRIMARY KEY AUTOINCREMENT, name text, position integer, my_scope integer)',
+  'INSERT INTO my_lists(name, position) VALUES("D", 3), ("E", 4), ("F", 5), ("G", 6), ("A", 0), ("B", 1), ("C", 2)',
+  'INSERT INTO my_scoped_lists(name, position, my_scope) VALUES("B2", 1, 2), ("D1", 3, 1), ("A3", 0, 3), ("A1", 0, 1), ("A2", 0, 2), ("B1", 1, 1), ("C1", 2, 1)'
+]);
+*/
 testSQLite('plugins/stampable', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at timestamp, updated_at timestamp, creator_id integer, updater_id integer)',
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT, created_at timestamp, updated_at timestamp, creator_id integer, updater_id integer)',
