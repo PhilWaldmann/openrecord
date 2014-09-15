@@ -6,7 +6,7 @@
 [![npm package version](http://badge.fury.io/js/openrecord.png)](https://npmjs.org/package/openrecord)
 [![Dependency Status](https://gemnasium.com/PhilWaldmann/openrecord.svg)](https://gemnasium.com/PhilWaldmann/openrecord)
 
-> An ActiveRecord like ORM for nodejs
+> An ActiveRecord-like ORM for nodejs
 
 There are currently a hand full of nodejs ORMs available - but there is no one with a nice syntax similar to ActiveRecord (Ruby).
 OpenRecord has a nice syntax, a ton of features, over 1000 unit tests and could be extended easily!
