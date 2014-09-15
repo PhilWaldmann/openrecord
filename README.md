@@ -6,11 +6,10 @@
 [![npm package version](http://badge.fury.io/js/openrecord.png)](https://npmjs.org/package/openrecord)
 [![Dependency Status](https://gemnasium.com/PhilWaldmann/openrecord.svg)](https://gemnasium.com/PhilWaldmann/openrecord)
 
-> ActiveRecord like ORM for nodejs
+> An ActiveRecord like ORM for nodejs
 
-There are currently a hand full of ORMs for nodejs available - but there is no one with a nice syntax similar to ActiveRecord (Ruby).
-OpenRecord will change that!
-
+There are currently a hand full of nodejs ORMs available - but there is no one with a nice syntax similar to ActiveRecord (Ruby).
+OpenRecord has a nice syntax, a ton of features, over 1000 unit tests and could be extended easily!
 
 ## Installation
 
@@ -23,8 +22,8 @@ npm install openrecord
 ## Features
 
 * SQLite3, MySQL, Postgres, REST support
-* Async schema definition
-* Automatic field definition loading (SQL)
+* Async schema definition: You could even change your model definition temporarily
+* Automatic field definition loading (SQL): You don't need to define your database fields twice! OpenRerecord will automatically load your schema definition
 * Relations (hasMany, hasOne, belongsTo with through, polymorph)
 * Nested Cascade delete
 * Nested Eager Loading
@@ -32,14 +31,18 @@ npm install openrecord
 * Nested Updates
 * Nested Joins
 * Validations
-* Scopes
-* Before and After Hooks
+* Scopes: Makro like methods
+* Before and After Hooks: For validation, find, create, update, destroy and some more...
 * Events
-* Chaining
+* Chaining: Everything is chainable!
 * Promises
-* Migrations
-* Plugin support
-* Build in plugins (stampable, paranoid, nested set, sorted list)
+* Migrations: SQL Migrations are build in
+* Plugin support: In fact 99% of OpenRecord is a plugin
+* Build-In SQL plugins:
+  * stampable: automatically set `created_at`, `updated_at`, `updater_id` or `creator_id`
+  * paranoid: Soft delete of records
+  * nested set: Build trees easily
+  * sorted list: Don't worry about lists
 * ... with more than 1000 tests 
 
 
