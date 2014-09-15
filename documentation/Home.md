@@ -388,17 +388,80 @@ OpenRecord has some really handy methods to search your store. To get the result
 
 {{Model.exec()}}
 
+To get a single record, call `find(id)`.
+
 {{Model.find()}}
-	
+
+`get(id)` is very similar to get. The only difference is that `get(id)` will throw an error if no record was found.
+  
 {{Model.get()}}
 
 
 ## Conditions
 	
+OpenRecord has a realy nice syntax to filter your results.
+There are 3 simple ways to write some conditions:
+
+```js
+User.where(['login = ?', 'phil']) //write raw sql placeholders
+User.where(['login = :login', {login: 'phil'}]) //write raw sql with enhanced placeholders
+User.where({login: 'phil'}) //conditions as a hash
+```
+
+But the hash syntax is even more powerful:
+
+```js
+User.where({login: ['phil', 'michl']}) //login IN ('phil', 'michl')
+User.where({login: null}) //login IS NULL
+User.where({active: true}) //active IS true
+User.where({login_not: null}) //login IS NOT NULL
+User.where({login_like: 'phi'}) //login LIKE '%phi%'
+User.where({login_not_like: 'phi'}) //login NOT LIKE '%phi%'
+User.where({login_like: ['phi', 'mic']}) //(login LIKE '%phi%' OR login LIKE '%mic%')
+User.where({failed_logins_gt: 0}) //failed_logins > 0
+User.where({failed_logins_gte: 0}) //failed_logins >= 0
+User.where({failed_logins_lt: 10}) //failed_logins < 10
+User.where({failed_logins_lte: 10}) //failed_logins <= 10
+User.where({failed_logins_between: [5, 8]}) //failed_logins between 5 and 8
+```
+
+The above examples always relate to the `User` model, but what about relations?
+
+```js
+User.join('posts').where({posts:{title_like: ['OpenRecord']}}).exec(function(posts){
+  console.log(posts); //returs all users with all posts where the title contains 'OpenRecord'
+})
+```
+
+The conditions nesting could be done indefinitely!
+
+```js
+User.join({posts: {thread: 'rating'}}).where({posts: {thread: {rating: {stars_gte: 5}}}}).exec(function(posts){
+  console.log(posts); //returs all users with all posts whith it's thread where the rating has more than 4 stars
+})
+```
+
 {{Model.where()}}	
 
 ## Aggregate functions
-	
+
+OpenRecord has basic aggregate functions build in.
+
+```js
+User.count().where({active: true}).exec(function(count){
+  console.log(count); //logs the number of active users
+})
+```
+
+if you use multiple aggregate functions at once:
+
+```js
+User.count().sum('failed_logins').where({active: true}).exec(function(result){
+  console.log(result.count); //logs the number of active users
+  console.log(result.sum); //logs the sum of failed_logins
+})
+```
+
 {{Model.count()}}
 
 {{Model.sum()}}
@@ -409,13 +472,56 @@ OpenRecord has some really handy methods to search your store. To get the result
 
 ## Joins
 
+If you've properly set up your relations joining them is as easy as
+
+```js
+User.join('relation_name').exec(function(users){
+  console.log(users[0].relation_name);
+})
+```
+
+or 
+
+```js
+User.join('relation_name', 'another_relation', 'and_one_more')
+```
+
+or via
+
+```js
+User.join(['relation_name', 'another_relation', 'and_one_more'])
+```
+
+if you need to join nested relations use the hash syntax instead:
+
+```js
+User.join({posts: {thread: 'rating'}})
+```
+
+All joins are by default `LEFT JOIN`s.
+
+
 {{Model.join()}}
 
+{{Model.leftJoin()}}
+
+{{Model.rightJoin()}}
+
+{{Model.innerJoin()}}
+
+{{Model.outerJoin()}}
+
 ## Includes
+
+To prefetch/eagerload relations use the `include()` function.
+OpenRecord will create an extra query for every included relation.
+The syntax is similar to the `join()` method.
 
 {{Model.include()}}
 
 ## Limit/Offset
+
+Limit your results with `LIMIT` and `OFFSET`.
 
 {{Model.limit()}}
 
@@ -429,9 +535,14 @@ OpenRecord has some really handy methods to search your store. To get the result
 
 {{Model.group()}}
 
+`having()` acceptes the same params like the `where()` functions
+
 {{Model.having()}}
 
 ## Select
+
+By default OpenRecord will select all fields (`*`).
+You could define some custom select fields - or SQL functions here.
 
 {{Model.select()}}
 
