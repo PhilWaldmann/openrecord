@@ -153,16 +153,43 @@ describe('SQL: Relations', function(){
   });
   
   
-  it('should throw an error if the store is not defined', function(){
-    (function(){
-      var tmp = new Store({
-        type: 'sql'
-      });
+  it('should not create a relation if the store is not available', function(){
+    var tmp = new Store({
+      type: 'sql'
+    });
+  
+    tmp.Model('Foo', function(){
+      this.belongsTo('bar', {store:'UNKNOWN'});
+    });
     
-      tmp.Model('Foo', function(){
-        this.belongsTo('bar', {store:'UNKNOWN'});
-      });
-    }).should.throw();
+    var Foo = tmp.Model('Foo')
+    should.not.exists(Foo.definition.relations.bar);
+  });
+  
+  
+  it('should wait until the requested store is available', function(next){
+    var tmp = new Store({
+      type: 'sql'
+    });
+  
+    tmp.Model('Foo', function(){
+      this.belongsTo('bar', {store:'OTHER'});
+    });
+    
+    var tmp2 = new Store({
+      type: 'sql',
+      name: 'OTHER'
+    });
+    
+    tmp2.Model('Bar', function(){});
+    
+    var Foo = tmp.Model('Foo')
+    
+    process.nextTick(function(){
+      should.exists(Foo.definition.relations.bar);
+      next();
+    });
+    
   });
   
 });

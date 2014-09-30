@@ -5,7 +5,7 @@ test: test-mocha
 test-all: clean test-mocha test-cov
 
 test-mocha:
-	@NODE_ENV=test ./node_modules/.bin/mocha --reporter $(REPORTER) --recursive --grep 'SQLite3'
+	@NODE_ENV=test ./node_modules/.bin/mocha --reporter $(REPORTER) --recursive
 
 test-cov:
 	@NODE_ENV=test ./node_modules/.bin/mocha --require blanket --recursive -R html-cov > coverage.html
