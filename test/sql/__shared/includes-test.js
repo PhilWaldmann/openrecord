@@ -17,6 +17,14 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store = new Store(store_conf);
       store.setMaxListeners(0);
       
+      store2 = new Store({
+        type: 'rest',
+        url: 'http://localhost:8889',
+        version: '~1.0',
+        name: 'IncludeRestStore'
+      });
+      
+      
       store.Model('User', function(){
         this.hasMany('posts');
         this.hasMany('threads');
@@ -26,6 +34,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         this.hasMany('unread_threads', {through:'unread', relation:'thread'});
         this.hasMany('poly_things');
         this.hasMany('members', {through:'poly_things', relation:'member'});
+        
+        this.belongsTo('user', {store: 'IncludeRestStore', primary_key:'id'});
       });
       store.Model('Avatar', function(){
         this.belongsTo('user');
@@ -46,6 +56,26 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
       store.Model('PolyThing', function(){
         this.belongsTo('member', {polymorph: true});
+      });
+      
+      
+    
+
+      store2.Model('User', function(){
+        this.attribute('id', Number, {primary: true});
+        this.attribute('login', String);
+        this.attribute('email', String);
+        
+        this.hasMany('posts');
+      });
+  
+      store2.Model('Post', function(){
+        this.attribute('id', Number, {primary: true});
+        this.attribute('message', String);
+        this.attribute('user_id', Number);
+        this.attribute('thread_id', Number);
+    
+        this.belongsTo('user');
       });
     });
     
@@ -505,8 +535,43 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
        
+       
+      it('Include a cross store relation', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.include('user').exec(function(result){
+            result.length.should.be.equal(3);
+          
+            result[0].login.should.be.equal(result[0].user.login);
+            result[0].email.should.not.be.equal(result[0].user.email);
+          
+            next();
+          }).catch(function(err){
+            should.not.exist(err);
+            next();
+          });
+        });
+      });
+      
+      it('Include a cross store relation with a subrelation', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.include({user: 'posts'}).exec(function(result){
+            result.length.should.be.equal(3);
+            
+            result[0].user.posts.length.should.be.equal(3);
+            result[1].user.posts.length.should.be.equal(1);
+            result[2].user.posts.length.should.be.equal(0);
+          
+            next();
+          }).catch(function(err){
+            should.not.exist(err);
+            next();
+          });
+        });
+      });
+      
     });
-    
-    
+     
   });
 };

@@ -6,13 +6,12 @@ var store;
 var database = __dirname + '/rest_server.sqlite3';
 
 
-
 before(function(next){
   beforeSQLite(database, [
     'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
     'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
     'CREATE TABLE threads(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT)',
-    'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01")',
+    'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@rest.com", "2014-01-05"), ("michl", "michl@rest.com", "2014-01-10"), ("admin", "admin@rest.com", "2014-01-01")',
     'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")',
     'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread")'
   ], next);
@@ -50,7 +49,7 @@ after(function(){
 
 
 before(function(ready){
-  
+
   var server = restify.createServer({
     name: 'openrecord',
     version: '1.0.0'

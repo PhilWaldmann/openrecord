@@ -24,7 +24,7 @@ npm install openrecord
 * SQLite3, MySQL, Postgres, REST support
 * Async schema definition: You could even change your model definition temporarily
 * Automatic field definition loading (SQL): You don't need to define your database fields twice! OpenRerecord will automatically load your schema definition
-* Relations (hasMany, hasOne, belongsTo with through, polymorph)
+* Relations (hasMany, hasOne, belongsTo with through, polymorph, cross-store)
 * Nested Cascade delete
 * Nested Eager Loading
 * Nested Creates

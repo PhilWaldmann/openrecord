@@ -218,4 +218,34 @@ describe('Store: Base', function(){
        
   });
   
+  
+  
+  describe('has a name', function(){    
+    
+    it('which was configured', function(){
+      var store = new Store({
+        name: 'foo'
+      });
+      
+      store.name.should.be.equal('foo')
+    });
+    
+    it('which was auto-configured', function(){
+      var store = new Store({
+      });
+      
+      store.name.should.startWith('store');
+    });
+    
+    it('which was auto-configured and should be unique', function(){
+      var store1 = new Store({});
+      var store2 = new Store({});
+      
+      store1.name.should.startWith('store');
+      store2.name.should.startWith('store');
+      store2.name.should.not.be.equal(store1);
+    });
+       
+  });
+  
 });

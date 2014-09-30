@@ -7,13 +7,20 @@ describe('SQL: Relations', function(){
   
   before(function(){
     store = new Store({
-      type: 'sql'    
+      type: 'sql',
+      name: 'MyStore'  
+    });
+  
+    store2 = new Store({
+      type: 'sql',
+      name: 'MyStore2' 
     });
   
     store.Model('User', function(){
       this.attribute('id', Number, {primary: true});
       this.hasMany('posts');
       this.hasMany('bar', {model:'Foo'});
+      this.belongsTo('user', {store:'MyStore2'});
     });
     store.Model('Post', function(){
       this.attribute('id', Number, {primary: true});
@@ -32,6 +39,17 @@ describe('SQL: Relations', function(){
   
     store.Model('Baz', function(){
       this.attribute('id', Number, {primary: true});
+    });
+    
+    
+    
+    
+    
+    store2.Model('User', function(){
+      this.attribute('id', Number, {primary: true});
+      this.attribute('user_id', Number);
+      
+      this.belongsTo('user', {store:'MyStore'});
     });
   });
   
@@ -114,6 +132,37 @@ describe('SQL: Relations', function(){
       Post.definition.relations.bazinga.primary_key.should.be.equal('bazinga_id');
       next();
     });
+  });
+  
+  it('belongsTo() with cross store relation', function(next){
+    store.ready(function(){
+      var User = store.Model('User');
+      var User2 = store2.Model('User');
+      (User2.definition.relations.user.model === User).should.be.true;
+      next();
+    });
+  });
+  
+  it('belongsTo() with cross store relation from the other side', function(next){
+    store.ready(function(){
+      var User = store.Model('User');
+      var User2 = store2.Model('User');
+      (User.definition.relations.user.model === User2).should.be.true;
+      next();
+    });
+  });
+  
+  
+  it('should throw an error if the store is not defined', function(){
+    (function(){
+      var tmp = new Store({
+        type: 'sql'
+      });
+    
+      tmp.Model('Foo', function(){
+        this.belongsTo('bar', {store:'UNKNOWN'});
+      });
+    }).should.throw();
   });
   
 });
