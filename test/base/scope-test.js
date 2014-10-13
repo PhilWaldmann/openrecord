@@ -26,3 +26,35 @@ describe('Scope', function(){
   });
   
 });
+
+
+describe('Default Scope', function(){
+  var store = new Store();
+
+  store.Model('User', function(){
+    this.defaultScope('test');
+    
+    this.scope('test', function(){
+      this.temporaryDefinition()
+      .instanceMethods['test'] = function(){
+        return 'test';
+      }
+    });
+    
+    this.scope('admin', function(){
+      
+    }); 
+  });
+  
+  var User = store.Model('User');
+    
+  describe('scope()', function(){
+            
+    it('calls the default scope', function(){
+      var a = User.admin().new();
+      a.test().should.equal('test');
+    });
+    
+  });
+  
+});

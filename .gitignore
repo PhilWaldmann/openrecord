@@ -12,3 +12,5 @@ coverage.html
 .coveralls.yml
 
 wiki/
+
+lib/base/collection.js
