@@ -319,6 +319,8 @@ Scopes are synchronous only and will provide automatic [chainability](#chaining)
 
 {{Definition.scope()}}
 
+{{Definition.defaultScope()}}
+
 
 ## Custom Methods
 

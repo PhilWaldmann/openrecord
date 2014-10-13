@@ -542,7 +542,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.include('user').exec(function(result){
             result.length.should.be.equal(3);
           
-            result[0].login.should.be.equal(result[0].user.login);
+            result[0].id.should.be.equal(result[0].user.id);
             result[0].email.should.not.be.equal(result[0].user.email);
           
             next();
@@ -561,7 +561,6 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             
             result[0].user.posts.length.should.be.equal(3);
             result[1].user.posts.length.should.be.equal(1);
-            result[2].user.posts.length.should.be.equal(0);
           
             next();
           }).catch(function(err){
