@@ -288,7 +288,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
     
     
-      it('finds nothing with empty array in condition (IS NULL))', function(next){
+      it('finds nothing with empty array in condition (IS NULL)', function(next){
         store.ready(function(){
           var User = store.Model('User');
           User.where({login: []}).exec(function(result){
@@ -298,6 +298,27 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });      
       });
       
+      
+      it('finds nothing with IS NULL condition', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where({login_is: null}).exec(function(result){
+            result.length.should.be.equal(0);
+            next();
+          });
+        });      
+      });
+      
+      
+      it('finds all with IS NOT NULL condition', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where({login_is_not: null}).exec(function(result){
+            result.length.should.be.greaterThan(0);
+            next();
+          });
+        });      
+      });
             
     });
   
