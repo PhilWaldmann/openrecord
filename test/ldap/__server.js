@@ -1,36 +1,33 @@
 var ldap = require('ldapjs');
 
+var SUFFIX = 'dc=test';
+var db = {
+  'dc=test': {},
+  'cn=phil, dc=test': {
+    username: 'phil',
+    type: 'user',
+    age: 26
+  },
+  'cn=michl, dc=test': {
+    username: 'michl',
+    type: 'user',
+    age: 29
+  },
+  'ou=other, dc=test': {
+    name: 'Other',
+    type: 'ou'
+  }
+  
+};
 
-///--- Shared handlers
-
-function authorize(req, res, next) {
-  /* Any user may search after bind, only cn=root has full power */
-  var isSearch = (req instanceof ldap.SearchRequest);
-  if (!req.connection.ldap.bindDN.equals('cn=root') && !isSearch)
-    return next(new ldap.InsufficientAccessRightsError());
-
-  return next();
-}
 
 
 before(function(done){
 
   ///--- Globals
   
-  var SUFFIX = 'dc=test';
-  var db = {
-    'dc=test': {
-      base: true
-    },
-    'cn=foo, dc=test': {
-      username: 'foo',
-      objectClass: 'user'
-    }
-    
-  };
+  
   var server = ldap.createServer();
-  
-  
   
   server.bind('cn=root', function (req, res, next) {
     if (req.dn.toString() !== 'cn=root' || req.credentials !== 'secret')
@@ -185,7 +182,7 @@ before(function(done){
   
       break;
     }
-  
+
     Object.keys(db).forEach(function (key) {
       if (!scopeCheck(key))
         return;
@@ -203,10 +200,19 @@ before(function(done){
   });
 
   server.listen(1389, function () {
-    global.LDAP = ldap;
-    global.SERVER = server;
-    global.DB = db;
-    global.URL = server.url;
     done();
   });
 });
+
+
+
+///--- Shared handlers
+
+function authorize(req, res, next) {
+  /* Any user may search after bind, only cn=root has full power */
+  var isSearch = (req instanceof ldap.SearchRequest);
+  if (!req.connection.ldap.bindDN.equals('cn=root') && !isSearch)
+    return next(new ldap.InsufficientAccessRightsError());
+
+  return next();
+}

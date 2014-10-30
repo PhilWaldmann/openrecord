@@ -15,7 +15,7 @@ describe('LDAP Client: Exec', function(){
     });
   
     store.Model('User', function(){
-      
+      this.objectClassAttribute = 'type';
     });
   });
   
@@ -24,7 +24,7 @@ describe('LDAP Client: Exec', function(){
     store.ready(function(){
       var User = store.Model('User');
       User.exec(function(users){
-        console.log(users);
+        users.length.should.be.equal(2);
         next();
       });      
     });

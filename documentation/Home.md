@@ -550,13 +550,75 @@ You could define some custom select fields - or SQL functions here.
 
 ## Context
 
+If you want to do some user related stuff inside your model (e.g. automatically save the creator_id to a record) you'll need an execution context.
+Nodejs is asynchronous, so you could not just write the current user id into a global variable to use it another part of your application. To get that information into OpenRecord (e.g. if you need to do something with it inside a hook) we use the `setContext()` method.
+
+Here is an example:
+
+```js
+//the Post model definition
+store.Model('Post', function(){
+  this.beforeUpdate(function(){
+    //here we use the context.
+    //check if the user is an admin or the creator of that post
+    return this.context.role == 'admin' || this.context.id == this.creator_id;
+  });
+});
+
+
+//some middleware to get the current user
+var user = {role: 'admin', id:1};
+
+//some update action
+Post.setContext(user).find(id).exec(function(post){
+  //make some changes...
+  
+  post.save(function(){
+    ...
+  })
+})
+
+```
+
+In the above example we set the user object as our context and use it inside the models beforeUpdate hook.
+
+
 {{Model.setContext()}}
 
 ## Json
 
+Output all records inside the `Collection` as an json object/array
+
 {{Collection.toJson()}}
 
 ## Chaining
+
+Almost everything in OpenRecord is chainable.
+But there is one important point:
+
+> If you call any chainable method on a `Model` the returning object is a `Collection`
+
+Let's take the `where()` method to explain this in an example:
+
+```js
+var collection1 = User.where({active: true});
+var collection2 = User.where({active: false});
+
+console.log(collection1 === collection2); //false
+```
+
+If we would save all the `conditions`, `joins`, `includes` ect. inside the model, we couldn't do simultaneous queries.
+So everytime you call a chainable `Model`-method it will return a clone - the `Collection`!
+But the clone won't be cloned again (only if you force it to).
+
+```js
+var collection1 = User.where({active: true});
+var collection2 = collection2.where({login: 'phil'});
+
+console.log(collection1 === collection2); //true
+```
+
+Internally OpenRecord uses the `chain()` method
 
 {{Model.chain()}}
 
