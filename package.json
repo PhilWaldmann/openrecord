@@ -2,7 +2,7 @@
     "name": "openrecord",
     "version": "1.5.4",
     "description": "Active record like ORM for nodejs",
-    "keywords": ["orm", "record", "sql", "sqlite3", "postgres", "pg", "mysql", "database", "activerecord", "promise", "rest", "restify", "nested set"],
+    "keywords": ["orm", "record", "sql", "sqlite3", "postgres", "pg", "mysql", "database", "activerecord", "promise", "rest", "restify", "nested set", "ldap"],
     "author": "Philipp Waldmann <philipp.waldmann@s-team.at>",
     "repository": {
       "type": "git",
@@ -24,6 +24,7 @@
         "mysql": ">=2.1.x",
         "pg": ">= 2.11.x",
 				"restify": ">= 2.7.x",
+        "ldapjs": ">= 0.7.x",
         "coveralls": ">= 2.6.x",
         "mocha-lcov-reporter": ">= 0.0.x",
         "blanket": ">= 1.1.x",
