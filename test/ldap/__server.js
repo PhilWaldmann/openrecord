@@ -13,9 +13,19 @@ var db = {
     type: 'user',
     age: 29
   },
-  'ou=other, dc=test': {
-    name: 'Other',
+  'ou=others, dc=test': {
+    name: 'Others',
     type: 'ou'
+  },
+  'cn=susi, ou=others, dc=test': {
+    username: 'Susi',
+    type: 'user',
+    age: 25
+  },
+  'cn=max, ou=others, dc=test': {
+    username: 'Max',
+    type: 'user',
+    age: 47
   }
   
 };
