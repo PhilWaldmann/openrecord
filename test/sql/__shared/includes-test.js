@@ -260,7 +260,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('returns the right results on hasMany through', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.include('unread').order('users.id').exec(function(result){   
+          User.include('unread').order('users.id').exec(function(result){
             result.length.should.be.equal(3);
             result[0].unread.length.should.be.equal(1);
             result[1].unread.length.should.be.equal(0);
@@ -274,7 +274,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('returns the right results on nested hasMany through', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.include('unread_threads').order('users.id').exec(function(result){   
+          User.include('unread_threads').order('users.id').exec(function(result){
             result.length.should.be.equal(3);
             result[0].unread_threads.length.should.be.equal(1);
             result[0].unread_threads[0].title.should.be.equal('second thread');
@@ -347,6 +347,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.include({threads:{user:'unread_threads'}}).where({threads:{user:{unread_threads:["title like ?", 'second%']}}}).order('users.id').exec(function(result){
+            console.log(result);
             result.length.should.be.equal(3);
             result[0].unread_threads.length.should.be.equal(0);
             result[1].unread_threads.length.should.be.equal(0);

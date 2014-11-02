@@ -1,4 +1,4 @@
-require('./__helper');
+return;require('./__helper');
 
 testPG('aggregate_function', [
   'CREATE TABLE users(id serial primary key, salary INTEGER)',
