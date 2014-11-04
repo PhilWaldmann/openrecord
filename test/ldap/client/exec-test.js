@@ -29,7 +29,7 @@ describe('LDAP Client: Exec', function(){
   it('get all user objects of the root ou', function(next){
     store.ready(function(){
       var User = store.Model('User');
-      User.exec(function(users){
+      User.recursive(false).exec(function(users){
         users.length.should.be.equal(2);
         next();
       });      
@@ -39,7 +39,7 @@ describe('LDAP Client: Exec', function(){
   it('user object has standard attributes', function(next){
     store.ready(function(){
       var User = store.Model('User');
-      User.exec(function(users){
+      User.recursive(false).exec(function(users){
         var user = users[0];
         
         user.dn.should.endWith('dc=test');
@@ -53,8 +53,8 @@ describe('LDAP Client: Exec', function(){
   it('get all user objects!', function(next){
     store.ready(function(){
       var User = store.Model('User');
-      User.recursive().exec(function(users){
-        users.length.should.be.equal(4);
+      User.exec(function(users){
+        users.length.should.be.above(4);
         next();
       });      
     });

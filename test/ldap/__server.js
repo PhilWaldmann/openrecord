@@ -41,6 +41,26 @@ var db = {
     name: 'Archive',
     type: 'ou'
   },
+  
+  'cn=archive_group, ou=archive, ou=guests, ou=others, dc=test': {
+    name: 'Archive Group',
+    type: 'group',
+    member: ['cn=christian, ou=archive, ou=guests, ou=others, dc=test', 'cn=ulli, ou=archive, ou=guests, ou=others, dc=test']
+  },
+  
+  'cn=christian, ou=archive, ou=guests, ou=others, dc=test': {
+    username: 'christian',
+    type: 'user',
+    age: 32,
+    memberOf:['cn=archive_group, ou=archive, ou=guests, ou=others, dc=test', 'cn=not_existing_group, ou=others, dc=test']
+  },
+  
+  'cn=ulli, ou=archive, ou=guests, ou=others, dc=test': {
+    username: 'ulli',
+    type: 'user',
+    age: 25,
+    memberOf:['cn=archive_group, ou=archive, ou=guests, ou=others, dc=test']
+  }
 };
 
 

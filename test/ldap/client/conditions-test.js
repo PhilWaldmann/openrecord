@@ -29,7 +29,7 @@ describe('LDAP Client: Conditions', function(){
   it('get all user objects with conditions', function(next){
     store.ready(function(){
       var User = store.Model('User');
-      User.recursive().where({username:'phil'}).exec(function(users){
+      User.where({username:'phil'}).exec(function(users){
         users.length.should.be.equal(1);
         users[0].username.should.be.equal('phil');
         next();
@@ -41,7 +41,7 @@ describe('LDAP Client: Conditions', function(){
   it('get all user objects with conditions', function(next){
     store.ready(function(){
       var User = store.Model('User');
-      User.recursive().where({username_like:'ph'}).exec(function(users){
+      User.where({username_like:'ph'}).exec(function(users){
         users.length.should.be.equal(1);
         users[0].username.should.be.equal('phil');
         next();
