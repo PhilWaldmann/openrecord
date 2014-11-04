@@ -13,21 +13,54 @@ var db = {
     type: 'user',
     age: 29
   },
+  
+  //OU Others
   'ou=others, dc=test': {
     name: 'Others',
     type: 'ou'
   },
   'cn=susi, ou=others, dc=test': {
-    username: 'Susi',
+    username: 'susi',
     type: 'user',
     age: 25
   },
   'cn=max, ou=others, dc=test': {
-    username: 'Max',
+    username: 'max',
     type: 'user',
     age: 47
-  }
+  },
   
+  //OU Others/Guests
+  'ou=guests, ou=others, dc=test': {
+    name: 'Guests',
+    type: 'ou'
+  },
+  
+  //OU Others/Guests/Archive
+  'ou=archive, ou=guests, ou=others, dc=test': {
+    name: 'Archive',
+    type: 'ou'
+  },
+  
+  'cn=archive_group, ou=archive, ou=guests, ou=others, dc=test': {
+    name: 'Archive Group',
+    type: 'group',
+    member: ['cn=christian, ou=archive, ou=guests, ou=others, dc=test', 'cn=ulli, ou=archive, ou=guests, ou=others, dc=test']
+  },
+  
+  'cn=christian, ou=archive, ou=guests, ou=others, dc=test': {
+    username: 'christian',
+    type: 'user',
+    age: 32,
+    memberOf:['cn=archive_group, ou=archive, ou=guests, ou=others, dc=test', 'cn=not_existing_group, ou=others, dc=test']
+  },
+  
+  'cn=ulli, ou=archive, ou=guests, ou=others, dc=test': {
+    username: 'ulli',
+    type: 'user',
+    age: 25,
+    memberOf:['cn=archive_group, ou=archive, ou=guests, ou=others, dc=test']
+  }
 };
 
 
@@ -162,7 +195,7 @@ before(function(done){
       return next(new ldap.NoSuchObjectError(dn));
   
     var scopeCheck;
-  
+
     switch (req.scope) {
     case 'base':
       if (req.filter.matches(db[dn])) {
@@ -194,9 +227,10 @@ before(function(done){
     }
 
     Object.keys(db).forEach(function (key) {
+      
       if (!scopeCheck(key))
         return;
-        
+      db[key].dn = key;
       if (req.filter.matches(db[key])) {
         res.send({
           dn: key,

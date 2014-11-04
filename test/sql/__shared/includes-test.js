@@ -460,7 +460,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       
       
       
-      it('returns a the result + the totalCount', function(next){
+      it('returns the result + the totalCount', function(next){
         store.ready(function(){
           var User = store.Model('User');
           User.limit(2).include(':totalCount').exec(function(result){
