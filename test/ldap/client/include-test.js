@@ -96,7 +96,7 @@ describe('LDAP Client: Includes', function(){
     store.ready(function(){
       var Ou = store.Model('Ou');
       Ou.recursive(false).include('users').exec(function(ous){
-        ous.length.should.be.equal(1);
+        ous.length.should.be.equal(4);
         ous[0].dn.should.be.equal('ou=others, dc=test');
         ous[0].users.length.should.be.equal(2);
         next();
@@ -109,7 +109,7 @@ describe('LDAP Client: Includes', function(){
     store.ready(function(){
       var Ou = store.Model('Ou');
       Ou.recursive(false).include('groups').exec(function(ous){
-        ous.length.should.be.equal(1);
+        ous.length.should.be.equal(4);
         ous[0].groups.length.should.be.equal(0);
         next();
       });      

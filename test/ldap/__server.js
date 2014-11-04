@@ -65,6 +65,27 @@ var db = {
   'cn=matt, ou=archive, ou=guests, ou=others, dc=test': {
     username: 'matt',
     type: 'user'
+  },
+  
+  
+  //OU Create
+  'ou=create, dc=test': {
+    name: 'Create',
+    type: 'ou'
+  },
+  
+  
+  //OU Update
+  'ou=update, dc=test': {
+    name: 'Update',
+    type: 'ou'
+  },
+  
+  
+  //OU Destroy
+  'ou=destroy, dc=test': {
+    name: 'Destroy',
+    type: 'ou'
   }
 };
 
@@ -87,11 +108,12 @@ before(function(done){
   
   server.add(SUFFIX, authorize, function (req, res, next) {
     var dn = req.dn.toString();
-  
+
     if (db[dn])
       return next(new ldap.EntryAlreadyExistsError(dn));
   
     db[dn] = req.toObject().attributes;
+
     res.end();
     return next();
   });
