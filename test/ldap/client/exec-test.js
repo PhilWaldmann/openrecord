@@ -16,6 +16,7 @@ describe('LDAP Client: Exec', function(){
   
     store.Model('User', function(){
       this.objectClassAttribute = 'type';
+      this.attribute('username');
     });
     
     store.Model('Ou', function(){
@@ -25,11 +26,11 @@ describe('LDAP Client: Exec', function(){
   });
   
   
-  it('get all user objects', function(next){
+  it('get all user objects of the root ou', function(next){
     store.ready(function(){
       var User = store.Model('User');
       User.exec(function(users){
-        users.length.should.be.equal(4);
+        users.length.should.be.equal(2);
         next();
       });      
     });
@@ -49,11 +50,11 @@ describe('LDAP Client: Exec', function(){
     });
   });
     
-  it('get all user objects of the root ou', function(next){
+  it('get all user objects!', function(next){
     store.ready(function(){
       var User = store.Model('User');
-      User.searchScope('one').exec(function(users){
-        users.length.should.be.equal(2);
+      User.recursive().exec(function(users){
+        users.length.should.be.equal(4);
         next();
       });      
     });
@@ -68,4 +69,5 @@ describe('LDAP Client: Exec', function(){
       });      
     });
   });
+  
 });

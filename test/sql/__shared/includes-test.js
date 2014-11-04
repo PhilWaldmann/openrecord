@@ -464,7 +464,6 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.limit(2).include(':totalCount').exec(function(result){
-            console.log('>>', result.$totalCount);
             result.length.should.be.equal(2);
             result.$totalCount.should.be.equal(3);
             next();
