@@ -60,6 +60,11 @@ var db = {
     type: 'user',
     age: 25,
     memberOf:['cn=archive_group, ou=archive, ou=guests, ou=others, dc=test']
+  },
+  
+  'cn=matt, ou=archive, ou=guests, ou=others, dc=test': {
+    username: 'matt',
+    type: 'user'
   }
 };
 

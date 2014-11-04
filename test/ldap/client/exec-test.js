@@ -70,4 +70,14 @@ describe('LDAP Client: Exec', function(){
     });
   });
   
+  it('do a find on a not existing user object', function(next){
+    store.ready(function(){
+      var User = store.Model('User');
+      User.find('ou=others, dc=test').exec(function(user){
+        should.not.exist(user)
+        next();
+      });      
+    });
+  });
+  
 });
