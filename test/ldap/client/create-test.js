@@ -9,7 +9,7 @@ describe('LDAP Client: Create', function(){
       type: 'ldap',
       url: 'ldap://0.0.0.0:1389',
       base: 'dc=test',
-      username: 'cn=root',
+      user: 'cn=root',
       password: 'secret'
     });
   
