@@ -103,10 +103,20 @@ describe('LDAP Client: Conditions', function(){
     store.ready(function(){
       var User = store.Model('User');
       User.where({age_gte:29}).exec(function(users){
-        users.length.should.be.equal(3);
+        users.length.should.be.above(6);
         users[0].username.should.be.equal('michl');
         users[1].username.should.be.equal('max');
         users[2].username.should.be.equal('christian');
+        next();
+      });      
+    });
+  });
+  
+  it('get all user objects with > condition', function(next){
+    store.ready(function(){
+      var User = store.Model('User');
+      User.where({age_gt:29}).exec(function(users){
+        users.length.should.be.above(6); //null is greater and lower than 29?!? whoot?
         next();
       });      
     });
@@ -122,6 +132,19 @@ describe('LDAP Client: Conditions', function(){
         users[1].username.should.be.equal('michl');
         users[2].username.should.be.equal('susi');
         users[3].username.should.be.equal('ulli');
+        next();
+      });      
+    });
+  });
+  
+  it('get all user objects with <= condition', function(next){
+    store.ready(function(){
+      var User = store.Model('User');
+      User.where({age_lt:29}).exec(function(users){
+        users.length.should.be.equal(4); //null is greater and lower than 29?!? whoot?
+        users[0].username.should.be.equal('phil');
+        users[1].username.should.be.equal('susi');
+        users[2].username.should.be.equal('ulli');
         next();
       });      
     });

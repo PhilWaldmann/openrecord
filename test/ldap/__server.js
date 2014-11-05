@@ -80,13 +80,37 @@ var db = {
     name: 'Update',
     type: 'ou'
   },
+  'ou=target, ou=update, dc=test': {
+    name: 'Target',
+    type: 'ou'
+  },
+  'cn=change_me, ou=update, dc=test': {
+    username: 'change_me',
+    type: 'user',
+    age: 99
+  },
+  'cn=move_me, ou=update, dc=test': {
+    username: 'move_me',
+    type: 'user',
+    age: 99
+  },
+  'cn=move_and_update_me, ou=update, dc=test': {
+    username: 'move_and_update_me',
+    type: 'user',
+    age: 99
+  },
   
   
   //OU Destroy
   'ou=destroy, dc=test': {
     name: 'Destroy',
     type: 'ou'
-  }
+  },
+  'cn=destroy_me, ou=destroy, dc=test': {
+    username: 'destroy_me',
+    type: 'user',
+    age: 99
+  },
 };
 
 
@@ -163,6 +187,31 @@ before(function(done){
   
     res.end();
     return next();
+  });
+  
+  server.modifyDN(SUFFIX, function(req, res, next) {
+    var dn = req.dn.toString();
+    var new_dn = req.newRdn.toString() + ', ' + req.dn.parent().toString();
+    
+    if(!db[dn]){
+      return next(new ldap.NoSuchObjectError(req.newSuperior.toString()));
+    }
+    
+    if(req.newSuperior){
+      if(!db[req.newSuperior.toString()]){
+        return next(new ldap.NoSuchObjectError(req.newSuperior.toString()));
+      }
+      
+      new_dn = req.newRdn.toString() + ', ' + req.newSuperior.toString();
+    }
+    
+    db[new_dn] = db[dn];
+    
+    if(req.deleteOldRdn){
+      delete db[dn];
+    }
+    
+    res.end();
   });
   
   server.modify(SUFFIX, authorize, function (req, res, next) {
