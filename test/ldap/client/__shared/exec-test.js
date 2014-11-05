@@ -3,7 +3,7 @@ var Store = require('../../../../lib/store');
 
 module.exports = function(title, beforeFn, afterFn, store_conf){
   
-  describe(title + ': Aggregate Functions', function(){
+  describe(title + ': Exec', function(){
     var store;
   
     before(beforeFn);
