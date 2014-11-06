@@ -472,6 +472,18 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
       
       
+      it('returns the result + the totalCount with a join', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.join('posts').where({posts:{message_like: 'first'}}).include(':totalCount').exec(function(result){
+            result.length.should.be.equal(1);
+            result.$totalCount.should.be.equal(1);
+            next();
+          });
+        });
+      });
+      
+      
       it('returns the result + the totalCount of posts', function(next){
         store.ready(function(){
           var User = store.Model('User');
