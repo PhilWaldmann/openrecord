@@ -10,12 +10,24 @@ describe('Context', function(){
   store.Model('User', function(){
     this.attribute('login', String);
     
+    this.hasMany('posts');
+    
     this.beforeValidation(function(){
       //In the record scope (this == record)
       this.context.should.be.eql(my_context);
       this.validate.should.be.a.Function;
     });
   });
+  
+  store.Model('Post', function(){
+    this.attribute('message', String);
+    
+    this.beforeValidation(function(){
+      //In the record scope (this == record)
+      this.context.should.be.eql(my_context);
+    });
+  });
+  
   var User = store.Model('User');
 
   describe('setContext()', function(){
@@ -45,6 +57,14 @@ describe('Context', function(){
     it('does not change the context', function(){
       User.setContext(my_context).new({login: 'phil'});
       my_context.should.be.eql({foo:'bar'});
+    });
+    
+    it('passes the context to relational objects', function(){
+      var user = User.setContext(my_context).new({login: 'phil', posts:[{message:'test'}]});
+      my_context.should.be.eql({foo:'bar'});
+
+      user.context.should.be.eql(my_context);
+      user.posts[0].context.should.be.eql(my_context);
     });
 
   });
