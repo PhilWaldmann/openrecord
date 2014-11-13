@@ -138,7 +138,7 @@ describe('Postgres: all Attributes', function(){
         date_attribute: now,
         datetime_attribute: now,
         time_attribute: now,
-        hstore_attribute: {a:'11', b:'22', foo:{bar:['phil', 'michl']}}
+        hstore_attribute: {a:11, b:22, foo:{bar:['phil', 'michl']}}
       }, function(success){
         success.should.be.true;
         
@@ -155,7 +155,8 @@ describe('Postgres: all Attributes', function(){
           record.datetime_attribute.toJSON().should.be.equal(now.toJSON());
 
           record.time_attribute.toString().should.be.equal('20:04:00');
-          record.hstore_attribute.should.be.eql({a:'11', b:'22', foo:{bar:['phil', 'michl']}});
+
+          record.hstore_attribute.should.be.eql({a:11, b:22, foo:{bar:['phil', 'michl']}});
         
           done();
         });

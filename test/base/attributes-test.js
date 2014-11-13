@@ -191,7 +191,7 @@ describe('Attributes', function(){
      });
      
      it('returns a changes array', function(){
-       user.getChanges().should.be.eql({my_str: [null, 'phil']});
+       user.getChanges().should.be.eql({my_str: [undefined, 'phil']});
      });    
    });
    
