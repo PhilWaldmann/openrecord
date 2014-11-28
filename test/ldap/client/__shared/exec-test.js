@@ -3,7 +3,7 @@ var Store = require('../../../../lib/store');
 
 module.exports = function(title, beforeFn, afterFn, store_conf){
   
-  describe(title + ': Exec', function(){
+  describe(title + ': Exec (' + store_conf.url + ')', function(){
     var store;
   
     before(beforeFn);
@@ -26,47 +26,125 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     });
     
     
-    it('get all ou objects', function(next){
+    it('get all ou objects of the base ou', function(next){
       store.ready(function(){
         var Ou = store.Model('Ou');
-        Ou.searchRoot('ou=openrecord, dc=dabeach, dc=lan').exec(function(ous){ //use the config...
-          ous.length.should.be.equal(2);
+        Ou.searchRoot('ou=openrecord,' + LDAP_BASE).exec(function(ous){ 
+          ous.length.should.be.equal(1);
+          ous[0].name.should.be.equal('exec_test');
           next();
         });      
       });
     });
     
     
-    it.skip('get all user objects', function(next){
+    it('get all ou objects of the base ou incl. child objects', function(next){
+      store.ready(function(){
+        var Ou = store.Model('Ou');
+        Ou.searchRoot('ou=openrecord,' + LDAP_BASE, true).exec(function(ous){
+          ous.length.should.be.equal(6);
+          ous[0].name.should.be.equal('openrecord');
+          next();
+        });      
+      });
+    });
+    
+    it('get all ou objects of the base ou inkl. child objects (recursive)', function(next){
+      store.ready(function(){
+        var Ou = store.Model('Ou');
+        Ou.searchRoot('ou=openrecord,' + LDAP_BASE).recursive().exec(function(ous){
+          ous.length.should.be.equal(6);
+          ous[0].name.should.be.equal('openrecord');
+          next();
+        });      
+      });
+    });
+    
+    
+    it('get all user objects of base ou', function(next){
       store.ready(function(){
         var User = store.Model('User');
-        User.searchRoot('ou=openrecord, dc=dabeach, dc=lan').exec(function(users){
-          console.log(users);
-          users.length.should.be.equal(1);
+        User.searchRoot('ou=openrecord,' + LDAP_BASE).exec(function(users){
+          users.length.should.be.equal(0);
           next();
         });      
       });
     });
+    
+    
+    it('get all user objects of base ou incl. child objects', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        User.searchRoot('ou=openrecord,' + LDAP_BASE, true).exec(function(users){
+          users.length.should.be.equal(6);
+          next();
+        });      
+      });
+    });
+
+
+    it('get all user objects of one ou', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        User.searchRoot('ou=sub_ou1,ou=exec_test,ou=openrecord,' + LDAP_BASE).exec(function(users){
+          users.length.should.be.equal(3);
+          next();
+        });      
+      });
+    });
+
+
+    it('returns null on wrong searchRoot', function(next){ //TODO: this should instead throw an error - right?
+      store.ready(function(){
+        var User = store.Model('User');
+        User.searchRoot('ou=unknown,ou=openrecord,' + LDAP_BASE).exec(function(users){
+          should.not.exist(users)
+          next();
+        });      
+      });
+    });
+
+
   
-    it.skip('user object has standard attributes', function(next){
+    it('user object has standard attributes', function(next){
       store.ready(function(){
         var User = store.Model('User');
-        User.recursive(false).exec(function(users){
-          var user = users[0];
-        
-          user.dn.should.endWith('dc=test');
-          user.type.should.be.equal('user');
-        
+        User.searchRoot('ou=sub_ou3,ou=exec_test,ou=openrecord,' + LDAP_BASE).exec(function(users){
+          
+          var user = users[0];        
+          user.dn.should.endWith(LDAP_BASE);
+          user.name.should.be.equal('openerecord_test_user6');
+          user.givenName.should.be.equal('first name');
+          user.sn.should.be.equal('last name');
+          user.sAMAccountName.should.be.equal('test_samaccountname');
+          user.objectGUID.should.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{11}/);
+          user.objectSid.should.match(/S-\d-\d-\d{2}-\d{10}-\d{9}-\d{8}-\d{3}/);
+          user.whenChanged.should.be.instanceOf(Date);
+          user.accountExpires.should.be.instanceOf(Date);
+          user.objectClass.should.endWith('user');
+          
           next();
         });      
       });
     });
     
-    it.skip('get all user objects!', function(next){
+    it('get child objects (one level)!', function(next){
       store.ready(function(){
-        var User = store.Model('User');
-        User.exec(function(users){
-          users.length.should.be.above(4);
+        var Ou = store.Model('Ou');
+        Ou.searchRoot('ou=openrecord,' + LDAP_BASE).include('children').exec(function(ous){
+          ous.length.should.be.equal(1);
+          ous[0].children.length.should.be.equal(0);
+          next();
+        });      
+      });
+    });
+    
+    it('get all recursive child objects!', function(next){
+      store.ready(function(){
+        var Ou = store.Model('Ou');
+        Ou.searchRoot('ou=openrecord,' + LDAP_BASE).include('all_children').exec(function(ous){
+          ous.length.should.be.equal(1);
+          ous[0].children.length.should.not.be.equal(0);
           next();
         });      
       });

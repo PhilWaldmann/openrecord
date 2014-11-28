@@ -1,36 +1,15 @@
-var exec = require('child_process').exec;
+var ldap = require('ldapjs');
+var async = require('async');
+var client;
+
 
 global.beforeActiveDirectory = function(config, objects, next){
-  var user = config.user;
-  var data = [];
-  var base_dn  = "'" + objects[0].dn + "'";
   
-  for(var i = 0; i < objects.length; i++){
-    data.push("'" + JSON.stringify(objects[i]) + "'");
-  }
-  
-  data = data.join(' ');
-  
-  var destroy_all = function(callback){
-    exec('./node_modules/ldapjs/bin/ldapjs-search --base ' + base_dn + ' --binddn ' + user + ' --password ' + config.password + ' --url ' + config.url + ' --scope sub \'(objectClass=*)\' dn | grep dn', function(err, result){
-      var dn = result.replace(/(  "dn": "|",)/g, '').split('\n').reverse().slice(1);
-      if(dn.length === 0) return callback();
-      
-      dn = "'" + dn.join("' '") + "'";
-      
-      exec('./node_modules/ldapjs/bin/ldapjs-delete --binddn ' + user + ' --password ' + config.password + ' --url ' + config.url + ' ' + dn, function(err, result){
-        callback();
-      });
-    })
-  }
-  
-  destroy_all(function(){
-    exec('./node_modules/ldapjs/bin/ldapjs-add --binddn ' + user + ' --password ' + config.password + ' --url ' + config.url + ' ' + data, function(err){
-      if(err && err.message != 'Command failed: read ECONNRESET\n') throw new Error(err);
+  deleteAll(objects[0].dn, function(){
+    createAll(objects, function(){
       next();   
     });
   });
-  
   
 };
 
@@ -51,10 +30,31 @@ global.testActiveDirectory = function(name, objects){
     user: process.env['AD_USER'],
     password: process.env['AD_PASSWORD'],
     base: process.env['AD_BASE'],
+    tlsOptions: { 'rejectUnauthorized': false },
   };
   
+  global.LDAP_BASE = process.env['AD_BASE'];
+    
+  
+  //we use that client to create and destroy test entries
+  client = ldap.createClient({
+    url: config.url,
+    bindDN: config.user,
+    bindCredentials: config.password,
+    tlsOptions: { 'rejectUnauthorized': false },
+    maxConnections: 2
+  });
+  
+  client.on('error', function(err) {
+    throw err;
+  });
+  
+    
+  
+  objects = flattenTestData(objects);
+
   require('../__shared/' + name + '-test')(
-    'ActiveDirectory', 
+    'LDAP (ActiveDirectory)', 
     function(next){
       beforeActiveDirectory(config, objects, next);
     },
@@ -65,4 +65,94 @@ global.testActiveDirectory = function(name, objects){
       afterActiveDirectory(config, next);
     },
     config);
+}
+
+
+
+
+function flattenTestData(objects, parent_dn){
+  var tmp = [];
+  
+  for(var i = 0; i < objects.length; i++){
+    var obj = objects[i];
+    
+    if(parent_dn){
+      obj.dn += ',' + parent_dn;
+    }
+    
+    if(!obj.dn.toLowerCase().replace(' ', '').match(LDAP_BASE.toLowerCase().replace(' ', ''))){
+      objects[i].dn += ',' + LDAP_BASE;
+    }
+    
+    tmp.push(obj);
+    
+    if(obj.children){
+      tmp = tmp.concat(flattenTestData(obj.children, obj.dn));
+      delete obj.children;
+    }
+    
+  }
+  
+  return tmp;
+}
+
+
+
+
+function deleteAll(base_dn, callback){
+  client.search(base_dn, {scope: 'sub', attributes:['dn'], filter:'(objectClass=*)'}, [], function(err, res) {
+    if (err) throw err;
+    var results = [];
+    
+    res.on('searchEntry', function(entry) {
+      results.push(entry.object.dn);
+    });
+    res.on('error', function(err) {
+      if(err instanceof ldap.NoSuchObjectError){
+        callback();
+      }else{
+        throw err;
+      }
+    });
+    res.on('end', function(res) {
+      
+      results.reverse();      
+      var calls = [];
+
+      for(var i = 0; i < results.length; i++){
+        (function(result){
+          calls.push(function(next){
+            client.del(result, function(err){
+              if(err) throw new Error('unable to destroy ' + result + ': ' + err)
+              next();
+            });
+          });
+        })(results[i]);    
+      }
+  
+      async.series(calls, callback);
+      
+    });
+  });
+}
+
+
+function createAll(objects, callback){
+  var calls = [];
+
+  for(var i = 0; i < objects.length; i++){
+    (function(obj){
+      calls.push(function(next){
+        var dn = obj.dn;
+        delete obj.dn;
+
+        client.add(dn, obj, function(err){
+          if(err) throw new Error('unable to create ' + dn + ': ' + err)
+          next();
+        });
+      });
+    })(objects[i]);    
+  }
+  
+  async.series(calls, callback);
 }
