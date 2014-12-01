@@ -306,7 +306,7 @@ before(function(done){
       
       if (!scopeCheck(key))
         return;
-      db[key].dn = key;
+      
       if (req.filter.matches(db[key])) {
         res.send({
           dn: key,
