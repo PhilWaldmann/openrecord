@@ -9,19 +9,32 @@ describe('SQL: Conditions', function(){
     store = new Store({
       type: 'sql'    
     });
-  
+    
+    //a store of type sql does not have any data types
+    //so just create some dummy types
+    store.addOperator('eq', function(){}, {default: true});
+    store.addOperator('like', function(){});
+    
+    store.addType('string', function(value){
+      return value;
+    }, {operators:{defaults:['eq', 'like']}});
+    
+    store.addType('integer', function(value){
+      return value;
+    }, {operators:{defaults:['eq', 'like']}});
+
     store.Model('User', function(){
-      this.attribute('my_primary_key', Number, {primary: true});
-      this.attribute('login', String);
+      this.attribute('my_primary_key', 'integer', {primary: true});
+      this.attribute('login', 'string');
       this.hasMany('posts');
     });
   
   
   
     store.Model('Post', function(){
-      this.attribute('my_primary_key1', Number, {primary: true});
-      this.attribute('my_primary_key2', Number, {primary: true});
-      this.attribute('message', String);
+      this.attribute('my_primary_key1', 'integer', {primary: true});
+      this.attribute('my_primary_key2', 'integer', {primary: true});
+      this.attribute('message', 'string');
     });
   });
     
@@ -54,11 +67,11 @@ describe('SQL: Conditions', function(){
           var Chained = User.find(2);   
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
-            table: 'users',
-            field: 'my_primary_key',
-            operator: '=',
+            model: Chained,
+            name_tree: [],
+            attribute: 'my_primary_key',
+            operator: 'eq',
             value: 2,
-            name_tree: []
           }]);
           next();
         });
@@ -86,9 +99,9 @@ describe('SQL: Conditions', function(){
           var Chained = User.find([2, 3, 4, 5]);  
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
-            table: 'users',
-            field: 'my_primary_key',
-            operator: '=',
+            model: Chained,
+            attribute: 'my_primary_key',
+            operator: 'eq',
             value: [2, 3, 4, 5],
             name_tree: []
           }]);
@@ -99,10 +112,7 @@ describe('SQL: Conditions', function(){
     
     
     describe('with multiple primary keys', function(){
-      
-  
-      
-    
+
       it('has conditions', function(next){
         store.ready(function(){
           var Post = store.Model('Post');
@@ -118,16 +128,16 @@ describe('SQL: Conditions', function(){
           var Chained = Post.find(4, 899);
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
-            table: 'posts',
-            field: 'my_primary_key1',
-            operator: '=',
+            model: Chained,
+            attribute: 'my_primary_key1',
+            operator: 'eq',
             value: 4,
             name_tree: []
           },{
             type: 'hash',
-            table: 'posts',
-            field: 'my_primary_key2',
-            operator: '=',
+            model: Chained,
+            attribute: 'my_primary_key2',
+            operator: 'eq',
             value: 899,
             name_tree: []
           }]);
@@ -172,15 +182,25 @@ describe('SQL: Conditions', function(){
           var Chained = User.where({login:'phil'}); 
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
-            table: 'users',
-            field: 'login',
-            operator: '=',
+            model: User,
+            attribute: 'login',
+            operator: 'eq',
             value: 'phil',
             name_tree: []
           }]);
           next();
         });
       });
+      
+      it('does not include unknown attributes', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          var Chained = User.where({unknown:'phil'});
+          Chained.getInternal('conditions').length.should.be.equal(0);
+          next();
+        });
+      });
+            
     });
     
     describe('with hash (like)', function(){
@@ -200,10 +220,10 @@ describe('SQL: Conditions', function(){
           var Chained = User.where({login_like:'phil'});     
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
-            table: 'users',
-            field: 'login',
+            model: User,
+            attribute: 'login',
             operator: 'like',
-            value: '%phil%',
+            value: 'phil',
             name_tree: []
           }]);
           next();
@@ -217,7 +237,7 @@ describe('SQL: Conditions', function(){
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where({login_like:'phil', id:[2, 3]});
+          var Chained = User.where({login_like:'phil', my_primary_key:[2, 3]});
           Chained.getInternal('conditions').length.should.be.equal(2);
           next();
         });
@@ -226,19 +246,19 @@ describe('SQL: Conditions', function(){
       it('has the right conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where({login_like:'phil', id:[2, 3]});   
+          var Chained = User.where({login_like:'phil', my_primary_key:[2, 3]});   
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
-            table: 'users',
-            field: 'login',
+            model: User,
+            attribute: 'login',
             operator: 'like',
-            value: '%phil%',
+            value: 'phil',
             name_tree: []
           },{
             type: 'hash',
-            table: 'users',
-            field: 'id',
-            operator: '=',
+            model: User,
+            attribute: 'my_primary_key',
+            operator: 'eq',
             value: [2, 3],
             name_tree: []
           }]);
@@ -253,7 +273,7 @@ describe('SQL: Conditions', function(){
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where([{login_like:'phil'}, {id:[2, 3]}]);
+          var Chained = User.where([{login_like:'phil'}, {my_primary_key:[2, 3]}]);
           Chained.getInternal('conditions').length.should.be.equal(2);
           next();
         });
@@ -262,19 +282,19 @@ describe('SQL: Conditions', function(){
       it('has the right conditions', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where([{login_like:'phil'}, {id:[2, 3]}]);     
+          var Chained = User.where([{login_like:'phil'}, {my_primary_key:[2, 3]}]);     
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
-            table: 'users',
-            field: 'login',
+            model: User,
+            attribute: 'login',
             operator: 'like',
-            value: '%phil%',
+            value: 'phil',
             name_tree: []
           },{
             type: 'hash',
-            table: 'users',
-            field: 'id',
-            operator: '=',
+            model: User,
+            attribute: 'my_primary_key',
+            operator: 'eq',
             value: [2, 3],
             name_tree: []
           }]);
@@ -289,7 +309,7 @@ describe('SQL: Conditions', function(){
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where({posts:{id:[1, 2, 3]}});
+          var Chained = User.where({posts:{my_primary_key1:[1, 2, 3]}});
           Chained.getInternal('conditions').length.should.be.equal(1);
           next();
         });
@@ -298,12 +318,13 @@ describe('SQL: Conditions', function(){
       it('has the right conditions', function(next){  
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where({posts:{id:[1, 2, 3]}});    
+          var Post = store.Model('Post');
+          var Chained = User.where({posts:{my_primary_key1:[1, 2, 3]}});    
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
-            table: 'posts',
-            field: 'id',
-            operator: '=',
+            model: Post,
+            attribute: 'my_primary_key1',
+            operator: 'eq',
             value: [1, 2, 3],
             name_tree: ['posts']
           }]);

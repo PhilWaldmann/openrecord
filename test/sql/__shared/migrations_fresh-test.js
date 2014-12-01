@@ -92,27 +92,22 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     it('has the right data type', function(next){
       store.ready(function(){
         var AttributeTest = store.Model('AttributeTest');
+        
+        AttributeTest.definition.attributes.string_attr.type.name.should.be.equal('string');
+        AttributeTest.definition.attributes.text_attr.type.name.should.be.equal('string');
+        AttributeTest.definition.attributes.integer_attr.type.name.should.be.equal('integer');
+        AttributeTest.definition.attributes.float_attr.type.name.should.be.equal('float');
+        AttributeTest.definition.attributes.boolean_attr.type.name.should.be.equal('boolean');
+        AttributeTest.definition.attributes.date_attr.type.name.should.be.equal('date');
+        AttributeTest.definition.attributes.datetime_attr.type.name.should.be.equal('datetime');
+        
         if(store.type == 'postgres' || store.type == 'mysql'){
-          AttributeTest.definition.attributes.string_attr.type.name.should.be.equal('string');
-          AttributeTest.definition.attributes.text_attr.type.name.should.be.equal('string');
-          AttributeTest.definition.attributes.integer_attr.type.name.should.be.equal('integer');
-          AttributeTest.definition.attributes.float_attr.type.name.should.be.equal('float');
-          AttributeTest.definition.attributes.boolean_attr.type.name.should.be.equal('boolean');
           AttributeTest.definition.attributes.binary_attr.type.name.should.be.equal('binary');
-          AttributeTest.definition.attributes.date_attr.type.name.should.be.equal('date');
-          AttributeTest.definition.attributes.datetime_attr.type.name.should.be.equal('datetime');
           AttributeTest.definition.attributes.time_attr.type.name.should.be.equal('time');
         }else{
-          AttributeTest.definition.attributes.string_attr.type.name.should.be.equal('text');
-          AttributeTest.definition.attributes.text_attr.type.name.should.be.equal('text');
-          AttributeTest.definition.attributes.integer_attr.type.name.should.be.equal('integer');
-          AttributeTest.definition.attributes.float_attr.type.name.should.be.equal('real'); //SHOULD BE float
-          AttributeTest.definition.attributes.boolean_attr.type.name.should.be.equal('boolean');
-          AttributeTest.definition.attributes.binary_attr.type.name.should.be.equal('text'); //SHOULD BE binary
-          AttributeTest.definition.attributes.date_attr.type.name.should.be.equal('date');
-          AttributeTest.definition.attributes.datetime_attr.type.name.should.be.equal('datetime');
-          AttributeTest.definition.attributes.time_attr.type.name.should.be.equal('text'); //SHOULD BE time
-        }        
+          AttributeTest.definition.attributes.binary_attr.type.name.should.be.equal('string'); //TODO: SHOULD BE binary
+          AttributeTest.definition.attributes.time_attr.type.name.should.be.equal('string'); //TODO: SHOULD BE time
+        }
         
         next();
       });

@@ -18,7 +18,7 @@ global.afterMYSQL = function(db, next){
 global.testMYSQL = function(name, queries){
   var db = name.replace('/', '_') + '_test';
   require('../__shared/' + name + '-test')(
-    'MySQL', 
+    'SQL (MySQL)', 
     function(next){
       beforeMYSQL(db, queries, next);
     },

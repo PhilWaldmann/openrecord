@@ -63,11 +63,11 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         var User = store.Model('User');
         
         User.find(1).select('users.id', 'login', 'message').join('posts').exec(function(user){
-          user.should.be.eql({
+          user.should.be.eql([{ //TODO: should this be an array? we use a find() which returns an objects, if only one record was found...
             id: 1,
             login: 'phil',
             message: 'first message'
-          });
+          }]);
           done();
         });
       });

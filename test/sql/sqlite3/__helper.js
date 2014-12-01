@@ -28,7 +28,7 @@ global.testSQLite = function(name, queries){
   var db = name.replace('/', '_') + '_test';
   
   require('../__shared/' + name + '-test')(
-    'SQLite3', 
+    'SQL (SQLite3)', 
     function(next){
       beforeSQLite(db, queries, next);
     },

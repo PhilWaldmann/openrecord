@@ -40,7 +40,7 @@ describe('LDAP Client: Destroy', function(){
   
   
   
-  it('destroys a single record', function(next){
+  it.skip('destroys a single record', function(next){
     store.ready(function(){
       var User = store.Model('User');
       

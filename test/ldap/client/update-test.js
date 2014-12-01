@@ -66,7 +66,7 @@ describe('LDAP Client: Update', function(){
   
   
   
-  it('moves a record', function(next){
+  it.skip('moves a record', function(next){
     store.ready(function(){
       var User = store.Model('User');
       
@@ -94,7 +94,7 @@ describe('LDAP Client: Update', function(){
   });
     
     
-  it('moves and updates a record', function(next){
+  it.skip('moves and updates a record', function(next){
     store.ready(function(){
       var User = store.Model('User');
       

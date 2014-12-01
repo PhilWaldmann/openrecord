@@ -192,6 +192,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.where({login_like: 'ph'}).exec(function(result){
+            result.length.should.be.equal(1);
             result[0].login.should.be.equal('phil');
             next();
           });
@@ -202,6 +203,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.where({login_like: 'ph'}, function(result){
+            result.length.should.be.equal(1);
             result[0].login.should.be.equal('phil');
             next();
           });
@@ -214,6 +216,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.where(['login = ?', 'phil']).exec(function(result){
+            result.length.should.be.equal(1);
             result[0].login.should.be.equal('phil');
             next();
           });
@@ -225,6 +228,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.where(['login IN (?)', ['phil']]).exec(function(result){
+            result.length.should.be.equal(1);
             result[0].login.should.be.equal('phil');
             next();
           });
@@ -235,6 +239,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.where(['id IN (?)', [1, 2]]).exec(function(result){
+            result.length.should.be.equal(2);
             result[0].login.should.be.equal('phil');
             result[1].login.should.be.equal('michl');
             next();
@@ -246,6 +251,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.where(['login = ? OR id IN (?)', 'phil', [1, 2]]).exec(function(result){
+            result.length.should.be.equal(2);
             result[0].login.should.be.equal('phil');
             result[1].login.should.be.equal('michl');
             next();
@@ -257,6 +263,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.where(['login IN (?)', ['phil', 'michl']]).exec(function(result){
+            result.length.should.be.equal(2);
             result[0].login.should.be.equal('phil');
             result[1].login.should.be.equal('michl');
             next();
@@ -269,6 +276,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.where({login_not: ['michl', 'admin']}).exec(function(result){
+            result.length.should.be.equal(1);
             result[0].login.should.be.equal('phil');
             next();
           });
@@ -280,6 +288,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.where({login_like: ['mich', 'adm']}).order('login').exec(function(result){
+            result.length.should.be.equal(2);
             result[0].login.should.be.equal('admin');
             result[1].login.should.be.equal('michl');
             next();
@@ -302,7 +311,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('finds nothing with IS NULL condition', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          User.where({login_is: null}).exec(function(result){
+          User.where({login: null}).exec(function(result){
             result.length.should.be.equal(0);
             next();
           });
@@ -313,7 +322,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('finds all with IS NOT NULL condition', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          User.where({login_is_not: null}).exec(function(result){
+          User.where({login_not: null}).exec(function(result){
             result.length.should.be.greaterThan(0);
             next();
           });

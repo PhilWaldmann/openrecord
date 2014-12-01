@@ -56,11 +56,11 @@ describe('SQLite3: Attributes', function(){
 
       var attrs = AttributeTest.definition.attributes;
       
-      attrs.text_attribute.type.name.should.be.equal('text');
-      attrs.numeric_attribute.type.name.should.be.equal('real');
+      attrs.text_attribute.type.name.should.be.equal('string');
+      attrs.numeric_attribute.type.name.should.be.equal('float');
       attrs.integer_attribute.type.name.should.be.equal('integer');
-      attrs.real_attribute.type.name.should.be.equal('real');
-      attrs.blob_attribute.type.name.should.be.equal('text');
+      attrs.real_attribute.type.name.should.be.equal('float');
+      attrs.blob_attribute.type.name.should.be.equal('string');
     
       done();
     });
@@ -89,11 +89,11 @@ describe('SQLite3: Attributes', function(){
 
       var attrs = AttributeLowercaseTest.definition.attributes;
       
-      attrs.text_attribute.type.name.should.be.equal('text');
-      attrs.numeric_attribute.type.name.should.be.equal('real');
+      attrs.text_attribute.type.name.should.be.equal('string');
+      attrs.numeric_attribute.type.name.should.be.equal('float');
       attrs.integer_attribute.type.name.should.be.equal('integer');
-      attrs.real_attribute.type.name.should.be.equal('real');
-      attrs.blob_attribute.type.name.should.be.equal('text');
+      attrs.real_attribute.type.name.should.be.equal('float');
+      attrs.blob_attribute.type.name.should.be.equal('string');
     
       done();
     });
