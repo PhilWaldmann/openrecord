@@ -209,6 +209,24 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
         });
       });
+      
+      
+      it('returns the right results on multiple nested includes and nested conditions (attribute = attribute)', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          //joins the threads table....
+          User.include({threads: 'posts'}).where({threads:{id:{attribute:'user_id'}}}).order('users.id').exec(function(result){
+            result.length.should.be.equal(3);
+            result[0].posts.length.should.be.equal(0);
+            result[0].threads.length.should.be.equal(0);
+            result[1].posts.length.should.be.equal(0);
+            result[1].threads.length.should.be.equal(0);
+            result[2].posts.length.should.be.equal(0);
+            result[2].threads.length.should.be.equal(0);
+            next();
+          });
+        });
+      });
     
     
       it('Loads the user but no posts', function(next){ 

@@ -150,7 +150,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
     });
   
-    it.skip('get all user objects of another ou', function(next){
+    it('get all user objects of another ou', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.searchRoot('ou=others, dc=test').exec(function(users){
@@ -160,7 +160,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
     });
   
-    it.skip('do a find on a not existing user object', function(next){
+    it('do a find on a not existing user object', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.find('ou=others, dc=test').exec(function(user){

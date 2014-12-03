@@ -37,8 +37,8 @@ testSQLite('collection', [
 ]);
 
 testSQLite('conditions', [
-  'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
-  'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01")'
+  'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, private_email TEXT, created_at timestamp)',
+  'INSERT INTO users(login, email, private_email, created_at) VALUES("phil", "phil@mail.com", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "", "2014-01-10"), ("admin", "admin@mail.com", "hansi@mail.com", "2014-01-01")'
 ]);
 
 testSQLite('converter', [

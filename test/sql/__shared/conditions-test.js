@@ -17,7 +17,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store = new Store(store_conf);
       store.setMaxListeners(0);
 
-      store.Model('User', function(){});
+      store.Model('User', function(){
+        this.attribute('created_at', 'date');
+      });
     });
   
      
@@ -328,7 +330,79 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
         });      
       });
-            
+      
+      it('finds all where created_at is greater than 2014-01-05', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where({created_at_gt: '2014-01-05'}).exec(function(result){
+            result.length.should.be.equal(1);
+            next();
+          });
+        });      
+      });
+      
+      it('finds all where created_at is greater than equal 2014-01-05', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where({created_at_gte: '2014-01-05'}).exec(function(result){
+            result.length.should.be.equal(2);
+            next();
+          });
+        });      
+      });
+      
+      it('finds all where created_at is lower than 2014-01-05', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where({created_at_lt: '2014-01-05'}).exec(function(result){
+            result.length.should.be.equal(1);
+            next();
+          });
+        });      
+      });
+      
+      it('finds all where created_at is lower than equal 2014-01-05', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where({created_at_lte: '2014-01-05'}).exec(function(result){
+            result.length.should.be.equal(2);
+            next();
+          });
+        });      
+      });
+           
+      
+      it('finds all where created_at is between 2014-01-05 and 2014-01-20', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where({created_at_between: ['2014-01-05', '2014-01-20']}).exec(function(result){
+            result.length.should.be.equal(2);
+            next();
+          });
+        });      
+      });
+      
+      it('finds all where created_at is between (2014-01-09 and 2014-01-20) and (2014-01-01 and 2014-01-04)', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where({created_at_between: [['2014-01-09', '2014-01-20'], ['2014-01-01', '2014-01-04']]}).exec(function(result){
+            result.length.should.be.equal(2);
+            next();
+          });
+        });      
+      });
+      
+      
+      it('finds all where email attribute equal private_email attribute', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.where({email: {attribute: 'private_email'}}).exec(function(result){
+            result.length.should.be.equal(1);
+            next();
+          });
+        });      
+      });
+       
     });
   
   

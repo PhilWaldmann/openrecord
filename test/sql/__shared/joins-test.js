@@ -204,7 +204,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
     
     
-      it('returns the right results on nested joins', function(next){ 
+      it('returns the right results on nested joins aaa', function(next){ 
         store.ready(function(){
           var Thread = store.Model('Thread');
           Thread.join({posts: 'user'}).order('title').exec(function(result){   
@@ -256,7 +256,31 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
         });
       });
-    
+      
+      
+      it('returns the right results on multiple nested joins and nested conditions (attribute = attribute)', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.join({threads: 'posts'}).where({threads:{posts:{id:{attribute:'user_id'}}}}).order('users.id').exec(function(result){
+            result.length.should.be.equal(1);
+            result[0].threads[0].posts[0].id.should.be.equal(result[0].threads[0].posts[0].user_id);           
+            next();
+          });
+        });
+      });
+      
+      
+      it('returns the right results on multiple nested joins and nested conditions (attribute = other_table.attribute)', function(next){ 
+        store.ready(function(){
+          var User = store.Model('User');
+          User.join({threads: 'posts'}).where({threads:{posts:{id:{attribute:'id', relation:'threads'}}}}).order('users.id').exec(function(result){
+            result.length.should.be.equal(1);
+            result[0].threads[0].posts[0].id.should.be.equal(result[0].threads[0].posts[0].user_id);           
+            next();
+          });
+        });
+      });
+      
     
       it('returns the right results on deep nested joins with nested conditions', function(next){ 
         store.ready(function(){
@@ -269,6 +293,17 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result[0].posts[0].user.posts.length.should.be.equal(3);
             result[0].user.login.should.be.equal('michl');
             should.not.exist(result[1]);
+            next();
+          });
+        });
+      });
+      
+      it('returns the right results on deep nested joins with nested conditions (attribute = other_table.attribute)', function(next){ 
+        store.ready(function(){
+          var Thread = store.Model('Thread');
+          Thread.join({posts: {user:'posts'}}, 'user').where({posts:{user:{posts:{user_id:{attribute:'user_id', relation:'posts'}}}}}).order('title', 'user.id').exec(function(result){  
+            result.length.should.be.equal(2);
+            result[0].posts[0].user_id.should.be.equal(result[0].posts[0].user.posts[0].user_id);
             next();
           });
         });

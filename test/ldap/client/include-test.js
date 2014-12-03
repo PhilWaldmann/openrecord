@@ -117,7 +117,7 @@ describe('LDAP Client: Includes', function(){
   });
   
   
-  it.skip('includes group members', function(next){
+  it('includes group members', function(next){
     store.ready(function(){
       var Group = store.Model('Group');
       Group.include('members').exec(function(groups){
@@ -142,7 +142,7 @@ describe('LDAP Client: Includes', function(){
   });
   
   
-  it.skip('includes all members of ou groups', function(next){
+  it('includes all members of ou groups', function(next){
     store.ready(function(){
       var Ou = store.Model('Ou');
       Ou.include('group_members').exec(function(ous){

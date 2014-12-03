@@ -200,6 +200,18 @@ describe('SQL: Conditions', function(){
           next();
         });
       });
+      
+      
+      it('does include object values', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          var Chained = User.where({login:{attribute:'foo'}});
+          var conds = Chained.getInternal('conditions');
+          conds.length.should.be.equal(1);
+          conds[0].value.should.have.keys('attribute', 'model', 'name_tree');
+          next();
+        });
+      });
             
     });
     
