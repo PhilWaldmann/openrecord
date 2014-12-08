@@ -47,6 +47,7 @@ describe('LDAP Client: Includes', function(){
     store.ready(function(){
       var User = store.Model('User');
       User.include('ou').exec(function(users){
+        console.log(users);
         users.length.should.be.above(4);
         users[3].ou.type.should.be.equal('ou');
         next();

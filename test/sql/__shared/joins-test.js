@@ -262,6 +262,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var User = store.Model('User');
           User.join({threads: 'posts'}).where({threads:{posts:{id:{attribute:'user_id'}}}}).order('users.id').exec(function(result){
+            console.log(result);
             result.length.should.be.equal(1);
             result[0].threads[0].posts[0].id.should.be.equal(result[0].threads[0].posts[0].user_id);           
             next();

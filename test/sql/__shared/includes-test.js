@@ -446,9 +446,6 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('returns a hasMany through polymorphic relation with sub includes', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Post = store.Model('Post');
-          var Thread = store.Model('Thread');
-          var Avatar = store.Model('Avatar');
           User.include({members: ['user']}).order('users.id').exec(function(result){
             result.length.should.be.equal(3);
             result[0].members.length.should.be.equal(2);
