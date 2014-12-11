@@ -46,7 +46,7 @@ describe('Postgres: all Attributes', function(){
       
     
   
-  it('have all attributes loaded', function(done){
+  it('has all attributes loaded', function(done){
     store.ready(function(){    
       var AttributeTest = store.Model('AttributeTest');
 
