@@ -146,6 +146,53 @@ describe('Relations', function(){
   
   
   
+  describe('belongsToMany()', function(){
+    var store = new Store();
+
+    store.Model('User', function(){
+      this.attribute('login', String); 
+      this.belongsToMany('posts');
+    });
+    
+    store.Model('Post', function(){
+      this.attribute('title', String); 
+    });
+  
+    var User = store.Model('User');
+    var Post = store.Model('Post');
+    var phil = new User({login:'phil', posts:[{
+      title:'Title A'}, 
+      {title:'Title B', invalid_attribute:'test'}
+    ]});
+    
+    
+    it('posts exist', function(){
+      should.exist(phil.posts);
+    });
+    
+    it('posts is an Array', function(){
+      phil.posts.should.be.an.instanceof(Array);
+    });
+    
+    it('posts has Model methods', function(){
+      phil.posts.new.should.be.a.Function;
+      phil.posts.chain.should.be.a.Function;
+    });
+    
+    it('posts should be a chained Model', function(){
+      phil.posts.should.not.be.equal(Post);
+      phil.posts.should.be.equal(phil.posts.chain());
+    });
+    
+        
+    it('posts is an array of Post Records', function(){
+      phil.posts[0].should.have.property('title');
+      phil.posts[1].title.should.be.equal('Title B');
+      should.not.exist(phil.posts[1].invalid_attribute);      
+    });
+            
+  });
+  
   
   
   
