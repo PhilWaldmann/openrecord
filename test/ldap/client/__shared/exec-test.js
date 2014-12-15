@@ -110,7 +110,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.ready(function(){
         var User = store.Model('User');
         User.searchRoot('ou=sub_ou3,ou=exec_test,ou=openrecord,' + LDAP_BASE).exec(function(users){
-          
+
           var user = users[0];        
           user.dn.should.endWith(LDAP_BASE);
           user.name.should.be.equal('openerecord_test_user6');
