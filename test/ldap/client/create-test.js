@@ -14,25 +14,22 @@ describe('LDAP Client: Create', function(){
     });
   
     store.Model('User', function(){
-      this.objectClassAttribute = 'type';
       this.attribute('username', String);
       this.attribute('memberOf', Array);
       
-      this.belongsTo('ou', {container: 'parent'});
+      this.belongsTo('ou', {ldap: 'parent'});
       this.hasMany('groups', {container: 'children', foreign_key:'member'});
     });
     
     store.Model('Group', function(){
-      this.objectClassAttribute = 'type';
       this.attribute('name', String);
       this.attribute('member', Array);
       
-      this.belongsTo('ou', {container: 'parent'});
+      this.belongsTo('ou', {ldap: 'parent'});
       this.hasMany('members', {container: 'children', polymorph: true, type_key:'type', foreign_key:'memberOf'});
     });
     
     store.Model('Ou', function(){
-      this.objectClassAttribute = 'type';
       this.isContainer('ou');
       this.attribute('name', String);      
     });
@@ -75,6 +72,7 @@ describe('LDAP Client: Create', function(){
         success.should.be.true;
         
         Ou.find('ou=sub, ou=create, dc=test').include('children').exec(function(ou){
+
           ou.name.should.be.equal('Sub');
           ou.children.length.should.be.equal(1);
           ou.children[0].username.should.be.equal('hugo');

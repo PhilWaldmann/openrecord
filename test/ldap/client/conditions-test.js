@@ -15,13 +15,11 @@ describe('LDAP Client: Conditions', function(){
     });
   
     store.Model('User', function(){
-      this.objectClassAttribute = 'type';
       this.attribute('username');
       this.attribute('age', Number);
     });
     
     store.Model('Ou', function(){
-      this.objectClassAttribute = 'type';
       this.rdnPrefix('ou');
     });
   });

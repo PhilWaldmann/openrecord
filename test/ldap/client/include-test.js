@@ -15,41 +15,37 @@ describe('LDAP Client: Includes', function(){
     });
   
     store.Model('User', function(){
-      this.objectClassAttribute = 'type';
       this.attribute('username', String);
       this.attribute('memberOf', Array);
       
-      this.belongsTo('ou', {container: 'parent'});
-      this.hasMany('groups', {container: 'children', foreign_key:'member'});
+      this.belongsTo('ou', {ldap: 'parent'});
+      this.belongsToMany('groups', {ldap: 'memberOf'});
     });
     
     store.Model('Group', function(){
-      this.objectClassAttribute = 'type';
       this.attribute('name', String);
       this.attribute('member', Array);
       
-      this.belongsTo('ou', {container: 'parent'});
-      this.hasMany('members', {container: 'children', polymorph: true, type_key:'type', foreign_key:'memberOf'});
+      this.belongsTo('ou', {ldap: 'parent'});
+      this.belongsToMany('members', {polymorph: true, ldap: 'member'});
     });
     
     store.Model('Ou', function(){
-      this.objectClassAttribute = 'type';
       this.isContainer('ou'); //automatically creates `children` and `parent` relations
       
-      this.hasMany('users', {container: 'children'});
-      this.hasMany('groups', {container: 'children'});
+      this.hasMany('users', {ldap: 'children'});
+      this.hasMany('groups', {ldap: 'children'});
       this.hasMany('group_members', {through:'groups', relation:'members'});
     });
   });
   
   
-  it('includes a belongsTo relations', function(next){
+  it('includes a belongsTo relation', function(next){
     store.ready(function(){
       var User = store.Model('User');
       User.include('ou').exec(function(users){
-        console.log(users);
         users.length.should.be.above(4);
-        users[3].ou.type.should.be.equal('ou');
+        users[3].ou.objectClass.should.be.eql(['ou']);
         next();
       });      
     });
@@ -60,7 +56,7 @@ describe('LDAP Client: Includes', function(){
       var User = store.Model('User');
       User.find('cn=susi, ou=others, dc=test').include('ou').exec(function(user){
         user.username.should.be.equal('susi');
-        user.ou.type.should.be.equal('ou');
+        user.ou.objectClass.should.be.eql(['ou']);
         next();
       });      
     });
@@ -72,7 +68,7 @@ describe('LDAP Client: Includes', function(){
       var Ou = store.Model('Ou');
       Ou.find('ou=guests, ou=others, dc=test').include('parent').exec(function(ou){
         ou.dn.should.be.equal('ou=guests, ou=others, dc=test');
-        ou.parent.type.should.be.equal('ou');
+        ou.parent.objectClass.should.be.eql(['ou']);
         next();
       });      
     });
@@ -83,6 +79,7 @@ describe('LDAP Client: Includes', function(){
     store.ready(function(){
       var Ou = store.Model('Ou');
       Ou.find('ou=others, dc=test').include('children').exec(function(ou){
+        console.log(ou);
         ou.dn.should.be.equal('ou=others, dc=test');
         ou.children.length.should.be.equal(3);
         ou.children[0].username.should.be.equal('susi');

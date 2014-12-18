@@ -14,25 +14,22 @@ describe('LDAP Client: Update', function(){
     });
   
     store.Model('User', function(){
-      this.objectClassAttribute = 'type';
       this.attribute('username', String);
       this.attribute('memberOf', Array);
       
-      this.belongsTo('ou', {container: 'parent'});
+      this.belongsTo('ou', {ldap: 'parent'});
       this.hasMany('groups', {container: 'children', foreign_key:'member'});
     });
     
     store.Model('Group', function(){
-      this.objectClassAttribute = 'type';
       this.attribute('name', String);
       this.attribute('member', Array);
       
-      this.belongsTo('ou', {container: 'parent'});
+      this.belongsTo('ou', {ldap: 'parent'});
       this.hasMany('members', {container: 'children', polymorph: true, type_key:'type', foreign_key:'memberOf'});
     });
     
     store.Model('Ou', function(){
-      this.objectClassAttribute = 'type';
       this.isContainer('ou');
       this.attribute('name', String);      
     });

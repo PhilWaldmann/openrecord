@@ -15,12 +15,10 @@ describe('LDAP Client: Exec', function(){
     });
   
     store.Model('User', function(){
-      this.objectClassAttribute = 'type';
       this.attribute('username');
     });
     
     store.Model('Ou', function(){
-      this.objectClassAttribute = 'type';
       this.rdnPrefix('ou');
     });
   });
@@ -43,7 +41,7 @@ describe('LDAP Client: Exec', function(){
         var user = users[0];
         
         user.dn.should.endWith('dc=test');
-        user.type.should.be.equal('user');
+        user.objectClass.should.be.eql(['user']);
         
         next();
       });      
