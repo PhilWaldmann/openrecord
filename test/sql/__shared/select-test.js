@@ -63,11 +63,12 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         var User = store.Model('User');
         
         User.find(1).select('users.id', 'login', 'message').join('posts').exec(function(user){
-          user.should.be.eql([{ //TODO: should this be an array? we use a find() which returns an objects, if only one record was found...
-            id: 1,
-            login: 'phil',
-            message: 'first message'
-          }]);
+          
+          //TODO: should this be an array? we use a find() which returns an objects, if only one record was found...
+          user[0].id.should.be.equal(1);
+          user[0].login.should.be.equal('phil');
+          user[0].message.should.be.equal('first message');
+          
           done();
         });
       });
@@ -78,9 +79,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         var User = store.Model('User');
         
         User.select('count(*) as count').exec(function(count){
-          count.should.be.eql([{
-            count: 4
-          }]);
+          count[0].count.should.be.equal(4);
           done();
         });
       });
