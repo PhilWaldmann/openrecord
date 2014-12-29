@@ -24,7 +24,7 @@
         "mysql": ">=2.1.x",
         "pg": ">= 2.11.x",
 				"restify": ">= 2.7.x",
-        "ldapjs": ">= 0.7.x",
+        "ldapjs": "git://github.com/mcavage/node-ldapjs",
         "coveralls": ">= 2.6.x",
         "mocha-lcov-reporter": ">= 0.0.x",
         "blanket": ">= 1.1.x",

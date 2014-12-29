@@ -15,14 +15,6 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     before(function(){
       store = new Store(store_conf);
       store.setMaxListeners(0);
-
-      store.Model('User', function(){
-        this.isUser();
-      });
-    
-      store.Model('Ou', function(){
-        this.isOragnizationalUnit();
-      });
     });
     
     
@@ -112,7 +104,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         User.searchRoot('ou=sub_ou3,ou=exec_test,ou=openrecord,' + LDAP_BASE).exec(function(users){
 
           var user = users[0];        
-          user.dn.should.endWith(LDAP_BASE);
+          user.dn.should.endWith(LDAP_BASE.toLowerCase());
           user.name.should.be.equal('openerecord_test_user6');
           user.givenName.should.be.equal('first name');
           user.sn.should.be.equal('last name');
@@ -127,43 +119,12 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });      
       });
     });
-    
-    it('get child objects (one level)!', function(next){
-      store.ready(function(){
-        var Ou = store.Model('Ou');
-        Ou.searchRoot('ou=openrecord,' + LDAP_BASE).include('children').exec(function(ous){
-          ous.length.should.be.equal(1);
-          ous[0].children.length.should.be.equal(0);
-          next();
-        });      
-      });
-    });
-    
-    it('get all recursive child objects!', function(next){
-      store.ready(function(){
-        var Ou = store.Model('Ou');
-        Ou.searchRoot('ou=openrecord,' + LDAP_BASE).include('all_children').exec(function(ous){
-          ous.length.should.be.equal(1);
-          ous[0].children.length.should.not.be.equal(0);
-          next();
-        });      
-      });
-    });
-  
-    it('get all user objects of another ou', function(next){
-      store.ready(function(){
-        var User = store.Model('User');
-        User.searchRoot('ou=others, dc=test').exec(function(users){
-          users.length.should.be.equal(2);
-          next();
-        });      
-      });
-    });
+      
   
     it('do a find on a not existing user object', function(next){
       store.ready(function(){
         var User = store.Model('User');
-        User.find('ou=others, dc=test').exec(function(user){
+        User.find('cn=unknown,ou=exec_test,ou=openrecord,' + LDAP_BASE).exec(function(user){
           should.not.exist(user)
           next();
         });      
