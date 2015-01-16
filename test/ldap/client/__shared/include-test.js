@@ -23,7 +23,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         var Ou = store.Model('Ou');
         Ou.searchRoot('ou=openrecord,' + LDAP_BASE).include('children').exec(function(ous){
           ous.length.should.be.equal(1);
-          ous[0].children.length.should.be.equal(0);
+          ous[0].children.length.should.be.equal(4);
+          ous[0].children[0].children.length.should.be.equal(0);
           next();
         });      
       });
@@ -33,9 +34,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.ready(function(){
         var Ou = store.Model('Ou');
         Ou.searchRoot('ou=openrecord,' + LDAP_BASE).include('all_children').exec(function(ous){
-          console.log(ous);
           ous.length.should.be.equal(1);
-          ous[0].children.length.should.not.be.equal(0);
+          ous[0].all_children.length.should.not.be.equal(0);
           next();
         });      
       });

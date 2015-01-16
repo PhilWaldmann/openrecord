@@ -105,14 +105,13 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
 
           var user = users[0];        
           user.dn.should.endWith(LDAP_BASE.toLowerCase());
-          user.name.should.be.equal('openerecord_test_user6');
           user.givenName.should.be.equal('first name');
           user.sn.should.be.equal('last name');
           user.sAMAccountName.should.be.equal('test_samaccountname');
           user.objectGUID.should.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{11}/);
           user.objectSid.should.match(/S-\d-\d-\d{2}-\d{10}-\d{9}-\d{8}-\d{3}/);
-          user.whenChanged.should.be.instanceOf(Date);
-          user.accountExpires.should.be.instanceOf(Date);
+          user.attributes.whenChanged.should.be.instanceOf(Date); //will be handled internally as a date
+          user.attributes.accountExpires.should.be.instanceOf(Date); //will be handled internally as a date
           user.objectClass.should.endWith('user');
           
           next();

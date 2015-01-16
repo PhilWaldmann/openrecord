@@ -67,7 +67,7 @@ describe('LDAP Client: Includes', function(){
     store.ready(function(){
       var Ou = store.Model('Ou');
       Ou.find('ou=guests, ou=others, dc=test').include('parent').exec(function(ou){
-        ou.dn.should.be.equal('ou=guests, ou=others, dc=test');
+        ou.dn.should.be.equal('ou=guests,ou=others,dc=test');
         ou.parent.objectClass.should.be.eql(['ou']);
         next();
       });      
@@ -79,8 +79,7 @@ describe('LDAP Client: Includes', function(){
     store.ready(function(){
       var Ou = store.Model('Ou');
       Ou.find('ou=others, dc=test').include('children').exec(function(ou){
-        console.log(ou);
-        ou.dn.should.be.equal('ou=others, dc=test');
+        ou.dn.should.be.equal('ou=others,dc=test');
         ou.children.length.should.be.equal(3);
         ou.children[0].username.should.be.equal('susi');
         next();
@@ -95,7 +94,7 @@ describe('LDAP Client: Includes', function(){
       var Ou = store.Model('Ou');
       Ou.recursive(false).include('users').exec(function(ous){
         ous.length.should.be.equal(4);
-        ous[0].dn.should.be.equal('ou=others, dc=test');
+        ous[0].dn.should.be.equal('ou=others,dc=test');
         ous[0].users.length.should.be.equal(2);
         next();
       });      

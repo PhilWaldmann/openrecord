@@ -3,98 +3,98 @@ var ldap = require('ldapjs');
 var SUFFIX = 'dc=test';
 var db = {
   'dc=test': {},
-  'cn=phil, dc=test': {
+  'cn=phil,dc=test': {
     username: 'phil',
     objectClass: 'user',
     age: 26
   },
-  'cn=michl, dc=test': {
+  'cn=michl,dc=test': {
     username: 'michl',
     objectClass: 'user',
     age: 29
   },
   
   //OU Others
-  'ou=others, dc=test': {
+  'ou=others,dc=test': {
     name: 'Others',
     objectClass: 'ou'
   },
-  'cn=susi, ou=others, dc=test': {
+  'cn=susi,ou=others,dc=test': {
     username: 'susi',
     objectClass: 'user',
     age: 25
   },
-  'cn=max, ou=others, dc=test': {
+  'cn=max,ou=others,dc=test': {
     username: 'max',
     objectClass: 'user',
     age: 47
   },
   
   //OU Others/Guests
-  'ou=guests, ou=others, dc=test': {
+  'ou=guests,ou=others,dc=test': {
     name: 'Guests',
     objectClass: 'ou'
   },
   
   //OU Others/Guests/Archive
-  'ou=archive, ou=guests, ou=others, dc=test': {
+  'ou=archive,ou=guests,ou=others,dc=test': {
     name: 'Archive',
     objectClass: 'ou'
   },
   
-  'cn=archive_group, ou=archive, ou=guests, ou=others, dc=test': {
+  'cn=archive_group,ou=archive,ou=guests,ou=others,dc=test': {
     name: 'Archive Group',
     objectClass: 'group',
-    member: ['cn=christian, ou=archive, ou=guests, ou=others, dc=test', 'cn=ulli, ou=archive, ou=guests, ou=others, dc=test']
+    member: ['cn=christian,ou=archive,ou=guests,ou=others,dc=test','cn=ulli,ou=archive,ou=guests,ou=others,dc=test']
   },
   
-  'cn=christian, ou=archive, ou=guests, ou=others, dc=test': {
+  'cn=christian,ou=archive,ou=guests,ou=others,dc=test': {
     username: 'christian',
     objectClass: 'user',
     age: 32,
-    memberOf:['cn=archive_group, ou=archive, ou=guests, ou=others, dc=test', 'cn=not_existing_group, ou=others, dc=test']
+    memberOf:['cn=archive_group,ou=archive,ou=guests,ou=others,dc=test','cn=not_existing_group,ou=others,dc=test']
   },
   
-  'cn=ulli, ou=archive, ou=guests, ou=others, dc=test': {
+  'cn=ulli,ou=archive,ou=guests,ou=others,dc=test': {
     username: 'ulli',
     objectClass: 'user',
     age: 25,
-    memberOf:['cn=archive_group, ou=archive, ou=guests, ou=others, dc=test']
+    memberOf:['cn=archive_group,ou=archive,ou=guests,ou=others,dc=test']
   },
   
-  'cn=matt, ou=archive, ou=guests, ou=others, dc=test': {
+  'cn=matt,ou=archive,ou=guests,ou=others,dc=test': {
     username: 'matt',
     objectClass: 'user'
   },
   
   
   //OU Create
-  'ou=create, dc=test': {
+  'ou=create,dc=test': {
     name: 'Create',
     objectClass: 'ou'
   },
   
   
   //OU Update
-  'ou=update, dc=test': {
+  'ou=update,dc=test': {
     name: 'Update',
     objectClass: 'ou'
   },
-  'ou=target, ou=update, dc=test': {
+  'ou=target,ou=update,dc=test': {
     name: 'Target',
     objectClass: 'ou'
   },
-  'cn=change_me, ou=update, dc=test': {
+  'cn=change_me,ou=update,dc=test': {
     username: 'change_me',
     objectClass: 'user',
     age: 99
   },
-  'cn=move_me, ou=update, dc=test': {
+  'cn=move_me,ou=update,dc=test': {
     username: 'move_me',
     objectClass: 'user',
     age: 99
   },
-  'cn=move_and_update_me, ou=update, dc=test': {
+  'cn=move_and_update_me,ou=update,dc=test': {
     username: 'move_and_update_me',
     objectClass: 'user',
     age: 99
@@ -102,11 +102,11 @@ var db = {
   
   
   //OU Destroy
-  'ou=destroy, dc=test': {
+  'ou=destroy,dc=test': {
     name: 'Destroy',
     objectClass: 'ou'
   },
-  'cn=destroy_me, ou=destroy, dc=test': {
+  'cn=destroy_me,ou=destroy,dc=test': {
     username: 'destroy_me',
     objectClass: 'user',
     age: 99
@@ -131,7 +131,7 @@ before(function(done){
   });
   
   server.add(SUFFIX, authorize, function (req, res, next) {
-    var dn = req.dn.toString();
+    var dn = req.dn.toString().replace(/\, /g, ',').toLowerCase();
     if (db[dn])
       return next(new ldap.EntryAlreadyExistsError(dn));
   
@@ -142,7 +142,7 @@ before(function(done){
   });
   
   server.bind(SUFFIX, function (req, res, next) {
-    var dn = req.dn.toString();
+    var dn = req.dn.toString().replace(/\, /g, ',').toLowerCase();
     if (!db[dn])
       return next(new ldap.NoSuchObjectError(dn));
   
@@ -157,7 +157,7 @@ before(function(done){
   });
   
   server.compare(SUFFIX, authorize, function (req, res, next) {
-    var dn = req.dn.toString();
+    var dn = req.dn.toString().replace(/\, /g, ',').toLowerCase();
     if (!db[dn])
       return next(new ldap.NoSuchObjectError(dn));
   
@@ -178,7 +178,7 @@ before(function(done){
   });
   
   server.del(SUFFIX, authorize, function (req, res, next) {
-    var dn = req.dn.toString();
+    var dn = req.dn.toString().replace(/\, /g, ',').toLowerCase();
     if (!db[dn])
       return next(new ldap.NoSuchObjectError(dn));
   
@@ -189,8 +189,8 @@ before(function(done){
   });
   
   server.modifyDN(SUFFIX, function(req, res, next) {
-    var dn = req.dn.toString();
-    var new_dn = req.newRdn.toString() + ', ' + req.dn.parent().toString();
+    var dn = req.dn.toString().replace(/\, /g, ',').toLowerCase();
+    var new_dn = req.newRdn.toString() + ', ' + req.dn.parent().toString()
     
     if(!db[dn]){
       return next(new ldap.NoSuchObjectError(req.newSuperior.toString()));
@@ -204,6 +204,8 @@ before(function(done){
       new_dn = req.newRdn.toString() + ', ' + req.newSuperior.toString();
     }
     
+    new_dn = new_dn.replace(/\, /g, ',').toLowerCase();
+
     db[new_dn] = db[dn];
     
     if(req.deleteOldRdn){
@@ -214,7 +216,7 @@ before(function(done){
   });
   
   server.modify(SUFFIX, authorize, function (req, res, next) {
-    var dn = req.dn.toString();
+    var dn = req.dn.toString().replace(/\, /g, ',').toLowerCase();
     if (!req.changes.length)
       return next(new ldap.ProtocolError('changes required'));
     if (!db[dn])
@@ -264,7 +266,7 @@ before(function(done){
   });
   
   server.search(SUFFIX, authorize, function (req, res, next) {
-    var dn = req.dn.toString();
+    var dn = req.dn.toString().replace(/\, /g, ',').toLowerCase();
 
     if (!db[dn])
       return next(new ldap.NoSuchObjectError(dn));

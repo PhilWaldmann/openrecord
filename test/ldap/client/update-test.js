@@ -69,7 +69,6 @@ describe('LDAP Client: Update', function(){
       
       User.find('cn=move_me, ou=update, dc=test').exec(function(user){
         user.username.should.be.equal('move_me');
-        
         user.dn = 'cn=move_me, ou=target, ou=update, dc=test';
         
         user.save(function(result){
@@ -79,8 +78,8 @@ describe('LDAP Client: Update', function(){
             should.not.exist(user);
             
             User.find('cn=move_me, ou=target, ou=update, dc=test').exec(function(user){
-              user.username.should.be.equal('move_me');
-            
+              
+              user.username.should.be.equal('move_me');            
               next();
             });       
           });
