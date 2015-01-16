@@ -107,6 +107,29 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
       
       
+      it('changes an ou', function(next){
+        store.ready(function(){
+          var Ou = store.Model('Ou');
+          Ou.find('ou=change_me_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
+                        
+            ou.description = 'very important';
+            
+            ou.save(function(success){
+              
+              success.should.be.equal(true);
+          
+              Ou.find(ou.dn).exec(function(ou){
+                
+                ou.description.should.be.equal('very important');          
+                next();
+                
+              });
+            });
+            
+          });
+        });
+      });
+      
     });
     
     
@@ -189,6 +212,80 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
                 
                 group.name.should.be.equal('new_group_name');
                 group.parent_dn.should.be.equal('ou=update_test,ou=openrecord,' + LDAP_BASE.toLowerCase());
+          
+                next();
+              });
+            });
+            
+          });
+        });
+      });
+      
+      
+      it('changes a group', function(next){
+        store.ready(function(){
+          var Group = store.Model('Group');
+          Group.find('cn=change_me_group,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(group){
+                        
+            group.description = 'super important';
+            group.sAMAccountName = 'ChangedGroup';
+            group.groupType = {UNIVERSAL_GROUP: true};
+            
+            group.save(function(success){
+              success.should.be.equal(true);
+          
+              Group.find(group.dn).exec(function(group){
+
+                group.description.should.be.equal('super important');
+                group.sAMAccountName.should.be.equal('ChangedGroup');
+                group.groupType.UNIVERSAL_GROUP.should.be.eql(true);
+          
+                next();
+              });
+            });
+            
+          });
+        });
+      });
+      
+      
+      it('add members to a group', function(next){
+        store.ready(function(){
+          var Group = store.Model('Group');
+          Group.find('cn=change_me_group,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(group){
+                        
+            group.member = ['cn=change_me_user,ou=update_test,ou=openrecord,' + LDAP_BASE]
+            
+            group.save(function(success){
+              success.should.be.equal(true);
+          
+              Group.find(group.dn).include('members').exec(function(group){
+
+                group.members.length.should.be.equal(1);
+                group.members[0].name.should.be.equal('change_me_user');
+          
+                next();
+              });
+            });
+            
+          });
+        });
+      });
+      
+      
+      it('remove a member from a group', function(next){
+        store.ready(function(){
+          var Group = store.Model('Group');
+          Group.find('cn=change_me_group,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(group){
+                        
+            group.member = [];
+            
+            group.save(function(success){
+              success.should.be.equal(true);
+          
+              Group.find(group.dn).include('members').exec(function(group){
+
+                group.members.length.should.be.equal(0);
           
                 next();
               });
@@ -288,7 +385,32 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             
           });
         });
-      });      
+      });
+      
+      
+      it('changes a computer', function(next){
+        store.ready(function(){
+          var Computer = store.Model('Computer');
+          Computer.find('cn=change_me_computer,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(computer){
+                        
+            computer.sAMAccountName = 'supercomputer';
+            computer.description = 'super very important'
+            
+            computer.save(function(success){
+              success.should.be.equal(true);
+          
+              Computer.find(computer.dn).exec(function(computer){
+                
+                computer.description.should.be.equal('super very important');
+                computer.sAMAccountName.should.be.equal('$supercomputer');
+          
+                next();
+              });
+            });
+            
+          });
+        });
+      });
       
     });
     
@@ -378,10 +500,43 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
                 next();
               });
             });
+                      });
+        });
+      });
+      
+      
+      
+      it('changes a user', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.find('cn=change_me_user,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(user){
+                        
+            user.sAMAccountName = 'phils_account';
+            user.description = 'uber important';            
+            user.givenName = 'Phil';
+            user.sn = 'Waldmann';
+            user.userPrincipalName = 'phils_account_long';
+            user.mail = 'phil@mail.com';
             
+            user.save(function(success){
+              success.should.be.equal(true);
+          
+              User.find(user.dn).exec(function(user){
+                
+                user.description.should.be.equal('uber important');
+                user.sAMAccountName.should.be.equal('phils_account');
+                user.givenName.should.be.equal('Phil');
+                user.sn.should.be.equal('Waldmann');
+                user.userPrincipalName.should.be.equal('phils_account_long');
+                user.mail.should.be.equal('phil@mail.com');
+          
+                next();
+              });
+            });            
           });
         });
       });
+      
       
     });
         
