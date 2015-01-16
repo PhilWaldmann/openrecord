@@ -81,7 +81,7 @@ describe('Collection', function(){
   
     it('loops all records', function(){
       var tmp = []
-      Chain.each(function(index, record){
+      Chain.each(function(record){
         tmp.push(record);
       });
       

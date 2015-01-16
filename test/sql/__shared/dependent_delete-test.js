@@ -57,7 +57,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         var Thread = store.Model('Thread');
         var Post = store.Model('Post');
         
-        Post.find(3, function(post){   
+        Post.find(3, function(post){
+          
           post.destroy(function(result){
             result.should.be.equal(true);
             
