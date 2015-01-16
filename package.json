@@ -13,7 +13,7 @@
         "glob": ">= 3.2.x",
         "validator": ">= 3.1.x",
         "inflection": ">= 1.3.x",
-        "knex": "~ 0.7.x",
+        "knex": "git://github.com/tgriesser/knex#9767fdce69cd603b5f609554be3dd77c568a9416",
 				"bluebird": "~ 2.6.x",
         "moment": ">= 2.7.x"
     },
