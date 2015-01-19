@@ -131,5 +131,17 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     });
     
     
+    
+    it('do a find without null params returns null', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        User.find(null).exec(function(user){
+          should.not.exist(user)
+          next();
+        });      
+      });
+    });
+    
+    
   });
 };
