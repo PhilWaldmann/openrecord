@@ -221,7 +221,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
               new_group.name.should.be.equal('new_group');
               new_group.cn.should.be.equal('new_group');
               new_group.objectGUID.length.should.be.equal(36);
-              new_group.objectSid.length.should.be.equal(43);
+              new_group.objectSid.length.should.be.above(43);
               new_group.parent_dn.should.be.equal('ou=create_test,ou=openrecord,' + LDAP_BASE.toLowerCase());
               new_group.objectClass.should.be.eql(["top","group"]);
           
@@ -392,7 +392,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
               new_computer.cn.should.be.equal('new_computer');
               new_computer.sAMAccountName.should.be.equal('$new_computer');
               new_computer.objectGUID.length.should.be.equal(36);
-              new_computer.objectSid.length.should.be.equal(43);
+              new_computer.objectSid.length.should.be.above(42);
               new_computer.parent_dn.should.be.equal('ou=create_test,ou=openrecord,' + LDAP_BASE.toLowerCase());
               new_computer.objectClass.should.be.eql(["top","person","organizationalPerson","user","computer"]);
           
@@ -421,7 +421,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
               new_computer.description.should.be.equal('öäüß!');
               new_computer.userAccountControl.should.be.eql({SCRIPT:false,ACCOUNTDISABLED:false,HOMEDIR_REQUIRED:false,LOCKOUT:false,PASSWD_NOTREQUIRED:true,PASSWD_CANT_CHANGE:false,ENCRYPTED_TEXT_PWD_ALLOWED:false,TEMP_DUPLICATE_ACCOUNT:false,NORMAL_ACCOUNT:false,INTERDOMAIN_TRUST_ACCOUNT:false,WORKSTATION_TRUST_ACCOUNT:true,SERVER_TRUST_ACCOUNT:false,DONT_EXPIRE_PASSWORD:false,MNS_LOGON_ACCOUNT:false,SMARTCARD_REQUIRED:false,TRUSTED_FOR_DELEGATION:false,NOT_DELEGATED:false,USE_DES_KEY_ONLY:false,DONT_REQ_PREAUTH:false,PASSWORD_EXPIRED:false,TRUSTED_TO_AUTH_FOR_DELEGATION:false,PARTIAL_SECRETS_ACCOUNT:false});
               new_computer.objectGUID.length.should.be.equal(36);
-              new_computer.objectSid.length.should.be.equal(43);
+              new_computer.objectSid.length.should.be.above(42);
               new_computer.parent_dn.should.be.equal('ou=create_test,ou=openrecord,' + LDAP_BASE.toLowerCase());
               new_computer.objectClass.should.be.eql(["top","person","organizationalPerson","user","computer"]);
           
@@ -499,7 +499,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
               new_user.cn.should.be.equal('new_user');
               new_user.sAMAccountName.should.be.equal('new_user');
               new_user.objectGUID.length.should.be.equal(36);
-              new_user.objectSid.length.should.be.equal(43);
+              new_user.objectSid.length.should.be.above(42);
               new_user.parent_dn.should.be.equal('ou=create_test,ou=openrecord,' + LDAP_BASE.toLowerCase());
               new_user.objectClass.should.be.eql(["top","person","organizationalPerson","user"]);
           
@@ -528,7 +528,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
               new_user.description.should.be.equal('öäüß!');
               new_user.userAccountControl.should.be.eql({SCRIPT:false,ACCOUNTDISABLED:true,HOMEDIR_REQUIRED:false,LOCKOUT:false,PASSWD_NOTREQUIRED:false,PASSWD_CANT_CHANGE:false,ENCRYPTED_TEXT_PWD_ALLOWED:false,TEMP_DUPLICATE_ACCOUNT:false,NORMAL_ACCOUNT:true,INTERDOMAIN_TRUST_ACCOUNT:false,WORKSTATION_TRUST_ACCOUNT:false,SERVER_TRUST_ACCOUNT:false,DONT_EXPIRE_PASSWORD:false,MNS_LOGON_ACCOUNT:false,SMARTCARD_REQUIRED:false,TRUSTED_FOR_DELEGATION:false,NOT_DELEGATED:false,USE_DES_KEY_ONLY:false,DONT_REQ_PREAUTH:false,PASSWORD_EXPIRED:false,TRUSTED_TO_AUTH_FOR_DELEGATION:false,PARTIAL_SECRETS_ACCOUNT:false});
               new_user.objectGUID.length.should.be.equal(36);
-              new_user.objectSid.length.should.be.equal(43);
+              new_user.objectSid.length.should.be.above(42);
               new_user.parent_dn.should.be.equal('ou=create_test,ou=openrecord,' + LDAP_BASE.toLowerCase());
               new_user.objectClass.should.be.eql(["top","person","organizationalPerson","user"]);
           

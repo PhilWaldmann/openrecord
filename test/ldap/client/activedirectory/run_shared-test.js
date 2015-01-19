@@ -1,15 +1,36 @@
 require('./__helper');
 
-function convertPassword(str){
-  var output = '';
-  str = '"' + str + '"';
 
-  for(var i = 0; i < str.length; i++){
-    output += String.fromCharCode( str.charCodeAt(i) & 0xFF,(str.charCodeAt(i) >>> 8) & 0xFF);
-  }
+testActiveDirectory('create', [ //LDAP BASE will be added automatically! (global.LDAP_BASE)
+  {dn:'ou=openrecord', name:'openrecord', objectClass:['top', 'organizationalUnit'], children:[
+    {dn:'ou=create_test', name:'create_test', objectClass:['top', 'organizationalUnit'], children:[
+      {dn:'ou=sub_ou1', name:'sub ou1', objectClass:['top', 'organizationalUnit']}
+    ]}
+  ]}
+]);
 
-  return output;
-}
+
+
+testActiveDirectory('destroy', [ //LDAP BASE will be added automatically! (global.LDAP_BASE)
+  {dn:'ou=openrecord', name:'openrecord', objectClass:['top', 'organizationalUnit'], children:[
+    {dn:'ou=destroy_test', name:'destroy_test', objectClass:['top', 'organizationalUnit'], children:[
+      
+      {dn:'cn=destroy_me_user', name:'destroy_me_user', objectClass:['top', 'person', 'organizationalPerson', 'user']},
+      {dn:'cn=destroy_me_group', name:'destroy_me_group', objectClass:['top', 'group', ]},
+      {dn:'cn=destroy_me_computer', name:'destroy_me_computer', objectClass:['top', 'person', 'organizationalPerson', 'user', 'computer']},
+      {dn:'ou=destroy_me_ou', name:'destroy_me_ou', objectClass:['top', 'organizationalUnit']},
+      
+      {dn:'ou=destroy_me_sub_ou', name:'destroy_me_sub_ou', objectClass:['top', 'organizationalUnit'], children:[
+        {dn:'ou=level1', name:'level1', objectClass:['top', 'organizationalUnit'], children:[
+          {dn:'ou=level2', name:'level2', objectClass:['top', 'organizationalUnit']}
+        ]}
+      ]}
+      
+    ]}
+  ]}
+]);
+
+
 
 testActiveDirectory('exec', [ //LDAP BASE will be added automatically! (global.LDAP_BASE)
   {dn:'ou=openrecord', name:'openrecord', objectClass:['top', 'organizationalUnit'], children:[
@@ -32,6 +53,7 @@ testActiveDirectory('exec', [ //LDAP BASE will be added automatically! (global.L
     ]}
   ]}
 ]);
+
 
 
 testActiveDirectory('include', [ //LDAP BASE will be added automatically! (global.LDAP_BASE)
@@ -58,13 +80,6 @@ testActiveDirectory('include', [ //LDAP BASE will be added automatically! (globa
 
 
 
-testActiveDirectory('create', [ //LDAP BASE will be added automatically! (global.LDAP_BASE)
-  {dn:'ou=openrecord', name:'openrecord', objectClass:['top', 'organizationalUnit'], children:[
-    {dn:'ou=create_test', name:'create_test', objectClass:['top', 'organizationalUnit'], children:[
-      {dn:'ou=sub_ou1', name:'sub ou1', objectClass:['top', 'organizationalUnit']}
-    ]}
-  ]}
-]);
 
 
 
@@ -86,7 +101,9 @@ testActiveDirectory('update', [ //LDAP BASE will be added automatically! (global
       {dn:'cn=change_me_user', name:'change_me_user', objectClass:['top', 'person', 'organizationalPerson', 'user']},
       {dn:'cn=change_me_group', name:'change_me_group', objectClass:['top', 'group']},
       {dn:'cn=change_me_computer', name:'change_me_computer', objectClass:['top', 'person', 'organizationalPerson', 'user', 'computer']},
-      {dn:'ou=change_me_ou', name:'change_me_ou', objectClass:['top', 'organizationalUnit']}
+      {dn:'ou=change_me_ou', name:'change_me_ou', objectClass:['top', 'organizationalUnit']},
+      
+      {dn:'cn=reset_me_user', name:'reset_me_user', objectClass:['top', 'person', 'organizationalPerson', 'user']},
     ]}
   ]}
 ]);

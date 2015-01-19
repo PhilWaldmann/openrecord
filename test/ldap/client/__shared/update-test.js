@@ -538,6 +538,28 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
       
       
+      it('resets a user\'s password', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.find('cn=reset_me_user,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(user){
+                        
+            user.unicodePwd = 'super5e(reT!';
+            user.userAccountControl = {NORMAL_ACCOUNT: true}; //by default all dummy users are disabled
+            
+            user.save(function(success){
+              success.should.be.equal(true);
+          
+              user.checkPassword('super5e(reT!', function(okay){
+                
+                okay.should.be.equal(true);          
+                next();
+              });
+            });            
+          });
+        });
+      });
+      
+      
     });
         
   });
