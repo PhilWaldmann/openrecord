@@ -278,7 +278,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('returns the right results on hasMany through', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.include('unread').order('users.id').exec(function(result){   
+          User.include('unread').order('users.id').exec(function(result){  
             result.length.should.be.equal(3);
             result[0].unread.length.should.be.equal(1);
             result[1].unread.length.should.be.equal(0);
