@@ -60,18 +60,22 @@ testSQLite('dependent_delete', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
   'CREATE TABLE threads(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT)',
+  'CREATE TABLE poly_things(id INTEGER PRIMARY KEY AUTOINCREMENT, member_id integer, member_type text, user_id integer)',
   'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01")',
-  'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")',
-  'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread")'
+  'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 3, "michls post")',
+  'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread"), (1, "3. thread"), (1, "4. thread")',
+  'INSERT INTO poly_things (member_id, member_type, user_id) VALUES (4, "Post", 1), (3, "Thread", 1), (4, "Thread", 2), (1, "Avatar", 2)'
 ]);
 
 testSQLite('dependent_destroy', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
   'CREATE TABLE threads(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT)',
+  'CREATE TABLE poly_things(id INTEGER PRIMARY KEY AUTOINCREMENT, member_id integer, member_type text, user_id integer)',
   'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01")',
-  'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post"), (2, 3, "michls post")',
-  'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread")'
+  'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post"), (2, 3, "michls post"), (5, 5, "unknown post")',
+  'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread"), (1, "3. thread"), (1, "4. thread")',
+  'INSERT INTO poly_things (member_id, member_type, user_id) VALUES (6, "Post", 1), (3, "Thread", 1), (4, "Thread", 2), (5, "Post", 2)'
 ]);
 
 testSQLite('dependent_nullify', [

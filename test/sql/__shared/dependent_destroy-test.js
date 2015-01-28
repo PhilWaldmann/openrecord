@@ -20,6 +20,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.Model('User', function(){
         this.hasMany('posts');
         this.hasMany('threads');
+        this.hasMany('poly_things', {as:'member', dependent:'destroy'});
         this.beforeDestroy(function(){
           return this.id != 2;
         });
@@ -27,6 +28,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.Model('Post', function(){
         this.belongsTo('user', {dependent:'destroy'});
         this.belongsTo('thread', {dependent:'destroy'});
+        this.hasMany('poly_things', {as:'member', dependent:'destroy'});
         this.beforeDestroy(function(){
           return this.id != 1;
         });
@@ -34,8 +36,11 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.Model('Thread', function(){
         this.belongsTo('user');
         this.hasMany('posts', {dependent:'destroy', validates:false});
+        this.hasMany('poly_things', {as:'member', dependent:'destroy'});
       });
-      
+      store.Model('PolyThing', function(){
+        this.belongsTo('member', {polymorph: true});
+      });
     });
     
   
@@ -92,6 +97,25 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
     });
         
+    
+    
+    it('destroy polymorph hasMany', function(next){ 
+      store.ready(function(){
+        var PolyThing = store.Model('PolyThing');
+        var Post = store.Model('Post');
+        
+        Post.find(6, function(post){
+          post.destroy(function(result){
+            result.should.be.equal(true);
+            
+            PolyThing.find([1, 2], function(poly_things){
+              poly_things.length.should.be.equal(1);
+              next();
+            });
+          });                 
+        });          
+      });
+    });
     
   });
 };

@@ -19,17 +19,22 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       
       store.Model('User', function(){
         this.hasMany('posts');
-        this.hasMany('threads');      
+        this.hasMany('threads');
+        this.hasMany('poly_things', {as:'member', dependent:'delete'});    
       });
       store.Model('Post', function(){
         this.belongsTo('user');
         this.belongsTo('thread', {dependent:'delete'});
+        this.hasMany('poly_things', {as:'member', dependent:'delete'});    
       });
       store.Model('Thread', function(){
         this.belongsTo('user');
         this.hasMany('posts', {dependent:'delete'});
+        this.hasMany('poly_things', {as:'member', dependent:'delete'});
       });
-      
+      store.Model('PolyThing', function(){
+        this.belongsTo('member', {polymorph: true});
+      });
     });
     
   
@@ -71,6 +76,24 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
     });
     
+    
+    it('delete polymorph hasMany', function(next){ 
+      store.ready(function(){
+        var PolyThing = store.Model('PolyThing');
+        var Post = store.Model('Post');
+        
+        Post.find(4, function(post){
+          post.destroy(function(result){
+            result.should.be.equal(true);
+            
+            PolyThing.find(1, function(poly_thing){
+              should.not.exist(poly_thing);
+              next();
+            });
+          });                 
+        });          
+      });
+    });
     
     
   });
