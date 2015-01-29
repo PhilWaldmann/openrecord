@@ -251,5 +251,179 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     });
     
     
+    
+    it('moves an element to the root node', function(next){
+      store.ready(function(){
+        var Folder = store.Model('Folder');
+        Folder.find(6).exec(function(folder){ // => B2.1
+
+          folder.parent_id = 3;
+          
+          folder.save(function(success){
+            success.should.be.true;
+            
+            Folder.order('lft').exec(function(folders){
+
+              folders[0].id.should.be.equal(3);
+              folders[1].id.should.be.equal(4);
+              folders[2].id.should.be.equal(8);
+              folders[3].id.should.be.equal(5);
+              folders[4].id.should.be.equal(6);
+              folders[5].id.should.be.equal(7);
+              folders[6].id.should.be.equal(9);
+              
+              folders[0].depth.should.be.equal(0);
+              folders[1].depth.should.be.equal(1);
+              folders[2].depth.should.be.equal(2);
+              folders[3].depth.should.be.equal(1);
+              folders[4].depth.should.be.equal(1);
+              folders[5].depth.should.be.equal(2);
+              folders[6].depth.should.be.equal(2);
+              
+              next();
+            });
+          });
+        });
+      });      
+    });
+    
+    
+    
+    it('moves an  element to parent=0', function(next){
+      store.ready(function(){
+        var Folder = store.Model('Folder');
+        Folder.find(6).exec(function(folder){ // => B2.1
+
+          folder.parent_id = 0;
+          
+          folder.save(function(success){
+            success.should.be.true;
+            
+            Folder.order('lft').exec(function(folders){
+              
+              folders[0].id.should.be.equal(3);
+              folders[1].id.should.be.equal(4);
+              folders[2].id.should.be.equal(8);
+              folders[3].id.should.be.equal(5);
+              folders[4].id.should.be.equal(6);
+              folders[5].id.should.be.equal(7);
+              folders[6].id.should.be.equal(9);
+              
+              folders[0].depth.should.be.equal(0);
+              folders[1].depth.should.be.equal(1);
+              folders[2].depth.should.be.equal(2);
+              folders[3].depth.should.be.equal(1);
+              folders[4].depth.should.be.equal(0);
+              folders[5].depth.should.be.equal(1);
+              folders[6].depth.should.be.equal(1);
+              
+              folders[0].lft.should.be.equal(0);
+              folders[1].lft.should.be.equal(1);
+              folders[2].lft.should.be.equal(2);
+              folders[3].lft.should.be.equal(5);
+              folders[4].lft.should.be.equal(8);
+              folders[5].lft.should.be.equal(9);
+              folders[6].lft.should.be.equal(11);
+              
+              folders[0].rgt.should.be.equal(7);
+              folders[1].rgt.should.be.equal(4);
+              folders[2].rgt.should.be.equal(3);
+              folders[3].rgt.should.be.equal(6);
+              folders[4].rgt.should.be.equal(13);
+              folders[5].rgt.should.be.equal(10);
+              folders[6].rgt.should.be.equal(12);
+              
+              next();
+            });
+          });
+        });
+      });      
+    });
+    
+    
+    
+    
+    
+    it('moves an  element to parent=8 and then parent=0', function(next){
+      store.ready(function(){
+        var Folder = store.Model('Folder');
+        Folder.find(6).exec(function(folder){ // => B2.1
+
+          folder.parent_id = 8;
+          
+          folder.save(function(success){
+            success.should.be.true;
+            
+            Folder.order('lft').exec(function(folders){
+              
+              folders[0].id.should.be.equal(3);
+              folders[1].id.should.be.equal(4);
+              folders[2].id.should.be.equal(8);
+              folders[3].id.should.be.equal(6);
+              folders[4].id.should.be.equal(7);
+              folders[5].id.should.be.equal(9);
+              folders[6].id.should.be.equal(5);
+              
+              folders[0].depth.should.be.equal(0);
+              folders[1].depth.should.be.equal(1);
+              folders[2].depth.should.be.equal(2);
+              folders[3].depth.should.be.equal(3);
+              folders[4].depth.should.be.equal(4);
+              folders[5].depth.should.be.equal(4);
+              folders[6].depth.should.be.equal(1);
+              
+              
+              folder = folders[3]; // => B2.1
+              folder.parent_id = 0;
+            
+              folder.save(function(success){
+              
+                Folder.order('lft').exec(function(folders){
+              
+                  folders[0].id.should.be.equal(3);
+                  folders[1].id.should.be.equal(4);
+                  folders[2].id.should.be.equal(8);
+                  folders[3].id.should.be.equal(5);
+                  folders[4].id.should.be.equal(6);
+                  folders[5].id.should.be.equal(7);
+                  folders[6].id.should.be.equal(9);
+              
+                  folders[0].depth.should.be.equal(0);
+                  folders[1].depth.should.be.equal(1);
+                  folders[2].depth.should.be.equal(2);
+                  folders[3].depth.should.be.equal(1);
+                  folders[4].depth.should.be.equal(0);
+                  folders[5].depth.should.be.equal(1);
+                  folders[6].depth.should.be.equal(1);
+              
+                  folders[0].lft.should.be.equal(0);
+                  folders[1].lft.should.be.equal(1);
+                  folders[2].lft.should.be.equal(2);
+                  folders[3].lft.should.be.equal(5);
+                  folders[4].lft.should.be.equal(8);
+                  folders[5].lft.should.be.equal(9);
+                  folders[6].lft.should.be.equal(11);
+              
+                  folders[0].rgt.should.be.equal(7);
+                  folders[1].rgt.should.be.equal(4);
+                  folders[2].rgt.should.be.equal(3);
+                  folders[3].rgt.should.be.equal(6);
+                  folders[4].rgt.should.be.equal(13);
+                  folders[5].rgt.should.be.equal(10);
+                  folders[6].rgt.should.be.equal(12);
+              
+                  next();
+                });
+              
+              })  
+              
+              
+            });       
+          });
+        });
+      });      
+    });
+    
+    
   });
 };
