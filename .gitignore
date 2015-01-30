@@ -2,15 +2,10 @@
 *.csv
 
 documentation/wiki
-
+wiki
 logs
-
-npm-debug.log
 node_modules
 
 coverage.html
 .coveralls.yml
 
-wiki/
-
-lib/base/collection.js
