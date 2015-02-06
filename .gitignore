@@ -14,3 +14,5 @@ coverage.html
 wiki/
 
 lib/base/collection.js
+
+lib/stores/activedirectory/data_types/user_account_control.js

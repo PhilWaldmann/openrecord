@@ -412,6 +412,39 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
       
+      
+      it('enable and disables a computer', function(next){
+
+        store.ready(function(){
+          var Computer = store.Model('Computer');
+          Computer.find('cn=disable_me_computer,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(computer){
+            
+            computer.userAccountControl.ACCOUNTDISABLED.should.be.equal(true);            
+            computer.userAccountControl = {ACCOUNTDISABLED: false, PASSWD_NOTREQUIRED: true, WORKSTATION_TRUST_ACCOUNT: true};
+            
+            computer.save(function(success){
+              success.should.be.equal(true);
+          
+              Computer.find(computer.dn).exec(function(computer){
+                computer.userAccountControl.ACCOUNTDISABLED.should.be.equal(false);           
+                computer.userAccountControl.ACCOUNTDISABLED = true;
+
+                computer.save(function(success){
+                  success.should.be.equal(true);
+                  
+                  Computer.find(computer.dn).exec(function(computer){
+                    computer.userAccountControl.ACCOUNTDISABLED.should.be.equal(true);
+                    next();
+                  });
+                });
+              });
+            });
+            
+          });
+        });
+      });
+      
+      
     });
     
         
