@@ -2,17 +2,9 @@
 *.csv
 
 documentation/wiki
-
+wiki
 logs
-
-npm-debug.log
 node_modules
 
 coverage.html
 .coveralls.yml
-
-wiki/
-
-lib/base/collection.js
-
-lib/stores/activedirectory/data_types/user_account_control.js
