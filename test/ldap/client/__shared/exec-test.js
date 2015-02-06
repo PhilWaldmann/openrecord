@@ -111,7 +111,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           user.objectGUID.should.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{11}/);
           user.objectSid.should.match(/S-\d-\d-\d{2}-\d{10}-\d{9}-\d{8}-\d{3}/);
           user.attributes.whenChanged.should.be.instanceOf(Date); //will be handled internally as a date
-          user.attributes.accountExpires.should.be.instanceOf(Date); //will be handled internally as a date
+          should.not.exist(user.attributes.accountExpires);
           user.objectClass.should.endWith('user');
           
           next();
