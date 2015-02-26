@@ -104,6 +104,7 @@ testActiveDirectory('update', [ //LDAP BASE will be added automatically! (global
       {dn:'ou=change_me_ou', name:'change_me_ou', objectClass:['top', 'organizationalUnit']},
       
       {dn:'cn=reset_me_user', name:'reset_me_user', objectClass:['top', 'person', 'organizationalPerson', 'user']},
+      {dn:'cn=reset_me_user2', name:'reset_me_user2', objectClass:['top', 'person', 'organizationalPerson', 'user']},
       
       {dn:'cn=disable_me_user', name:'disable_me_user', objectClass:['top', 'person', 'organizationalPerson', 'user']},
       {dn:'cn=disable_me_computer', name:'disable_me_computer', objectClass:['top', 'person', 'organizationalPerson', 'user', 'computer']},

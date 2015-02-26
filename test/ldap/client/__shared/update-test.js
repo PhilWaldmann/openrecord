@@ -593,6 +593,62 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
       
       
+      it('resets a user\'s password with password expiration', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.find('cn=reset_me_user2,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(user){
+                        
+            user.unicodePwd = 'super5e(reT2!';
+            user.userAccountControl = {NORMAL_ACCOUNT: true}; //by default all dummy users are disabled
+            
+            user.save(function(success){
+              success.should.be.equal(true);
+              
+              user.unicodePwd = 'super5e(reT3!';
+              user.userAccountControl.PASSWORD_EXPIRED = true;
+              user.pwdLastSet = 0;
+              
+              user.save(function(success){
+                success.should.be.equal(true);
+                
+                user.checkPassword('super5e(reT3!', function(okay){
+                
+                  okay.should.be.equal(false);
+                  user.errors.should.be.eql({base: ['user must reset password']})         
+                  next();
+                });
+                
+              });
+            });            
+          });
+        });
+      });
+      
+      
+      
+      it('disables a user', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.find('cn=disable_me_user,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(user){
+                        
+            user.unicodePwd = 'super5e(reT5!';
+            user.userAccountControl = {NORMAL_ACCOUNT: true, ACCOUNTDISABLED:true}; //by default all dummy users are disabled
+  
+            user.save(function(success){
+              success.should.be.equal(true);
+              
+              user.checkPassword('super5e(reT5!', function(okay){
+              
+                okay.should.be.equal(false);
+                user.errors.should.be.eql({base: ['account disabled']})         
+                next();
+              });
+            });            
+          });
+        });
+      });
+      
+      
     });
         
   });
