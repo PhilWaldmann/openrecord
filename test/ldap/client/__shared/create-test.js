@@ -390,7 +390,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             Computer.find(computer.dn).exec(function(new_computer){
               new_computer.name.should.be.equal('new_computer');
               new_computer.cn.should.be.equal('new_computer');
-              new_computer.sAMAccountName.should.be.equal('$new_computer');
+              new_computer.sAMAccountName.should.be.equal('new_computer$');
               new_computer.objectGUID.length.should.be.equal(36);
               new_computer.objectSid.length.should.be.above(42);
               new_computer.parent_dn.should.be.equal('ou=create_test,ou=openrecord,' + LDAP_BASE.toLowerCase());
@@ -417,7 +417,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             Computer.find(computer.dn).exec(function(new_computer){
               new_computer.name.should.be.equal('all_attribute_computer');
               new_computer.cn.should.be.equal('all_attribute_computer');
-              new_computer.sAMAccountName.should.be.equal('$openrecord_cp1');
+              new_computer.sAMAccountName.should.be.equal('openrecord_cp1$');
               new_computer.description.should.be.equal('öäüß!');
               new_computer.userAccountControl.should.be.eql({SCRIPT:false,ACCOUNTDISABLED:false,HOMEDIR_REQUIRED:false,LOCKOUT:false,PASSWD_NOTREQUIRED:true,PASSWD_CANT_CHANGE:false,ENCRYPTED_TEXT_PWD_ALLOWED:false,TEMP_DUPLICATE_ACCOUNT:false,NORMAL_ACCOUNT:false,INTERDOMAIN_TRUST_ACCOUNT:false,WORKSTATION_TRUST_ACCOUNT:true,SERVER_TRUST_ACCOUNT:false,DONT_EXPIRE_PASSWORD:false,MNS_LOGON_ACCOUNT:false,SMARTCARD_REQUIRED:false,TRUSTED_FOR_DELEGATION:false,NOT_DELEGATED:false,USE_DES_KEY_ONLY:false,DONT_REQ_PREAUTH:false,PASSWORD_EXPIRED:false,TRUSTED_TO_AUTH_FOR_DELEGATION:false,PARTIAL_SECRETS_ACCOUNT:false});
               new_computer.objectGUID.length.should.be.equal(36);

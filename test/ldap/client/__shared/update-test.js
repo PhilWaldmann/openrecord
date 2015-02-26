@@ -402,7 +402,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
               Computer.find(computer.dn).exec(function(computer){
                 
                 computer.description.should.be.equal('super very important');
-                computer.sAMAccountName.should.be.equal('$supercomputer');
+                computer.sAMAccountName.should.be.equal('supercomputer$');
           
                 next();
               });
