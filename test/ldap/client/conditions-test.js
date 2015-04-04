@@ -114,7 +114,6 @@ describe('LDAP Client: Conditions', function(){
     store.ready(function(){
       var User = store.Model('User');
       User.where({age_gt:29}).exec(function(users){
-        console.log(users);
         users.length.should.be.equal(6);
         next();
       });      
@@ -126,7 +125,6 @@ describe('LDAP Client: Conditions', function(){
     store.ready(function(){
       var User = store.Model('User');
       User.where({age_lte:29}).exec(function(users){
-        console.log(users);
         users.length.should.be.equal(5); // 4 users age <= 29 + 1 without age
         next();
       });      
