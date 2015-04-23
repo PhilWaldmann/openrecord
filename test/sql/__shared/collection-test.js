@@ -235,7 +235,66 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     });
     
     
-    it('load all related records', function(next){ 
+    it('add multiple records on a hasMany through relation via unread_ids = [1, 2]', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        var Post = store.Model('Post');
+        User.find(4).exec(function(user){
+          
+          user.unread_ids = [1, 2];
+          
+          user.save(function(success){
+            success.should.be.true;
+            User.find(4).include('unread').exec(function(user){
+              user.unread.length.should.be.equal(2);
+              next();
+            });
+          });
+        });
+      });
+    });
+    
+    it('creates a new record with subrecords defined as unread_ids=[]', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.create({
+          login: 'A',
+          email: 'A@mail.com',
+          unread_ids:[2, 3, 4]
+        }, function(result){
+          result.should.be.equal(true);
+        
+          User.where({login:'A'}).include('unread').limit(1).exec(function(result){
+            result.login.should.be.equal('A');
+            result.unread.length.should.be.equal(3);
+            next();
+          });
+        
+        });  
+      });
+    });
+    
+    
+    it.skip('updates a record`s has_many relation with thread_ids=[1, 2]', function(next){ 
+      store.ready(function(){
+        var User = store.Model('User');
+        User.find(1).include('threads').exec(function(user){
+
+          user.thread_ids = [1, 2];
+
+          user.save(function(success){
+            success.should.be.true;
+            User.find(1).include('threads').exec(function(phil){
+              phil.threads.length.should.be.equal(2);
+              next();
+            });
+          });
+        });
+      });
+    });
+    
+    
+    it('load all related records via exec()', function(next){ 
       store.ready(function(){
         var User = store.Model('User');
         User.find(3).exec(function(user){
