@@ -72,8 +72,8 @@ sqlite.Model('Post', function(){
 });
 
 
-sql.ready(function(){
-  var User = sql.Model('User');
+sqlite.ready(function(){
+  var User = sqlite.Model('User');
 
   User.active().where({posts: {title_like:'openrecord' }}).include('posts').exec(function(records){
     console.log(records);
