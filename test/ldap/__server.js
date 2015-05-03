@@ -5,98 +5,98 @@ var db = {
   'dc=test': {},
   'cn=phil,dc=test': {
     username: 'phil',
-    objectClass: 'user',
+    objectclass: 'user',
     age: 26
   },
   'cn=michl,dc=test': {
     username: 'michl',
-    objectClass: 'user',
+    objectclass: 'user',
     age: 29
   },
   
   //OU Others
   'ou=others,dc=test': {
     name: 'Others',
-    objectClass: 'ou'
+    objectclass: 'ou'
   },
   'cn=susi,ou=others,dc=test': {
     username: 'susi',
-    objectClass: 'user',
+    objectclass: 'user',
     age: 25
   },
   'cn=max,ou=others,dc=test': {
     username: 'max',
-    objectClass: 'user',
+    objectclass: 'user',
     age: 47
   },
   
   //OU Others/Guests
   'ou=guests,ou=others,dc=test': {
     name: 'Guests',
-    objectClass: 'ou'
+    objectclass: 'ou'
   },
   
   //OU Others/Guests/Archive
   'ou=archive,ou=guests,ou=others,dc=test': {
     name: 'Archive',
-    objectClass: 'ou'
+    objectclass: 'ou'
   },
   
   'cn=archive_group,ou=archive,ou=guests,ou=others,dc=test': {
     name: 'Archive Group',
-    objectClass: 'group',
+    objectclass: 'group',
     member: ['cn=christian,ou=archive,ou=guests,ou=others,dc=test','cn=ulli,ou=archive,ou=guests,ou=others,dc=test']
   },
   
   'cn=christian,ou=archive,ou=guests,ou=others,dc=test': {
     username: 'christian',
-    objectClass: 'user',
+    objectclass: 'user',
     age: 32,
     memberOf:['cn=archive_group,ou=archive,ou=guests,ou=others,dc=test','cn=not_existing_group,ou=others,dc=test']
   },
   
   'cn=ulli,ou=archive,ou=guests,ou=others,dc=test': {
     username: 'ulli',
-    objectClass: 'user',
+    objectclass: 'user',
     age: 25,
     memberOf:['cn=archive_group,ou=archive,ou=guests,ou=others,dc=test']
   },
   
   'cn=matt,ou=archive,ou=guests,ou=others,dc=test': {
     username: 'matt',
-    objectClass: 'user'
+    objectclass: 'user'
   },
   
   
   //OU Create
   'ou=create,dc=test': {
     name: 'Create',
-    objectClass: 'ou'
+    objectclass: 'ou'
   },
   
   
   //OU Update
   'ou=update,dc=test': {
     name: 'Update',
-    objectClass: 'ou'
+    objectclass: 'ou'
   },
   'ou=target,ou=update,dc=test': {
     name: 'Target',
-    objectClass: 'ou'
+    objectclass: 'ou'
   },
   'cn=change_me,ou=update,dc=test': {
     username: 'change_me',
-    objectClass: 'user',
+    objectclass: 'user',
     age: 99
   },
   'cn=move_me,ou=update,dc=test': {
     username: 'move_me',
-    objectClass: 'user',
+    objectclass: 'user',
     age: 99
   },
   'cn=move_and_update_me,ou=update,dc=test': {
     username: 'move_and_update_me',
-    objectClass: 'user',
+    objectclass: 'user',
     age: 99
   },
   
@@ -104,11 +104,11 @@ var db = {
   //OU Destroy
   'ou=destroy,dc=test': {
     name: 'Destroy',
-    objectClass: 'ou'
+    objectclass: 'ou'
   },
   'cn=destroy_me,ou=destroy,dc=test': {
     username: 'destroy_me',
-    objectClass: 'user',
+    objectclass: 'user',
     age: 99
   },
 };
@@ -228,8 +228,11 @@ before(function(done){
       mod = req.changes[i].modification;
       switch (req.changes[i].operation) {
       case 'replace':
-        if (!entry[mod.type])
+        if (!entry[mod.type]){
+          console.log('REPLACE', req.changes[i].json);
           return next(new ldap.NoSuchAttributeError(mod.type));
+        }
+          
   
         if (!mod.vals || !mod.vals.length) {
           delete entry[mod.type];
