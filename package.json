@@ -25,6 +25,7 @@
         "pg": ">= 2.11.x",
 				"restify": ">= 2.7.x",
         "ldapjs": "~0.7.x",
+        "fibers": "latest",
         "coveralls": ">= 2.6.x",
         "mocha-lcov-reporter": ">= 0.0.x",
         "blanket": ">= 1.1.x",

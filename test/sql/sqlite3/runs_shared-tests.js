@@ -99,6 +99,15 @@ testSQLite('destroy', [
 
 testSQLite('exec', []);
 
+testSQLite('fibers', [
+  'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, active BOOLEAN)',
+  'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
+  'CREATE TABLE threads(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT)',
+  'INSERT INTO users(login, email, active) VALUES("phil", "phil@mail.com", 1), ("michl", "michl@mail.com", 0), ("admin", "admin@mail.com", 1)',
+  'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")',
+  'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread")'
+]);
+
 testSQLite('group', [
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first"), (1, 1, "second"), (3, 2, "third"), (2, 2, "first")'
