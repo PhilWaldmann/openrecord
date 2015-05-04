@@ -23,6 +23,7 @@ npm install openrecord
 
 * SQLite3, MySQL, Postgres, REST and LDAP (+ ActiveDirectory) support
 * Async schema definition: You could even change your model definition temporarily
+* Optional (Fibers)[https://github.com/laverdet/node-fibers] support
 * Automatic field definition loading (SQL): You don't need to define your database fields twice! OpenRerecord will automatically load your schema definition
 * Relations (hasMany, hasOne, belongsTo with through, polymorph, **cross-store**)
 * Nested Cascade delete
@@ -43,7 +44,7 @@ npm install openrecord
   * paranoid: Soft delete of records
   * nested set: Build trees easily
   * sorted list: Don't worry about lists
-* ... with more than 1100 tests 
+* ... with more than 1200 tests 
 
 
 
@@ -81,6 +82,63 @@ sqlite.ready(function(){
 });
 
 ```
+
+
+## Examples
+
+Hooks:
+
+```js
+sqlite.Model('User', function(){
+  this.hasMany('posts');
+    
+  this.afterCreate(function(record, transaction, next){
+    //send email
+    next();
+  })
+});
+```
+
+Synchronous (via fibers)
+
+```js
+sqlite.sync(function(){
+  var user = User.find(1).exec();
+  user.active = false;
+  user.save();
+})
+```
+
+Cross store relations
+
+```js
+var sqlite = new OpenRecord({
+  type: 'sqlite3',
+  file: 'test.sqlite',
+  global: true //expose all Models as globals (default: false)
+});
+
+rest = new OpenRecord({
+  type: 'rest',
+  url: 'http://api.yourservice.com',
+  name: 'rest'
+});
+
+sqlite.Model('Book', function(){
+  this.belongsTo('author', {store: 'rest', primary_key:'id'});
+})
+
+rest.Model('Author', function(){
+});
+
+sqlite.ready(function(){
+  Book.include('author').where({created_at_lt:'1990-01-01'}).exec(function(books){
+    //books[0].author
+  })
+});
+
+```
+
 
 
 ## Contributing
