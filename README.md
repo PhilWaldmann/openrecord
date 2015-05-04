@@ -115,7 +115,8 @@ Cross store relations
 var sqlite = new OpenRecord({
   type: 'sqlite3',
   file: 'test.sqlite',
-  global: true //expose all Models as globals (default: false)
+  global: true, //expose all Models as globals (default: false)
+  name: 'sqlite'
 });
 
 rest = new OpenRecord({
@@ -125,10 +126,11 @@ rest = new OpenRecord({
 });
 
 sqlite.Model('Book', function(){
-  this.belongsTo('author', {store: 'rest', primary_key:'id'});
+  this.belongsTo('author', {store: 'rest'});
 })
 
 rest.Model('Author', function(){
+  this.hasMany('books', {store: 'sqlite'});
 });
 
 sqlite.ready(function(){
