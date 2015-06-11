@@ -277,7 +277,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         store.ready(function(){
           var Group = store.Model('Group');
           Group.find('cn=change_me_group,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(group){
-                        
+            
+            group.member.length.should.be.equal(1);            
             group.member = [];
             
             group.save(function(success){
@@ -295,6 +296,57 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
       
+      
+      
+      it('add members to a group via push', function(next){
+        store.ready(function(){
+          var Group = store.Model('Group');
+          Group.find('cn=change_me_group,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(group){
+            
+            group.member.push(
+              'cn=change_me_user,ou=update_test,ou=openrecord,' + LDAP_BASE,
+              'cn=change_me_computer,ou=update_test,ou=openrecord,' + LDAP_BASE
+            )
+            
+            group.save(function(success){
+              success.should.be.equal(true);
+          
+              Group.find(group.dn).include('members').exec(function(group){
+
+                group.members.length.should.be.equal(2);          
+                next();
+              });
+            });
+            
+          });
+        });
+      });
+      
+      
+      it('add and remove members to a group via splice', function(next){
+        store.ready(function(){
+          var Group = store.Model('Group');
+          
+          Group.find('cn=change_me_group,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(group){
+
+            group.member.splice(0, 1, 'cn=disable_me_user,ou=update_test,ou=openrecord,' + LDAP_BASE);
+            
+            group.save(function(success){
+              success.should.be.equal(true);
+          
+              Group.find(group.dn).include('members').exec(function(group){
+
+                group.members.length.should.be.equal(2);
+                group.members[0].name.should.be.equal('disable_me_user');
+                group.members[1].name.should.be.equal('change_me_user');
+                next();
+              });
+            });
+            
+          });
+        });
+      });
+         
     });
     
     
@@ -421,7 +473,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             
             computer.userAccountControl.ACCOUNTDISABLED.should.be.equal(true);            
             computer.userAccountControl = {ACCOUNTDISABLED: false, PASSWD_NOTREQUIRED: true, WORKSTATION_TRUST_ACCOUNT: true};
-            
+
             computer.save(function(success){
               success.should.be.equal(true);
           
@@ -431,7 +483,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
 
                 computer.save(function(success){
                   success.should.be.equal(true);
-                  
+
                   Computer.find(computer.dn).exec(function(computer){
                     computer.userAccountControl.ACCOUNTDISABLED.should.be.equal(true);
                     next();
