@@ -11,9 +11,18 @@ describe('validatesPresenceOf()', function(){
     this.validatesPresenceOf('email');  
   });
 
-  var User = store.Model('User');
-  var valid = new User({email:'philipp@email.com'});
-  var invalid = new User();
+  var User, valid, invalid;
+  before(function(next){
+    store.ready(function(){
+    
+      User = store.Model('User');
+      valid = new User({email:'philipp@email.com'});
+      invalid = new User();
+    
+      next();
+    });
+  });
+  
   
   it('exists', function(){
     should.exist(valid.isValid);
@@ -55,9 +64,18 @@ describe('validatesPresenceOf()', function(){
       this.validatesPresenceOf('email', 'login');  
     });
 
-    var User = store.Model('User');
-    var valid = new User({email:'philipp@email.com', login: 'phil'});
-    var invalid = new User({login:'phil'});
+    var User, valid, invalid;
+    before(function(next){
+      store.ready(function(){
+      
+        User = store.Model('User');
+        valid = new User({email:'philipp@email.com', login: 'phil'});
+        invalid = new User({login:'phil'});
+      
+        next();
+      });
+    });
+    
     
     it('returns true on valid records', function(done){
       valid.isValid(function(valid){

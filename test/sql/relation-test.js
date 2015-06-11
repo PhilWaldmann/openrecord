@@ -153,7 +153,7 @@ describe('SQL: Relations', function(){
   });
   
   
-  it('should not create a relation if the store is not available', function(){
+  it('should not create a relation if the store is not available', function(next){
     var tmp = new Store({
       type: 'sql'
     });
@@ -162,8 +162,12 @@ describe('SQL: Relations', function(){
       this.belongsTo('bar', {store:'UNKNOWN'});
     });
     
-    var Foo = tmp.Model('Foo')
-    should.not.exists(Foo.definition.relations.bar);
+    tmp.ready(function(){
+      var Foo = tmp.Model('Foo')
+      should.not.exists(Foo.definition.relations.bar);
+      next();
+    })
+    
   });
   
   
@@ -183,12 +187,14 @@ describe('SQL: Relations', function(){
     
     tmp2.Model('Bar', function(){});
     
-    var Foo = tmp.Model('Foo')
     
-    process.nextTick(function(){
-      should.exists(Foo.definition.relations.bar);
-      next();
-    });
+    tmp.ready(function(){
+      var Foo = tmp.Model('Foo')
+      process.nextTick(function(){
+        should.exists(Foo.definition.relations.bar);
+        next();
+      });
+    });    
     
   });
   

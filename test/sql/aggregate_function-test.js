@@ -6,8 +6,8 @@ describe('SQL: Aggregate Functions', function(){
   var store;
   var User;
   
-  before(function(){
-    store= new Store({
+  before(function(next){
+    store = new Store({
       type: 'sql'    
     });
   
@@ -15,7 +15,10 @@ describe('SQL: Aggregate Functions', function(){
       this.attribute('salary', Number);
     });
   
-    User = store.Model('User');
+    store.ready(function(){
+      User = store.Model('User');
+      next();
+    });
   });
   
   

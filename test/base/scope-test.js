@@ -11,7 +11,13 @@ describe('Scope', function(){
     });    
   });
   
-  var User = store.Model('User');
+  var User;
+  before(function(next){
+    store.ready(function(){
+      User = store.Model('User');
+      next();
+    })    
+  })
     
   describe('scope()', function(){
     
@@ -46,7 +52,13 @@ describe('Default Scope', function(){
     }); 
   });
   
-  var User = store.Model('User');
+  var User;
+  before(function(next){
+    store.ready(function(){
+      User = store.Model('User');
+      next();
+    })    
+  })
     
   describe('scope()', function(){
             

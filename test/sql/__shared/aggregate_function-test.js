@@ -30,8 +30,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('returns the right sql', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          User.count('salary').toSql().should.be.equal('select count("salary") as "count" from "users"');
-          next();
+          User.count('salary').toSql(function(sql){
+            sql.should.be.equal('select count("salary") as "count" from "users"');
+            next();
+          })
         });      
       });
     
@@ -82,8 +84,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('returns the right sql', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          User.sum('salary').toSql().should.be.equal('select sum("salary") as "sum" from "users"');
-          next();
+          User.sum('salary').toSql(function(sql){
+            sql.should.be.equal('select sum("salary") as "sum" from "users"');
+            next();
+          })
         });      
       });
     
@@ -124,8 +128,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('returns the right sql', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          User.max('salary').toSql().should.be.equal('select max("salary") as "max" from "users"');
-          next();
+          User.max('salary').toSql(function(sql){
+            sql.should.be.equal('select max("salary") as "max" from "users"');
+            next();
+          })
         });      
       });
     
@@ -166,8 +172,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('returns the right sql', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          User.min('salary').toSql().should.be.equal('select min("salary") as "min" from "users"');
-          next();
+          User.min('salary').toSql(function(sql){
+            sql.should.be.equal('select min("salary") as "min" from "users"');
+            next();
+          })
         });      
       });
     
@@ -208,8 +216,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('returns the right sql', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          User.avg('salary').toSql().should.be.equal('select avg("salary") as "avg" from "users"');
-          next();
+          User.avg('salary').toSql(function(sql){
+            sql.should.be.equal('select avg("salary") as "avg" from "users"');
+            next();
+          })
         });      
       });
     

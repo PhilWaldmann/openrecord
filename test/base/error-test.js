@@ -18,17 +18,25 @@ describe('Error', function(){
     this.attribute('url');
   });
   
-  var User = store.Model('User');
-  var phil = new User();
-  var michl = new User({
-    posts:[{
-      title: 'foo'
-    }],
+  var User, phil, michl;
+  
+  before(function(next){
+    store.ready(function(){
+      User = store.Model('User');
+      phil = new User();
+      michl = new User({
+        posts:[{
+          title: 'foo'
+        }],
     
-    avatar: {
-      url: 'http://foo.com/img.png'
-    }
-  });
+        avatar: {
+          url: 'http://foo.com/img.png'
+        }
+      });
+      next();
+    })
+  })
+  
 
 
   describe('errors.add()', function(){
@@ -56,8 +64,11 @@ describe('Error', function(){
   
   describe('relation errors', function(){
 
-    michl.posts[0].errors.add('title', 'some title error');
-    michl.avatar.errors.add('url', 'some url error');
+    before(function(){
+      michl.posts[0].errors.add('title', 'some title error');
+      michl.avatar.errors.add('url', 'some url error');
+    });
+    
 
     it('has the posts error object on its error obj.', function(){
       michl.errors.should.have.property('posts');

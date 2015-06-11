@@ -46,8 +46,17 @@ describe('Definition: Base', function(){
     this.validatesPresenceOf('title');
   });
   
-  User = store.Model('User');
-  Post = store.Model('Post');
+  
+  var User, Post;
+  
+  before(function(next){
+    store.ready(function(){
+      
+      User = store.Model('User');
+      Post = store.Model('Post');
+      next();
+    })
+  })
   
   it('every model has it own definition', function(){
     User.definition.should.not.be.equal(Post.definition);

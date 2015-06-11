@@ -12,8 +12,15 @@ describe('Methods', function(){
     };    
   });
   
-  var User = store.Model('User');
-  var phil = new User();
+  var User, phil;
+  
+  before(function(){
+    store.ready(function(){
+      User = store.Model('User');
+      phil = new User();
+    });
+  });
+  
     
     
   it('is defined', function(){

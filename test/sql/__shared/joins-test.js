@@ -78,8 +78,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('join returns the right sql', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.join('posts').toSql().should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"');
-          next();
+          User.join('posts').toSql(function(sql){
+            sql.should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"');
+            next();
+          })
         });
       });
     
@@ -87,8 +89,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('leftJoin returns the right sql', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.leftJoin('posts').toSql().should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"');
-          next();
+          User.leftJoin('posts').toSql(function(sql){
+            sql.should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"');
+            next();
+          })
         });
       });
     
@@ -96,8 +100,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('rightJoin returns the right sql', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.rightJoin('posts').toSql().should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" right join "posts" on "users"."id" = "posts"."user_id"');
-          next();
+          User.rightJoin('posts').toSql(function(sql){
+            sql.should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" right join "posts" on "users"."id" = "posts"."user_id"');
+            next();
+          })
         });
       });
     
@@ -105,8 +111,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('innerJoin returns the right sql', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.innerJoin('posts').toSql().should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" inner join "posts" on "users"."id" = "posts"."user_id"');
-          next();
+          User.innerJoin('posts').toSql(function(sql){
+            sql.should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" inner join "posts" on "users"."id" = "posts"."user_id"');
+            next();
+          })
         });
       });
     
@@ -114,8 +122,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('outerJoin returns the right sql', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.outerJoin('posts').toSql().should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" outer join "posts" on "users"."id" = "posts"."user_id"');
-          next();
+          User.outerJoin('posts').toSql(function(sql){
+            sql.should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" outer join "posts" on "users"."id" = "posts"."user_id"');
+            next();
+          })
         });
       });
     
@@ -123,8 +133,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('join returns the right sql (type=right)', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.join('posts', 'right').toSql().should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" right join "posts" on "users"."id" = "posts"."user_id"');
-          next();
+          User.join('posts', 'right').toSql(function(sql){
+            sql.should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" right join "posts" on "users"."id" = "posts"."user_id"');
+            next();
+          })
         });
       });
     
@@ -132,8 +144,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('join with a belongsTo relation', function(next){ 
         store.ready(function(){
           var Post = store.Model('Post');
-          Post.join('user').toSql().should.be.equal('select "posts"."id" as "f0", "posts"."user_id" as "f1", "posts"."thread_id" as "f2", "posts"."message" as "f3", "user"."id" as "f4", "user"."login" as "f5", "user"."email" as "f6", "user"."created_at" as "f7" from "posts" left join "users" as "user" on "posts"."user_id" = "user"."id"');
-          next();
+          Post.join('user').toSql(function(sql){
+            sql.should.be.equal('select "posts"."id" as "f0", "posts"."user_id" as "f1", "posts"."thread_id" as "f2", "posts"."message" as "f3", "user"."id" as "f4", "user"."login" as "f5", "user"."email" as "f6", "user"."created_at" as "f7" from "posts" left join "users" as "user" on "posts"."user_id" = "user"."id"');
+            next();
+          })
         });
       });
     
@@ -141,8 +155,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('join returns the right sql (nested arrays)', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.join([['posts']]).toSql().should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"');
-          next();
+          User.join([['posts']]).toSql(function(sql){
+            sql.should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"');
+            next();
+          })
         });
       });
     

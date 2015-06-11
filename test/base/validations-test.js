@@ -24,9 +24,17 @@ describe('Validation', function(){
       });  
     });
   
-    var User = store.Model('User');
-    var valid = new User({login:'admin'});
-    var invalid = new User({login:'phil'});
+    var User, valid, invalid;    
+    before(function(next){
+      store.ready(function(){
+        
+        User = store.Model('User');
+        valid = new User({login:'admin'});
+        invalid = new User({login:'phil'});
+        
+        next();
+      })
+    })
     
     
     it('returns true on valid records', function(done){
@@ -70,9 +78,18 @@ describe('Validation', function(){
         });  
       });
 
-      var User = store.Model('User');
-      var valid = new User({login:'phil', email:'philipp@email.com'});
-      var invalid = new User({login:'philipp@email.com', email:'philipp@email.com'});
+      var User, valid, invalid;    
+      before(function(next){
+        store.ready(function(){
+        
+          User = store.Model('User');
+          valid = new User({login:'phil', email:'philipp@email.com'});
+          invalid = new User({login:'philipp@email.com', email:'philipp@email.com'});
+        
+          next();
+        })
+      })
+      
   
   
       it('returns true on valid records', function(done){

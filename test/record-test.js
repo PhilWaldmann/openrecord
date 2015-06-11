@@ -8,10 +8,14 @@ describe('Record: Base', function(){
   store.Model('User', function(){
     
   });
-  var User = store.Model('User');
-  var phil = new User({
-    email: 'phiw@gmx.net'
-  });
+  var User, phil;
+  
+  before(function(){
+    User = store.Model('User');
+    phil = new User({
+      email: 'phiw@gmx.net'
+    });
+  })
 
   it('is a object', function(){
     phil.should.be.a.Object;

@@ -31,9 +31,9 @@ describe('Store: Base', function(){
         done();
       });
     
-      var User = store.Model('User');
   
       it('returns the model', function(){
+        var User = store.Model('User');
         should.exist(User);
       });
     });
@@ -44,10 +44,9 @@ describe('Store: Base', function(){
       store.Model('User', function(){
         
       });
-    
-      var User = store.Model('User');
   
       it('returns the model', function(){
+        var User = store.Model('User');
         should.exist(User);
       });
     });

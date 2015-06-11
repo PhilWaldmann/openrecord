@@ -31,8 +31,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('finds with one id returns the right sql', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.find(1).toSql().should.be.equal('select * from "users" where "users"."id" = 1 limit 1');
-          next();
+          User.find(1).toSql(function(sql){
+            sql.should.be.equal('select * from "users" where "users"."id" = 1 limit 1');
+            next();
+          })
         });
       });
     */
@@ -72,8 +74,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('finds with multiple ids returns the right sql', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.find([1, 2]).toSql().should.be.equal('select * from "users" where "users"."id" in (1, 2)');
-          next();
+          User.find([1, 2]).toSql(function(sql){
+            sql.should.be.equal('select * from "users" where "users"."id" in (1, 2)');
+            next();
+          })
         });
       });
     */
@@ -114,8 +118,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('finds with one id returns the right sql', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.get(1).toSql().should.be.equal('select * from "users" where "users"."id" = 1 limit 1');
-          next();
+          User.get(1).toSql(function(sql){
+            sql.should.be.equal('select * from "users" where "users"."id" = 1 limit 1');
+            next();
+          })
         });
       });
     */
@@ -184,8 +190,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('where with like returns the right sql', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.where({login_like: 'phi'}).toSql().should.be.equal('select * from "users" where "users"."login" like \'%phi%\'');
-          next();
+          User.where({login_like: 'phi'}).toSql(function(sql){
+            sql.should.be.equal('select * from "users" where "users"."login" like \'%phi%\'');
+            next();
+          })
         });
       });
     

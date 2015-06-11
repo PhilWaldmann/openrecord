@@ -15,14 +15,23 @@ describe('Inspect', function(){
     this.belongsTo('user');
   });
   
-  var User = store.Model('User');
+  var User, Collection, posts, michl, phil;
   
-  var posts = [{title:'foo'}, {title: 'bar'}];
+  before(function(next){
+    store.ready(function(){
+      
+      User = store.Model('User');
   
-  var phil = User.new({login: 'phil', foo: 'bar'});
-  var michl = User.new({login: 'michl', foo: 'bar', posts:posts});
+      posts = [{title:'foo'}, {title: 'bar'}];
   
-  Collection = User.chain().add(phil).add(michl);
+      phil = User.new({login: 'phil', foo: 'bar'});
+      michl = User.new({login: 'michl', foo: 'bar', posts:posts});
+  
+      Collection = User.chain().add(phil).add(michl);
+      
+      next();
+    });
+  });
   
   describe('inspect()', function(){
     

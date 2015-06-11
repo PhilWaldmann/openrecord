@@ -67,10 +67,12 @@ describe('Interceptors', function(){
       });
     });
           
-    var User = store.Model('User');
-    phil = new User();
+
     
     it('has the right scope', function(done){
+      var User = store.Model('User');
+      phil = new User();
+      
       phil.callInterceptors('beforeTest', function(){
         done();
       });
@@ -97,10 +99,12 @@ describe('Interceptors', function(){
       });
     });
           
-    var User = store.Model('User');
-    phil = new User();
+   
     
     it('gets the right params', function(done){
+      var User = store.Model('User');
+      phil = new User();
+      
       phil.callInterceptors('beforeTest', ['A', 'B'], function(result){
         result.should.be.false;
         done();
@@ -127,10 +131,12 @@ describe('Interceptors', function(){
       });
     });
           
-    var User = store.Model('User');
-    phil = new User();
+    
     
     it('gets the right params', function(done){
+      var User = store.Model('User');
+      phil = new User();
+      
       phil.callInterceptors('beforeTest', ['A'], function(){
         done();
       });
@@ -158,10 +164,12 @@ describe('Interceptors', function(){
       });
     });
           
-    var User = store.Model('User');
-    phil = new User();
+    
     
     it('is false', function(done){
+      var User = store.Model('User');
+      phil = new User();
+      
       phil.callInterceptors('beforeTest', ['A'], function(result){
         result.should.be.false;
         done();
@@ -194,10 +202,12 @@ describe('Interceptors', function(){
 
     });
           
-    var User = store.Model('User');
-    phil = new User();
+    
     
     it('is true', function(done){
+      var User = store.Model('User');
+      phil = new User();
+      
       phil.callInterceptors('beforeSuccessTest', ['arg1'], function(result){
         result.should.be.true;
         done();
@@ -219,11 +229,12 @@ describe('Interceptors', function(){
     store.Model('User', function(){              
   
     });
-          
-    var User = store.Model('User');
-    phil = new User();
+    
     
     it('is true', function(done){
+      var User = store.Model('User');
+      phil = new User();
+      
       phil.callInterceptors('beforeTest', ['A'], function(result){
         result.should.be.true;
         done();

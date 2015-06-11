@@ -121,10 +121,11 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           var Post = store.Model('Post');
           
           User.exec().each(function(user, index, done){
-            var posts = Post.where({user_id: user.id}).exec();
-            posts.length.should.be.equal(user.id == 1 ? 3 : (user.id == 2 ? 1 : 0));
+            Post.where({user_id: user.id}).exec(function(posts){
+              posts.length.should.be.equal(user.id == 1 ? 3 : (user.id == 2 ? 1 : 0));
             
-            done();
+              done();
+            });            
           }, function(){
             next();
           });

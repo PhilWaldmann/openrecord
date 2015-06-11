@@ -4,15 +4,24 @@ var Store = require('../../lib/store');
 
 describe('Chainable', function(){
   var store = new Store();
-
-  store.Model('User', function(){
-    
-  });
-  var User = store.Model('User');
+  var User;
+  
+  store.Model('User', function(){});
+  
+  
+  before(function(){
+    store.ready(function(){
+      User = store.Model('User');
+    });    
+  })
 
   describe('chain()', function(){
   
-    var ChainedUser = User.chain();
+    var ChainedUser;
+    
+    before(function(){
+      ChainedUser = User.chain();
+    });
   
     it('returns a new Model class', function(){
       ChainedUser.should.not.be.equal(User);
@@ -46,7 +55,11 @@ describe('Chainable', function(){
   
   describe('setInternal(), getInternal(), addInternal()', function(){
   
-    var ChainedUser = User.chain();
+    var ChainedUser;
+    
+    before(function(){
+      ChainedUser = User.chain();
+    });
   
     it('has method setInternal()', function(){
       ChainedUser.setInternal.should.be.a.Function;
@@ -60,16 +73,16 @@ describe('Chainable', function(){
       ChainedUser.addInternal.should.be.a.Function;
     });
     
-    ChainedUser.setInternal('my_attr', 'my_value');
     
     it('getInternal() returns the right value', function(){
+      ChainedUser.setInternal('my_attr', 'my_value');
       ChainedUser.getInternal('my_attr').should.be.equal('my_value');
     });
     
-    ChainedUser.setInternal('my_attr2', 'my_old_value');
-    ChainedUser.setInternal('my_attr2', 'my_new_value');
     
     it('getInternal() returns the right value after some changes', function(){
+      ChainedUser.setInternal('my_attr2', 'my_old_value');
+      ChainedUser.setInternal('my_attr2', 'my_new_value');
       ChainedUser.getInternal('my_attr2').should.be.equal('my_new_value');
     });
     
@@ -77,31 +90,30 @@ describe('Chainable', function(){
       should.not.exist(ChainedUser.getInternal('unknown_attr'));
     });
     
-    ChainedUser.setInternal('my_attr3', {a:2, b:3});
     
     it('getInternal() returns objects', function(){
+      ChainedUser.setInternal('my_attr3', {a:2, b:3});
       ChainedUser.getInternal('my_attr3').should.be.eql({a:2, b:3});
     });
 
-    ChainedUser.addInternal('my_attr4', 'A');
     
     it('getInternal() returns an array', function(){
+      ChainedUser.addInternal('my_attr4', 'A');
       ChainedUser.getInternal('my_attr4').should.be.eql(['A']);
     });
     
-    ChainedUser.addInternal('my_attr5', 'A');
-    ChainedUser.addInternal('my_attr5', 'B');
     
     it('getInternal() returns an array', function(){
+      ChainedUser.addInternal('my_attr5', 'A');
+      ChainedUser.addInternal('my_attr5', 'B');
       ChainedUser.getInternal('my_attr5').should.be.eql(['A', 'B']);
     });
     
     
-    ChainedUser.addInternal('my_attr6', 'A');
-    ChainedUser.addInternal('my_attr6', ['B', 'C']);
-    ChainedUser.addInternal('my_attr6', ['D']);
-    
     it('concatenates arrays', function(){
+      ChainedUser.addInternal('my_attr6', 'A');
+      ChainedUser.addInternal('my_attr6', ['B', 'C']);
+      ChainedUser.addInternal('my_attr6', ['D']);
       ChainedUser.getInternal('my_attr6').should.be.eql(['A', 'B', 'C', 'D']);
     });
 

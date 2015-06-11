@@ -16,9 +16,15 @@ describe('Convert', function(){
         return '$' + value;
       });  
     });
-  
-    var User = store.Model('User');
-    var user = new User({login:'admin', other: 'foo'});
+    
+    var User,user;
+    before(function(){
+      store.ready(function(){
+        User = store.Model('User');
+        user = new User({login:'admin', other: 'foo'});
+      });
+    });
+    
     
     
     it('converts the value accordingly', function(){
@@ -47,9 +53,13 @@ describe('Convert', function(){
       });  
     });
   
-    var User = store.Model('User');
-    var user = new User({login:'admin', other: 'foo'});
-    
+    var User,user;
+    before(function(){
+      store.ready(function(){
+        User = store.Model('User');
+        user = new User({login:'admin', other: 'foo'});
+      });
+    });
     
     it('converts the value accordingly', function(done){
       user.toJson().login.should.be.equal('$admin')

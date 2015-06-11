@@ -16,12 +16,16 @@ describe('Relations', function(){
       this.attribute('title', String); 
     });
   
-    var User = store.Model('User');
-    var Post = store.Model('Post');
-    var phil = new User({login:'phil', posts:[{
-      title:'Title A'}, 
-      {title:'Title B', invalid_attribute:'test'}
-    ]});
+    var User, Post, phil;
+  
+    before(function(){
+      User = store.Model('User');
+      Post = store.Model('Post');
+      phil = new User({login:'phil', posts:[{
+        title:'Title A'}, 
+        {title:'Title B', invalid_attribute:'test'}
+      ]});
+    })
     
     
     it('posts exist', function(){
@@ -73,23 +77,32 @@ describe('Relations', function(){
       this.belongsTo('user');
     });
   
-    var User = store.Model('User');
-    var Post = store.Model('Post');
-    var post = new Post({
-      title:'title A', 
-      user: {login:'phil'}
-    });
+    var User, Post, post, nested_post;
+  
+    before(function(next){
+      store.ready(function(){
+        
+        User = store.Model('User');
+        Post = store.Model('Post');
+        post = new Post({
+          title:'title A', 
+          user: {login:'phil'}
+        });
     
-    var nested_post = new Post({
-      title:'title A', 
-      user: {
-        login:'phil',
-        websites:[{
-          url: 'http://www.s-team.at'
-        },{
-          url: 'http://github.com'
-        }]
-      }
+        nested_post = new Post({
+          title:'title A', 
+          user: {
+            login:'phil',
+            websites:[{
+              url: 'http://www.s-team.at'
+            },{
+              url: 'http://github.com'
+            }]
+          }
+        });
+       
+        next();
+      });
     });
     
     
@@ -158,12 +171,21 @@ describe('Relations', function(){
       this.attribute('title', String); 
     });
   
-    var User = store.Model('User');
-    var Post = store.Model('Post');
-    var phil = new User({login:'phil', posts:[{
-      title:'Title A'}, 
-      {title:'Title B', invalid_attribute:'test'}
-    ]});
+  
+    var User, Post, phil;
+    before(function(next){
+      store.ready(function(){
+        
+        User = store.Model('User');
+        Post = store.Model('Post');
+        phil = new User({login:'phil', posts:[{
+          title:'Title A'}, 
+          {title:'Title B', invalid_attribute:'test'}
+        ]});
+        
+        next()
+      });
+    });
     
     
     it('posts exist', function(){

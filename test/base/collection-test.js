@@ -9,8 +9,12 @@ describe('Collection', function(){
     this.attribute('login');
   });
   
-  var User = store.Model('User');
-  var Chain = User.chain();
+  var User,Chain;
+  
+  before(function(){
+    User = store.Model('User');
+    Chain = User.chain();
+  });
   
   
   it('chained model has add()', function(){
@@ -28,9 +32,11 @@ describe('Collection', function(){
   
   
   describe('add()', function(){
-    Chain.add({login:'phil', unknown_attr:'test'});
-    Chain.add({login:'admin'});
-    Chain.add({login:'michl'});
+    before(function(){
+      Chain.add({login:'phil', unknown_attr:'test'});
+      Chain.add({login:'admin'});
+      Chain.add({login:'michl'});
+    });    
   
     it('record has been added', function(){
       Chain.length.should.be.equal(3);
@@ -49,10 +55,14 @@ describe('Collection', function(){
   
   describe('remove()', function(){    
 
-    var Chain = User.chain();
-    Chain.add({login:'phil'});
-    Chain.add({login:'admin'});
-    Chain.add({login:'michl'});
+    var Chain;
+    
+    before(function(){
+      Chain = User.chain();
+      Chain.add({login:'phil'});
+      Chain.add({login:'admin'});
+      Chain.add({login:'michl'});
+    });
         
     it('works by passing in a number', function(){
       Chain.remove(1);
@@ -73,11 +83,14 @@ describe('Collection', function(){
   
   
   describe('each()', function(){
+    var Chain;
     
-    var Chain = User.chain();
-    Chain.add({login:'phil'});
-    Chain.add({login:'admin'});
-    Chain.add({login:'michl'});
+    before(function(){
+      Chain = User.chain();
+      Chain.add({login:'phil'});
+      Chain.add({login:'admin'});
+      Chain.add({login:'michl'});
+    });
   
     it('loops all records', function(){
       var tmp = []
@@ -94,10 +107,13 @@ describe('Collection', function(){
   
   
   describe('new()', function(){    
-
-    var Chain = User.chain();
-    Chain.add({login:'phil'});
-    Chain.new();
+    var Chain;
+    
+    before(function(){
+      Chain = User.chain();
+      Chain.add({login:'phil'});
+      Chain.new();
+    });
         
     it('adds a new record', function(){
       Chain.length.should.be.equal(2);
@@ -108,11 +124,14 @@ describe('Collection', function(){
   
   
   describe('.every', function(){    
-
-    var Chain = User.chain();
-    Chain.add({login:'phil'});
-    Chain.add({login:'admin'});
-    Chain.add({login:'michl'});
+    var Chain;
+    
+    before(function(){
+      Chain = User.chain();
+      Chain.add({login:'phil'});
+      Chain.add({login:'admin'});
+      Chain.add({login:'michl'});
+    });    
        
     
     it('every.login', function(){

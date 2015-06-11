@@ -18,14 +18,24 @@ describe('JSON', function(){
     this.belongsTo('user');
   });
   
-  var User = store.Model('User');
   
-  var posts = [{title:'foo'}, {title: 'bar'}];
+  var User, Collection, posts, michl, phil;
   
-  var phil = User.new({login: 'phil', foo: 'bar', a:'A', b:'B', c:'C'});
-  var michl = User.new({login: 'michl', foo: 'bar', a:'A1', b:'B1', c:'C1', posts:posts});
+  before(function(next){
+    store.ready(function(){
+      
+      User = store.Model('User');
   
-  Collection = User.chain().add(phil).add(michl);
+      posts = [{title:'foo'}, {title: 'bar'}];
+  
+      phil = User.new({login: 'phil', foo: 'bar', a:'A', b:'B', c:'C'});
+      michl = User.new({login: 'michl', foo: 'bar', a:'A1', b:'B1', c:'C1', posts:posts});
+  
+      Collection = User.chain().add(phil).add(michl);
+      
+      next();
+    })
+  })
   
   describe('Record toJson()', function(){
     

@@ -12,9 +12,18 @@ describe('validatesFormatOf()', function(){
     this.validatesFormatOf('mail', 'email');  
   });
 
-  var User = store.Model('User');
-  var valid = new User({mail:'philipp@email.com'});
-  var invalid = new User({mail:'not.a.valid@email!'});
+  var User, valid, invalid;  
+  before(function(next){
+    store.ready(function(){
+      
+      User = store.Model('User');
+      valid = new User({mail:'philipp@email.com'});
+      invalid = new User({mail:'not.a.valid@email!'});
+      
+      next();
+    });
+  });
+  
   
   
   it('returns true on valid records', function(done){
@@ -63,28 +72,37 @@ describe('validatesFormatOf()', function(){
       this.validatesFormatOf('first_name', '(P|p)hil.*');  
     });
 
-    var User = store.Model('User');
-    var valid = new User({
-      email:'philipp@email.com',
-      login:'philipp@email.com',
-      user_url: 'http://www.s-team.at',
-      user_ip:'10.20.30.40',
-      user_uuid:'550e8400-e29b-41d4-a716-446655440000',
-      created_at: new Date(),
-      blocked_at: null,
-      first_name: 'Philipp'
+    var User, valid, invalid;
+    before(function(next){
+      store.ready(function(){
+      
+        User = store.Model('User');
+        valid = new User({
+          email:'philipp@email.com',
+          login:'philipp@email.com',
+          user_url: 'http://www.s-team.at',
+          user_ip:'10.20.30.40',
+          user_uuid:'550e8400-e29b-41d4-a716-446655440000',
+          created_at: new Date(),
+          blocked_at: null,
+          first_name: 'Philipp'
+        });
+        invalid = new User({
+          email:'not.a.valid@email!',
+          login: 'phil',
+          user_url: 'http:www.s-team.at',
+          user_ip:'10.620.30.40',
+          user_uuid:'550e8400-ZZZZ-41d4-a716-446655440000',
+          created_at: 'tomorrow',
+          blocked_at: '2014-02-01',
+          first_name: 'Alex'
+        });
+      
+        next();
+      });
     });
-    var invalid = new User({
-      email:'not.a.valid@email!',
-      login: 'phil',
-      user_url: 'http:www.s-team.at',
-      user_ip:'10.620.30.40',
-      user_uuid:'550e8400-ZZZZ-41d4-a716-446655440000',
-      created_at: 'tomorrow',
-      blocked_at: '2014-02-01',
-      first_name: 'Alex'
-    });
-  
+
+      
   
     it('returns true on valid records', function(done){
       valid.isValid(function(valid){

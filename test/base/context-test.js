@@ -28,7 +28,13 @@ describe('Context', function(){
     });
   });
   
-  var User = store.Model('User');
+  var User;
+  before(function(next){
+    store.ready(function(){
+      User = store.Model('User');
+      next();
+    })
+  });
 
   describe('setContext()', function(){
   

@@ -12,9 +12,19 @@ describe('validatesConfirmationOf()', function(){
     this.validatesConfirmationOf('password');  
   });
 
-  var User = store.Model('User');
-  var valid = new User({password:'my!secret?password', password_confirmation:'my!secret?password'});
-  var invalid = new User({password:'1234', password_connfirmation:'abc'});
+  var User, valid, invalid;
+  
+  before(function(next){
+    store.ready(function(){
+      
+      User = store.Model('User');
+      valid = new User({password:'my!secret?password', password_confirmation:'my!secret?password'});
+      invalid = new User({password:'1234', password_connfirmation:'abc'});
+      
+      next();
+    })
+  })
+  
   
   
   it('returns true on valid records', function(done){
@@ -51,9 +61,19 @@ describe('validatesConfirmationOf()', function(){
       this.validatesConfirmationOf('password', 'email');  
     });
 
-    var User = store.Model('User');
-    var valid = new User({password:'my!secret?password', password_confirmation:'my!secret?password', email:'philipp@email.com', email_confirmation:'philipp@email.com'});
-    var invalid = new User({password:'1234', password_connfirmation:'abc', email:'philipp@email.com', email_confirmation:'philw@gmx.at'});
+
+    var User, valid, invalid;
+  
+    before(function(next){
+      store.ready(function(){
+      
+        User = store.Model('User');
+        valid = new User({password:'my!secret?password', password_confirmation:'my!secret?password', email:'philipp@email.com', email_confirmation:'philipp@email.com'});
+        invalid = new User({password:'1234', password_connfirmation:'abc', email:'philipp@email.com', email_confirmation:'philw@gmx.at'});
+      
+        next();
+      })
+    })
   
   
     it('returns true on valid records', function(done){

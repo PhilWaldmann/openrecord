@@ -57,9 +57,9 @@ describe('Events', function(){
   
   describe('Model', function(){
     describe('emit()', function(){
-      var User = store.Model('User');
       
       it('does not exists', function(){
+        var User = store.Model('User');
         should.not.exist(User.emit);
         should.not.exist(User.on);
       });
@@ -70,10 +70,11 @@ describe('Events', function(){
   
   describe('Record', function(){
     describe('emit()', function(){
-      var User = store.Model('User');
-      var record = new User();
-      
+            
       it('does not exists', function(){
+        var User = store.Model('User');
+        var record = new User();
+        
         should.not.exist(record.emit);
         should.not.exist(record.on);
       });

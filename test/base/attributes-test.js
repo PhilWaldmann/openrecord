@@ -32,8 +32,16 @@ describe('Attributes', function(){
     
   });
   
-  var User = store.Model('User');
-  var phil = new User();
+  var User, phil;
+  
+  before(function(next){
+    store.ready(function(){
+      User = store.Model('User');
+      phil = new User();
+      next();
+    });
+  });
+ 
   
   describe('setter()', function(){
     
@@ -167,8 +175,12 @@ describe('Attributes', function(){
    
    
    describe('hasChanges()', function(){
-     var user = new User({
-       my_str: 'phil'
+     var user;
+     
+     before(function(){
+       user = new User({
+        my_str: 'phil'
+       });
      });
      
      it('has method', function(){
@@ -182,8 +194,12 @@ describe('Attributes', function(){
    
    
    describe('getChanges()', function(){
-     var user = new User({
-       my_str: 'phil'
+     var user;
+     
+     before(function(){
+       user = new User({
+        my_str: 'phil'
+       });
      });
      
      it('has method', function(){
@@ -191,14 +207,18 @@ describe('Attributes', function(){
      });
      
      it('returns a changes array', function(){
-       user.getChanges().should.be.eql({my_str: [undefined, 'phil']});
+       user.getChanges().should.be.eql({my_str: [null, 'phil']});
      });    
    });
    
    
    describe('getChangedValues()', function(){
-     var user = new User({
-       my_str: 'phil'
+     var user;
+     
+     before(function(){
+       user = new User({
+        my_str: 'phil'
+       });
      });
      
      it('has method', function(){
@@ -212,13 +232,17 @@ describe('Attributes', function(){
    
    
    describe('getChangedValues() with allowed_attributes', function(){
-     var user = new User({
-       my_str: 'phil',
-       my_number: 3,
-       my_bool: true
-     });
+     var user;
      
-     user.allowed_attributes = ['my_number', 'my_bool'];
+     before(function(){
+       user = new User({
+        my_str: 'phil',
+         my_number: 3,
+         my_bool: true
+       });
+       user.allowed_attributes = ['my_number', 'my_bool'];
+     }); 
+     
           
      it('returns a modified changes hash', function(){
        user.getChangedValues().should.be.eql({my_number: 3, my_bool: true});
@@ -227,8 +251,12 @@ describe('Attributes', function(){
    
    
    describe('resetChanges()', function(){
-     var user = new User({
-       my_str: 'phil'
+     var user;
+     
+     before(function(){
+       user = new User({
+        my_str: 'phil'
+       });
      });
      
      it('has method', function(){

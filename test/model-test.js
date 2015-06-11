@@ -8,7 +8,11 @@ describe('Model: Base', function(){
   store.Model('User', function(){
     
   });
-  var User = store.Model('User');
+  
+  var User;
+  before(function(){
+    User = store.Model('User');
+  })
 
   it('is a function', function(){
     User.should.be.a.Function;

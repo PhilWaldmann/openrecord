@@ -108,8 +108,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       it('include does not join tables', function(next){ 
         store.ready(function(){
           var User = store.Model('User');
-          User.include('posts').toSql().should.be.equal('select * from "users"');
-          next();
+          User.include('posts').toSql(function(sql){
+            sql.should.be.equal('select * from "users"');
+            next();
+          })
         });
       });
     
