@@ -8,3 +8,5 @@ node_modules
 
 coverage.html
 .coveralls.yml
+
+test/**/*.sqlite3
