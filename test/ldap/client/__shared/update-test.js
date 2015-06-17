@@ -24,7 +24,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             
       it('returns an error on invalid move', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
           Ou.find('ou=move_me_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
             
             ou.parent_dn = 'ou=somewhere,' + LDAP_BASE;
@@ -42,7 +42,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       
       it('returns an error on invalid name', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
           Ou.find('ou=move_me_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
             
             ou.name = 'cn=foooo';
@@ -60,7 +60,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       
       it('moves an ou to another parent', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
           Ou.find('ou=move_me_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
                         
             ou.parent_dn = target_ou
@@ -84,7 +84,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       
       it('renames an ou', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
           Ou.find('ou=rename_me_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
                         
             ou.name = 'new_name';
@@ -109,7 +109,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       
       it('changes an ou', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
           Ou.find('ou=change_me_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
                         
             ou.description = 'very important';

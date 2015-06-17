@@ -24,7 +24,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       
       it('destroys an ou', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
           Ou.find('ou=destroy_me_ou,ou=destroy_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
                 
             ou.destroy(function(success){
@@ -44,7 +44,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       
       it('returns an error on ou destroys with children', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
           Ou.find('ou=destroy_me_sub_ou,ou=destroy_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
                 
             ou.destroy(function(success){
@@ -60,7 +60,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       
       it('destroys ou with all children', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
           Ou.find('ou=destroy_me_sub_ou,ou=destroy_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
                 
             ou.destroyAll(function(success){

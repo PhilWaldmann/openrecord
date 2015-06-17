@@ -20,7 +20,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     
     it('get all ou objects of the base ou', function(next){
       store.ready(function(){
-        var Ou = store.Model('Ou');
+        var Ou = store.Model('OrganizationalUnit');
         Ou.searchRoot('ou=openrecord,' + LDAP_BASE).exec(function(ous){ 
           ous.length.should.be.equal(1);
           ous[0].name.should.be.equal('exec_test');
@@ -32,7 +32,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     
     it('get all ou objects of the base ou incl. child objects', function(next){
       store.ready(function(){
-        var Ou = store.Model('Ou');
+        var Ou = store.Model('OrganizationalUnit');
         Ou.searchRoot('ou=openrecord,' + LDAP_BASE, true).exec(function(ous){
           ous.length.should.be.equal(6);
           ous[0].name.should.be.equal('openrecord');
@@ -43,7 +43,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     
     it('get all ou objects of the base ou inkl. child objects (recursive)', function(next){
       store.ready(function(){
-        var Ou = store.Model('Ou');
+        var Ou = store.Model('OrganizationalUnit');
         Ou.searchRoot('ou=openrecord,' + LDAP_BASE).recursive().exec(function(ous){
           ous.length.should.be.equal(6);
           ous[0].name.should.be.equal('openrecord');

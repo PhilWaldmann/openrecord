@@ -20,7 +20,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     
     it('get child objects (one level)!', function(next){
       store.ready(function(){
-        var Ou = store.Model('Ou');
+        var Ou = store.Model('OrganizationalUnit');
         Ou.searchRoot('ou=openrecord,' + LDAP_BASE).include('children').exec(function(ous){
           ous.length.should.be.equal(1);
           ous[0].children.length.should.be.equal(4);
@@ -32,7 +32,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     
     it('get all recursive child objects!', function(next){
       store.ready(function(){
-        var Ou = store.Model('Ou');
+        var Ou = store.Model('OrganizationalUnit');
         Ou.searchRoot('ou=openrecord,' + LDAP_BASE).include('all_children').exec(function(ous){
           ous.length.should.be.equal(1);
           ous[0].all_children.length.should.not.be.equal(0);

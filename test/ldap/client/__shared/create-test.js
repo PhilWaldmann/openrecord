@@ -21,7 +21,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     describe('OU', function(){
       it('creates a new ou', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
           var ou = Ou.new({
             name: 'new_ou',
             parent_dn: 'ou=create_test,ou=openrecord,' + LDAP_BASE
@@ -47,7 +47,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     
       it('creates a new ou with all attributes', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
           var ou = Ou.new({
             name: 'all_attribute_ou',
             description: 'Description with utf-8 chars öäü',
@@ -75,7 +75,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     
       it('creates nested ous', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
         
           var child_ou = Ou.new({
             name: 'sub_nested_ou'
@@ -106,7 +106,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     
       it('creates reverse nested ous (bottom up)', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
         
           var ou = Ou.new({
             name: 'level5',
@@ -155,7 +155,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     
       it('returns an error on missing ou name', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
           var ou = Ou.new({
             parent_dn: 'ou=create_test,ou=openrecord,' + LDAP_BASE
           });
@@ -170,7 +170,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     
       it('returns an error on missing parent_dn', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
           var ou = Ou.new({
             name: 'foo'
           });
@@ -185,7 +185,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     
       it('returns an error on empty ou record', function(next){
         store.ready(function(){
-          var Ou = store.Model('Ou');
+          var Ou = store.Model('OrganizationalUnit');
           var ou = Ou.new({});
         
           ou.save(function(success){
@@ -344,7 +344,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
     
       it('returns an error on missing parent_dn', function(next){
         store.ready(function(){
-          var Group = store.Model('Ou');
+          var Group = store.Model('OrganizationalUnit');
           var group = Group.new({
             name: 'foo'
           });
