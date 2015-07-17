@@ -15,8 +15,10 @@ describe('Postgres: all Attributes', function(){
       'CREATE EXTENSION IF NOT EXISTS hstore',
       'CREATE TABLE attribute_tests(char_attribute  varchar(255), float_attribute float, integer_attribute  integer, text_attribute text, boolean_attribute boolean, binary_attribute bytea, date_attribute date, datetime_attribute timestamp without time zone, time_attribute time, hstore_attribute hstore)',
       'CREATE TABLE attribute_join_tests(attribute_test_id integer)',
+      'CREATE TABLE attribute_hstore_tests(name varchar(255), properties hstore)',
       "INSERT INTO attribute_tests VALUES('abcd', 2.3345, 3243, 'some text', true, 'some binary data', '2014-02-18', '2014-02-18 15:45:02', '15:45:01', hstore(ARRAY['key', 'value', 'nested', '{\\\"key\\\": \\\"value\\\"}']))",
-      'INSERT INTO attribute_join_tests VALUES(3243)'
+      'INSERT INTO attribute_join_tests VALUES(3243)',
+      "Insert into attribute_hstore_tests VALUES('A', 'foo=>A,bar=>2'::hstore), ('B', 'foo=>B'::hstore), ('c', 'foo=>c'::hstore), ('C', 'foo=>C,bar=>1'::hstore), ('A2', 'foo=>A2,bar=>A'::hstore)"
     ], next);
   });
   
@@ -34,6 +36,8 @@ describe('Postgres: all Attributes', function(){
     });
     store.Model('AttributeJoinTest', function(){
       this.belongsTo('attribute_test', {foreign_key:'integer_attribute'});
+    });
+    store.Model('AttributeHstoreTest', function(){
     });
     
     store.on('exception', function(){});
@@ -161,6 +165,38 @@ describe('Postgres: all Attributes', function(){
           done();
         });
         
+      });
+    });
+  });
+  
+  
+  
+  it('sort by hstore attribute', function(done){
+    store.ready(function(){    
+      var AttributeHstoreTest = store.Model('AttributeHstoreTest');
+      AttributeHstoreTest.order('properties.foo').exec(function(records){
+        records.length.should.be.equal(5);
+        records[0].name.should.be.equal('A');
+        records[1].name.should.be.equal('A2');
+        records[2].name.should.be.equal('B');
+        records[3].name.should.be.equal('C');
+        records[4].name.should.be.equal('c');      
+        done();
+      });
+    });
+  });
+  
+  it('sort by multiple hstore attributes', function(done){
+    store.ready(function(){    
+      var AttributeHstoreTest = store.Model('AttributeHstoreTest');
+      AttributeHstoreTest.order('properties.bar', 'properties.foo').exec(function(records){
+        records.length.should.be.equal(5);
+        records[0].name.should.be.equal('C');
+        records[1].name.should.be.equal('A');
+        records[2].name.should.be.equal('A2');
+        records[3].name.should.be.equal('B');
+        records[4].name.should.be.equal('c');      
+        done();
       });
     });
   });
