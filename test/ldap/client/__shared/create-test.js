@@ -43,6 +43,32 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });     
         });
       });
+      
+      
+      it('creates a new ou with upper case letters', function(next){
+        store.ready(function(){
+          var Ou = store.Model('OrganizationalUnit');
+          var ou = Ou.new({
+            name: 'AwEsOmE_Ou',
+            parent_dn: 'ou=create_test,ou=openrecord,' + LDAP_BASE
+          });
+        
+          ou.save(function(success){
+            success.should.be.equal(true);
+          
+            Ou.find(ou.dn).exec(function(new_ou){
+            
+              new_ou.name.should.be.equal('AwEsOmE_Ou');
+              new_ou.ou.should.be.equal('AwEsOmE_Ou');
+              new_ou.objectGUID.length.should.be.equal(36);
+              new_ou.parent_dn.should.be.equal('ou=create_test,ou=openrecord,' + LDAP_BASE.toLowerCase());
+              new_ou.objectClass.should.be.eql(["top","organizationalUnit"]);
+          
+              next();
+            });
+          });     
+        });
+      });
         
     
       it('creates a new ou with all attributes', function(next){
