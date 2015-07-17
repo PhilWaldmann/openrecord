@@ -11,7 +11,7 @@ describe('Postgres: Array Attributes', function(){
   before(function(next){
     this.timeout(5000);
     beforePG(database, [
-      'CREATE EXTENSION hstore'
+      'CREATE EXTENSION IF NOT EXISTS hstore'
     ], next);
   });
   
