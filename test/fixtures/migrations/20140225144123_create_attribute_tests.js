@@ -17,7 +17,7 @@ module.exports = function(){
     this.time('time_attr');
     
 
-    this.text('with_default_text', {default:'foo'});
+    this.string('with_default_text', {default:'foo'});
     this.integer('with_default_integer', {default:55});
     this.boolean('with_default_boolean', {default:true});
   });

@@ -189,7 +189,6 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         
         AttributeTest.create().then(function(){
           AttributeTest.find(this.id).exec(function(record){
-            console.log(record, record.with_default_text);
             record.with_default_text.should.be.equal('foo')
             next();
           });
