@@ -182,5 +182,51 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
     });
     
+    
+    it('has default text value', function(next){
+      store.ready(function(){
+        var AttributeTest = store.Model('AttributeTest');
+        
+        AttributeTest.create().then(function(){
+          AttributeTest.find(this.id).exec(function(record){
+            console.log(record, record.with_default_text);
+            record.with_default_text.should.be.equal('foo')
+            next();
+          });
+        });
+        
+      });
+    });
+    
+    
+    it('has default integer value', function(next){
+      store.ready(function(){
+        var AttributeTest = store.Model('AttributeTest');
+        
+        AttributeTest.create().then(function(){
+          AttributeTest.find(this.id).exec(function(record){
+            record.with_default_integer.should.be.equal(55)
+            next();
+          });
+        });
+        
+      });
+    });
+    
+    
+    it('has default boolean value', function(next){
+      store.ready(function(){
+        var AttributeTest = store.Model('AttributeTest');
+        
+        AttributeTest.create().then(function(){
+          AttributeTest.find(this.id).exec(function(record){
+            record.with_default_boolean.should.be.equal(true)
+            next();
+          });
+        });
+        
+      });
+    });
+    
   });
 };
