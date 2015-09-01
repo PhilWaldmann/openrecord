@@ -13,10 +13,10 @@ describe('Postgres: all Attributes', function(){
     this.timeout(5000);
     beforePG(database, [
       'CREATE EXTENSION IF NOT EXISTS hstore',
-      'CREATE TABLE attribute_tests(char_attribute  varchar(255), float_attribute float, integer_attribute  integer, text_attribute text, boolean_attribute boolean, binary_attribute bytea, date_attribute date, datetime_attribute timestamp without time zone, time_attribute time, hstore_attribute hstore)',
+      'CREATE TABLE attribute_tests(id serial primary key, char_attribute  varchar(255), float_attribute float, integer_attribute  integer, text_attribute text, boolean_attribute boolean, binary_attribute bytea, date_attribute date, datetime_attribute timestamp without time zone, time_attribute time, hstore_attribute hstore)',
       'CREATE TABLE attribute_join_tests(attribute_test_id integer)',
       'CREATE TABLE attribute_hstore_tests(name varchar(255), properties hstore)',
-      "INSERT INTO attribute_tests VALUES('abcd', 2.3345, 3243, 'some text', true, 'some binary data', '2014-02-18', '2014-02-18 15:45:02', '15:45:01', hstore(ARRAY['key', 'value', 'nested', '{\\\"key\\\": \\\"value\\\"}']))",
+      "INSERT INTO attribute_tests (char_attribute, float_attribute, integer_attribute, text_attribute, boolean_attribute, binary_attribute, date_attribute, datetime_attribute, time_attribute, hstore_attribute)VALUES('abcd', 2.3345, 3243, 'some text', true, 'some binary data', '2014-02-18', '2014-02-18 15:45:02', '15:45:01', hstore(ARRAY['key', 'value', 'nested', '{\\\"key\\\": \\\"value\\\"}']))",
       'INSERT INTO attribute_join_tests VALUES(3243)',
       "Insert into attribute_hstore_tests VALUES('A', 'foo=>A,bar=>2'::hstore), ('B', 'foo=>B'::hstore), ('c', 'foo=>c'::hstore), ('C', 'foo=>C,bar=>1'::hstore), ('A2', 'foo=>A2,bar=>A'::hstore)"
     ], next);
@@ -146,7 +146,7 @@ describe('Postgres: all Attributes', function(){
       }, function(success){
         success.should.be.true;
         
-        AttributeTest.limit(1, 1).exec(function(record){
+        AttributeTest.find(this.id).exec(function(record){
 
           record.char_attribute.should.be.equal('aaaa');
           record.float_attribute.should.be.equal(1.00001);
@@ -165,6 +165,60 @@ describe('Postgres: all Attributes', function(){
           done();
         });
         
+      });
+    });
+  });
+  
+  
+  it('write complex hstore value', function(done){
+    store.ready(function(){    
+      var AttributeTest = store.Model('AttributeTest');
+      
+      var obj = {a:'\\"', b:true, c: 22, d:null, e:'{=>\/?öä#+-,.,1:23\'"}', f:'C:\\files\\shares\\user.name', g:'H:', foo:{bar:['phil', 'michl\\/', {a:1, b:true}]}};
+      
+      AttributeTest.create({
+        hstore_attribute: obj
+      }, function(success){
+        success.should.be.true;
+
+        AttributeTest.find(this.id).exec(function(record){
+
+          record.hstore_attribute.should.be.eql(obj);
+        
+          done();
+        });
+        
+      });
+    });
+  });
+  
+  
+  it('write complex hstore value multiple times', function(done){
+    store.ready(function(){    
+      var AttributeTest = store.Model('AttributeTest');
+      
+      var obj = {a:'\\"', b:true, c: 40, d:null, e:'{=>\/?öä#+-,.,123\'"}', f:'C:\\files\\shares\\user.name', g:'H:', h:' \'', i:'\\\\', j:'"foo"=>"bar"', k:'null', foo:{bar:['phil', 'michl\\/', {a:1, b:true}]}};
+      var after = {a:'\\"', b:false, c: 40, d:null, e:'{=>\/?öä#+-,.,123\'"}', f:'C:\\files\\shares\\user.name', g:'H:', h:' \'', i:'\\\\', j:'"foo"=>"bar"', k:'null', foo:{bar:['phil', 'michl\\/', {a:1, b:true}, 'foo']}};
+      
+      AttributeTest.create({
+        hstore_attribute: obj
+      }, function(success){
+        success.should.be.true;
+
+        AttributeTest.find(this.id).exec(function(record){
+          record.hstore_attribute.should.be.eql(obj);
+          record.hstore_attribute.b = false;
+          record.hstore_attribute.foo.bar.push('foo');
+          record.save(function(success){
+            success.should.be.true;
+            record.hstore_attribute.should.be.eql(after);
+            
+            AttributeTest.find(record.id).exec(function(record){
+              record.hstore_attribute.should.be.eql(after);            
+              done();
+            });            
+          });          
+        });        
       });
     });
   });
