@@ -197,8 +197,8 @@ describe('Postgres: all Attributes', function(){
     store.ready(function(){    
       var AttributeTest = store.Model('AttributeTest');
       
-      var obj = {a:'\\"', b:true, c: 40, d:null, e:'{=>\/?öä#+-,.,123\'"}', f:'C:\\files\\shares\\user.name', g:'H:', h:' \'', i:'\\\\', j:'"foo"=>"bar"', k:'null', foo:{bar:['phil', 'michl\\/', {a:1, b:true}]}};
-      var after = {a:'\\"', b:false, c: 40, d:null, e:'{=>\/?öä#+-,.,123\'"}', f:'C:\\files\\shares\\user.name', g:'H:', h:' \'', i:'\\\\', j:'"foo"=>"bar"', k:'null', foo:{bar:['phil', 'michl\\/', {a:1, b:true}, 'foo']}};
+      var obj = {a:'\\"', b:true, c: 40, d:null, e:'{=>\/?öä#+-,.,123\'"}', f:'C:\\files\\shares\\user.name', g:'H:', h:' \'', i:'\\\\', j:'"foo"=>"bar"', k:'null', l:[1, 2, 3, 4], foo:{bar:['phil', 'michl\\/', {a:1, b:true}]}};
+      var after = {a:'\\"', b:false, c: 40, d:null, e:'{=>\/?öä#+-,.,123\'"}', f:'C:\\files\\shares\\user.name', g:'H:', h:' \'', i:'\\\\', j:'"foo"=>"bar"', k:'null', l:[1, 2, 3, 4], foo:{bar:['phil', 'michl\\/', {a:1, b:true}, 'foo']}};
       
       AttributeTest.create({
         hstore_attribute: obj
