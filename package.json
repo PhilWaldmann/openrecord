@@ -1,6 +1,6 @@
 {
     "name": "openrecord",
-    "version": "1.10.6",
+    "version": "1.10.8",
     "description": "Active record like ORM for nodejs",
     "keywords": ["orm", "record", "sql", "sqlite3", "postgres", "pg", "mysql", "database", "activerecord", "promise", "rest", "restify", "nested set", "ldap", "activedirectory", "active directory", "ad"],
     "author": "Philipp Waldmann <philipp.waldmann@s-team.at>",
@@ -9,7 +9,7 @@
       "url": "git://github.com/PhilWaldmann/openrecord.git"
     },
     "dependencies": {
-        "async": "~ 1.2.x",
+        "async": "~ 1.4.x",
         "glob": ">= 3.2.x",
         "validator": ">= 3.1.x",
         "inflection": ">= 1.3.x",
