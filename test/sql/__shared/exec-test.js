@@ -26,7 +26,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
     });
     
-    it('throws an error on unknown table', function(next){ 
+    it('throws an error on unknown table', function(next){
+      store.throw = false;
       store.ready(function(){
         var User = store.Model('User');
         User.where({login_like: 'phi'}).exec(function(){
