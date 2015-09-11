@@ -80,6 +80,54 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
         });
       });
+                  
+      
+      it('moves an ou to another parent and renames it', function(next){
+        store.ready(function(){
+          var Ou = store.Model('OrganizationalUnit');
+          Ou.find('ou=move_and_rename_me_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
+            ou.name = 'move_me_ou_renamed';
+            ou.parent_dn = target_ou;
+
+            ou.save(function(success){
+              success.should.be.equal(true);
+          
+              Ou.find(ou.dn).exec(function(ou){
+                ou.name.should.be.equal('move_me_ou_renamed');
+                ou.parent_dn.should.be.equal(target_ou);
+          
+                next();
+              });
+            });
+            
+          });
+        });
+      });
+      
+      
+      it('moves an ou to another parent and changes name to uppercase', function(next){
+        store.ready(function(){
+          var Ou = store.Model('OrganizationalUnit');
+          Ou.find('ou=move_and_rename_me2_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
+            ou.set({
+              name: 'MOVE_AND_RENAME_ME2_OU',
+              parent_dn: target_ou
+            });
+
+            ou.save(function(success){
+              success.should.be.equal(true);
+          
+              Ou.find(ou.dn).exec(function(ou){
+                ou.name.should.be.equal('MOVE_AND_RENAME_ME2_OU');
+                ou.parent_dn.should.be.equal(target_ou);
+          
+                next();
+              });
+            });
+            
+          });
+        });
+      });
       
       
       it('renames an ou', function(next){
@@ -102,6 +150,40 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
               });
             });
             
+          });
+        });
+      });
+      
+      
+      it('returns an error on renames with existing object', function(next){
+        store.ready(function(){
+          var Ou = store.Model('OrganizationalUnit');
+          Ou.find('ou=move_me_test_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
+                        
+            ou.name = 'change_me_ou';
+            
+            ou.save(function(success){
+              success.should.be.equal(false);
+              this.errors.should.be.eql({ sAMAccountName: [ 'already exists' ] }); //TODO: should name, right? 
+              next();
+            });
+          });
+        });
+      });
+      
+      
+      it('returns an error on invalid characters in name', function(next){
+        store.ready(function(){
+          var Ou = store.Model('OrganizationalUnit');
+          Ou.find('ou=move_me_test_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
+                        
+            ou.name = '#test';
+            
+            ou.save(function(success){
+              success.should.be.equal(false);
+              this.errors.should.be.eql({ name: [ 'not valid' ] });
+              next();
+            });
           });
         });
       });
@@ -273,6 +355,24 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
       
       
+      it('returns an error on adding not existing members', function(next){
+        store.ready(function(){
+          var Group = store.Model('Group');
+          Group.find('cn=change_me_group,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(group){
+                        
+            group.member = ['cn=not_existing,ou=update_test,ou=openrecord,' + LDAP_BASE]
+            
+            group.save(function(success){
+              success.should.be.equal(false);
+              this.errors.should.be.eql({ member: [ 'unknown member added' ] });
+              next();
+            });
+            
+          });
+        });
+      });
+      
+      
       it('remove a member from a group', function(next){
         store.ready(function(){
           var Group = store.Model('Group');
@@ -290,6 +390,24 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           
                 next();
               });
+            });
+            
+          });
+        });
+      });
+      
+      it('returns an error on removing not existing members', function(next){
+        store.ready(function(){
+          var Group = store.Model('Group');
+          Group.find('cn=change_me_group,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(group){
+                        
+            group.member = []
+            group.changes.member[0] = ['cn=not_existing,ou=update_test,ou=openrecord,' + LDAP_BASE];
+                        
+            group.save(function(success){
+              success.should.be.equal(false);
+              this.errors.should.be.eql({ member: [ 'unknown member removed' ] });
+              next();
             });
             
           });

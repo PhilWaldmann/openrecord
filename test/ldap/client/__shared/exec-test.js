@@ -109,7 +109,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           user.sn.should.be.equal('last name');
           user.sAMAccountName.should.be.equal('test_samaccountname');
           user.objectGUID.should.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{11}/);
-          user.objectSid.should.match(/S-\d-\d-\d{2}-\d{10}-\d{9}-\d{8}-\d{3}/);
+          user.objectSid.should.match(/S-\d-\d-\d{2}-\d{10}-\d{9}-\d{8,9}-\d{3,6}/);
           user.attributes.whenChanged.should.be.instanceOf(Date); //will be handled internally as a date
           should.not.exist(user.attributes.accountExpires);
           user.objectClass.should.endWith('user');
@@ -138,6 +138,20 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         User.find(null).exec(function(user){
           should.not.exist(user)
           next();
+        });      
+      });
+    });
+    
+    
+
+    it.skip('find with objectGUID', function(next){
+      store.ready(function(){
+        var User = store.Model('User');
+        User.find('cn=openerecord_test_user6,ou=sub_ou3,ou=exec_test,ou=openrecord,' + LDAP_BASE).exec(function(user){
+          User.where({objectGUID: user.objectGUID}).exec(function(same_user){
+            user.dn.should.be.equal(same_user.dn);
+            next();
+          });
         });      
       });
     });

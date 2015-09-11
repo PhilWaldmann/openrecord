@@ -92,7 +92,10 @@ testActiveDirectory('update', [ //LDAP BASE will be added automatically! (global
       {dn:'cn=move_me_group', name:'move_me_group', objectClass:['top', 'group', ]},
       {dn:'cn=move_me_computer', name:'move_me_computer', objectClass:['top', 'person', 'organizationalPerson', 'user', 'computer']},
       {dn:'ou=move_me_ou', name:'move_me_ou', objectClass:['top', 'organizationalUnit']},
-      
+      {dn:'ou=move_me_test_ou', name:'move_me_ou', objectClass:['top', 'organizationalUnit']},
+      {dn:'ou=move_and_rename_me_ou', name:'move_me_ou', objectClass:['top', 'organizationalUnit']},
+      {dn:'ou=move_and_rename_me2_ou', name:'move_me_ou', objectClass:['top', 'organizationalUnit']},
+            
       {dn:'cn=rename_me_user', name:'rename_me_user', objectClass:['top', 'person', 'organizationalPerson', 'user']},
       {dn:'cn=rename_me_group', name:'rename_me_group', objectClass:['top', 'group']},
       {dn:'cn=rename_me_computer', name:'rename_me_computer', objectClass:['top', 'person', 'organizationalPerson', 'user', 'computer']},
