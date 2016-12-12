@@ -85,7 +85,7 @@ var store = new OpenRecord({
 	type: 'mysql',
 	host: 'localhost',
 	database: 'mydb',
-	username: 'myuser',
+	user: 'myuser',
 	password: 'mypass',
 	migrations: 'path/to/my/migrations/*'
 });
