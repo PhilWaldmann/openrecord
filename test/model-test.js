@@ -6,9 +6,9 @@ describe('Model: Base', function(){
   var store = new Store();
 
   store.Model('User', function(){
-    
+
   });
-  
+
   var User;
   before(function(){
     User = store.Model('User');
@@ -22,18 +22,18 @@ describe('Model: Base', function(){
     should.exist(User.new);
     User.new.should.be.a.Function;
   });
-  
+
   it('has chain() mixin method', function(){
     should.exist(User.chain);
     User.chain.should.be.a.Function;
   });
-  
+
   it('has definition', function(){
     should.exist(User.definition);
   });
-  
+
   it('has correct model name', function(){
     User.definition.model_name.should.be.equal('User');
   });
-  
+
 });

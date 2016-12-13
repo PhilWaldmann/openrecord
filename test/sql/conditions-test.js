@@ -4,21 +4,21 @@ var Store = require('../../lib/store');
 
 describe('SQL: Conditions', function(){
   var store;
-  
+
   before(function(){
     store = new Store({
-      type: 'sql'    
+      type: 'sql'
     });
-    
+
     //a store of type sql does not have any data types
     //so just create some dummy types
     store.addOperator('eq', function(){}, {default: true});
     store.addOperator('like', function(){});
-    
+
     store.addType('string', function(value){
       return value;
     }, {operators:{defaults:['eq', 'like']}});
-    
+
     store.addType('integer', function(value){
       return value;
     }, {operators:{defaults:['eq', 'like']}});
@@ -28,43 +28,43 @@ describe('SQL: Conditions', function(){
       this.attribute('login', 'string');
       this.hasMany('posts');
     });
-  
-  
-  
+
+
+
     store.Model('Post', function(){
       this.attribute('my_primary_key1', 'integer', {primary: true});
       this.attribute('my_primary_key2', 'integer', {primary: true});
       this.attribute('message', 'string');
     });
   });
-    
-  
-  
+
+
+
   describe('find()', function(){
     it('has method', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.find.should.be.a.Function;
         next();
-      });      
+      });
     });
-    
-    
+
+
     describe('with one param', function(){
-          
+
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
           var Chained = User.find(2);
           Chained.getInternal('conditions').length.should.be.equal(1);
           next();
-        });        
+        });
       });
-      
+
       it('has the right conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.find(2);   
+          var Chained = User.find(2);
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
             model: Chained,
@@ -77,26 +77,26 @@ describe('SQL: Conditions', function(){
         });
       });
     });
-    
-    
-    
+
+
+
     describe('with multiple param', function(){
-      
-    
+
+
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
           var Chained = User.find([2, 3, 4, 5]);
           Chained.getInternal('conditions').length.should.be.equal(1);
           next();
-        })   
-        
+        })
+
       });
-      
-      it('has the right conditions', function(next){    
+
+      it('has the right conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.find([2, 3, 4, 5]);  
+          var Chained = User.find([2, 3, 4, 5]);
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
             model: Chained,
@@ -109,8 +109,8 @@ describe('SQL: Conditions', function(){
         });
       });
     });
-    
-    
+
+
     describe('with multiple primary keys', function(){
 
       it('has conditions', function(next){
@@ -119,9 +119,9 @@ describe('SQL: Conditions', function(){
           var Chained = Post.find(4, 899);
           Chained.getInternal('conditions').length.should.be.equal(2);
           next();
-        });        
+        });
       });
-      
+
       it('has the right conditions', function(next){
         store.ready(function(){
           var Post = store.Model('Post');
@@ -145,17 +145,17 @@ describe('SQL: Conditions', function(){
         });
       });
     });
-    
-    
+
+
   });
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
   describe('where()', function(){
     it('has method', function(next){
       store.ready(function(){
@@ -164,22 +164,22 @@ describe('SQL: Conditions', function(){
         next();
       });
     });
-    
+
     describe('with hash', function(){
-    
+
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where({login:'phil'}); 
+          var Chained = User.where({login:'phil'});
           Chained.getInternal('conditions').length.should.be.equal(1);
           next();
         });
       });
-      
+
       it('has the right conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where({login:'phil'}); 
+          var Chained = User.where({login:'phil'});
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
             model: User,
@@ -191,7 +191,7 @@ describe('SQL: Conditions', function(){
           next();
         });
       });
-      
+
       it('does not include unknown attributes', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -200,8 +200,8 @@ describe('SQL: Conditions', function(){
           next();
         });
       });
-      
-      
+
+
       it('does include object values', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -212,11 +212,11 @@ describe('SQL: Conditions', function(){
           next();
         });
       });
-            
+
     });
-    
+
     describe('with hash (like)', function(){
-    
+
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -225,11 +225,11 @@ describe('SQL: Conditions', function(){
           next();
         });
       });
-      
-      it('has the right conditions', function(next){ 
+
+      it('has the right conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where({login_like:'phil'});     
+          var Chained = User.where({login_like:'phil'});
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
             model: User,
@@ -242,10 +242,10 @@ describe('SQL: Conditions', function(){
         });
       });
     });
-    
-    
+
+
     describe('with hash (multiple)', function(){
-    
+
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -254,11 +254,11 @@ describe('SQL: Conditions', function(){
           next();
         });
       });
-      
+
       it('has the right conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where({login_like:'phil', my_primary_key:[2, 3]});   
+          var Chained = User.where({login_like:'phil', my_primary_key:[2, 3]});
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
             model: User,
@@ -278,10 +278,10 @@ describe('SQL: Conditions', function(){
         });
       });
     });
-    
-    
+
+
     describe('with array of hashes', function(){
-    
+
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -290,11 +290,11 @@ describe('SQL: Conditions', function(){
           next();
         });
       });
-      
-      it('has the right conditions', function(next){ 
+
+      it('has the right conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where([{login_like:'phil'}, {my_primary_key:[2, 3]}]);     
+          var Chained = User.where([{login_like:'phil'}, {my_primary_key:[2, 3]}]);
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
             model: User,
@@ -314,10 +314,10 @@ describe('SQL: Conditions', function(){
         });
       });
     });
-    
-    
+
+
     describe('with joined table conditions', function(){
-    
+
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -326,12 +326,12 @@ describe('SQL: Conditions', function(){
           next();
         });
       });
-      
-      it('has the right conditions', function(next){  
+
+      it('has the right conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
           var Post = store.Model('Post');
-          var Chained = User.where({posts:{my_primary_key1:[1, 2, 3]}});    
+          var Chained = User.where({posts:{my_primary_key1:[1, 2, 3]}});
           Chained.getInternal('conditions').should.be.eql([{
             type: 'hash',
             model: Post,
@@ -344,10 +344,10 @@ describe('SQL: Conditions', function(){
         });
       });
     });
-    
-    
+
+
     describe('with string', function(){
-    
+
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -356,11 +356,11 @@ describe('SQL: Conditions', function(){
           next();
         });
       });
-      
-      it('has the right conditions', function(next){  
+
+      it('has the right conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where('login IS NULL');    
+          var Chained = User.where('login IS NULL');
           Chained.getInternal('conditions').should.be.eql([{
             type: 'raw',
             args: [],
@@ -371,9 +371,9 @@ describe('SQL: Conditions', function(){
         });
       });
     });
-    
+
     describe('with string and "?" placeholder', function(){
-    
+
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -382,38 +382,11 @@ describe('SQL: Conditions', function(){
           next();
         });
       });
-      
-      it('has the right conditions', function(next){ 
-        store.ready(function(){
-          var User = store.Model('User');
-          var Chained = User.where('login = ?', 'phil');
-          Chained.getInternal('conditions').should.be.eql([{
-            type: 'raw',
-            args: ['phil'],
-            query: 'login = ?',
-            name_tree: []
-          }]);
-          next();
-        });
-      });
-    });
-    
-    
-    describe('with array and "?" placeholder', function(){
-    
-      it('has conditions', function(next){ 
-        store.ready(function(){
-          var User = store.Model('User');
-          var Chained = User.where(['login = ?', 'phil']); 
-          Chained.getInternal('conditions').length.should.be.equal(1);
-          next();
-        });
-      });
-      
+
       it('has the right conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where(['login = ?', 'phil']); 
+          var Chained = User.where('login = ?', 'phil');
           Chained.getInternal('conditions').should.be.eql([{
             type: 'raw',
             args: ['phil'],
@@ -424,10 +397,37 @@ describe('SQL: Conditions', function(){
         });
       });
     });
-    
-    
+
+
+    describe('with array and "?" placeholder', function(){
+
+      it('has conditions', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          var Chained = User.where(['login = ?', 'phil']);
+          Chained.getInternal('conditions').length.should.be.equal(1);
+          next();
+        });
+      });
+
+      it('has the right conditions', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          var Chained = User.where(['login = ?', 'phil']);
+          Chained.getInternal('conditions').should.be.eql([{
+            type: 'raw',
+            args: ['phil'],
+            query: 'login = ?',
+            name_tree: []
+          }]);
+          next();
+        });
+      });
+    });
+
+
     describe('with sting and hash placeholder', function(){
-    
+
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -436,8 +436,8 @@ describe('SQL: Conditions', function(){
           next();
         });
       });
-      
-      it('has the right conditions', function(next){ 
+
+      it('has the right conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
           var Chained = User.where('login = :login', {login: 'phil'});
@@ -451,10 +451,10 @@ describe('SQL: Conditions', function(){
         });
       });
     });
-    
-    
+
+
     describe('with array and hash placeholder', function(){
-    
+
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -463,11 +463,11 @@ describe('SQL: Conditions', function(){
           next();
         });
       });
-      
+
       it('has the right conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where(['login = :login', {login: 'phil'}]);    
+          var Chained = User.where(['login = :login', {login: 'phil'}]);
           Chained.getInternal('conditions').should.be.eql([{
             type: 'raw',
             args: ['phil'],
@@ -478,10 +478,10 @@ describe('SQL: Conditions', function(){
         });
       });
     });
-    
-    
+
+
     describe('with array and hash placeholder on a relation', function(){
-    
+
       it('has conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -490,11 +490,11 @@ describe('SQL: Conditions', function(){
           next();
         });
       });
-      
+
       it('has the right conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
-          var Chained = User.where({posts:['message = :message', {message: 'hello'}]});  
+          var Chained = User.where({posts:['message = :message', {message: 'hello'}]});
           Chained.getInternal('conditions').should.be.eql([{
             type: 'raw',
             args: ['hello'],
@@ -505,7 +505,7 @@ describe('SQL: Conditions', function(){
         });
       });
     });
-    
+
   });
-  
+
 });

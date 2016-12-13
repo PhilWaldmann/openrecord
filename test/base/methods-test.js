@@ -9,20 +9,20 @@ describe('Methods', function(){
     this.my_method = function(){
       this.should.have.property('attributes');
       this.should.have.property('errors');
-    };    
+    };
   });
-  
+
   var User, phil;
-  
+
   before(function(){
     store.ready(function(){
       User = store.Model('User');
       phil = new User();
     });
   });
-  
-    
-    
+
+
+
   it('is defined', function(){
     should.exist(phil.my_method);
     phil.my_method.should.be.a.Function;
@@ -31,6 +31,6 @@ describe('Methods', function(){
   it('has the right context', function(){
     phil.my_method();
   });
-    
-  
+
+
 });

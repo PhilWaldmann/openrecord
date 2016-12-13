@@ -9,7 +9,7 @@ global.beforePG = function(db, sql, next){
       exec('psql ' + db + ' -c "' + sql.join(';') + '" -U postgres', function(err, result){
         if(err) throw new Error(err);
         next();
-      });    
+      });
     });
   });
 };
@@ -21,14 +21,14 @@ global.afterPG = function(db, next){
 global.testPG = function(name, queries){
   var db = name.replace('/', '_') + '_test';
   require('../__shared/' + name + '-test')(
-    'SQL (Postgres)', 
+    'SQL (Postgres)',
     function(next){
       this.timeout(5000);
       beforePG(db, queries, next);
     },
     function(next, store){
       store.close(function(){
-        
+
       });
       afterPG(db, next);
     },

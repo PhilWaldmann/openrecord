@@ -3,16 +3,16 @@ var should = require('should');
 var Store = require('../../../lib/store');
 
 module.exports = function(title, beforeFn, afterFn, store_conf){
-  
+
   describe(title + ': Promise', function(){
     var store;
-  
+
     before(beforeFn);
     after(function(next){
       afterFn(next, store);
     });
-  
-  
+
+
     before(function(){
       store = new Store(store_conf);
       store.setMaxListeners(0);
@@ -22,20 +22,20 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         this.validatesPresenceOf('message');
       });
     });
-        
-    
-    
-    
-    it('has then() function', function(next){ 
+
+
+
+
+    it('has then() function', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.find(1).exec().then.should.be.a.Function
         next();
       });
     });
-      
-    
-    it('returns select results', function(next){ 
+
+
+    it('returns select results', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.find(1).exec().then(function(result){
@@ -44,9 +44,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
-    
-    it('returns select results multiple times', function(next){ 
+
+
+    it('returns select results multiple times', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.find(1).exec(function(result){
@@ -58,9 +58,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
-    
-    it('saves a record', function(next){ 
+
+
+    it('saves a record', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.find(1).exec(function(result){
@@ -71,8 +71,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
-    it('destroys a record', function(next){ 
+
+    it('destroys a record', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.find(2).exec(function(result){
@@ -83,8 +83,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
-    it('destroys multiple records', function(next){ 
+
+    it('destroys multiple records', function(next){
       store.ready(function(){
         var Post = store.Model('Post');
         Post.find(1, 2).destroyAll(function(success){
@@ -93,8 +93,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
-    it('destroys multiple records', function(next){ 
+
+    it('destroys multiple records', function(next){
       store.ready(function(){
         var Post = store.Model('Post');
         Post.find(3, 4).deleteAll(function(success){
@@ -103,8 +103,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
-    it('destroys multiple records', function(next){ 
+
+    it('destroys multiple records', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.where({id_gt:2}).destroy().then(function(result){
@@ -112,35 +112,35 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
-    it('calls onReject method on error', function(next){ 
+
+    it('calls onReject method on error', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.where('foo=blaa').exec(function(result){
-          
+
         }, function(error){
           next();
         });
       });
     });
- 
-    
-    it('calls onReject methods on error', function(next){ 
+
+
+    it('calls onReject methods on error', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.where('foo=blaa').exec(function(result){
-          
+
         }, function(error){
-          
+
         }).then(null, function(error){
           error.should.be.instanceOf(Store.SQLError);
           next();
         });
       });
     });
-    
-    
-    it('calls catch method on error', function(next){ 
+
+
+    it('calls catch method on error', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.where('foo=blaa').exec().catch(function(error){
@@ -149,9 +149,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
-    
-    it('calls catch with exec() first', function(next){ 
+
+
+    it('calls catch with exec() first', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.where('foo=blaa').exec(function(result){
@@ -161,9 +161,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
-    
-    it('catches only SQLError', function(next){ 
+
+
+    it('catches only SQLError', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.where('foo=blaa').catch(Store.RecordNotFoundError, function(error){
@@ -174,8 +174,8 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
-    it('catches only Store.SQLError', function(next){ 
+
+    it('catches only Store.SQLError', function(next){
       store.ready(function(){
         var User = store.Model('User');
         User.where('foo=blaa').catch(Store.RecordNotFoundError, function(error){
@@ -186,9 +186,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
-    
-    it('create multiple records', function(next){ 
+
+
+    it('create multiple records', function(next){
       store.ready(function(){
         var Post = store.Model('Post');
         Post.create({message:'first promise'}).then(function(){
@@ -203,9 +203,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
-    
-    it('create multiple records with an validation error', function(next){ 
+
+
+    it('create multiple records with an validation error', function(next){
       store.ready(function(){
         var Post = store.Model('Post');
         Post.create({message:'first pro_mise'}).then(function(){
@@ -220,9 +220,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
-    
-    it('create multiple records with all()', function(next){ 
+
+
+    it('create multiple records with all()', function(next){
       store.ready(function(){
         var Post = store.Model('Post');
         Post.all([
@@ -234,12 +234,12 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           results[1].should.be.true;
           results[2].should.be.true;
           return Post.where({message_like: 'element'}).exec();
-        }).then(function(posts){          
+        }).then(function(posts){
           posts.length.should.be.equal(3);
           next();
         });
       });
     });
-    
+
   });
 };

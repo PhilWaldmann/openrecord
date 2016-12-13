@@ -3,20 +3,20 @@ var Store = require('../../../lib/store');
 
 
 module.exports = function(title, beforeFn, afterFn, store_conf){
-  
+
   describe(title + ': Destroy dependent', function(){
     var store;
-  
+
     before(beforeFn);
     after(function(next){
       afterFn(next, store);
     });
-  
-  
+
+
     before(function(){
       store = new Store(store_conf);
       store.setMaxListeners(0);
-      
+
       store.Model('User', function(){
         this.hasMany('posts');
         this.hasMany('threads');
@@ -42,80 +42,80 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         this.belongsTo('member', {polymorph: true});
       });
     });
-    
-  
-    it('destroy hasMany', function(next){ 
+
+
+    it('destroy hasMany', function(next){
       store.ready(function(){
         var Thread = store.Model('Thread');
         var Post = store.Model('Post');
-        
-        Thread.find(1, function(thread){   
+
+        Thread.find(1, function(thread){
           thread.destroy(function(result){
             result.should.be.equal(true);
-            
+
             Post.find([1, 2], function(posts){
               posts.length.should.be.equal(1);
               posts[0].id.should.be.equal(1);
               next();
             });
-          });                 
-        });          
+          });
+        });
       });
     });
-    
-    
-    it('destroy belongsTo', function(next){ 
+
+
+    it('destroy belongsTo', function(next){
       store.ready(function(){
         var Thread = store.Model('Thread');
         var Post = store.Model('Post');
-        
-        Post.find(3, function(post){   
+
+        Post.find(3, function(post){
           post.destroy(function(result){
             result.should.be.equal(true);
-            
+
             Thread.find(2, function(thread){
               should.not.exist(thread);
               next();
             });
-          });                 
-        });          
+          });
+        });
       });
     });
-    
-    
-    it('destroy belongsTo with failing relation destroy', function(next){ 
+
+
+    it('destroy belongsTo with failing relation destroy', function(next){
       store.ready(function(){
         var Thread = store.Model('Thread');
         var Post = store.Model('Post');
-        
-        Post.find(5, function(post){   
+
+        Post.find(5, function(post){
           post.destroy(function(result){
             result.should.be.equal(false);
             next();
-          });                 
-        });          
+          });
+        });
       });
     });
-        
-    
-    
-    it('destroy polymorph hasMany', function(next){ 
+
+
+
+    it('destroy polymorph hasMany', function(next){
       store.ready(function(){
         var PolyThing = store.Model('PolyThing');
         var Post = store.Model('Post');
-        
+
         Post.find(6, function(post){
           post.destroy(function(result){
             result.should.be.equal(true);
-            
+
             PolyThing.find([1, 2], function(poly_things){
               poly_things.length.should.be.equal(1);
               next();
             });
-          });                 
-        });          
+          });
+        });
       });
     });
-    
+
   });
 };

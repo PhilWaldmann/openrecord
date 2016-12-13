@@ -3,7 +3,6 @@ sudo: false
 node_js:
   - "0.10"
   - "4"
-  - "5"
   - "6"
 addons:
   postgresql: "9.4"

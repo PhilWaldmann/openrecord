@@ -6,7 +6,7 @@ global.beforeMYSQL = function(db, sql, next){
       exec('mysql ' + db + ' -e "' + sql.join(';') + '" -u travis', function(err, result){
         if(err) throw new Error(err);
         next();
-      });    
+      });
     });
   });
 };
@@ -18,13 +18,13 @@ global.afterMYSQL = function(db, next){
 global.testMYSQL = function(name, queries){
   var db = name.replace('/', '_') + '_test';
   require('../__shared/' + name + '-test')(
-    'SQL (MySQL)', 
+    'SQL (MySQL)',
     function(next){
       beforeMYSQL(db, queries, next);
     },
     function(next, store){
       store.close(function(){
-        
+
       });
       afterMYSQL(db, next);
     },

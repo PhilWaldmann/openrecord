@@ -9,48 +9,48 @@ describe('validatesFormatOf()', function(){
 
   store.Model('User', function(){
     this.attribute('mail', String);
-    this.validatesFormatOf('mail', 'email');  
+    this.validatesFormatOf('mail', 'email');
   });
 
-  var User, valid, invalid;  
+  var User, valid, invalid;
   before(function(next){
     store.ready(function(){
-      
+
       User = store.Model('User');
       valid = new User({mail:'philipp@email.com'});
       invalid = new User({mail:'not.a.valid@email!'});
-      
+
       next();
     });
   });
-  
-  
-  
+
+
+
   it('returns true on valid records', function(done){
     valid.isValid(function(valid){
       valid.should.be.true;
       done();
     });
   });
-  
+
   it('returns false on invalid records', function(done){
     invalid.isValid(function(valid){
       valid.should.be.false;
       done();
     });
-  });   
-  
+  });
+
   it('returns the right error message', function(done){
     invalid.isValid(function(valid){
       invalid.errors.should.have.property('mail');
       done();
     });
   });
-  
+
   'url', 'ip', 'uuid', 'date', null, /test.*/
-  
+
   describe('with multiple params', function(){
-    
+
     var store = new Store();
 
     store.Model('User', function(){
@@ -62,20 +62,20 @@ describe('validatesFormatOf()', function(){
       this.attribute('created_at', String);
       this.attribute('blocked_at', String);
       this.attribute('first_name', String);
-      
-      this.validatesFormatOf(['email', 'login'], 'email');  
-      this.validatesFormatOf('user_url', 'url');  
-      this.validatesFormatOf('user_ip', 'ip');  
-      this.validatesFormatOf('user_uuid', 'uuid');  
-      this.validatesFormatOf('created_at', 'date'); 
-      this.validatesFormatOf('blocked_at', null);   
-      this.validatesFormatOf('first_name', '(P|p)hil.*');  
+
+      this.validatesFormatOf(['email', 'login'], 'email');
+      this.validatesFormatOf('user_url', 'url');
+      this.validatesFormatOf('user_ip', 'ip');
+      this.validatesFormatOf('user_uuid', 'uuid');
+      this.validatesFormatOf('created_at', 'date');
+      this.validatesFormatOf('blocked_at', null);
+      this.validatesFormatOf('first_name', '(P|p)hil.*');
     });
 
     var User, valid, invalid;
     before(function(next){
       store.ready(function(){
-      
+
         User = store.Model('User');
         valid = new User({
           email:'philipp@email.com',
@@ -97,27 +97,27 @@ describe('validatesFormatOf()', function(){
           blocked_at: '2014-02-01',
           first_name: 'Alex'
         });
-      
+
         next();
       });
     });
 
-      
-  
+
+
     it('returns true on valid records', function(done){
       valid.isValid(function(valid){
         valid.should.be.true;
         done();
       });
     });
-  
+
     it('returns false on invalid records', function(done){
       invalid.isValid(function(valid){
         valid.should.be.false;
         done();
       });
-    });   
-  
+    });
+
     it('returns the right error message', function(done){
       invalid.isValid(function(valid){
         invalid.errors.should.have.property('email');
@@ -130,7 +130,7 @@ describe('validatesFormatOf()', function(){
         done();
       });
     });
-    
+
   });
-  
+
 });

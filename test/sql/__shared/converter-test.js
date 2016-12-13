@@ -3,40 +3,40 @@ var Store = require('../../../lib/store');
 
 
 module.exports = function(title, beforeFn, afterFn, store_conf){
-  
+
   describe(title + ': Converter', function(){
     var store;
-  
+
     before(beforeFn);
     after(function(next){
       afterFn(next, store);
     });
-  
-  
+
+
     before(function(){
       store = new Store(store_conf);
       store.setMaxListeners(0);
-      
+
       store.Model('User', function(){
         this.convertRead('my_blob', function(value){
           return value.toUpperCase();
         });
-        
+
         this.convertWrite('my_integer', function(value){
           return value * 100;
         });
-        
+
         this.convertOutput('my_real', function(value){
           return value > 10.0 ? 'BIG' : 'SMALL';
         }, false)
-        
+
       });
     });
 
-    
-    
+
+
     it('convertRead() converts the value', function(done){
-      store.ready(function(){    
+      store.ready(function(){
         var User = store.Model('User');
 
         User.find(1).exec(function(user){
@@ -45,10 +45,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-  
-  
+
+
     it('convertWrite() converts the value', function(done){
-      store.ready(function(){    
+      store.ready(function(){
         var User = store.Model('User');
 
         User.create({
@@ -61,10 +61,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
-    
+
+
     it('convertOutput() converts the value and overwrites the original type', function(done){
-      store.ready(function(){    
+      store.ready(function(){
         var User = store.Model('User');
 
         User.find(1).exec(function(user){
@@ -73,9 +73,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-    
+
     it('convertOutput() does not change the original value', function(done){
-      store.ready(function(){    
+      store.ready(function(){
         var User = store.Model('User');
 
         User.find(1).exec(function(user){
@@ -84,7 +84,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
     });
-  
+
   });
-  
+
 }

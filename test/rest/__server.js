@@ -24,10 +24,10 @@ before(function(ready){
     file: database
   });
   store.setMaxListeners(0);
-  
+
   store.Model('User', function(){
     this.hasMany('posts');
-    this.hasMany('threads');      
+    this.hasMany('threads');
   });
   store.Model('Post', function(){
     this.belongsTo('user');
@@ -37,7 +37,7 @@ before(function(ready){
     this.belongsTo('user');
     this.hasMany('posts');
   });
-  
+
   store.ready(ready);
 });
 
@@ -54,17 +54,17 @@ before(function(ready){
     name: 'openrecord',
     version: '1.0.0'
   });
-  
+
   var User = store.Model('User');
   var Post = store.Model('Post');
-  
-  
-  
+
+
+
   server.use(restify.acceptParser(server.acceptable));
   server.use(restify.queryParser());
   server.use(restify.bodyParser());
 
-  
+
   // USERS
   server.get('/users', function (req, res, next) {
     User.where(req.params).exec(function(users){
@@ -74,8 +74,8 @@ before(function(ready){
       next();
     });
   });
-  
-  
+
+
   server.get('/users/:id', function (req, res, next) {
     User.find(req.params.id).exec(function(user){
       res.send({
@@ -84,8 +84,8 @@ before(function(ready){
       next();
     });
   });
-  
-  
+
+
   server.put('/users/:id', function (req, res, next) {
     User.find(req.params.id).exec(function(user){
       if(user){
@@ -105,8 +105,8 @@ before(function(ready){
       }
     });
   });
-  
-  
+
+
   server.post('/users', function (req, res, next) {
     User.create(req.params.data, function(success){
       res.send({
@@ -116,8 +116,8 @@ before(function(ready){
       next();
     });
   });
-  
-  
+
+
   server.del('/users/:id', function (req, res, next) {
     User.find(req.params.id).exec(function(user){
       if(user){
@@ -136,9 +136,9 @@ before(function(ready){
       }
     });
   });
-  
-  
-  
+
+
+
   // POSTS
   server.get('/posts', function (req, res, next) {
     Post.where(req.params).exec(function(posts){
@@ -148,8 +148,8 @@ before(function(ready){
       next();
     });
   });
-  
-  
+
+
   server.get('/posts/:id', function (req, res, next) {
     Post.find(req.params.id).exec(function(post){
       res.send({
@@ -158,8 +158,8 @@ before(function(ready){
       next();
     });
   });
-  
-  
+
+
   server.put('/posts/:id', function (req, res, next) {
     Post.find(req.params.id).exec(function(post){
       if(post){
@@ -179,8 +179,8 @@ before(function(ready){
       }
     });
   });
-  
-  
+
+
   server.post('/posts', function (req, res, next) {
     Post.create(req.params.data, function(success){
       res.send({
@@ -190,8 +190,8 @@ before(function(ready){
       next();
     });
   });
-  
-  
+
+
   server.del('/posts/:id', function (req, res, next) {
     Post.find(req.params.id).exec(function(post){
       if(post){

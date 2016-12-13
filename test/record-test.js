@@ -6,10 +6,10 @@ describe('Record: Base', function(){
   var store = new Store();
 
   store.Model('User', function(){
-    
+
   });
   var User, phil;
-  
+
   before(function(){
     User = store.Model('User');
     phil = new User({
@@ -25,11 +25,11 @@ describe('Record: Base', function(){
     should.exist(phil.validate);
     phil.validate.should.be.a.Function;
   });
-  
+
   it('has definition', function(){
     should.exist(phil.definition);
   });
-  
+
   it('has correct model name', function(){
     phil.model.should.be.equal(User);
   });

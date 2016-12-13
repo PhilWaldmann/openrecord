@@ -5,9 +5,9 @@ var Store = require('../../../lib/store');
 describe('Postgres: belongsToMany()', function(){
   var store;
   var database = 'belongs_to_many_test';
-  
-  
-  
+
+
+
   before(function(next){
     this.timeout(5000);
     beforePG(database, [
@@ -17,7 +17,7 @@ describe('Postgres: belongsToMany()', function(){
       "INSERT INTO folders(name) VALUES('A'), ('B'), ('C'), ('D')"
     ], next);
   });
-  
+
   before(function(){
     store = new Store({
       host: 'localhost',
@@ -30,19 +30,19 @@ describe('Postgres: belongsToMany()', function(){
     store.Model('User', function(){
       this.belongsToMany('folders');
     });
-    
+
     store.Model('Folder', function(){
-      
+
     });
-    
+
     store.setMaxListeners(0);
   });
-  
+
   after(function(next){
-    afterPG(database, next);   
+    afterPG(database, next);
   });
-      
-  
+
+
   it('does have a proper relation definition', function(next){
     store.ready(function(){
       var User = store.Model('User');
@@ -74,9 +74,9 @@ describe('Postgres: belongsToMany()', function(){
       });
     });
   });
-  
-  
-  
+
+
+
   it('does join a belongs_to_many relation', function(next){
     store.ready(function(){
       var User = store.Model('User');
@@ -96,5 +96,5 @@ describe('Postgres: belongsToMany()', function(){
       });
     });
   });
-  
+
 });

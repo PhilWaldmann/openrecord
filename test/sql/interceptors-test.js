@@ -4,13 +4,13 @@ var Store = require('../../lib/store');
 
 describe('SQL: Interceptors', function(){
   var store = new Store({
-    type: 'sql'    
+    type: 'sql'
   });
-  
+
   store.Model('User', function(){
     var self = this;
-    
-    
+
+
     it('has beforeCreate()', function(){
       should.exist(self.beforeCreate);
       self.beforeCreate.should.be.a.Function;
@@ -20,8 +20,8 @@ describe('SQL: Interceptors', function(){
       should.exist(self.afterCreate);
       self.afterCreate.should.be.a.Function;
     });
-    
-      
+
+
     it('has beforeUpdate()', function(){
       should.exist(self.beforeUpdate);
       self.beforeUpdate.should.be.a.Function;
@@ -70,6 +70,6 @@ describe('SQL: Interceptors', function(){
       should.exist(self.beforeValidation);
       self.beforeValidation.should.be.a.Function;
     });
-  
+
   });
 });

@@ -4,9 +4,9 @@ var async = require('async');
 
 global.beforeSQLite = function(file, sql, next){
   afterSQLite(file);
-  
+
   db = new sqlite.Database(file);
-  
+
   var tmp = [];
   for(var i in sql){
     (function(sql){
@@ -15,7 +15,7 @@ global.beforeSQLite = function(file, sql, next){
       });
     })(sql[i]);
   }
-  
+
   async.series(tmp, next);
 };
 
@@ -26,9 +26,9 @@ global.afterSQLite = function(file){
 
 global.testSQLite = function(name, queries){
   var db = name.replace('/', '_') + '_test';
-  
+
   require('../__shared/' + name + '-test')(
-    'SQL (SQLite3)', 
+    'SQL (SQLite3)',
     function(next){
       beforeSQLite(db, queries, next);
     },

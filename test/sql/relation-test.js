@@ -3,19 +3,19 @@ var should = require('should');
 var Store = require('../../lib/store');
 
 describe('SQL: Relations', function(){
-  var store;  
-  
+  var store;
+
   before(function(){
     store = new Store({
       type: 'sql',
-      name: 'MyStore'  
+      name: 'MyStore'
     });
-  
+
     store2 = new Store({
       type: 'sql',
-      name: 'MyStore2' 
+      name: 'MyStore2'
     });
-  
+
     store.Model('User', function(){
       this.attribute('id', Number, {primary: true});
       this.hasMany('posts');
@@ -31,29 +31,29 @@ describe('SQL: Relations', function(){
       this.belongsTo('bar', {model:'Foo'});
       this.belongsTo('bazinga', {model:'Baz'});
     });
-  
+
     store.Model('Foo', function(){
       this.attribute('id', Number, {primary: true});
       this.attribute('user_id', Number);
     });
-  
+
     store.Model('Baz', function(){
       this.attribute('id', Number, {primary: true});
     });
-    
-    
-    
-    
-    
+
+
+
+
+
     store2.Model('User', function(){
       this.attribute('id', Number, {primary: true});
       this.attribute('user_id', Number);
-      
+
       this.belongsTo('user', {store:'MyStore'});
     });
   });
-  
-  
+
+
   it('hasMany() has the right foreign key', function(next){
     store.ready(function(){
       var User = store.Model('User');
@@ -61,7 +61,7 @@ describe('SQL: Relations', function(){
       next();
     });
   });
-  
+
   it('hasMany() has the right primary key', function(next){
     store.ready(function(){
       var User = store.Model('User');
@@ -69,7 +69,7 @@ describe('SQL: Relations', function(){
       next();
     });
   });
-  
+
   it('hasMany() with custom model has the right foreign key', function(next){
     store.ready(function(){
       var User = store.Model('User');
@@ -77,7 +77,7 @@ describe('SQL: Relations', function(){
       next();
     });
   });
-  
+
   it('hasMany() with custom model has the right primary key', function(next){
     store.ready(function(){
       var User = store.Model('User');
@@ -85,7 +85,7 @@ describe('SQL: Relations', function(){
       next();
     });
   });
-  
+
   it('belongsTo() has the right foreign key', function(next){
     store.ready(function(){
       var Post = store.Model('Post');
@@ -93,7 +93,7 @@ describe('SQL: Relations', function(){
       next();
     });
   });
-  
+
   it('belongsTo() has the right primary key', function(next){
     store.ready(function(){
       var Post = store.Model('Post');
@@ -101,7 +101,7 @@ describe('SQL: Relations', function(){
       next();
     });
   });
-  
+
   it('belongsTo() with custom model has the right foreign key', function(next){
     store.ready(function(){
       var Post = store.Model('Post');
@@ -109,7 +109,7 @@ describe('SQL: Relations', function(){
       next();
     });
   });
-  
+
   it('belongsTo() with custom model has the right primary key', function(next){
     store.ready(function(){
       var Post = store.Model('Post');
@@ -117,7 +117,7 @@ describe('SQL: Relations', function(){
       next();
     });
   });
-  
+
   it('belongsTo() with custom model and same field name has the right foreign key', function(next){
     store.ready(function(){
       var Post = store.Model('Post');
@@ -125,7 +125,7 @@ describe('SQL: Relations', function(){
       next();
     });
   });
-  
+
   it('belongsTo() with custom model and same field name has the right primary key', function(next){
     store.ready(function(){
       var Post = store.Model('Post');
@@ -133,7 +133,7 @@ describe('SQL: Relations', function(){
       next();
     });
   });
-  
+
   it('belongsTo() with cross store relation', function(next){
     store.ready(function(){
       var User = store.Model('User');
@@ -142,7 +142,7 @@ describe('SQL: Relations', function(){
       next();
     });
   });
-  
+
   it('belongsTo() with cross store relation from the other side', function(next){
     store.ready(function(){
       var User = store.Model('User');
@@ -151,51 +151,51 @@ describe('SQL: Relations', function(){
       next();
     });
   });
-  
-  
+
+
   it('should not create a relation if the store is not available', function(next){
     var tmp = new Store({
       type: 'sql'
     });
-  
+
     tmp.Model('Foo', function(){
       this.belongsTo('bar', {store:'UNKNOWN'});
     });
-    
+
     tmp.ready(function(){
       var Foo = tmp.Model('Foo')
       should.not.exists(Foo.definition.relations.bar);
       next();
     })
-    
+
   });
-  
-  
+
+
   it('should wait until the requested store is available', function(next){
     var tmp = new Store({
       type: 'sql'
     });
-  
+
     tmp.Model('Foo', function(){
       this.belongsTo('bar', {store:'OTHER'});
     });
-    
+
     var tmp2 = new Store({
       type: 'sql',
       name: 'OTHER'
     });
-    
+
     tmp2.Model('Bar', function(){});
-    
-    
+
+
     tmp.ready(function(){
       var Foo = tmp.Model('Foo')
       process.nextTick(function(){
         should.exists(Foo.definition.relations.bar);
         next();
       });
-    });    
-    
+    });
+
   });
-  
+
 });

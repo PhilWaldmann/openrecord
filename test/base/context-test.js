@@ -9,25 +9,25 @@ describe('Context', function(){
 
   store.Model('User', function(){
     this.attribute('login', String);
-    
+
     this.hasMany('posts');
-    
+
     this.beforeValidation(function(){
       //In the record scope (this == record)
       this.context.should.be.eql(my_context);
       this.validate.should.be.a.Function;
     });
   });
-  
+
   store.Model('Post', function(){
     this.attribute('message', String);
-    
+
     this.beforeValidation(function(){
       //In the record scope (this == record)
       this.context.should.be.eql(my_context);
     });
   });
-  
+
   var User;
   before(function(next){
     store.ready(function(){
@@ -37,7 +37,7 @@ describe('Context', function(){
   });
 
   describe('setContext()', function(){
-  
+
     it('has method', function(){
       User.setContext.should.be.a.Function;
     });
@@ -47,7 +47,7 @@ describe('Context', function(){
       ChainedModel.should.not.be.eql(User);
       ChainedModel.should.be.an.instanceof(Array);
     });
-    
+
     it('has the right context on record scope', function(next){
       var phil = User.setContext(my_context).new({login: 'phil'});
       phil.isValid(function(){
@@ -58,13 +58,13 @@ describe('Context', function(){
     it('has the right context on model scope', function(){
       User.setContext(my_context).context.should.be.equal(my_context);
     });
-    
-    
+
+
     it('does not change the context', function(){
       User.setContext(my_context).new({login: 'phil'});
       my_context.should.be.eql({foo:'bar'});
     });
-    
+
     it('passes the context to relational objects', function(){
       var user = User.setContext(my_context).new({login: 'phil', posts:[{message:'test'}]});
       my_context.should.be.eql({foo:'bar'});
@@ -76,4 +76,3 @@ describe('Context', function(){
   });
 
 });
-

@@ -3,16 +3,16 @@ var Store = require('../../../lib/store');
 
 
 module.exports = function(title, beforeFn, afterFn, store_conf){
-  
+
   describe(title + ': Aggregate Functions', function(){
     var store;
-  
+
     before(beforeFn);
     after(function(next){
       afterFn(next, store);
     });
-  
-  
+
+
     before(function(){
       store = new Store(store_conf);
       store.setMaxListeners(0);
@@ -22,10 +22,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
       store.Model('Post', function(){});
     });
-  
-        
-  
-  
+
+
+
+
     describe('count()', function(){
       it('returns the right sql', function(next){
         store.ready(function(){
@@ -34,9 +34,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             sql.should.be.equal('select count("salary") as "count" from "users"');
             next();
           })
-        });      
+        });
       });
-    
+
       it('returns the right result', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -44,9 +44,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(5);
             next();
           });
-        });      
+        });
       });
-    
+
       it('returns the right result without a param (*)', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -54,9 +54,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(5);
             next();
           });
-        });      
+        });
       });
-    
+
       it('works with conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -64,9 +64,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(1);
             next();
           });
-        });      
+        });
       });
-      
+
       it('works with joins', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -74,12 +74,12 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(7);
             next();
           });
-        });      
+        });
       });
     });
-  
-  
-  
+
+
+
     describe('sum()', function(){
       it('returns the right sql', function(next){
         store.ready(function(){
@@ -88,9 +88,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             sql.should.be.equal('select sum("salary") as "sum" from "users"');
             next();
           })
-        });      
+        });
       });
-    
+
       it('returns the right result', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -98,9 +98,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(2000);
             next();
           });
-        });      
+        });
       });
-    
+
       it('works with conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -108,9 +108,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(1000);
             next();
           });
-        });      
+        });
       });
-      
+
       it('works with joins', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -118,12 +118,12 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(2200);
             next();
           });
-        });      
+        });
       });
     });
-  
-  
-  
+
+
+
     describe('max()', function(){
       it('returns the right sql', function(next){
         store.ready(function(){
@@ -132,9 +132,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             sql.should.be.equal('select max("salary") as "max" from "users"');
             next();
           })
-        });      
+        });
       });
-    
+
       it('returns the right result', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -142,9 +142,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(1000);
             next();
           });
-        });      
+        });
       });
-    
+
       it('works with conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -152,9 +152,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(1000);
             next();
           });
-        });      
+        });
       });
-      
+
       it('works with joins', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -162,12 +162,12 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(1000);
             next();
           });
-        });      
+        });
       });
     });
-  
-  
-  
+
+
+
     describe('min()', function(){
       it('returns the right sql', function(next){
         store.ready(function(){
@@ -176,9 +176,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             sql.should.be.equal('select min("salary") as "min" from "users"');
             next();
           })
-        });      
+        });
       });
-    
+
       it('returns the right result', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -186,9 +186,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(100);
             next();
           });
-        });      
+        });
       });
-    
+
       it('works with conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -196,9 +196,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(1000);
             next();
           });
-        });      
+        });
       });
-      
+
       it('works with joins', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -206,11 +206,11 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(100);
             next();
           });
-        });      
+        });
       });
     });
-  
-  
+
+
     /* not yet supported by knex
     describe('avg()', function(){
       it('returns the right sql', function(next){
@@ -220,9 +220,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             sql.should.be.equal('select avg("salary") as "avg" from "users"');
             next();
           })
-        });      
+        });
       });
-    
+
       it('returns the right result', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -230,9 +230,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(400);
             next();
           });
-        });      
+        });
       });
-    
+
       it('works with conditions', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -240,9 +240,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(700);
             next();
           });
-        });      
+        });
       });
-      
+
       it('works with joins', function(next){
         store.ready(function(){
           var User = store.Model('User');
@@ -250,11 +250,11 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             result.should.be.equal(400);
             next();
           });
-        });      
+        });
       });
     });
     */
-  
+
   });
-  
+
 };

@@ -4,17 +4,17 @@ var Store = require('../../lib/store');
 
 describe('SQL: Table Name', function(){
   var store;
-  
+
   before(function(){
     store = new Store({
-      type: 'sql'    
+      type: 'sql'
     });
-  
+
     store.Model('User', function(){});
     store.Model('CamelCasedTableName', function(){});
   });
-  
-  
+
+
   it('has the right table name', function(next){
     store.ready(function(){
       var User = store.Model('User');
@@ -22,7 +22,7 @@ describe('SQL: Table Name', function(){
       next();
     });
   });
-  
+
   it('has the right table name on camelcased models', function(next){
     store.ready(function(){
       var CamelCasedTableName = store.Model('CamelCasedTableName');
@@ -30,7 +30,7 @@ describe('SQL: Table Name', function(){
       next();
     });
   });
-  
+
   it('returns a model by it\'s table name', function(next){
     store.ready(function(){
       var CamelCasedTableName = store.getByTableName('camel_cased_table_names');
@@ -38,5 +38,5 @@ describe('SQL: Table Name', function(){
       next();
     });
   })
-  
+
 });
