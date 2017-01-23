@@ -197,7 +197,7 @@ before(function(done){
     }
 
     if(req.newSuperior){
-      if(!db[req.newSuperior.toString()]){
+      if(!db[req.newSuperior.toString().replace(/, /g, ',')]){
         return next(new ldap.NoSuchObjectError(req.newSuperior.toString()));
       }
 
@@ -229,7 +229,6 @@ before(function(done){
       switch (req.changes[i].operation) {
       case 'replace':
         if (!entry[mod.type]){
-          console.log('REPLACE', req.changes[i].json);
           return next(new ldap.NoSuchAttributeError(mod.type));
         }
 
@@ -278,7 +277,7 @@ before(function(done){
 
     switch (req.scope) {
     case 'base':
-      if (req.filter.matches(db[dn])) {
+      if (db[dn] && Object.keys(db[dn]).length > 0 && req.filter.matches(db[dn])) {
         res.send({
           dn: dn,
           attributes: db[dn]
@@ -308,8 +307,8 @@ before(function(done){
 
     Object.keys(db).forEach(function (key) {
 
-      if (!scopeCheck(key))
-        return;
+      if (!scopeCheck(key)) return;
+      if(!db[key] || Object.keys(db[key]).length === 0) return;
 
       if (req.filter.matches(db[key])) {
         res.send({

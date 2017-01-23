@@ -12,18 +12,18 @@ test-cov:
 
 test-coveralls:
 	./node_modules/.bin/mocha --require blanket --recursive --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
-	
+
 docs:
 	rm -rf wiki
 	git clone git@github.com:PhilWaldmann/openrecord.wiki.git wiki
 	./node_modules/.bin/docu --input documentation/Home.md --output wiki/Home.md "./lib/**/*.js" "./examples/**/*.js"
 	cp documentation/_Sidebar.md wiki/_Sidebar.md
-	
-push-docs: 
+
+push-docs:
 	git -C wiki/ add -A
 	git -C wiki/ commit -m 'auto update'
 	git -C wiki/ push
 	rm -rf wiki
-	
-clean: 
+
+clean:
 	rm coverage.html
