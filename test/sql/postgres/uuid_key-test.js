@@ -42,9 +42,8 @@ describe('Postgres: UUID Key', function(){
       var test = new UuidTest({ another_column: 'i am setting uuid' })
 
       test.save(function (success) {
-        console.log(success, test, test.errors)
         should.exist(test.id)
-        success.should.be.true
+        success.should.be.true()
         next();
       })
     });
