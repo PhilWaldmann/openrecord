@@ -20,6 +20,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.Model('User', function(){
         this.hasMany('posts');
         this.hasMany('threads');
+        this.attribute('foo', Number)
       });
       store.Model('Post', function(){
         this.belongsTo('user');
@@ -85,6 +86,28 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       });
     });
 
+    it('returns renamed field with predefined attribute', function(done){
+      store.ready(function(){
+        var User = store.Model('User');
+
+        User.find(1).select('id as foo').exec(function(user){
+          user.foo.should.be.equal(1);
+          done();
+        });
+      });
+    });
+
+
+    it('returns renamed field as raw value', function(done){
+      store.ready(function(){
+        var User = store.Model('User');
+
+        User.find(1).select('id as bar').asRaw().exec(function(user){
+          user[0].bar.should.be.equal(1);
+          done();
+        });
+      });
+    });
   });
 
 }
