@@ -22,7 +22,7 @@ npm install openrecord
 ## Features
 
 * SQLite3, MySQL, Postgres, REST and LDAP (+ ActiveDirectory) support
-* Runs on Node v4 up to v8
+* Runs on Node v4 up to v6
 * Async schema definition: You could even change your model definition temporarily
 * Optional [Fibers](https://github.com/laverdet/node-fibers) support
 * Automatic field definition loading (SQL): You don't need to define your database fields twice! OpenRerecord will automatically load your schema definition
