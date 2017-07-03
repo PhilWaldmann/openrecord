@@ -1,7 +1,7 @@
 ![OpenRecord](logo.png)
 ==========
 
-[![Build Status](https://travis-ci.org/PhilWaldmann/openrecord.svg?branch=master)](https://travis-ci.org/PhilWaldmann/openrecord) 
+[![Build Status](https://travis-ci.org/PhilWaldmann/openrecord.svg?branch=master)](https://travis-ci.org/PhilWaldmann/openrecord)
 [![Coverage Status](http://coveralls.io/repos/PhilWaldmann/openrecord/badge.png)](https://coveralls.io/r/PhilWaldmann/openrecord)
 [![npm package version](http://badge.fury.io/js/openrecord.png)](https://npmjs.org/package/openrecord)
 [![Dependency Status](https://gemnasium.com/PhilWaldmann/openrecord.svg)](https://gemnasium.com/PhilWaldmann/openrecord)
@@ -22,7 +22,7 @@ npm install openrecord
 ## Features
 
 * SQLite3, MySQL, Postgres, REST and LDAP (+ ActiveDirectory) support
-* Runs on Node v0.10 up to v6
+* Runs on Node v4 up to v8
 * Async schema definition: You could even change your model definition temporarily
 * Optional [Fibers](https://github.com/laverdet/node-fibers) support
 * Automatic field definition loading (SQL): You don't need to define your database fields twice! OpenRerecord will automatically load your schema definition
@@ -45,7 +45,7 @@ npm install openrecord
   * paranoid: Soft delete of records
   * nested set: Build trees easily
   * sorted list: Don't worry about lists
-* ... with more than 1200 tests 
+* ... with more than 1200 tests
 
 
 
@@ -62,7 +62,7 @@ var sqlite = new OpenRecord({
 
 sqlite.Model('User', function(){
   this.hasMany('posts');
-    
+
   this.scope('active', function(){
     this.where({active: true});
   });
@@ -92,7 +92,7 @@ Hooks:
 ```js
 sqlite.Model('User', function(){
   this.hasMany('posts');
-    
+
   this.afterCreate(function(record, transaction, next){
     //send email
     next();
@@ -147,4 +147,4 @@ sqlite.ready(function(){
 ## Contributing
 
 If you've found a bug please report it via the [issues](https://github.com/PhilWaldmann/openrecord/issues) page. Please make sure to add a unit test with the bug report!
-Before submit pull request make sure all tests still passed. 
+Before submit pull request make sure all tests still passed.

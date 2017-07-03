@@ -47,6 +47,6 @@
         "postpublish": "make docs && make push-docs"
     },
     "engines": {
-        "node": ">=0.8.7"
+        "node": ">=4.0.0"
     }
 }

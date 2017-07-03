@@ -1,9 +1,9 @@
 language: node_js
 sudo: false
 node_js:
-  - "0.10"
   - "4"
   - "6"
+  - "8"
 addons:
   postgresql: "9.4"
 before_install:  psql --version
