@@ -42,7 +42,7 @@ describe('LDAP Client: Create', function(){
       var User = store.Model('User');
 
       User.create({dn:'cn=fifi, ou=create, dc=test', username: 'fifi', age: 35}, function(success){
-        success.should.be.true;
+        success.should.be.equal(true);
         User.find('cn=fifi, ou=create, dc=test').exec(function(user){
           user.username.should.be.equal('fifi');
           next();
@@ -69,7 +69,7 @@ describe('LDAP Client: Create', function(){
       }));
 
       ou.save(function(success){
-        success.should.be.true;
+        success.should.be.equal(true);
 
         Ou.find('ou=sub, ou=create, dc=test').include('children').exec(function(ou){
 

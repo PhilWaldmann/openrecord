@@ -1,6 +1,6 @@
 {
     "name": "openrecord",
-    "version": "1.11.1",
+    "version": "1.11.2",
     "description": "Active record like ORM for nodejs",
     "license": "MIT",
     "keywords": ["orm", "record", "sql", "sqlite3", "postgres", "pg", "mysql", "database", "activerecord", "promise", "rest", "restify", "nested set", "ldap", "activedirectory", "active directory", "ad"],

@@ -28,6 +28,10 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.Model('MultipleKey', function(){
         this.validatesUniquenessOf('name');
       });
+      store.Model('WithArray', function(){
+        this.validatesUniquenessOf(['login', 'email'])
+        .validatesFormatOf('email', /^[^@\s\;]+@[^@\s\;]+\.[^@\s\;]+$/)
+      });
       store.Model('WithScope', function(){
         this.validatesUniquenessOf('name', {scope: 'scope_id'});
       });
@@ -42,7 +46,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.create({
             login:'max'
           }, function(result){
-            result.should.be.false;
+            result.should.be.equal(false);
             next();
           });
         });
@@ -55,7 +59,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.find(1, function(phil){
             phil.login = 'max';
             phil.save(function(result){
-              result.should.be.false;
+              result.should.be.equal(false);
               next();
             });
           });
@@ -75,10 +79,25 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
 
           phil2.isValid(function(valid){
-            valid.should.be.false;
+            valid.should.be.equal(false);
             next();
           });
 
+        });
+      });
+
+      it('returns false on duplicate entries (create, with array syntax)', function(next){
+        store.ready(function(){
+          var WithArray = store.Model('WithArray');
+          var phil2 = WithArray.new({
+            login:'phil',
+            email: 'phil@mail.com'
+          });
+
+          phil2.isValid(function(valid){
+            valid.should.be.equal(false);
+            next();
+          });
         });
       });
 
@@ -91,7 +110,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
 
           phil2.isValid(function(valid){
-            valid.should.be.true;
+            valid.should.be.equal(true);
             next();
           });
 
@@ -107,7 +126,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
 
           phil2.isValid(function(valid){
-            valid.should.be.false;
+            valid.should.be.equal(false);
             next();
           });
 
@@ -124,7 +143,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
 
           phil2.isValid(function(valid){
-            valid.should.be.true;
+            valid.should.be.equal(true);
             next();
           });
 
@@ -142,7 +161,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
 
           phil.isValid(function(valid){
-            valid.should.be.false;
+            valid.should.be.equal(false);
             next();
           });
 
@@ -160,7 +179,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
 
           phil.isValid(function(valid){
-            valid.should.be.true;
+            valid.should.be.equal(true);
             next();
           });
 
@@ -178,7 +197,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
 
           phil.isValid(function(valid){
-            valid.should.be.false;
+            valid.should.be.equal(false);
             next();
           });
 
@@ -194,7 +213,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
 
           phil.isValid(function(valid){
-            valid.should.be.true;
+            valid.should.be.equal(true);
             next();
           });
 
@@ -212,7 +231,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
 
           phil.isValid(function(valid){
-            valid.should.be.false;
+            valid.should.be.equal(false);
             next();
           });
 
@@ -229,7 +248,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
 
           phil.isValid(function(valid){
-            valid.should.be.true;
+            valid.should.be.equal(true);
             next();
           });
 

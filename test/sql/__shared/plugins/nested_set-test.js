@@ -117,7 +117,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
           
           folder.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             
             Folder.find(3).withAllChildren(2).exec(function(folder){
 
@@ -150,7 +150,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           });
           
           folder.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             
             Folder.find(5).withAllChildren().exec(function(folder){
 
@@ -185,7 +185,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           folder.moveToChildOf(3); // => B
           
           folder.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             
             Folder.find(3).withAllChildren(2).order('lft').exec(function(folder){
               folder.children.length.should.be.equal(3);
@@ -212,7 +212,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           folder.moveToChildOf(4); // => B1
           
           folder.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             
             Folder.find(4).withAllChildren().order('lft').exec(function(folder){
               folder.children.length.should.be.equal(2);
@@ -234,7 +234,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         Folder.find(1).exec(function(folder){ // => A
           
           folder.destroy(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             
             Folder.order('lft').exec(function(folders){
               folders.length.should.be.equal(7);
@@ -260,7 +260,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           folder.parent_id = 3;
           
           folder.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             
             Folder.order('lft').exec(function(folders){
 
@@ -297,7 +297,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           folder.parent_id = 0;
           
           folder.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             
             Folder.order('lft').exec(function(folders){
               
@@ -352,7 +352,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           folder.parent_id = 8;
           
           folder.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             
             Folder.order('lft').exec(function(folders){
               

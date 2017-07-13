@@ -76,7 +76,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.create({
             login: 'max'
           }, function(result){
-            result.should.be.false;
+            result.should.be.equal(false);
             next();
           });
         });
@@ -92,7 +92,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.create({
             login: 'find_inside'
           }, function(result){
-            result.should.be.true;
+            result.should.be.equal(true);
             next();
           });
         });
@@ -107,7 +107,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.create({
             login: 'maxi'
           }, function(result){
-            result.should.be.false;
+            result.should.be.equal(false);
 
             User.where({login:'maxi'}).count().exec(function(result){
               result.should.be.equal(0);
@@ -127,7 +127,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.create({
             login: '_max'
           }, function(result){
-            result.should.be.false;
+            result.should.be.equal(false);
             next();
           });
         });
@@ -142,7 +142,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.create({
             login: '_maxi'
           }, function(result){
-            result.should.be.false;
+            result.should.be.equal(false);
 
             User.where({login:'_maxi'}).count().exec(function(result){
               result.should.be.equal(0);
@@ -167,7 +167,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             email: 'my_mail@mail.com'
           }, function(result){
             this.login.should.be.equal('my_login');
-            result.should.be.true;
+            result.should.be.equal(true);
             next();
           });
         });
@@ -183,7 +183,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             email: 'my_mail@mail.com'
           }, function(result){
             this.login.should.be.equal('my_login2');
-            result.should.be.true;
+            result.should.be.equal(true);
             next();
           });
         });

@@ -201,6 +201,8 @@ testPG('updates', [
 testPG('validations', [
   'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
   "INSERT INTO users(login, email, created_at) VALUES('phil', 'phil@mail.com', '2014-01-05'), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', '2014-01-01')",
+  'CREATE TABLE with_arrays(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
+  "INSERT INTO with_arrays(login, email, created_at) VALUES('phil', 'phil@mail.com', '2014-01-05'), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', '2014-01-01')",
   'CREATE TABLE multiple_keys(id  INTEGER, id2 INTEGER, name TEXT, PRIMARY KEY(id, id2))',
   "INSERT INTO multiple_keys(id, id2, name) VALUES(1, 1, 'phil'), (1, 2, 'michl'), (2, 1, 'admin')",
   'CREATE TABLE with_scopes(id serial primary key, name TEXT, scope_id INTEGER)',

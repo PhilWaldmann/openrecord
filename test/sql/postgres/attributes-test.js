@@ -144,7 +144,7 @@ describe('Postgres: all Attributes', function(){
         time_attribute: now,
         hstore_attribute: {a:11, b:22, foo:{bar:['phil', 'michl']}}
       }, function(success){
-        success.should.be.true;
+        success.should.be.equal(true);
 
         AttributeTest.find(this.id).exec(function(record){
 
@@ -179,7 +179,7 @@ describe('Postgres: all Attributes', function(){
       AttributeTest.create({
         hstore_attribute: obj
       }, function(success){
-        success.should.be.true;
+        success.should.be.equal(true);
 
         AttributeTest.find(this.id).exec(function(record){
 
@@ -203,14 +203,14 @@ describe('Postgres: all Attributes', function(){
       AttributeTest.create({
         hstore_attribute: obj
       }, function(success){
-        success.should.be.true;
+        success.should.be.equal(true);
 
         AttributeTest.find(this.id).exec(function(record){
           record.hstore_attribute.should.be.eql(obj);
           record.hstore_attribute.b = false;
           record.hstore_attribute.foo.bar.push('foo');
           record.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             record.hstore_attribute.should.be.eql(after);
 
             AttributeTest.find(record.id).exec(function(record){

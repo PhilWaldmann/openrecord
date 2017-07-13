@@ -138,7 +138,7 @@ describe('SQL: Relations', function(){
     store.ready(function(){
       var User = store.Model('User');
       var User2 = store2.Model('User');
-      (User2.definition.relations.user.model === User).should.be.true;
+      (User2.definition.relations.user.model === User).should.be.equal(true);
       next();
     });
   });
@@ -147,7 +147,7 @@ describe('SQL: Relations', function(){
     store.ready(function(){
       var User = store.Model('User');
       var User2 = store2.Model('User');
-      (User.definition.relations.user.model === User2).should.be.true;
+      (User.definition.relations.user.model === User2).should.be.equal(true);
       next();
     });
   });

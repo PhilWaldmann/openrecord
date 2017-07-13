@@ -77,7 +77,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         var User = store.Model('User');
         User.find(2).exec(function(result){
           result.destroy().then(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             next();
           });
         });
@@ -88,7 +88,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.ready(function(){
         var Post = store.Model('Post');
         Post.find(1, 2).destroyAll(function(success){
-          success.should.be.true;
+          success.should.be.equal(true);
           next();
         });
       });
@@ -98,7 +98,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.ready(function(){
         var Post = store.Model('Post');
         Post.find(3, 4).deleteAll(function(success){
-          success.should.be.true;
+          success.should.be.equal(true);
           next();
         });
       });
@@ -230,9 +230,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           Post.create({message:'second element'}),
           Post.create({message:'third element'})
         ]).then(function(results){
-          results[0].should.be.true;
-          results[1].should.be.true;
-          results[2].should.be.true;
+          results[0].should.be.equal(true);
+          results[1].should.be.equal(true);
+          results[2].should.be.equal(true);
           return Post.where({message_like: 'element'}).exec();
         }).then(function(posts){
           posts.length.should.be.equal(3);

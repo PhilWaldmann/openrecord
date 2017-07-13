@@ -60,7 +60,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           user.posts.length.should.be.equal(3);
 
           user.posts.create({thread_id:1, message: 'another post'}, function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             this.id.should.be.equal(5);
             this.user_id.should.be.equal(user.id);
             next();
@@ -158,7 +158,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           thread.user = User.new({login:'new_user', email:'new_user@mail.com'});
 
           thread.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
 
             User.where({login: 'new_user'}).include('threads').limit(1).exec(function(user){
               user.email.should.be.equal('new_user@mail.com');
@@ -179,7 +179,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
 
           user.avatar = Avatar.new({url:'http://better-avatar.com/strong.png'});
           user.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             Avatar.where({url_like: 'better'}).include('user').limit(1).exec(function(avatar){
               avatar.url.should.be.equal('http://better-avatar.com/strong.png');
               avatar.user.id.should.be.equal(user.id);
@@ -200,7 +200,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           user.unread.add([1, 2]);
 
           user.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             User.find(1).include('unread').exec(function(phil){
               phil.unread.length.should.be.equal(3);
               next();
@@ -221,7 +221,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           user.unread.new({thread_id:3, user_id:3, message: 'unread message'});
 
           user.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             User.find(2).include('unread').exec(function(michl){
               michl.unread.length.should.be.equal(1);
               user.unread[0].attributes.user_id.should.be.equal(3);
@@ -244,7 +244,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           user.unread_ids = [1, 2];
 
           user.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             User.find(4).include('unread').exec(function(user){
               user.unread.length.should.be.equal(2);
               next();
@@ -283,7 +283,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           user.thread_ids = [1, 2];
 
           user.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             User.find(1).include('threads').exec(function(phil){
               phil.threads.length.should.be.equal(2);
               next();
@@ -318,7 +318,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           user.poly_things.new({message: 'foo'});
 
           user.save(function(success){
-            success.should.be.true;
+            success.should.be.equal(true);
             User.find(1).include('poly_things').exec(function(phil){
               phil.poly_things.length.should.be.equal(1);
               phil.poly_things[0].message.should.be.eql('foo');

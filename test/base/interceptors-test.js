@@ -106,7 +106,7 @@ describe('Interceptors', function(){
       phil = new User();
 
       phil.callInterceptors('beforeTest', ['A', 'B'], function(result){
-        result.should.be.false;
+        result.should.be.equal(false);
         done();
       });
     });
@@ -171,7 +171,7 @@ describe('Interceptors', function(){
       phil = new User();
 
       phil.callInterceptors('beforeTest', ['A'], function(result){
-        result.should.be.false;
+        result.should.be.equal(false);
         done();
       });
     });
@@ -209,7 +209,7 @@ describe('Interceptors', function(){
       phil = new User();
 
       phil.callInterceptors('beforeSuccessTest', ['arg1'], function(result){
-        result.should.be.true;
+        result.should.be.equal(true);
         done();
       });
     });
@@ -236,7 +236,7 @@ describe('Interceptors', function(){
       phil = new User();
 
       phil.callInterceptors('beforeTest', ['A'], function(result){
-        result.should.be.true;
+        result.should.be.equal(true);
         done();
       });
     });

@@ -34,7 +34,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.ready(function(){
         var User = store.Model('User');
         User.create({}, function(success){
-          success.should.be.true;
+          success.should.be.equal(true);
           should.exist(this.created_at);
           next();
         })
@@ -45,7 +45,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.ready(function(){
         var User = store.Model('User');
         User.create({}, function(success){
-          success.should.be.true;
+          success.should.be.equal(true);
           should.exist(this.updated_at);
           next();
         })
@@ -82,7 +82,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.ready(function(){
         var Post = store.Model('Post');
         Post.create({}, function(success){
-          success.should.be.true;
+          success.should.be.equal(true);
           this.creator_id.should.be.equal(2);
           next();
         });
@@ -93,7 +93,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.ready(function(){
         var Post = store.Model('Post');
         Post.create({}, function(success){
-          success.should.be.true;
+          success.should.be.equal(true);
           this.updater_id.should.be.equal(2);
           next();
         });

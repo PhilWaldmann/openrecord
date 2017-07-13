@@ -56,7 +56,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.find(1, function(phil){
             phil.login = 'max';
             phil.destroy(function(result){
-              result.should.be.false;
+              result.should.be.equal(false);
               next();
             });
           });
@@ -71,7 +71,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.find(1, function(phil){
             phil.login = 'maxi';
             phil.destroy(function(result){
-              result.should.be.false;
+              result.should.be.equal(false);
 
               User.find(1, function(phil){
                 should.exist(phil);

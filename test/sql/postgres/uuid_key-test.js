@@ -43,7 +43,7 @@ describe('Postgres: UUID Key', function(){
 
       test.save(function (success) {
         should.exist(test.id)
-        success.should.be.true()
+        success.should.be.equal(true)
         next();
       })
     });

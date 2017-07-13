@@ -40,7 +40,7 @@ describe('Postgres: Json/Jsonb Attributes', function(){
       var test = new JsonTest({ json_attr: {foo: {bar: [1, 2, 3]}} })
 
       test.save(function (success) {
-        success.should.be.true()
+        success.should.be.equal(true)
 
         JsonTest.find(test.id).exec(function(t){
           t.json_attr.should.be.eql({foo: {bar: [1, 2, 3]}})
@@ -56,7 +56,7 @@ describe('Postgres: Json/Jsonb Attributes', function(){
       var test = new JsonTest({ jsonb_attr: {foo: {bar: [1, 2, 3]}} })
 
       test.save(function (success) {
-        success.should.be.true()
+        success.should.be.equal(true)
 
         JsonTest.find(test.id).exec(function(t){
           t.jsonb_attr.should.be.eql({foo: {bar: [1, 2, 3]}})
@@ -75,7 +75,7 @@ describe('Postgres: Json/Jsonb Attributes', function(){
         test.json_attr.bar = 'test';
 
         test.save(function(success){
-          success.should.be.true()
+          success.should.be.equal(true)
 
           JsonTest.find(test.id).exec(function(t){
             t.json_attr.should.be.eql({foo: {bar: [1, 2, 3, 4]}, bar: 'test'})
@@ -93,7 +93,7 @@ describe('Postgres: Json/Jsonb Attributes', function(){
       var test = new JsonTest({ json_attr: {bar: 'foo'} })
 
       test.save(function (success) {
-        success.should.be.true()
+        success.should.be.equal(true)
 
         JsonTest.order('json_attr.bar').exec(function(result){
           result[0].json_attr.bar.should.be.equal('foo')

@@ -25,7 +25,7 @@ describe('REST Client: Destroy', function(){
       User.find(3).exec(function(record){
         record.id.should.be.equal(3);
         record.destroy(function(success){
-          success.should.be.true;
+          success.should.be.equal(true);
           next();
         });
       });

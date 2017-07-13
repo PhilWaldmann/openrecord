@@ -39,14 +39,14 @@ describe('Validation', function(){
 
     it('returns true on valid records', function(done){
       valid.isValid(function(valid){
-        valid.should.be.true;
+        valid.should.be.equal(true);
         done();
       });
     });
 
     it('returns false on invalid records', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
         done();
       });
     });
@@ -94,14 +94,14 @@ describe('Validation', function(){
 
       it('returns true on valid records', function(done){
         valid.isValid(function(valid){
-          valid.should.be.true;
+          valid.should.be.equal(true);
           done();
         });
       });
 
       it('returns false on invalid records', function(done){
         invalid.isValid(function(valid){
-          valid.should.be.false;
+          valid.should.be.equal(false);
           done();
         });
       });

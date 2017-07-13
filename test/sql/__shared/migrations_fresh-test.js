@@ -62,9 +62,9 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
       store.ready(function(){
         var User = store.Model('User');
 
-        User.definition.attributes.id.notnull.should.be.true;
-        User.definition.attributes.login.notnull.should.be.true;
-        User.definition.attributes.first_name.notnull.should.be.false;
+        User.definition.attributes.id.notnull.should.be.equal(true);
+        User.definition.attributes.login.notnull.should.be.equal(true);
+        User.definition.attributes.first_name.notnull.should.be.equal(false);
 
         next();
       });

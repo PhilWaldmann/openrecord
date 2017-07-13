@@ -255,7 +255,7 @@ describe('SQL: Helper', function(){
         result.length.should.be.equal(1);
         result[0].name_tree.should.be.eql([]);
         result[0].model.should.be.eql(User);
-        (result[0].value === null).should.be.true;
+        (result[0].value === null).should.be.equal(true);
         next();
       });
     });

@@ -37,7 +37,7 @@ describe('REST Client: Update', function(){
         record.id.should.be.equal(1);
         record.login = 'philipp';
         record.save(function(success){
-          success.should.be.true;
+          success.should.be.equal(true);
           next();
         });
       });
@@ -56,7 +56,7 @@ describe('REST Client: Update', function(){
         record.posts[0].message = 'michaels post';
 
         record.save(function(success){
-          success.should.be.true;
+          success.should.be.equal(true);
 
           User.find(2).include('posts').exec(function(record){
 

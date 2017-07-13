@@ -28,21 +28,21 @@ describe('validatesNumericalityOf()', function(){
 
     it('returns true on valid records', function(done){
       valid.isValid(function(valid){
-        valid.should.be.true;
+        valid.should.be.equal(true);
         done();
       });
     });
 
     it('returns false on invalid records', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
         done();
       });
     });
 
     it('returns the right error message', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
         invalid.errors.should.have.property('attr');
         done();
       });
@@ -73,21 +73,21 @@ describe('validatesNumericalityOf()', function(){
 
     it('returns true on valid records', function(done){
       valid.isValid(function(valid){
-        valid.should.be.true;
+        valid.should.be.equal(true);
         done();
       });
     });
 
     it('returns false on invalid records', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
         done();
       });
     });
 
     it('returns the right error message', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
         invalid.errors.should.have.property('attr');
         done();
       });
@@ -119,21 +119,21 @@ describe('validatesNumericalityOf()', function(){
 
     it('returns true on valid records', function(done){
       valid.isValid(function(valid){
-        valid.should.be.true;
+        valid.should.be.equal(true);
         done();
       });
     });
 
     it('returns false on invalid records', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
         done();
       });
     });
 
     it('returns the right error message', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
         invalid.errors.should.have.property('attr');
         done();
       });
@@ -165,21 +165,21 @@ describe('validatesNumericalityOf()', function(){
 
     it('returns true on valid records', function(done){
       valid.isValid(function(valid){
-        valid.should.be.true;
+        valid.should.be.equal(true);
         done();
       });
     });
 
     it('returns false on invalid records', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
         done();
       });
     });
 
     it('returns the right error message', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
         invalid.errors.should.have.property('attr');
         done();
       });
@@ -211,21 +211,21 @@ describe('validatesNumericalityOf()', function(){
 
     it('returns true on valid records', function(done){
       valid.isValid(function(valid){
-        valid.should.be.true;
+        valid.should.be.equal(true);
         done();
       });
     });
 
     it('returns false on invalid records', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
         done();
       });
     });
 
     it('returns the right error message', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
         invalid.errors.should.have.property('attr');
         done();
       });
@@ -256,21 +256,21 @@ describe('validatesNumericalityOf()', function(){
 
     it('returns true on valid records', function(done){
       valid.isValid(function(valid){
-        valid.should.be.true;
+        valid.should.be.equal(true);
         done();
       });
     });
 
     it('returns false on invalid records', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
         done();
       });
     });
 
     it('returns the right error message', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
         invalid.errors.should.have.property('attr');
         done();
       });
@@ -302,21 +302,75 @@ describe('validatesNumericalityOf()', function(){
 
     it('returns true on valid records', function(done){
       valid.isValid(function(valid){
-        valid.should.be.true;
+        valid.should.be.equal(true);
         done();
       });
     });
 
     it('returns false on invalid records', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
         done();
       });
     });
 
     it('returns the right error message', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
+        invalid.errors.should.have.property('attr');
+        done();
+      });
+    });
+  });
+
+
+  describe('with fields array', function(){
+    var store = new Store();
+    store.Model('User', function(){
+      this.attribute('attr', Number);
+      this.attribute('attr2', Number);
+      this.validatesNumericalityOf(['attr', 'attr2'], {odd: true});
+    });
+
+    var User, valid, invalid;
+    before(function(next){
+      store.ready(function(){
+
+        User = store.Model('User');
+        valid = new User({attr: 3, attr2: 5});
+        invalid = new User({attr: 4, attr2: 6});
+        invalid2 = new User({attr: 3, attr2: 6});
+
+        next();
+      });
+    });
+
+
+
+    it('returns true on valid records', function(done){
+      valid.isValid(function(valid){
+        valid.should.be.equal(true);
+        done();
+      });
+    });
+
+    it('returns false on invalid records', function(done){
+      invalid.isValid(function(valid){
+        valid.should.be.equal(false);
+        done();
+      });
+    });
+
+    it('returns false on invalid records (second field)', function(done){
+      invalid2.isValid(function(valid){
+        valid.should.be.equal(false);
+        done();
+      });
+    });
+
+    it('returns the right error message', function(done){
+      invalid.isValid(function(valid){
+        valid.should.be.equal(false);
         invalid.errors.should.have.property('attr');
         done();
       });

@@ -64,7 +64,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.find(1, function(phil){
             phil.login = 'max';
             phil.save(function(result){
-              result.should.be.false;
+              result.should.be.equal(false);
               next();
             });
           });
@@ -80,7 +80,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.find(1, function(phil){
             phil.login = 'maxi';
             phil.save(function(result){
-              result.should.be.false;
+              result.should.be.equal(false);
 
               User.where({login:'maxi'}).count().exec(function(result){
                 result.should.be.equal(0);
@@ -101,7 +101,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.find(1, function(phil){
             phil.login = '_max';
             phil.save(function(result){
-              result.should.be.false;
+              result.should.be.equal(false);
               next();
             });
           });
@@ -117,7 +117,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           User.find(1, function(phil){
             phil.login = '_maxi';
             phil.save(function(result){
-              result.should.be.false;
+              result.should.be.equal(false);
 
               User.where({login:'_maxi'}).count().exec(function(result){
                 result.should.be.equal(0);
@@ -196,7 +196,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             michl.login = 'michael';
             michl.posts[0].message = 'michaels post';
 
-            michl.posts[0].__exists.should.be.true;
+            michl.posts[0].__exists.should.be.equal(true);
 
             michl.save(function(result){
               result.should.be.equal(true);

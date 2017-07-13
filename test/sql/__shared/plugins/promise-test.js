@@ -4,7 +4,7 @@ var Store = require('../../../../lib/store');
 
 module.exports = function(title, beforeFn, afterFn, store_conf){
 
-  describe.only(title + ': Promise Changes', function(){
+  describe(title + ': Promise Changes', function(){
     var store;
 
     before(beforeFn);

@@ -62,7 +62,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         User.tmpValidation().create({
           login: 'max'
         }, function(result){
-          result.should.be.false;
+          result.should.be.equal(false);
           next();
         });
       });
@@ -75,7 +75,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         User.create({
           login: 'max'
         }, function(result){
-          result.should.be.true;
+          result.should.be.equal(true);
           next();
         });
       });
@@ -89,7 +89,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         User.tmpHook().create({
           login: 'max'
         }, function(result){
-          result.should.be.false;
+          result.should.be.equal(false);
           next();
         });
       });
@@ -102,7 +102,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         User.create({
           login: 'max'
         }, function(result){
-          result.should.be.true;
+          result.should.be.equal(true);
           next();
         });
       });

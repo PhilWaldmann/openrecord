@@ -36,7 +36,7 @@ describe('REST Client: Create', function(){
       var User = store.Model('User');
 
       User.create({login: 'max', email: 'max@mail.com'}, function(success){
-        success.should.be.true;
+        success.should.be.equal(true);
         should.exist(this.id);
         next();
       }, function(err){
@@ -60,7 +60,7 @@ describe('REST Client: Create', function(){
       });
 
       user.save(function(success){
-        success.should.be.true;
+        success.should.be.equal(true);
 
         User.find(this.id).include('posts').exec(function(user){
 

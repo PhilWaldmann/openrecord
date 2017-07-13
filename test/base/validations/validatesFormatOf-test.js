@@ -28,14 +28,14 @@ describe('validatesFormatOf()', function(){
 
   it('returns true on valid records', function(done){
     valid.isValid(function(valid){
-      valid.should.be.true;
+      valid.should.be.equal(true);
       done();
     });
   });
 
   it('returns false on invalid records', function(done){
     invalid.isValid(function(valid){
-      valid.should.be.false;
+      valid.should.be.equal(false);
       done();
     });
   });
@@ -59,8 +59,8 @@ describe('validatesFormatOf()', function(){
       this.attribute('user_url', String);
       this.attribute('user_ip', String);
       this.attribute('user_uuid', String);
-      this.attribute('created_at', String);
-      this.attribute('blocked_at', String);
+      this.attribute('created_at', Date);
+      this.attribute('blocked_at', Date);
       this.attribute('first_name', String);
 
       this.validatesFormatOf(['email', 'login'], 'email');
@@ -98,6 +98,10 @@ describe('validatesFormatOf()', function(){
           first_name: 'Alex'
         });
 
+        invalid2 = new User({
+          login: 'phil'
+        });
+
         next();
       });
     });
@@ -105,15 +109,22 @@ describe('validatesFormatOf()', function(){
 
 
     it('returns true on valid records', function(done){
-      valid.isValid(function(valid){
-        valid.should.be.true;
+      valid.isValid(function(_valid){
+        _valid.should.be.equal(true);
         done();
       });
     });
 
     it('returns false on invalid records', function(done){
       invalid.isValid(function(valid){
-        valid.should.be.false;
+        valid.should.be.equal(false);
+        done();
+      });
+    });
+
+    it('returns false on invalid records (second field)', function(done){
+      invalid2.isValid(function(valid){
+        valid.should.be.equal(false);
         done();
       });
     });

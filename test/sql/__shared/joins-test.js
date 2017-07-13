@@ -194,7 +194,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
           var User = store.Model('User');
           User.find(4).join('threads').exec(function(marlene){
             marlene.threads[0].attributes.should.have.property('archived');
-            marlene.threads[0].archived.should.be.false;
+            marlene.threads[0].archived.should.be.equal(false);
             next();
           });
         });

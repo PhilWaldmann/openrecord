@@ -55,7 +55,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         var User = store.Model('User');
 
         var attributes = User.definition.attributes;
-        attributes.login.notnull.should.be.true;
+        attributes.login.notnull.should.be.equal(true);
 
         done();
       });
@@ -68,7 +68,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         var phil = User.new();
 
         phil.isValid(function(valid){
-          valid.should.be.false;
+          valid.should.be.equal(false);
           phil.errors.should.have.property('login');
           done();
         });
@@ -82,7 +82,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         var User = store.Model('User');
         User.find(1).exec(function(result){
           should.exist(result);
-          result.hasChanges().should.be.false;
+          result.hasChanges().should.be.equal(false);
           result.login.should.be.equal('phil');
           next();
         });
@@ -101,7 +101,7 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
 
         phil.save(function(success){
-          success.should.be.true;
+          success.should.be.equal(true);
           phil.id.should.be.equal(2);
           done();
         });
