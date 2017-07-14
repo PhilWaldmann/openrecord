@@ -465,6 +465,40 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
         });
       });
 
+
+
+      it('join returns the right sql (custom join)', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.join('JOIN posts ON posts.id = users.id').toSql(function(sql){
+            sql.should.be.equal('select * from "users" JOIN posts ON posts.id = users.id');
+            next();
+          })
+        });
+      });
+
+      it('join returns the right sql (custom join with args)', function(next){
+        store.ready(function(){
+          var User = store.Model('User');
+          User.join(['JOIN posts ON posts.id = users.id AND posts.message LIKE ?', ['%foo%']]).toSql(function(sql){
+            sql.should.be.equal('select * from "users" JOIN posts ON posts.id = users.id AND posts.message LIKE \'%foo%\'');
+            next();
+          })
+        });
+      });
+
+
+      it('join with a belongsTo relation', function(next){
+        store.ready(function(){
+          var Post = store.Model('Post');
+          Post.join('user').toSql(function(sql){
+            sql.should.be.equal('select "posts"."id" as "f0", "posts"."user_id" as "f1", "posts"."thread_id" as "f2", "posts"."message" as "f3", "user"."id" as "f4", "user"."login" as "f5", "user"."email" as "f6", "user"."created_at" as "f7" from "posts" left join "users" as "user" on "posts"."user_id" = "user"."id"');
+            next();
+          })
+        });
+      });
+
+
     });
 
 
