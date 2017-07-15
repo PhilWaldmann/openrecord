@@ -30,7 +30,7 @@
   "scripts": {
     "test": "NODE_ENV=test mocha",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- --reporter dot",
-    "report-coverage": "mocha --require blanket --reporter mocha-lcov-reporter | coveralls.js"
+    "report-coverage": "NODE_ENV=test istanbul cover _mocha -- --reporter mocha-lcov-reporter && cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
     "async": "~ 2.5.x",
