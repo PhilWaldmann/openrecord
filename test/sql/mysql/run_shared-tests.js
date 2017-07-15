@@ -242,3 +242,7 @@ testMYSQL('plugins/promise', [
   'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
   'CREATE TABLE threads(id  serial primary key, user_id INTEGER, title TEXT)'
 ]);
+
+testMYSQL('plugins/serialize', [
+  'CREATE TABLE users(id serial primary key, login TEXT, config TEXT)',
+]);

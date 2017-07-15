@@ -6,6 +6,7 @@ wiki
 logs
 node_modules
 
+coverage
 coverage.html
 .coveralls.yml
 

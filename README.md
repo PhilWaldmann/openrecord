@@ -9,7 +9,7 @@
 > A hackable, ActiveRecord-like ORM for nodejs
 
 There are currently a hand full of nodejs ORMs available - but there is no one with a nice syntax similar to ActiveRecord (Ruby).
-OpenRecord has a nice syntax, a ton of features, over 1000 unit tests and could be extended easily!
+OpenRecord has a nice syntax, a ton of features, over 1300 unit tests and could be extended easily!
 
 ## Installation
 
@@ -45,7 +45,7 @@ npm install openrecord
   * paranoid: Soft delete of records
   * nested set: Build trees easily
   * sorted list: Don't worry about lists
-* ... with more than 1200 tests
+* ... with more than 1300 tests
 
 
 

@@ -239,3 +239,7 @@ testSQLite('plugins/promise', [
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
   'CREATE TABLE threads(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT)'
 ]);
+
+testSQLite('plugins/serialize', [
+  'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, config TEXT)',
+]);

@@ -60,14 +60,14 @@ before(function(ready){
 
 
 
-  server.use(restify.acceptParser(server.acceptable));
-  server.use(restify.queryParser());
-  server.use(restify.bodyParser());
+  server.use(restify.plugins.acceptParser(server.acceptable));
+  server.use(restify.plugins.queryParser());
+  server.use(restify.plugins.bodyParser());
 
 
   // USERS
   server.get('/users', function (req, res, next) {
-    User.where(req.params).exec(function(users){
+    User.where(req.query).exec(function(users){
       res.send({
         data: users.toJson()
       });
@@ -89,7 +89,7 @@ before(function(ready){
   server.put('/users/:id', function (req, res, next) {
     User.find(req.params.id).exec(function(user){
       if(user){
-        user.set(req.params.data);
+        user.set(req.body.data);
         user.save(function(success){
           res.send({
             data: user.toJson(),
@@ -108,7 +108,7 @@ before(function(ready){
 
 
   server.post('/users', function (req, res, next) {
-    User.create(req.params.data, function(success){
+    User.create(req.body.data, function(success){
       res.send({
         data: this.toJson(),
         success: success
@@ -141,7 +141,7 @@ before(function(ready){
 
   // POSTS
   server.get('/posts', function (req, res, next) {
-    Post.where(req.params).exec(function(posts){
+    Post.where(req.query).exec(function(posts){
       res.send({
         data: posts.toJson()
       });
@@ -163,7 +163,7 @@ before(function(ready){
   server.put('/posts/:id', function (req, res, next) {
     Post.find(req.params.id).exec(function(post){
       if(post){
-        post.set(req.params.data);
+        post.set(req.body.data);
         post.save(function(success){
           res.send({
             data: post.toJson(),
@@ -182,7 +182,7 @@ before(function(ready){
 
 
   server.post('/posts', function (req, res, next) {
-    Post.create(req.params.data, function(success){
+    Post.create(req.body.data, function(success){
       res.send({
         data: this.toJson(),
         success: success
