@@ -1,26 +1,22 @@
-var should = require('should');
-var Store = require('../../../lib/store');
+var Store = require('../../../lib/store')
 
 
-module.exports = function(title, beforeFn, afterFn, store_conf){
-
+module.exports = function(title, beforeFn, afterFn, storeConf){
   describe(title + ': Empty', function(){
-    var store;
+    var store
 
-    before(beforeFn);
+    before(beforeFn)
     after(function(next){
-      afterFn(next, store);
-    });
+      afterFn(next, store)
+    })
 
 
     before(function(){
-      store = new Store(store_conf);
-      store.setMaxListeners(0);
-      //Models here
-    });
+      store = new Store(storeConf)
+      store.setMaxListeners(0)
+      // Models here
+    })
 
-    //Tests here
-
-
-  });
-};
+    // Tests here
+  })
+}

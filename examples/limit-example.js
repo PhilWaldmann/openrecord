@@ -4,5 +4,5 @@
  * @example Model.exec
  */
 User.limit(1).exec(function(){
-  
-});
+
+})

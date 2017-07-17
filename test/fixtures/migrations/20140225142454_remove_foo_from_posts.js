@@ -1,3 +1,3 @@
 module.exports = function(){
-  this.removeColumn('posts', 'foo');
-};
+  this.removeColumn('posts', 'foo')
+}

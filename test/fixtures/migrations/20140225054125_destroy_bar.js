@@ -1,3 +1,3 @@
 module.exports = function(){
-  this.removeTable('bar');
-};
+  this.removeTable('bar')
+}

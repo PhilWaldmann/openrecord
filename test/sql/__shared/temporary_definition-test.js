@@ -1,159 +1,156 @@
-var should = require('should');
-var Store = require('../../../lib/store');
+var should = require('should')
+var Store = require('../../../lib/store')
 
 
-module.exports = function(title, beforeFn, afterFn, store_conf){
-
+module.exports = function(title, beforeFn, afterFn, storeConf){
   describe(title + ': Temporary Definition', function(){
-    var store;
+    var store
 
-    before(beforeFn);
+    before(beforeFn)
     after(function(next){
-      afterFn(next, store);
-    });
+      afterFn(next, store)
+    })
 
 
     before(function(){
-      store = new Store(store_conf);
-      store.setMaxListeners(0);
+      store = new Store(storeConf)
+      store.setMaxListeners(0)
 
       store.Model('User', function(){
-        this.hasMany('posts');
+        this.hasMany('posts')
 
         this.scope('tmpValidation', function(){
           this.temporaryDefinition()
-          .validatesFormatOf('login', /phil.*/);
-        });
+            .validatesFormatOf('login', /phil.*/)
+        })
 
         this.scope('tmpHook', function(){
           this.temporaryDefinition()
-          .beforeSave(function(){
-            return false;
-          });
-        });
+            .beforeSave(function(){
+              return false
+            })
+        })
 
         this.scope('tmpRelation', function(){
           this.temporaryDefinition()
-          .hasMany('threads');
-        });
+            .hasMany('threads')
+        })
 
         this.scope('tmpAttribute', function(){
           this.temporaryDefinition()
-          .attribute('LOGIN', String)
-          .convert('output', 'LOGIN', function(){
-            return this.login.toUpperCase();
-          })
-        });
-      });
+            .attribute('LOGIN', String)
+            .convert('output', 'LOGIN', function(){
+              return this.login.toUpperCase()
+            })
+        })
+      })
       store.Model('Post', function(){
-        this.belongsTo('user');
-        this.belongsTo('thread');
-      });
+        this.belongsTo('user')
+        this.belongsTo('thread')
+      })
       store.Model('Thread', function(){
-        this.belongsTo('user');
-        this.hasMany('posts');
-      });
-    });
+        this.belongsTo('user')
+        this.hasMany('posts')
+      })
+    })
 
 
     it('adds a temporary validation', function(next){
       store.ready(function(){
-        var User = store.Model('User');
+        var User = store.Model('User')
         User.tmpValidation().create({
           login: 'max'
         }, function(result){
-          result.should.be.equal(false);
-          next();
-        });
-      });
-    });
+          result.should.be.equal(false)
+          next()
+        })
+      })
+    })
 
 
     it('does not pollute the model validation definition', function(next){
       store.ready(function(){
-        var User = store.Model('User');
+        var User = store.Model('User')
         User.create({
           login: 'max'
         }, function(result){
-          result.should.be.equal(true);
-          next();
-        });
-      });
-    });
+          result.should.be.equal(true)
+          next()
+        })
+      })
+    })
 
 
 
     it('adds a temporary beforeSave hook', function(next){
       store.ready(function(){
-        var User = store.Model('User');
+        var User = store.Model('User')
         User.tmpHook().create({
           login: 'max'
         }, function(result){
-          result.should.be.equal(false);
-          next();
-        });
-      });
-    });
+          result.should.be.equal(false)
+          next()
+        })
+      })
+    })
 
 
     it('does not pollute the model hooks definition', function(next){
       store.ready(function(){
-        var User = store.Model('User');
+        var User = store.Model('User')
         User.create({
           login: 'max'
         }, function(result){
-          result.should.be.equal(true);
-          next();
-        });
-      });
-    });
+          result.should.be.equal(true)
+          next()
+        })
+      })
+    })
 
 
 
     it('adds a temporary relation', function(next){
       store.ready(function(){
-        var User = store.Model('User');
+        var User = store.Model('User')
         User.tmpRelation().include('threads').exec(function(){
-          next();
+          next()
         })
-      });
-    });
+      })
+    })
 
 
     it('does not pollute the model relations definition', function(next){
       store.ready(function(){
         var User = store.Model('User');
         (function(){
-          User.include('threads').exec();
-        }).should.throw();
-        next();
-      });
-    });
+          User.include('threads').exec()
+        }).should.throw()
+        next()
+      })
+    })
 
 
 
 
     it('adds a temporary attribute', function(next){
       store.ready(function(){
-        var User = store.Model('User');
+        var User = store.Model('User')
         User.tmpAttribute().find(1).exec(function(user){
           user.LOGIN.should.be.equal('PHIL')
-          next();
-        });
-      });
-    });
+          next()
+        })
+      })
+    })
 
 
     it('does not pollute the model relations definition', function(next){
       store.ready(function(){
-        var User = store.Model('User');
+        var User = store.Model('User')
         User.find(1).exec(function(user){
-          should.not.exist(user.LOGIN);
-          next();
-        });
-      });
-    });
-
-  });
-
+          should.not.exist(user.LOGIN)
+          next()
+        })
+      })
+    })
+  })
 }

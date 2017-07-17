@@ -1,3 +1,3 @@
 module.exports = function(){
-  this.attribute('login', String);
+  this.attribute('login', String)
 }

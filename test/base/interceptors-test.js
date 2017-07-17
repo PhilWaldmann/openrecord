@@ -1,246 +1,235 @@
-var should = require('should');
+var should = require('should')
 
-var Store = require('../../lib/store');
+var Store = require('../../lib/store')
 
 describe('Interceptors', function(){
-  var store = new Store();
+  var store = new Store()
 
   store.Model('User', function(){
-    var self = this;
+    var self = this
 
     it('has beforeValidation()', function(){
-      should.exist(self.beforeValidation);
-      self.beforeValidation.should.be.a.Function;
-    });
-
-  });
+      should.exist(self.beforeValidation)
+      self.beforeValidation.should.be.a.Function()
+    })
+  })
 
 
   describe('addInterceptor()', function(){
-
-    var store = new Store();
+    var store = new Store()
 
     it('exists', function(){
-      should.exist(store.addInterceptor);
-      store.addInterceptor.should.be.a.Function;
-    });
+      should.exist(store.addInterceptor)
+      store.addInterceptor.should.be.a.Function()
+    })
 
-    store.addInterceptor('myInterceptor');
+    store.addInterceptor('myInterceptor')
 
     it('exists in the definition scope', function(done){
       store.Model('NewModel', function(){
-        should.exist(this.myInterceptor);
-        this.myInterceptor.should.be.a.Function;
-        done();
-      });
-    });
+        should.exist(this.myInterceptor)
+        this.myInterceptor.should.be.a.Function()
+        done()
+      })
+    })
 
 
     it('throws an error on an undefined interceptor', function(done){
       store.Model('NewModel', function(){
         var self = this;
         (function(){
-          self.addInterceptor('unknownInterceptor', function(){});
-        }).should.throw();
+          self.addInterceptor('unknownInterceptor', function(){})
+        }).should.throw()
 
-        done();
-      });
-    });
-
-  });
+        done()
+      })
+    })
+  })
 
 
 
 
   describe('call (without params)', function(){
-    var store = new Store();
-    var phil;
+    var store = new Store()
+    var phil
 
-    store.addInterceptor('beforeTest');
+    store.addInterceptor('beforeTest')
 
     store.Model('User', function(){
-      should.not.exist(this.myInterceptor);
+      should.not.exist(this.myInterceptor)
 
       this.beforeTest(function(){
-        this.should.be.equal(phil);
-        return false;
-      });
-    });
+        this.should.be.equal(phil)
+        return false
+      })
+    })
 
 
 
     it('has the right scope', function(done){
-      var User = store.Model('User');
-      phil = new User();
+      var User = store.Model('User')
+      phil = new User()
 
       phil.callInterceptors('beforeTest', function(){
-        done();
-      });
-    });
-
-  });
+        done()
+      })
+    })
+  })
 
 
 
 
   describe('call (with params)', function(){
-    var store = new Store();
-    var phil;
+    var store = new Store()
+    var phil
 
-    store.addInterceptor('beforeTest');
+    store.addInterceptor('beforeTest')
 
     store.Model('User', function(){
-      should.not.exist(this.myInterceptor);
+      should.not.exist(this.myInterceptor)
 
       this.beforeTest(function(arg1, arg2){
-        arg1.should.be.equal('A');
-        arg2.should.be.equal('B');
-        return false;
-      });
-    });
+        arg1.should.be.equal('A')
+        arg2.should.be.equal('B')
+        return false
+      })
+    })
 
 
 
     it('gets the right params', function(done){
-      var User = store.Model('User');
-      phil = new User();
+      var User = store.Model('User')
+      phil = new User()
 
       phil.callInterceptors('beforeTest', ['A', 'B'], function(result){
-        result.should.be.equal(false);
-        done();
-      });
-    });
-
-  });
+        result.should.be.equal(false)
+        done()
+      })
+    })
+  })
 
 
 
 
   describe('call (with params and async)', function(){
-    var store = new Store();
-    var phil;
+    var store = new Store()
+    var phil
 
-    store.addInterceptor('beforeTest');
+    store.addInterceptor('beforeTest')
 
     store.Model('User', function(){
-      should.not.exist(this.myInterceptor);
+      should.not.exist(this.myInterceptor)
 
       this.beforeTest(function(arg1, next){
-        arg1.should.be.equal('A');
+        arg1.should.be.equal('A')
         next(false)
-      });
-    });
+      })
+    })
 
 
 
     it('gets the right params', function(done){
-      var User = store.Model('User');
-      phil = new User();
+      var User = store.Model('User')
+      phil = new User()
 
       phil.callInterceptors('beforeTest', ['A'], function(){
-        done();
-      });
-    });
-
-  });
+        done()
+      })
+    })
+  })
 
 
 
 
 
   describe('call (with multiple interceptors: false)', function(){
-    var store = new Store();
-    var phil;
+    var store = new Store()
+    var phil
 
-    store.addInterceptor('beforeTest');
+    store.addInterceptor('beforeTest')
 
     store.Model('User', function(){
       this.beforeTest(function(arg1, next){
         next(false)
-      });
+      })
 
       this.beforeTest(function(){
-        return true;
-      });
-    });
+        return true
+      })
+    })
 
 
 
     it('is false', function(done){
-      var User = store.Model('User');
-      phil = new User();
+      var User = store.Model('User')
+      phil = new User()
 
       phil.callInterceptors('beforeTest', ['A'], function(result){
-        result.should.be.equal(false);
-        done();
-      });
-    });
-
-  });
+        result.should.be.equal(false)
+        done()
+      })
+    })
+  })
 
 
 
 
   describe('call (with multiple interceptors: true)', function(){
-    var store = new Store();
-    var phil;
+    var store = new Store()
+    var phil
 
-    store.addInterceptor('beforeSuccessTest');
+    store.addInterceptor('beforeSuccessTest')
 
     store.Model('User', function(){
       this.beforeSuccessTest(function(arg1, next){
-        next();
-      });
+        next()
+      })
 
       this.beforeSuccessTest(function(){
-        return true;
-      });
+        return true
+      })
 
       this.beforeSuccessTest(function(arg1){
-        return true;
-      });
-
-    });
+        return true
+      })
+    })
 
 
 
     it('is true', function(done){
-      var User = store.Model('User');
-      phil = new User();
+      var User = store.Model('User')
+      phil = new User()
 
       phil.callInterceptors('beforeSuccessTest', ['arg1'], function(result){
-        result.should.be.equal(true);
-        done();
-      });
-    });
-
-  });
+        result.should.be.equal(true)
+        done()
+      })
+    })
+  })
 
 
 
 
 
   describe('call (without any interceptors)', function(){
-    var store = new Store();
-    var phil;
+    var store = new Store()
+    var phil
 
-    store.addInterceptor('beforeTest');
+    store.addInterceptor('beforeTest')
 
     store.Model('User', function(){
 
-    });
+    })
 
 
     it('is true', function(done){
-      var User = store.Model('User');
-      phil = new User();
+      var User = store.Model('User')
+      phil = new User()
 
       phil.callInterceptors('beforeTest', ['A'], function(result){
-        result.should.be.equal(true);
-        done();
-      });
-    });
-
-  });
-
-});
+        result.should.be.equal(true)
+        done()
+      })
+    })
+  })
+})

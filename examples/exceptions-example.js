@@ -3,27 +3,27 @@
  * @example Model.then
  */
 User.limit(1).then(function(){
-  //success
+  // success
 }).catch(SQLError, function(e){
-  //handle exception
-});
+  // handle exception
+})
 
-//or
+// or
 
 User.on('exception', function(e){
-  //handle exception
+  // handle exception
 })
 
 User.limit(1).then(function(){
-  //success
-});
+  // success
+})
 
-//or
+// or
 
 store.on('exception', function(e){
-  //handle exception
+  // handle exception
 })
 
 User.limit(1).then(function(){
-  //success
-});
+  // success
+})

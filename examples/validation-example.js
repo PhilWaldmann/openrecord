@@ -4,10 +4,10 @@
  */
 store.model('MyModel', function(){
   this.validates('my_attr', function(){
-    //your custom validation logic
-    return true; //true: validation passes, false: validation failes
-  });
-});
+    // your custom validation logic
+    return true // true: validation passes, false: validation failes
+  })
+})
 
 
 /**
@@ -16,9 +16,9 @@ store.model('MyModel', function(){
  */
 store.model('MyModel', function(){
   this.validates('my_attr', function(next){
-    next(true);
-  });
-});
+    next(true)
+  })
+})
 
 
 /**
@@ -26,8 +26,8 @@ store.model('MyModel', function(){
  * @example Definition.validatesPresenceOf
  */
 store.model('MyModel', function(){
-  this.validatesPresenceOf('my_attr', 'my_attr2');
-});
+  this.validatesPresenceOf('my_attr', 'my_attr2')
+})
 
 
 /**
@@ -35,8 +35,8 @@ store.model('MyModel', function(){
  * @example Definition.validatesFormatOf
  */
 store.model('MyModel', function(){
-  this.validatesFormatOf('my_email', 'email');
-});
+  this.validatesFormatOf('my_email', 'email')
+})
 
 
 /**
@@ -44,5 +44,5 @@ store.model('MyModel', function(){
  * @example Definition.validatesConfirmationOf
  */
 store.model('MyModel', function(){
-  this.validatesConfirmationOf('password');
-});
+  this.validatesConfirmationOf('password')
+})

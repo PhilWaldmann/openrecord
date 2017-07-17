@@ -1,11 +1,11 @@
-require('./__helper');
+require('./__helper')
 
 testSQLite('aggregate_function', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, salary INTEGER)',
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
   'INSERT INTO users(salary) VALUES(100), (200), (400), (300), (1000)',
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")'
-]);
+])
 
 testSQLite('allowed_attributes', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, active BOOLEAN)',
@@ -14,13 +14,13 @@ testSQLite('allowed_attributes', [
   'INSERT INTO users(login, email, active) VALUES("phil", "phil@mail.com", 1), ("michl", "michl@mail.com", 0), ("admin", "admin@mail.com", 1)',
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")',
   'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread")'
-]);
+])
 
 testSQLite('attributes', [
   'CREATE TABLE users(id  INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT NOT NULL, email TEXT)',
   'CREATE TABLE multiple_keys(id  INTEGER, id2 INTEGER, PRIMARY KEY(id, id2))',
   'INSERT INTO users(login, email) VALUES("phil", "phil@mail.com")'
-]);
+])
 
 testSQLite('collection', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
@@ -34,27 +34,27 @@ testSQLite('collection', [
   'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread"), (3, "third thread")',
   'INSERT INTO avatars(user_id, url) VALUES(1, "http://awesome-avatar.com/avatar.png"), (1, "http://awesome-avatar.com/foo.png")',
   'INSERT INTO unread_posts(user_id, post_id) VALUES(1, 3)'
-]);
+])
 
 testSQLite('conditions', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, private_email TEXT, created_at timestamp)',
   'INSERT INTO users(login, email, private_email, created_at) VALUES("phil", "phil@mail.com", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "", "2014-01-10"), ("admin", "admin@mail.com", "hansi@mail.com", "2014-01-01")'
-]);
+])
 
 testSQLite('converter', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, my_blob TEXT, my_integer INTEGER, my_real REAL)',
   'INSERT INTO users(my_blob, my_integer, my_real) VALUES("phil", 12, 44.66)'
-]);
+])
 
 testSQLite('create', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
   'CREATE TABLE threads(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT)'
-]);
+])
 
 testSQLite('data_types', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, my_blob BLOB, my_integer INTEGER, my_real REAL)'
-]);
+])
 
 testSQLite('dependent_delete', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
@@ -65,7 +65,7 @@ testSQLite('dependent_delete', [
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 3, "michls post")',
   'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread"), (1, "3. thread"), (1, "4. thread")',
   'INSERT INTO poly_things (member_id, member_type, user_id) VALUES (4, "Post", 1), (3, "Thread", 1), (4, "Thread", 2), (1, "Avatar", 2)'
-]);
+])
 
 testSQLite('dependent_destroy', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
@@ -76,7 +76,7 @@ testSQLite('dependent_destroy', [
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post"), (2, 3, "michls post"), (5, 5, "unknown post")',
   'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread"), (1, "3. thread"), (1, "4. thread")',
   'INSERT INTO poly_things (member_id, member_type, user_id) VALUES (6, "Post", 1), (3, "Thread", 1), (4, "Thread", 2), (5, "Post", 2)'
-]);
+])
 
 testSQLite('dependent_nullify', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
@@ -85,7 +85,7 @@ testSQLite('dependent_nullify', [
   'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01")',
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")',
   'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread")'
-]);
+])
 
 
 testSQLite('destroy', [
@@ -95,9 +95,9 @@ testSQLite('destroy', [
   'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01")',
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")',
   'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread"), (3, "delete me"), (3, "delete me too"), (3, "destroy me"), (3, "do not destroy")'
-]);
+])
 
-testSQLite('exec', []);
+testSQLite('exec', [])
 
 testSQLite('fibers', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, active BOOLEAN)',
@@ -106,12 +106,12 @@ testSQLite('fibers', [
   'INSERT INTO users(login, email, active) VALUES("phil", "phil@mail.com", 1), ("michl", "michl@mail.com", 0), ("admin", "admin@mail.com", 1)',
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")',
   'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread")'
-]);
+])
 
 testSQLite('group', [
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first"), (1, 1, "second"), (3, 2, "third"), (2, 2, "first")'
-]);
+])
 
 
 testSQLite('includes', [
@@ -127,7 +127,7 @@ testSQLite('includes', [
   'INSERT INTO avatars(user_id, url) VALUES(1, "http://awesome-avatar.com/avatar.png"), (1, "http://awesome-avatar.com/foo.png")',
   'INSERT INTO unread_posts(user_id, post_id) VALUES(1, 3)',
   'INSERT INTO poly_things (member_id, member_type, user_id) VALUES (1, "Post", 1), (1, "Thread", 1), (2, "Thread", 2), (1, "Avatar", 2)'
-]);
+])
 
 testSQLite('autojoin', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
@@ -136,7 +136,7 @@ testSQLite('autojoin', [
   'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01"), ("marlene", "marlene@mail.com", "2014-01-01")',
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post"), (4, 4, NULL)',
   'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread")'
-]);
+])
 
 testSQLite('joins', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
@@ -152,22 +152,22 @@ testSQLite('joins', [
   'INSERT INTO avatars(user_id, url) VALUES(1, "http://awesome-avatar.com/avatar.png"), (1, "http://awesome-avatar.com/foo.png")',
   'INSERT INTO unread_posts(user_id, post_id) VALUES(1, 3)',
   'INSERT INTO poly_things (member_id, member_type) VALUES (1, "Post"), (1, "Thread"), (2, "Thread"), (1, "Avatar")'
-]);
+])
 
-testSQLite('migrations_fresh', []);
+testSQLite('migrations_fresh', [])
 
 testSQLite('migrations', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT NOT NULL, first_name TEXT)',
   'CREATE TABLE openrecord_migrations(name TEXT)',
   'INSERT INTO openrecord_migrations VALUES("20140223120815_create_users")'
-]);
+])
 
 testSQLite('promise', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
   'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01")',
   'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01"), ("marlene", "marlene@mail.com", "2014-01-01")'
-]);
+])
 
 testSQLite('select', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
@@ -176,7 +176,7 @@ testSQLite('select', [
   'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01"), ("administrator", "administrator@mail.com", "2014-01-01")',
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")',
   'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread")'
-]);
+])
 
 testSQLite('temporary_definition', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
@@ -185,7 +185,7 @@ testSQLite('temporary_definition', [
   'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01"), ("administrator", "administrator@mail.com", "2014-01-01")',
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")',
   'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread")'
-]);
+])
 
 testSQLite('updates', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
@@ -194,7 +194,7 @@ testSQLite('updates', [
   'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01"), ("administrator", "administrator@mail.com", "2014-01-01"), ("new_owner", "new_owner@mail.com", "2014-01-01")',
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post"), (5, 4, "update me")',
   'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread"), (1, "another"), (1, "thread 4")'
-]);
+])
 
 testSQLite('validations', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
@@ -204,21 +204,21 @@ testSQLite('validations', [
   'CREATE TABLE multiple_keys(id  INTEGER, id2 INTEGER, name TEXT, PRIMARY KEY(id, id2))',
   'INSERT INTO multiple_keys(id, id2, name) VALUES(1, 1, "phil"), (1, 2, "michl"), (2, 1, "admin")',
   'CREATE TABLE with_scopes(id  INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, scope_id INTEGER)',
-  'INSERT INTO with_scopes(name, scope_id) VALUES("phil", 1), ("michl", 1), ("phil", 2)',
-]);
+  'INSERT INTO with_scopes(name, scope_id) VALUES("phil", 1), ("michl", 1), ("phil", 2)'
+])
 
 
 
-//plugins
+// plugins
 testSQLite('plugins/nested_set', [
   'CREATE TABLE folders(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, parent_id INTEGER, lft INTEGER, rgt INTEGER, depth INTEGER)',
   'INSERT INTO folders(name, parent_id, lft, rgt, depth) VALUES("A", 0, 0, 3, 0), ("A1", 1, 1, 2, 1), ("B", 0, 4, 13, 0), ("B1", 3, 5, 6, 1), ("B2", 3, 7, 12, 1), ("B2.1", 5, 8, 11, 2), ("B2.1.1", 6, 9, 10, 3)'
-]);
+])
 
 testSQLite('plugins/paranoid', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, deleted_at TEXT)',
   'INSERT INTO users(login, email, deleted_at) VALUES("phil", "phil@mail.com", NULL), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", NULL), ("marlene", "marlene@mail.com", "2014-01-01"), ("hans", "hans@mail.com", NULL)'
-]);
+])
 /* //there is currently a problem with knex?!
 testSQLite('plugins/sorted_list', [
   'CREATE TABLE my_lists(id INTEGER PRIMARY KEY AUTOINCREMENT, name text, position integer)',
@@ -231,15 +231,15 @@ testSQLite('plugins/stampable', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at timestamp, updated_at timestamp, creator_id integer, updater_id integer)',
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT, created_at timestamp, updated_at timestamp, creator_id integer, updater_id integer)',
   'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", NULL), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", NULL), ("marlene", "marlene@mail.com", "2014-01-01"), ("hans", "hans@mail.com", NULL)',
-  'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post"), (5, 4, "update me")',
-]);
+  'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post"), (5, 4, "update me")'
+])
 
 testSQLite('plugins/promise', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
   'CREATE TABLE threads(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT)'
-]);
+])
 
 testSQLite('plugins/serialize', [
-  'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, config TEXT)',
-]);
+  'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, config TEXT)'
+])

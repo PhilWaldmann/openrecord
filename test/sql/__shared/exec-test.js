@@ -1,55 +1,52 @@
-var should = require('should');
-var Store = require('../../../lib/store');
+var should = require('should')
+var Store = require('../../../lib/store')
 
 
-module.exports = function(title, beforeFn, afterFn, store_conf){
-
+module.exports = function(title, beforeFn, afterFn, storeConf){
   describe(title + ': Exec', function(){
-    var store;
+    var store
 
-    before(beforeFn);
+    before(beforeFn)
     after(function(next){
-      afterFn(next, store);
-    });
+      afterFn(next, store)
+    })
 
 
     before(function(){
-      store = new Store(store_conf);
-      store.setMaxListeners(0);
-      store.on('exception', function(){});
+      store = new Store(storeConf)
+      store.setMaxListeners(0)
+      store.on('exception', function(){})
 
-      store.Model('User', function(){});
+      store.Model('User', function(){})
       store.Model('Stop', function(){
         this.beforeFind(function(){
-          return false;
+          return false
         })
-      });
-    });
+      })
+    })
 
     it('throws an error on unknown table', function(next){
-      store.throw = false;
+      store.throw = false
       store.ready(function(){
-        var User = store.Model('User');
+        var User = store.Model('User')
         User.where({login_like: 'phi'}).exec(function(){
 
         }, function(err){
-          err.should.be.an.instanceof(Error);
-          next();
-        });
-      });
-    });
+          err.should.be.an.instanceof(Error)
+          next()
+        })
+      })
+    })
 
 
     it('returns null', function(next){
       store.ready(function(){
-        var Stop = store.Model('Stop');
+        var Stop = store.Model('Stop')
         Stop.where({login_like: 'phi'}).exec(function(result){
-          should.not.exists(result);
-          next();
-        });
-      });
-    });
-
-
-  });
-};
+          should.not.exists(result)
+          next()
+        })
+      })
+    })
+  })
+}

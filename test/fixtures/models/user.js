@@ -1,3 +1,5 @@
+var path = require('path')
+
 module.exports = function(){
-  this.require(__dirname + '/_user/*');
-};
+  this.require(path.join(__dirname, '_user', '*'))
+}

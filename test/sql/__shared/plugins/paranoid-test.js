@@ -1,68 +1,65 @@
-var should = require('should');
-var Store = require('../../../../lib/store');
+var should = require('should')
+var Store = require('../../../../lib/store')
 
 
-module.exports = function(title, beforeFn, afterFn, store_conf){
-  
+module.exports = function(title, beforeFn, afterFn, storeConf){
   describe(title + ': Paranoid', function(){
-    var store;
-  
-    before(beforeFn);
+    var store
+
+    before(beforeFn)
     after(function(next){
-      afterFn(next, store);
-    });
-  
-  
+      afterFn(next, store)
+    })
+
+
     before(function(){
-      store = new Store(store_conf);
-      store.setMaxListeners(0);
-      
+      store = new Store(storeConf)
+      store.setMaxListeners(0)
+
       store.Model('User', function(){
-        this.paranoid();
-      });
-    });
-    
+        this.paranoid()
+      })
+    })
+
     it('returns only records with deleted_at IS NULL', function(next){
       store.ready(function(){
-        var User = store.Model('User');
+        var User = store.Model('User')
         User.where({login_not: 'hans'}).exec(function(records){
-          records.length.should.be.equal(2);
-          next();
-        });
-      });      
-    });
-    
-    
+          records.length.should.be.equal(2)
+          next()
+        })
+      })
+    })
+
+
     it('returns all records with with_deleted() scope', function(next){
       store.ready(function(){
-        var User = store.Model('User');
+        var User = store.Model('User')
         User.where({login_not: 'hans'}).with_deleted().exec(function(records){
-          records.length.should.be.equal(4);
-          next();
-        });
-      });      
-    });
-    
-    
+          records.length.should.be.equal(4)
+          next()
+        })
+      })
+    })
+
+
     it('"deletes" a record', function(next){
       store.ready(function(){
-        var User = store.Model('User');
+        var User = store.Model('User')
         User.find(5).exec(function(hans){
           hans.destroy(function(success){
-            User.find(5).exec(function(del_hans){
-              should.not.exist(del_hans);
-              
-              User.find(5).with_deleted().exec(function(existing_hans){
-                existing_hans.login.should.be.equal('hans');
-                should.exist(existing_hans.deleted_at);
-                next();
-              });
-              
-            });
-          });          
-        });
-      });      
-    });
-    
-  });
-};
+            User.find(5).exec(function(delHans){
+              should.not.exist(delHans)
+
+              User.find(5).with_deleted().exec(function(existingHans){
+                existingHans.login.should.be.equal('hans')
+                should.exist(existingHans.deleted_at)
+                next()
+              })
+            })
+          })
+        })
+      })
+    })
+  })
+}

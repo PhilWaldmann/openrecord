@@ -1,9 +1,9 @@
-var should = require('should');
+var should = require('should')
 
-var Store = require('../../../lib/store');
+var Store = require('../../../lib/store')
 
 describe('LDAP Client: Exec', function(){
-  var store;
+  var store
 
   before(function(){
     store = new Store({
@@ -12,70 +12,69 @@ describe('LDAP Client: Exec', function(){
       base: 'dc=test',
       user: 'cn=root',
       password: 'secret'
-    });
+    })
 
     store.Model('User', function(){
-      this.attribute('username');
-    });
+      this.attribute('username')
+    })
 
     store.Model('Ou', function(){
-      this.rdnPrefix('ou');
-    });
-  });
+      this.rdnPrefix('ou')
+    })
+  })
 
 
   it('get all user objects of the root ou', function(next){
     store.ready(function(){
-      var User = store.Model('User');
+      var User = store.Model('User')
       User.recursive(false).exec(function(users){
-        users.length.should.be.equal(2);
-        next();
-      });
-    });
-  });
+        users.length.should.be.equal(2)
+        next()
+      })
+    })
+  })
 
   it('user object has standard attributes', function(next){
     store.ready(function(){
-      var User = store.Model('User');
+      var User = store.Model('User')
       User.recursive(false).exec(function(users){
-        var user = users[0];
+        var user = users[0]
 
-        user.dn.should.endWith('dc=test');
-        user.objectClass.should.be.eql(['user']);
+        user.dn.should.endWith('dc=test')
+        user.objectClass.should.be.eql(['user'])
 
-        next();
-      });
-    });
-  });
+        next()
+      })
+    })
+  })
 
   it('get all user objects!', function(next){
     store.ready(function(){
-      var User = store.Model('User');
+      var User = store.Model('User')
       User.exec(function(users){
-        users.length.should.be.above(4);
-        next();
-      });
-    });
-  });
+        users.length.should.be.above(4)
+        next()
+      })
+    })
+  })
 
   it('get all user objects of another ou', function(next){
     store.ready(function(){
-      var User = store.Model('User');
+      var User = store.Model('User')
       User.searchRoot('ou=others, dc=test').exec(function(users){
-        users.length.should.be.equal(2);
-        next();
-      });
-    });
-  });
+        users.length.should.be.equal(2)
+        next()
+      })
+    })
+  })
 
   it('do a find on a not existing user object', function(next){
     store.ready(function(){
-      var User = store.Model('User');
+      var User = store.Model('User')
       User.find('ou=others, dc=test').exec(function(user){
         should.not.exist(user)
-        next();
-      });
-    });
-  });
-
-});
+        next()
+      })
+    })
+  })
+})

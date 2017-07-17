@@ -1,3 +1,3 @@
 module.exports = function(){
-  this.renameTable('foo', 'bar');
-};
+  this.renameTable('foo', 'bar')
+}

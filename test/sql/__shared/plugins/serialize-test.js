@@ -1,30 +1,28 @@
-var should = require('should');
-var Store = require('../../../../lib/store');
+var Store = require('../../../../lib/store')
 
 
-module.exports = function(title, beforeFn, afterFn, store_conf){
-
+module.exports = function(title, beforeFn, afterFn, storeConf){
   describe(title + ': Serialize', function(){
-    var store;
+    var store
 
-    before(beforeFn);
+    before(beforeFn)
     after(function(next){
-      afterFn(next, store);
-    });
+      afterFn(next, store)
+    })
 
 
     before(function(){
-      store = new Store(store_conf);
-      store.setMaxListeners(0);
+      store = new Store(storeConf)
+      store.setMaxListeners(0)
 
       store.Model('User', function(){
-        this.serialize('config');
-      });
-    });
+        this.serialize('config')
+      })
+    })
 
     it('saves serialized data', function(next){
       store.ready(function(){
-        var User = store.Model('User');
+        var User = store.Model('User')
         User.create({
           login: 'phil',
           config: {
@@ -33,25 +31,24 @@ module.exports = function(title, beforeFn, afterFn, store_conf){
             }
           }
         }, function(success){
-          success.should.be.equal(true);
-          next();
-        });
-      });
-    });
+          success.should.be.equal(true)
+          next()
+        })
+      })
+    })
 
     it('reads serialized data', function(next){
       store.ready(function(){
-        var User = store.Model('User');
+        var User = store.Model('User')
         User.find(1).exec(function(phil){
           phil.config.should.be.eql({
             some: {
               nested: ['data']
             }
-          });
-          next();
-        });
-      });
-    });
-
-  });
-};
+          })
+          next()
+        })
+      })
+    })
+  })
+}

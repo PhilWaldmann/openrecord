@@ -1,36 +1,36 @@
-var should = require('should');
+var should = require('should')
 
-var Store = require('../lib/store');
+var Store = require('../lib/store')
 
 describe('Record: Base', function(){
-  var store = new Store();
+  var store = new Store()
 
   store.Model('User', function(){
 
-  });
-  var User, phil;
+  })
+  var User, phil
 
   before(function(){
-    User = store.Model('User');
+    User = store.Model('User')
     phil = new User({
       email: 'phiw@gmx.net'
-    });
+    })
   })
 
   it('is a object', function(){
-    phil.should.be.a.Object;
-  });
+    phil.should.be.a.Object()
+  })
 
   it('has validate() mixin method', function(){
-    should.exist(phil.validate);
-    phil.validate.should.be.a.Function;
-  });
+    should.exist(phil.validate)
+    phil.validate.should.be.a.Function()
+  })
 
   it('has definition', function(){
-    should.exist(phil.definition);
-  });
+    should.exist(phil.definition)
+  })
 
   it('has correct model name', function(){
-    phil.model.should.be.equal(User);
-  });
-});
+    phil.model.should.be.equal(User)
+  })
+})

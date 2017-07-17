@@ -1,36 +1,36 @@
-var exec = require('child_process').exec;
+var exec = require('child_process').exec
 
 global.beforePG = function(db, sql, next){
-  /*exec('psql -c "SELECT pid FROM pg_stat_activity where pid <> pg_backend_pid()" -U postgres', function(err, result){
+  /* exec('psql -c "SELECT pid FROM pg_stat_activity where pid <> pg_backend_pid()" -U postgres', function(err, result){
     console.log('Connected', result);
-  });*/
-  exec('psql -c "DROP DATABASE ' + db + '" -U postgres', function(err, result){
-    exec('psql -c "create database ' + db + '" -U postgres', function(err, result){
+  }); */
+  exec('psql -c "DROP DATABASE ' + db + '" -U postgres', function(err, result){ // eslint-disable-line
+    exec('psql -c "create database ' + db + '" -U postgres', function(err, result){ // eslint-disable-line
       exec('psql ' + db + ' -c "' + sql.join(';') + '" -U postgres', function(err, result){
-        if(err) throw new Error(err);
-        next();
-      });
-    });
-  });
-};
+        if(err) throw new Error(err)
+        next()
+      })
+    })
+  })
+}
 
 global.afterPG = function(db, next){
-  next();
-};
+  next()
+}
 
 global.testPG = function(name, queries){
-  var db = name.replace('/', '_') + '_test';
+  var db = name.replace('/', '_') + '_test'
   require('../__shared/' + name + '-test')(
     'SQL (Postgres)',
     function(next){
-      this.timeout(5000);
-      beforePG(db, queries, next);
+      this.timeout(5000)
+      beforePG(db, queries, next)
     },
     function(next, store){
       store.close(function(){
 
-      });
-      afterPG(db, next);
+      })
+      afterPG(db, next)
     },
     {
       host: 'localhost',
@@ -38,5 +38,5 @@ global.testPG = function(name, queries){
       database: db,
       user: 'postgres',
       password: ''
-  });
+    })
 }
