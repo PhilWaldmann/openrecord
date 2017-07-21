@@ -34,6 +34,14 @@ describe('Postgres: UUID Key', function(){
     afterPG(database, next)
   })
 
+  it('attribute id is type uuid', function(next){
+    store.ready(function(){
+      var UuidTest = store.Model('UuidTest')
+      UuidTest.definition.attributes.id.type.name.should.be.equal('uuid')
+      next()
+    })
+  })
+
   it('new() returns a null id (uuid)', function(next){
     store.ready(function(){
       var UuidTest = store.Model('UuidTest')
