@@ -1,7 +1,6 @@
 var should = require('should')
 var Store = require('../../../lib/store')
 
-
 describe('Postgres: UUID Key', function(){
   var store
   var database = 'uuid_key_test'
@@ -35,6 +34,14 @@ describe('Postgres: UUID Key', function(){
     afterPG(database, next)
   })
 
+  it('new() returns a null id (uuid)', function(next){
+    store.ready(function(){
+      var UuidTest = store.Model('UuidTest')
+      var test = new UuidTest({ another_column: 'i am setting uuid' })
+      should.not.exist(test.id)
+      next()
+    })
+  })
 
   it('create() returns a new id (uuid)', function(next){
     store.ready(function(){
