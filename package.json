@@ -28,7 +28,7 @@
     "url": "git://github.com/PhilWaldmann/openrecord.git"
   },
   "scripts": {
-    "test": "npm run lint && npm run mocha",
+    "test": "npm run lint && npm run mocha --bail",
     "mocha": "NODE_ENV=test mocha",
     "lint": "eslint --ext .js lib test",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- --reporter dot",
@@ -36,12 +36,12 @@
   },
   "dependencies": {
     "async": "~ 2.5.x",
+    "bluebird": "~ 3.5.x",
+    "date-fns": "^1.28.5",
     "glob": "~ 7.1.x",
-    "validator": "~ 8.0.x",
     "inflection": "~ 1.12.x",
     "knex": "~ 0.13.x",
-    "bluebird": "~ 3.5.x",
-    "moment": "~ 2.18.x"
+    "validator": "~ 8.0.x"
   },
   "devDependencies": {
     "blanket": ">= 1.1.x",
