@@ -2,7 +2,7 @@
 var path = require('path')
 var Store = require('../../lib/store')
 
-describe.only('Graphql: Schema', function(){
+describe('Graphql: Schema', function(){
   var store
   var database = path.join(__dirname, 'graphql_test.sqlite3')
 
