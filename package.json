@@ -28,7 +28,7 @@
     "url": "git://github.com/PhilWaldmann/openrecord.git"
   },
   "scripts": {
-    "test": "npm run lint && npm run mocha --bail",
+    "test": "npm run lint && npm run mocha",
     "mocha": "NODE_ENV=test mocha",
     "lint": "eslint --ext .js lib test",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- --reporter dot",
@@ -54,6 +54,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "fibers": "~ 1.x.x",
+    "graphql": "^0.10.5",
     "istanbul": "^0.4.5",
     "ldapjs": "latest",
     "mocha": ">= 1.13.0",
