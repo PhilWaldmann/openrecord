@@ -46,6 +46,7 @@
   "devDependencies": {
     "blanket": ">= 1.1.x",
     "coveralls": ">= 2.13.x",
+    "docpress": "^0.7.1",
     "docu": "latest",
     "eslint": "^4.2.0",
     "eslint-config-standard": "^10.2.1",
@@ -56,6 +57,8 @@
     "fibers": "~ 1.x.x",
     "graphql": "^0.10.5",
     "istanbul": "^0.4.5",
+    "jsdoc-parse": "^3.0.0",
+    "jsdoc-to-markdown": "^3.0.0",
     "ldapjs": "latest",
     "mocha": ">= 1.13.0",
     "mocha-lcov-reporter": ">= 0.0.x",

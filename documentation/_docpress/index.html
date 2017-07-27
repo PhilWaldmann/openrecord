@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="assets/style.css?t=615badd5">
+    <script src="assets/script.js?t=42463e55"></script>
+    <title>Installation</title>
+    <meta name="viewport" content="width=device-width">
+  </head>
+  <body class="-menu-visible">
+    <div class="doc-layout">
+      <div class="toggle menu-toggle js-menu-toggle"></div>
+      <div class="menu toc-menu">
+        <li class="menu-item -level-0 -parent">
+          <ul class="submenu">
+            <li class="menu-item -level-1"><a class="link title -active link-index" href="index.html">Installation</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-openrecord-with-sqlite3" href="#openrecord-with-sqlite3">OpenRecord with sqlite3</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-openrecord-with-postgres" href="#openrecord-with-postgres">OpenRecord with postgres</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-openrecord-with-mysql" href="#openrecord-with-mysql">OpenRecord with mysql</a>
+            </li>
+            <li class="menu-item -level-1 -parent"><a class="link title link-openrecord-with-rest-backend" href="#openrecord-with-rest-backend">OpenRecord with REST-Backend</a>
+              <ul class="submenu">
+                <li class="menu-item -level-2"><a class="link title link-sqlite3" href="#sqlite3">SQLite3</a>
+                </li>
+                <li class="menu-item -level-2"><a class="link title link-postgres" href="#postgres">Postgres</a>
+                </li>
+                <li class="menu-item -level-2"><a class="link title link-mysql" href="#mysql">MySQL</a>
+                </li>
+                <li class="menu-item -level-2"><a class="link title link-rest" href="#rest">REST</a>
+                </li>
+              </ul>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-global-config-options" href="#global-config-options">Global config options</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-ready()" href="#ready()">ready()</a>
+            </li>
+            <li class="menu-item -level-1 -parent"><a class="link title link-actionhero-plugin" href="#actionhero-plugin">Actionhero Plugin</a>
+              <ul class="submenu">
+                <li class="menu-item -level-2"><a class="link title link-async" href="#async">Async</a>
+                </li>
+                <li class="menu-item -level-2"><a class="link title link-load-from-files" href="#load-from-files">Load from files</a>
+                </li>
+              </ul>
+            </li>
+            <li class="menu-item -level-1 -parent"><a class="link title link-attributes" href="#attributes">Attributes</a>
+              <ul class="submenu">
+                <li class="menu-item -level-2"><a class="link title link-attribute()" href="#attribute()">attribute()</a>
+                </li>
+                <li class="menu-item -level-2"><a class="link title link-setter()-and-getter()" href="#setter()-and-getter()">setter() &amp; getter()</a>
+                </li>
+              </ul>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-validations" href="#validations">Validations</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-relations" href="#relations">Relations</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-hooks" href="#hooks">Hooks</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-scopes" href="#scopes">Scopes</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-custom-methods" href="#custom-methods">Custom Methods</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-autojoin" href="#autojoin">Autojoin</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-chaining" href="#chaining">Chaining</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-findget" href="#findget">Find/Get</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-conditions" href="#conditions">Conditions</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-aggregate-functions" href="#aggregate-functions">Aggregate functions</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-joins" href="#joins">Joins</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-includes" href="#includes">Includes</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-limitoffset" href="#limitoffset">Limit/Offset</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-sorting" href="#sorting">Sorting</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-grouphaving" href="#grouphaving">Group/Having</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-select" href="#select">Select</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-context" href="#context">Context</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-json" href="#json">Json</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-chaining" href="#chaining">Chaining</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-collection" href="#collection">Collection</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-deletedestroy" href="#deletedestroy">Delete/Destroy</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-attributes" href="#attributes">Attributes</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-validations" href="#validations">Validations</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-relations" href="#relations">Relations</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-json" href="#json">Json</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-create" href="#create">Create</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-update" href="#update">Update</a>
+            </li>
+            <li class="menu-item -level-1 -parent"><a class="link title link-destroy" href="#destroy">Destroy</a>
+              <ul class="submenu">
+                <li class="menu-item -level-2"><a class="link title link-cascade" href="#cascade">Cascade</a>
+                </li>
+              </ul>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-transactions" href="#transactions">Transactions</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-internal-structure" href="#internal-structure">Internal Structure</a>
+            </li>
+          </ul>
+        </li>
+      </div>
+      <div class="body page-index">
+        <div class="header-nav">
+          <div class="right">
+          </div>
+        </div>
+        <div class="markdown-body"><h1 id="installation">Installation</h1>
+<pre><code class="lang-bash">npm install openrecord
+</code></pre>
+<h2 id="openrecord-with-sqlite3">OpenRecord with sqlite3</h2>
+<p>install <code>sqlite3</code> as well</p>
+<pre><code class="lang-bash">npm install sqlite3
+</code></pre>
+<h2 id="openrecord-with-postgres">OpenRecord with postgres</h2>
+<p>install <code>pg</code> as well</p>
+<pre><code class="lang-bash">npm install pg
+</code></pre>
+<h2 id="openrecord-with-mysql">OpenRecord with mysql</h2>
+<p>install <code>mysql</code> as well</p>
+<pre><code class="lang-bash">npm install mysql
+</code></pre>
+<h2 id="openrecord-with-rest-backend">OpenRecord with REST-Backend</h2>
+<p>install <code>restify</code> as well</p>
+<pre><code class="lang-bash">npm install restify
+</code></pre>
+<h1 id="setup">Setup</h1>
+<pre><code class="lang-js"><span class="pl-k">var</span> OpenRecord = <span class="pl-c1">require</span>(<span class="pl-s">&apos;openrecord&apos;</span>);
+
+<span class="pl-k">var</span> store = <span class="pl-k">new</span> OpenRecord({
+	<span class="hljs-attr">type</span>: <span class="pl-s">&apos;THE TYPE&apos;</span>
+	<span class="pl-c">//... config options ...</span>
+});
+</code></pre>
+<p>The <code>type</code> config option is manditory and defines the store type (e.g. <code>postgres</code> or <code>mysql</code>). See the following sections for the type specific config options.</p>
+<h3 id="sqlite3">SQLite3</h3>
+<pre><code class="lang-js"><span class="pl-k">var</span> store = <span class="pl-k">new</span> OpenRecord({
+	<span class="hljs-attr">type</span>: <span class="pl-s">&apos;sqlite3&apos;</span>
+	file: <span class="pl-s">&apos;mydb.sqlite3&apos;</span>,
+	<span class="hljs-attr">migrations</span>: <span class="pl-s">&apos;path/to/my/migrations/*&apos;</span>
+});
+</code></pre>
+<h3 id="postgres">Postgres</h3>
+<pre><code class="lang-js"><span class="pl-k">var</span> store = <span class="pl-k">new</span> OpenRecord({
+	<span class="hljs-attr">type</span>: <span class="pl-s">&apos;postgres&apos;</span>,
+	<span class="hljs-attr">host</span>: <span class="pl-s">&apos;localhost&apos;</span>,
+	<span class="hljs-attr">database</span>: <span class="pl-s">&apos;mydb&apos;</span>,
+	<span class="hljs-attr">username</span>: <span class="pl-s">&apos;myuser&apos;</span>,
+	<span class="hljs-attr">password</span>: <span class="pl-s">&apos;mypass&apos;</span>,
+	<span class="hljs-attr">migrations</span>: <span class="pl-s">&apos;path/to/my/migrations/*&apos;</span>
+});
+</code></pre>
+<h3 id="mysql">MySQL</h3>
+<pre><code class="lang-js"><span class="pl-k">var</span> store = <span class="pl-k">new</span> OpenRecord({
+	<span class="hljs-attr">type</span>: <span class="pl-s">&apos;mysql&apos;</span>,
+	<span class="hljs-attr">host</span>: <span class="pl-s">&apos;localhost&apos;</span>,
+	<span class="hljs-attr">database</span>: <span class="pl-s">&apos;mydb&apos;</span>,
+	<span class="hljs-attr">user</span>: <span class="pl-s">&apos;myuser&apos;</span>,
+	<span class="hljs-attr">password</span>: <span class="pl-s">&apos;mypass&apos;</span>,
+	<span class="hljs-attr">migrations</span>: <span class="pl-s">&apos;path/to/my/migrations/*&apos;</span>
+});
+</code></pre>
+<h3 id="rest">REST</h3>
+<pre><code class="lang-js"><span class="pl-k">var</span> store = <span class="pl-k">new</span> OpenRecord({
+	<span class="hljs-attr">type</span>: <span class="pl-s">&apos;rest&apos;</span>,
+	<span class="hljs-attr">url</span>: <span class="pl-s">&apos;http://my-rest-server.com&apos;</span>,
+	<span class="hljs-attr">path</span>: <span class="pl-s">&apos;api/application/&apos;</span>, <span class="pl-c">//optional path</span>
+	baseParams:{ <span class="pl-c">// optional params which will be included in every search</span>
+		param: <span class="pl-s">&apos;value&apos;</span>
+	},
+});
+</code></pre>
+<h2 id="global-config-options">Global config options</h2>
+<ul>
+<li><code>models</code>: A string or array of model paths which will be loaded on initialization. See <a href="#model-definition">Model definition</a> for more information.</li>
+<li><code>plugins</code>: A string or array of plugin paths which will be included on initialization. See <a href="#plugins">Plugins</a> for more information.</li>
+<li><code>global</code>: if <code>true</code> OpenRecord will put all models into the global scope. Default: <code>false</code></li>
+</ul>
+<h2 id="ready()">ready()</h2>
+<pre><code class="lang-js">store.ready(<span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+	<span class="pl-c">//store is ready})</span>
+</code></pre>
+<p>The <code>ready</code> callback will be called after all <a href="#model-definition">models</a> and <a href="#migrations">migrations</a> are finished/ready.</p>
+<h2 id="actionhero-plugin">Actionhero Plugin</h2>
+<p>If you are using <a href="http://actionherojs.com/">actionherojs</a> you could use the <a href="https://github.com/PhilWaldmann/ah-openrecord">ah-openrecord</a> plugin.</p>
+<h1 id="model-definition">Model definition</h1>
+<p>Models could be defined synchronous or asynchronous. In the simplest form a model definition consists of just an empty function:</p>
+<pre><code class="lang-js">store.Model(<span class="pl-s">&apos;MyModel&apos;</span>, <span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+	<span class="pl-c">//definition goes here});</span>
+</code></pre>
+<p>Inside that function your are in the model definition scope. For example setting a <a href="#validations">validation</a> is as easy as:</p>
+<pre><code class="lang-js">store.Model(<span class="pl-s">&apos;MyModel&apos;</span>, <span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+	<span class="pl-k">this</span>.validatesPresenceOf(<span class="pl-s">&apos;name&apos;</span>);});
+</code></pre>
+<h3 id="async">Async</h3>
+<p>The model definition could also be done asynchronous. If you need to do some async actions before the model is ready (See <a href="#ready">ready()</a>) just put one param into in model definition function:</p>
+<pre><code class="lang-js">store.Model(<span class="pl-s">&apos;MyModel&apos;</span>, <span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params">done</span>)</span>{
+	setTimeout(done, <span class="hljs-number">100</span>);});
+</code></pre>
+<h3 id="load-from-files">Load from files</h3>
+<p>Defining models via the <code>Model()</code> method is nice, but if you need to define and load a lot of models it&apos;s easier to let OpenRecord do most of the work. Just set the <code>models</code> config option on the store and point it to the folder where all your model files are located. e.g. <code>&quot;./models/*&quot;</code>. OpenRecord uses <a href="https://github.com/isaacs/node-glob">glob</a> to find your files. So you could also do <code>&quot;./models/**/*.js&quot;</code> to load all javascript files from all subfolders.
+The model name will be automatically take from the file name so you just need to define your model definition function:</p>
+<pre><code class="lang-js"><span class="pl-c1">module</span>.exports = <span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+	<span class="pl-c">//definition goes here}</span>
+</code></pre>
+<p>Alternatively you could export a named function to set the model name manually!</p>
+<h2 id="attributes">Attributes</h2>
+<p>A model could have multiple attributes which store the records data. The model&apos;s attributes of the store type <code>sqlite3</code>, <code>mysql</code> and <code>postgres</code> are loaded automatically - so you don&apos;t need to define them twice. This will happen before your model definition function will be called. <em>Internally it uses the asynchronous model definition method described above!</em></p>
+<h3 id="attribute()">attribute()</h3>
+<p>However, if you are using a <code>REST</code> store, or need some custom attributes on your model, use the <code>attribute()</code> method:</p>
+<pre><code class="lang-js"><span class="pl-c1">module</span>.exports = <span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+	<span class="pl-k">this</span>.attribute(<span class="pl-s">&apos;my_attribute&apos;</span>, <span class="pl-c1">String</span>);
+}
+</code></pre>
+<p>{{Definition.attribute()}}</p>
+<p>OpenRecord has some build in types like <code>String</code>, <code>Number</code>, <code>Date</code>, <code>Boolean</code> and <code>Object</code>. These types are for custom attributes. But every store type could have it&apos;s own attribute types - this depends on the backend. These store dependent types will always map to javascript primitives. So most of the time you don&apos;t have to deal with that.</p>
+<h3 id="setter()-and-getter()">setter() &amp; getter()</h3>
+<p>To provide a nice API OpenRecord uses javascript setter and getter. These setters and getters are created automatically for every attribute and <a href="#relations">relation</a> and provide the magic behind <a href="#attribute-changes">record.hasChanged()</a>.
+If you need to create a custom setter or getter for your records use <code>setter()</code> or <code>getter()</code> to do so.</p>
+<p>{{Definition.setter()}}</p>
+<p>{{Definition.getter()}}</p>
+<h2 id="validations">Validations</h2>
+<p>OpenRecord has a lot of build in validation methods and could be customized and extended easily (See <a href="#plugins">Plugins</a>). Validations could be applied to a specific attribute or to the whole record. All validation errors are stored inside the <code>errors</code> Object of your record (See <a href="#errors">errors</a>).</p>
+<p>Stores that automatically load and define your attributes (<code>sqlite3</code>, <code>postgres</code> and <code>mysql</code>) also automatically apply certain validations based on e.g. <code>NOT NULL</code> or <code>varchar(255)</code>.</p>
+<p>The following validation methods are available for every store type:</p>
+<p>{{Definition.validates()}}</p>
+<p>{{Definition.validatesPresenceOf()}}</p>
+<p>{{Definition.validatesConfirmationOf()}}</p>
+<p>{{Definition.validatesFormatOf()}}</p>
+<p>{{Definition.validatesLengthOf()}}</p>
+<p>{{Definition.validatesNumericalityOf()}}</p>
+<p>The following validation methods are only available for sql store (<code>sqlite3</code>, <code>postgres</code> and <code>mysql</code>)</p>
+<p>{{Definition.validatesUniquenessOf()}}</p>
+<h2 id="relations">Relations</h2>
+<p>OpenRecord supports <code>belongs to</code>, <code>has many</code> and <code>has one</code> relations as well has <code>has many through</code>, <code>belongs to through</code> and <code>polymorphic</code> relations.</p>
+<p>A relation - except for a polymorphic relations - always needs a target model. The model name will be automatically taken from the relation name. If needed, you could always define a custom model name via <code>model</code> config option.</p>
+<p>The relation will be initialized after the target model is ready - to automatically get the primary and foreign key. The default for the foreign key is <code>&lt;model_name&gt;_&lt;primary_key&gt;</code> - all lower case! You could manually set the <code>primary_key</code> and <code>foreign_key</code> if you need.</p>
+<p>{{Definition.hasMany()}}</p>
+<p>{{Definition.hasOne()}}</p>
+<p>{{Definition.belongsTo()}}</p>
+<h2 id="hooks">Hooks</h2>
+<p>OpenRecord provides you a multitude of build in hooks to intercept or expand the internal parts. Hooks are similar to events, but will always wait for your custom code to complete - either synchronous or asynchronous. All the internal processes are build on top of these hooks. A hook could return one of three &quot;states&quot;:</p>
+<ol>
+<li><code>true</code>: Everything okay - keep going</li>
+<li><code>false</code>: Stop the process and return <code>false</code></li>
+<li><code>new Error()</code>: reject the process with an error</li>
+</ol>
+<p>For example trying to save an invalid record (some <a href="#validations">validations</a> failed) will return <code>false</code> and stop the process of writing the record into the store. If, for example, the save process failed (e.g. connection lost) OpenRecord will reject it with an <code>Error</code>.</p>
+<p>Here is an example how to use the <code>beforeFind()</code> hook synchronous:</p>
+<pre><code class="lang-js"><span class="pl-c1">module</span>.exports = <span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+	<span class="pl-k">this</span>.beforeFind(<span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+		<span class="pl-k">this</span>.where({<span class="hljs-attr">delete_at</span>: <span class="pl-c1">null</span>});
+		<span class="pl-k">return</span> <span class="pl-c1">true</span>;			});
+}
+</code></pre>
+<p>The above example will add a <a href="#conditions">condition</a> (<code>delete_at</code> should be equal <code>null</code>) to every record search of that model. If you need to do some async stuff inside the hook, you could use it asynchronous. The very last param is a callback. If you put that callback into your function&apos;s parameters OpenRecord will treat that function asynchronous. <em>Same concept as model definition function!</em></p>
+<pre><code class="lang-js"><span class="pl-c1">module</span>.exports = <span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+	<span class="pl-k">this</span>.beforeFind(<span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params">query, done</span>)</span>{
+		<span class="pl-k">this</span>.setTimeout(done, <span class="hljs-number">1000</span>);
+	});
+}
+</code></pre>
+<p>As you could see in the above example, returning anything else except <code>false</code> and an <code>Error</code>-Object is equal to returning <code>true</code>.</p>
+<p>The following hooks are available:</p>
+<p>{{Definition.beforeFind()}}</p>
+<p>{{Definition.afterFind()}}</p>
+<p>{{Definition.beforeValidation()}}</p>
+<p>{{Definition.afterValidation()}}</p>
+<p>{{Definition.beforeSave()}}</p>
+<p>{{Definition.afterSave()}}</p>
+<p>{{Definition.beforeCreate()}}</p>
+<p>{{Definition.afterCreate()}}</p>
+<p>{{Definition.beforeUpdate()}}</p>
+<p>{{Definition.afterUpdate()}}</p>
+<p>{{Definition.beforeDestroy()}}</p>
+<p>{{Definition.afterDestroy()}}</p>
+<h2 id="scopes">Scopes</h2>
+<p>As you have seen in the first example of <a href="#hooks">hooks</a>, you are able to define <a href="#conditions">condition</a> inside the <a href="#beforefind">beforeFind()</a> hook. This is nice if you always want to apply this conditions - otherwiese you need to define that conditions for every search you do. To give you a kind of macro-like functionality OpenRecord offer you <code>scopes</code>.
+scopes are little helpers that contains your search criteria and could be used in an recuring fashion.</p>
+<p>For example if you need to get all activated users (<code>activated</code> is <code>true</code>) in 99% of all your searches, you would add <code>.where({activated: true})</code> to every search you do. This is okay with one condition but gets messy if you need to apply multiple conditions on every users search you do in your application. With scopes you define your search criteria on one place - in your model definition.</p>
+<pre><code class="lang-js"><span class="pl-c1">module</span>.exports = <span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+	<span class="pl-k">this</span>.scope(<span class="pl-s">&apos;activated&apos;</span>, <span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+		<span class="pl-k">this</span>.where({<span class="hljs-attr">activated</span>: <span class="pl-c1">true</span>});	});
+}
+</code></pre>
+<p>OpenRecord automatically creates the <code>activated</code> method on your model. Now you just need to add <code>.activated()</code> instead of <code>.where({activated: true})</code> to your search.</p>
+<pre><code class="lang-js">User.activated().join()...
+</code></pre>
+<p>Scopes are synchronous only and will provide automatic <a href="#chaining">chainability</a> for you!</p>
+<p>{{Definition.scope()}}</p>
+<p>{{Definition.defaultScope()}}</p>
+<h2 id="custom-methods">Custom Methods</h2>
+<p>Extending your model with custom methods is as easy as defining your method on the model definition scope:</p>
+<pre><code class="lang-js"><span class="pl-c1">module</span>.exports = <span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+	<span class="pl-k">this</span>.fullName = <span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+		<span class="pl-k">return</span> <span class="pl-k">this</span>.first_name + <span class="pl-s">&apos; &apos;</span> + <span class="pl-k">this</span>.last_name;	}
+}
+</code></pre>
+<p>now you could call <code>fullName()</code> on your record like this:</p>
+<pre><code class="lang-js"><span class="pl-k">var</span> phil = <span class="pl-k">new</span> User({
+	<span class="hljs-attr">first_name</span>: <span class="pl-s">&apos;Philipp&apos;</span>,
+	<span class="hljs-attr">last_name</span>: <span class="pl-s">&apos;Waldmann&apos;</span>
+});
+
+<span class="pl-c1">console</span>.log(phil.fullName()); <span class="pl-c">//returns &quot;Philipp Waldmann&quot;</span>
+</code></pre>
+<h2 id="autojoin">Autojoin</h2>
+<p>OpenRecord gives your the option to define relations which will be joined automatically if needed. The relation will be joined if there is a condition targeting the related table.</p>
+<pre><code class="lang-js"><span class="pl-c1">module</span>.exports = <span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+	<span class="pl-k">this</span>.hasMany(<span class="pl-s">&apos;permissions&apos;</span>);
+	<span class="pl-k">this</span>.autoJoin(<span class="pl-s">&apos;permissions&apos;</span>);
+}
+</code></pre>
+<p>{{Definition.autoJoin()}}</p>
+<h2 id="chaining">Chaining</h2>
+<p>You may have noticed that every definition method described above will return a <code>Definition</code>-Object. This Object is the the definition scope (<code>this</code>). So you are able to chain everything if you prefer it that way.</p>
+<pre><code class="lang-js"><span class="pl-c1">module</span>.exports = <span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+	<span class="pl-k">this</span>
+	.validatesPresenceOf(<span class="pl-s">&apos;name&apos;</span>)
+	.validatesConfirmationOf(<span class="pl-s">&apos;password&apos;</span>)
+	
+	.hasMany(<span class="pl-s">&apos;posts&apos;</span>)
+	.hasMany(<span class="pl-s">&apos;threads&apos;</span>);
+}
+</code></pre>
+<h1 id="model">Model</h1>
+<p>Use the <a href="#ready">ready()</a> method to get notified when your model is ready for usage. To retrieve the model you could use the <code>Model()</code> as well.
+Just do the following to get your Model:</p>
+<pre><code class="lang-js"><span class="pl-k">var</span> User = store.Model(<span class="pl-s">&apos;User&apos;</span>);
+</code></pre>
+<p>If you&apos;ve set the <code>global</code> config option to <code>true</code> OpenRecord automatically created a global variable with the same name as your model for you.</p>
+<h2 id="findget">Find/Get</h2>
+<p>OpenRecord has some really handy methods to search your store. To get the results call <code>exec()</code></p>
+<p>{{Model.exec()}}</p>
+<p>To get a single record, call <code>find(id)</code>.</p>
+<p>{{Model.find()}}</p>
+<p><code>get(id)</code> is very similar to get. The only difference is that <code>get(id)</code> will throw an error if no record was found.</p>
+<p>{{Model.get()}}</p>
+<h2 id="conditions">Conditions</h2>
+<p>OpenRecord has a realy nice syntax to filter your results.
+There are 3 simple ways to write some conditions:</p>
+<pre><code class="lang-js">User.where([<span class="pl-s">&apos;login = ?&apos;</span>, <span class="pl-s">&apos;phil&apos;</span>]) <span class="pl-c">//write raw sql placeholders</span>
+User.where([<span class="pl-s">&apos;login = :login&apos;</span>, {<span class="hljs-attr">login</span>: <span class="pl-s">&apos;phil&apos;</span>}]) <span class="pl-c">//write raw sql with enhanced placeholders</span>
+User.where({<span class="hljs-attr">login</span>: <span class="pl-s">&apos;phil&apos;</span>}) <span class="pl-c">//conditions as a hash</span>
+</code></pre>
+<p>But the hash syntax is even more powerful:</p>
+<pre><code class="lang-js">User.where({<span class="hljs-attr">login</span>: [<span class="pl-s">&apos;phil&apos;</span>, <span class="pl-s">&apos;michl&apos;</span>]}) <span class="pl-c">//login IN (&apos;phil&apos;, &apos;michl&apos;)</span>
+User.where({<span class="hljs-attr">login</span>: <span class="pl-c1">null</span>}) <span class="pl-c">//login IS NULL</span>
+User.where({<span class="hljs-attr">active</span>: <span class="pl-c1">true</span>}) <span class="pl-c">//active IS true</span>
+User.where({<span class="hljs-attr">login_not</span>: <span class="pl-c1">null</span>}) <span class="pl-c">//login IS NOT NULL</span>
+User.where({<span class="hljs-attr">login_like</span>: <span class="pl-s">&apos;phi&apos;</span>}) <span class="pl-c">//login LIKE &apos;%phi%&apos;</span>
+User.where({<span class="hljs-attr">login_not_like</span>: <span class="pl-s">&apos;phi&apos;</span>}) <span class="pl-c">//login NOT LIKE &apos;%phi%&apos;</span>
+User.where({<span class="hljs-attr">login_like</span>: [<span class="pl-s">&apos;phi&apos;</span>, <span class="pl-s">&apos;mic&apos;</span>]}) <span class="pl-c">//(login LIKE &apos;%phi%&apos; OR login LIKE &apos;%mic%&apos;)</span>
+User.where({<span class="hljs-attr">failed_logins_gt</span>: <span class="hljs-number">0</span>}) <span class="pl-c">//failed_logins &gt; 0</span>
+User.where({<span class="hljs-attr">failed_logins_gte</span>: <span class="hljs-number">0</span>}) <span class="pl-c">//failed_logins &gt;= 0</span>
+User.where({<span class="hljs-attr">failed_logins_lt</span>: <span class="hljs-number">10</span>}) <span class="pl-c">//failed_logins &lt; 10</span>
+User.where({<span class="hljs-attr">failed_logins_lte</span>: <span class="hljs-number">10</span>}) <span class="pl-c">//failed_logins &lt;= 10</span>
+User.where({<span class="hljs-attr">failed_logins_between</span>: [<span class="hljs-number">5</span>, <span class="hljs-number">8</span>]}) <span class="pl-c">//failed_logins between 5 and 8</span>
+</code></pre>
+<p>The above examples always relate to the <code>User</code> model, but what about relations?</p>
+<pre><code class="lang-js">User.join(<span class="pl-s">&apos;posts&apos;</span>).where({<span class="hljs-attr">posts</span>:{<span class="hljs-attr">title_like</span>: [<span class="pl-s">&apos;OpenRecord&apos;</span>]}}).exec(<span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params">posts</span>)</span>{
+  <span class="pl-c1">console</span>.log(posts); <span class="pl-c">//returs all users with all posts where the title contains &apos;OpenRecord&apos;</span>
+})
+</code></pre>
+<p>The conditions nesting could be done indefinitely!</p>
+<pre><code class="lang-js">User.join({<span class="hljs-attr">posts</span>: {<span class="hljs-attr">thread</span>: <span class="pl-s">&apos;rating&apos;</span>}}).where({<span class="hljs-attr">posts</span>: {<span class="hljs-attr">thread</span>: {<span class="hljs-attr">rating</span>: {<span class="hljs-attr">stars_gte</span>: <span class="hljs-number">5</span>}}}}).exec(<span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params">posts</span>)</span>{
+  <span class="pl-c1">console</span>.log(posts); <span class="pl-c">//returs all users with all posts whith it&apos;s thread where the rating has more than 4 stars</span>
+})
+</code></pre>
+<p>{{Model.where()}}</p>
+<h2 id="aggregate-functions">Aggregate functions</h2>
+<p>OpenRecord has basic aggregate functions build in.</p>
+<pre><code class="lang-js">User.count().where({<span class="hljs-attr">active</span>: <span class="pl-c1">true</span>}).exec(<span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params">count</span>)</span>{
+  <span class="pl-c1">console</span>.log(count); <span class="pl-c">//logs the number of active users</span>
+})
+</code></pre>
+<p>if you use multiple aggregate functions at once:</p>
+<pre><code class="lang-js">User.count().sum(<span class="pl-s">&apos;failed_logins&apos;</span>).where({<span class="hljs-attr">active</span>: <span class="pl-c1">true</span>}).exec(<span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params">result</span>)</span>{
+  <span class="pl-c1">console</span>.log(result.count); <span class="pl-c">//logs the number of active users</span>
+  <span class="pl-c1">console</span>.log(result.sum); <span class="pl-c">//logs the sum of failed_logins</span>
+})
+</code></pre>
+<p>{{Model.count()}}</p>
+<p>{{Model.sum()}}</p>
+<p>{{Model.max()}}</p>
+<p>{{Model.min()}}</p>
+<h2 id="joins">Joins</h2>
+<p>If you&apos;ve properly set up your relations joining them is as easy as</p>
+<pre><code class="lang-js">User.join(<span class="pl-s">&apos;relation_name&apos;</span>).exec(<span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params">users</span>)</span>{
+  <span class="pl-c1">console</span>.log(users[<span class="hljs-number">0</span>].relation_name);
+})
+</code></pre>
+<p>or</p>
+<pre><code class="lang-js">User.join(<span class="pl-s">&apos;relation_name&apos;</span>, <span class="pl-s">&apos;another_relation&apos;</span>, <span class="pl-s">&apos;and_one_more&apos;</span>)
+</code></pre>
+<p>or via</p>
+<pre><code class="lang-js">User.join([<span class="pl-s">&apos;relation_name&apos;</span>, <span class="pl-s">&apos;another_relation&apos;</span>, <span class="pl-s">&apos;and_one_more&apos;</span>])
+</code></pre>
+<p>if you need to join nested relations use the hash syntax instead:</p>
+<pre><code class="lang-js">User.join({<span class="hljs-attr">posts</span>: {<span class="hljs-attr">thread</span>: <span class="pl-s">&apos;rating&apos;</span>}})
+</code></pre>
+<p>All joins are by default <code>LEFT JOIN</code>s.</p>
+<p>{{Model.join()}}</p>
+<p>{{Model.leftJoin()}}</p>
+<p>{{Model.rightJoin()}}</p>
+<p>{{Model.innerJoin()}}</p>
+<p>{{Model.outerJoin()}}</p>
+<h2 id="includes">Includes</h2>
+<p>To prefetch/eagerload relations use the <code>include()</code> function.
+OpenRecord will create an extra query for every included relation.
+The syntax is similar to the <code>join()</code> method.</p>
+<p>{{Model.include()}}</p>
+<h2 id="limitoffset">Limit/Offset</h2>
+<p>Limit your results with <code>LIMIT</code> and <code>OFFSET</code>.</p>
+<p>{{Model.limit()}}</p>
+<p>{{Model.offset()}}</p>
+<h2 id="sorting">Sorting</h2>
+<p>{{Model.order()}}</p>
+<h2 id="grouphaving">Group/Having</h2>
+<p>{{Model.group()}}</p>
+<p><code>having()</code> acceptes the same params like the <code>where()</code> functions</p>
+<p>{{Model.having()}}</p>
+<h2 id="select">Select</h2>
+<p>By default OpenRecord will select all fields (<code>*</code>).
+You could define some custom select fields - or SQL functions here.</p>
+<p>{{Model.select()}}</p>
+<h2 id="context">Context</h2>
+<p>If you want to do some user related stuff inside your model (e.g. automatically save the creator_id to a record) you&apos;ll need an execution context.
+Nodejs is asynchronous, so you could not just write the current user id into a global variable to use it another part of your application. To get that information into OpenRecord (e.g. if you need to do something with it inside a hook) we use the <code>setContext()</code> method.</p>
+<p>Here is an example:</p>
+<pre><code class="lang-js"><span class="pl-c">//the Post model definition</span>
+store.Model(<span class="pl-s">&apos;Post&apos;</span>, <span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+  <span class="pl-k">this</span>.beforeUpdate(<span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+    <span class="pl-c">//here we use the context.</span>
+    <span class="pl-c">//check if the user is an admin or the creator of that post</span>
+    <span class="pl-k">return</span> <span class="pl-k">this</span>.context.role == <span class="pl-s">&apos;admin&apos;</span> || <span class="pl-k">this</span>.context.id == <span class="pl-k">this</span>.creator_id;
+  });
+});
+
+
+<span class="pl-c">//some middleware to get the current user</span>
+<span class="pl-k">var</span> user = {<span class="hljs-attr">role</span>: <span class="pl-s">&apos;admin&apos;</span>, <span class="hljs-attr">id</span>:<span class="hljs-number">1</span>};
+
+<span class="pl-c">//some update action</span>
+Post.setContext(user).find(id).exec(<span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params">post</span>)</span>{
+  <span class="pl-c">//make some changes...</span>
+  
+  post.save(<span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+    ...
+  })
+})
+
+</code></pre>
+<p>In the above example we set the user object as our context and use it inside the models beforeUpdate hook.</p>
+<p>{{Model.setContext()}}</p>
+<h2 id="json">Json</h2>
+<p>Output all records inside the <code>Collection</code> as an json object/array</p>
+<p>{{Collection.toJson()}}</p>
+<h2 id="chaining">Chaining</h2>
+<p>Almost everything in OpenRecord is chainable.
+But there is one important point:</p>
+<blockquote>
+<p>If you call any chainable method on a <code>Model</code> the returning object is a <code>Collection</code></p>
+</blockquote>
+<p>Let&apos;s take the <code>where()</code> method to explain this in an example:</p>
+<pre><code class="lang-js"><span class="pl-k">var</span> collection1 = User.where({<span class="hljs-attr">active</span>: <span class="pl-c1">true</span>});
+<span class="pl-k">var</span> collection2 = User.where({<span class="hljs-attr">active</span>: <span class="pl-c1">false</span>});
+
+<span class="pl-c1">console</span>.log(collection1 === collection2); <span class="pl-c">//false</span>
+</code></pre>
+<p>If we would save all the <code>conditions</code>, <code>joins</code>, <code>includes</code> ect. inside the model, we couldn&apos;t do simultaneous queries.
+So everytime you call a chainable <code>Model</code>-method it will return a clone - the <code>Collection</code>!
+But the clone won&apos;t be cloned again (only if you force it to).</p>
+<pre><code class="lang-js"><span class="pl-k">var</span> collection1 = User.where({<span class="hljs-attr">active</span>: <span class="pl-c1">true</span>});
+<span class="pl-k">var</span> collection2 = collection2.where({<span class="hljs-attr">login</span>: <span class="pl-s">&apos;phil&apos;</span>});
+
+<span class="pl-c1">console</span>.log(collection1 === collection2); <span class="pl-c">//true</span>
+</code></pre>
+<p>Internally OpenRecord uses the <code>chain()</code> method</p>
+<p>{{Model.chain()}}</p>
+<h2 id="collection">Collection</h2>
+<h2 id="deletedestroy">Delete/Destroy</h2>
+<p>{{Model.delete()}}</p>
+<p>{{Model.destroy()}}</p>
+<h1 id="record">Record</h1>
+<h2 id="attributes">Attributes</h2>
+<p>{{Record.set()}}</p>
+<p>{{Record.get()}}</p>
+<p>Changes</p>
+<p>{{Record.hasChanges()}}</p>
+<p>{{Record.hasChanged()}}</p>
+<p>{{Record.getChanges()}}</p>
+<p>{{Record.getChangedValues()}}</p>
+<p>{{Record.resetChanges()}}</p>
+<p>Allowed attributes</p>
+<h2 id="validations">Validations</h2>
+<p>{{Record.validate()}}</p>
+<p>Errors ... coming soon</p>
+<h2 id="relations">Relations</h2>
+<p>Nested records ... coming soon</p>
+<h2 id="json">Json</h2>
+<p>{{Record.toJson()}}</p>
+<h2 id="create">Create</h2>
+<p>{{Model.new()}}</p>
+<p>{{Model.create()}}</p>
+<p>{{Record.save()}}</p>
+<h2 id="update">Update</h2>
+<p>Just change some attributes and OpenRecord will automatically detect the changed values.</p>
+<pre><code class="lang-js">user.login = <span class="pl-s">&apos;phil&apos;</span>;
+user.save(<span class="hljs-function"><span class="pl-k">function</span>(<span class="hljs-params"></span>)</span>{
+  <span class="pl-c">// ...</span>
+}) 
+</code></pre>
+<h2 id="destroy">Destroy</h2>
+<p>{{Record.destroy()}}</p>
+<h3 id="cascade">Cascade</h3>
+<p>Coming soon</p>
+<h2 id="transactions">Transactions</h2>
+<p>{{Model.transaction()}}</p>
+<h1 id="migrations">Migrations</h1>
+<p>Coming soon</p>
+<h1 id="plugins">Plugins</h1>
+<p>Coming soon</p>
+<h2 id="internal-structure">Internal Structure</h2>
+<p>Coming soon</p>
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

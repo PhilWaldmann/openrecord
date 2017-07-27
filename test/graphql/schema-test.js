@@ -32,6 +32,10 @@ describe('Graphql: Schema', function(){
       this.getter('full_name', function(){
         return this.login + ' FULL'
       }, String)
+
+      this.variant('email', function(value){
+        return 123456
+      })
     })
     store.Model('Post', function(){
       this.belongsTo('user')
@@ -135,7 +139,7 @@ describe('Graphql: Schema', function(){
   })
 
 
-  it('returns a record with deeply nested relational data', function(done){
+  it.skip('returns a record with deeply nested relational data', function(done){
     store.ready(function(){
       store.query(`{
         users{

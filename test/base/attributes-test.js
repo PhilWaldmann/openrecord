@@ -24,6 +24,10 @@ describe('Attributes', function(){
     this.attribute('my_date', Date, {})
     this.attribute('my_number', Number, {})
     this.attribute('my_bool', Boolean, {})
+
+    this.variant('my_str', function(value, args, record){
+      return value.substr(0, args.size)
+    })
   })
 
   var User, phil
@@ -267,6 +271,29 @@ describe('Attributes', function(){
         }).should.throw()
         next()
       })
+    })
+  })
+
+
+  describe('variants', function(){
+    var user
+
+    before(function(){
+      user = new User({
+        my_str: 'phil'
+      })
+    })
+
+    it('if a attribute variant is defined there is a special attr_name$() method', function(next){
+      should.exist(user.my_str$)
+      user.my_str$.should.be.a.Function()
+      next()
+    })
+
+
+    it('variant returns the right value', function(next){
+      user.my_str$({size: 4}).should.be.equal('phil')
+      next()
     })
   })
 })

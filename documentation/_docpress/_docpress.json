@@ -1,0 +1,514 @@
+{
+  "toc": {
+    "sections": [
+      {
+        "title": "Installation",
+        "source": "README.md",
+        "expand": true,
+        "url": "index.html",
+        "slug": "index",
+        "headings": [
+          {
+            "title": "OpenRecord with sqlite3",
+            "depth": 2,
+            "id": "openrecord-with-sqlite3"
+          },
+          {
+            "title": "OpenRecord with postgres",
+            "depth": 2,
+            "id": "openrecord-with-postgres"
+          },
+          {
+            "title": "OpenRecord with mysql",
+            "depth": 2,
+            "id": "openrecord-with-mysql"
+          },
+          {
+            "title": "OpenRecord with REST-Backend",
+            "depth": 2,
+            "id": "openrecord-with-rest-backend",
+            "headings": [
+              {
+                "title": "SQLite3",
+                "depth": 3,
+                "id": "sqlite3"
+              },
+              {
+                "title": "Postgres",
+                "depth": 3,
+                "id": "postgres"
+              },
+              {
+                "title": "MySQL",
+                "depth": 3,
+                "id": "mysql"
+              },
+              {
+                "title": "REST",
+                "depth": 3,
+                "id": "rest"
+              }
+            ]
+          },
+          {
+            "title": "Global config options",
+            "depth": 2,
+            "id": "global-config-options"
+          },
+          {
+            "title": "ready()",
+            "depth": 2,
+            "id": "ready()"
+          },
+          {
+            "title": "Actionhero Plugin",
+            "depth": 2,
+            "id": "actionhero-plugin",
+            "headings": [
+              {
+                "title": "Async",
+                "depth": 3,
+                "id": "async"
+              },
+              {
+                "title": "Load from files",
+                "depth": 3,
+                "id": "load-from-files"
+              }
+            ]
+          },
+          {
+            "title": "Attributes",
+            "depth": 2,
+            "id": "attributes",
+            "headings": [
+              {
+                "title": "attribute()",
+                "depth": 3,
+                "id": "attribute()"
+              },
+              {
+                "title": "setter() & getter()",
+                "depth": 3,
+                "id": "setter()-and-getter()"
+              }
+            ]
+          },
+          {
+            "title": "Validations",
+            "depth": 2,
+            "id": "validations"
+          },
+          {
+            "title": "Relations",
+            "depth": 2,
+            "id": "relations"
+          },
+          {
+            "title": "Hooks",
+            "depth": 2,
+            "id": "hooks"
+          },
+          {
+            "title": "Scopes",
+            "depth": 2,
+            "id": "scopes"
+          },
+          {
+            "title": "Custom Methods",
+            "depth": 2,
+            "id": "custom-methods"
+          },
+          {
+            "title": "Autojoin",
+            "depth": 2,
+            "id": "autojoin"
+          },
+          {
+            "title": "Chaining",
+            "depth": 2,
+            "id": "chaining"
+          },
+          {
+            "title": "Find/Get",
+            "depth": 2,
+            "id": "findget"
+          },
+          {
+            "title": "Conditions",
+            "depth": 2,
+            "id": "conditions"
+          },
+          {
+            "title": "Aggregate functions",
+            "depth": 2,
+            "id": "aggregate-functions"
+          },
+          {
+            "title": "Joins",
+            "depth": 2,
+            "id": "joins"
+          },
+          {
+            "title": "Includes",
+            "depth": 2,
+            "id": "includes"
+          },
+          {
+            "title": "Limit/Offset",
+            "depth": 2,
+            "id": "limitoffset"
+          },
+          {
+            "title": "Sorting",
+            "depth": 2,
+            "id": "sorting"
+          },
+          {
+            "title": "Group/Having",
+            "depth": 2,
+            "id": "grouphaving"
+          },
+          {
+            "title": "Select",
+            "depth": 2,
+            "id": "select"
+          },
+          {
+            "title": "Context",
+            "depth": 2,
+            "id": "context"
+          },
+          {
+            "title": "Json",
+            "depth": 2,
+            "id": "json"
+          },
+          {
+            "title": "Chaining",
+            "depth": 2,
+            "id": "chaining"
+          },
+          {
+            "title": "Collection",
+            "depth": 2,
+            "id": "collection"
+          },
+          {
+            "title": "Delete/Destroy",
+            "depth": 2,
+            "id": "deletedestroy"
+          },
+          {
+            "title": "Attributes",
+            "depth": 2,
+            "id": "attributes"
+          },
+          {
+            "title": "Validations",
+            "depth": 2,
+            "id": "validations"
+          },
+          {
+            "title": "Relations",
+            "depth": 2,
+            "id": "relations"
+          },
+          {
+            "title": "Json",
+            "depth": 2,
+            "id": "json"
+          },
+          {
+            "title": "Create",
+            "depth": 2,
+            "id": "create"
+          },
+          {
+            "title": "Update",
+            "depth": 2,
+            "id": "update"
+          },
+          {
+            "title": "Destroy",
+            "depth": 2,
+            "id": "destroy",
+            "headings": [
+              {
+                "title": "Cascade",
+                "depth": 3,
+                "id": "cascade"
+              }
+            ]
+          },
+          {
+            "title": "Transactions",
+            "depth": 2,
+            "id": "transactions"
+          },
+          {
+            "title": "Internal Structure",
+            "depth": 2,
+            "id": "internal-structure"
+          }
+        ]
+      }
+    ]
+  },
+  "index": {
+    "index.html": {
+      "source": "README.md",
+      "title": "Installation",
+      "pageTitle": "Installation",
+      "slug": "index",
+      "headings": [
+        {
+          "title": "OpenRecord with sqlite3",
+          "depth": 2,
+          "id": "openrecord-with-sqlite3"
+        },
+        {
+          "title": "OpenRecord with postgres",
+          "depth": 2,
+          "id": "openrecord-with-postgres"
+        },
+        {
+          "title": "OpenRecord with mysql",
+          "depth": 2,
+          "id": "openrecord-with-mysql"
+        },
+        {
+          "title": "OpenRecord with REST-Backend",
+          "depth": 2,
+          "id": "openrecord-with-rest-backend",
+          "headings": [
+            {
+              "title": "SQLite3",
+              "depth": 3,
+              "id": "sqlite3"
+            },
+            {
+              "title": "Postgres",
+              "depth": 3,
+              "id": "postgres"
+            },
+            {
+              "title": "MySQL",
+              "depth": 3,
+              "id": "mysql"
+            },
+            {
+              "title": "REST",
+              "depth": 3,
+              "id": "rest"
+            }
+          ]
+        },
+        {
+          "title": "Global config options",
+          "depth": 2,
+          "id": "global-config-options"
+        },
+        {
+          "title": "ready()",
+          "depth": 2,
+          "id": "ready()"
+        },
+        {
+          "title": "Actionhero Plugin",
+          "depth": 2,
+          "id": "actionhero-plugin",
+          "headings": [
+            {
+              "title": "Async",
+              "depth": 3,
+              "id": "async"
+            },
+            {
+              "title": "Load from files",
+              "depth": 3,
+              "id": "load-from-files"
+            }
+          ]
+        },
+        {
+          "title": "Attributes",
+          "depth": 2,
+          "id": "attributes",
+          "headings": [
+            {
+              "title": "attribute()",
+              "depth": 3,
+              "id": "attribute()"
+            },
+            {
+              "title": "setter() & getter()",
+              "depth": 3,
+              "id": "setter()-and-getter()"
+            }
+          ]
+        },
+        {
+          "title": "Validations",
+          "depth": 2,
+          "id": "validations"
+        },
+        {
+          "title": "Relations",
+          "depth": 2,
+          "id": "relations"
+        },
+        {
+          "title": "Hooks",
+          "depth": 2,
+          "id": "hooks"
+        },
+        {
+          "title": "Scopes",
+          "depth": 2,
+          "id": "scopes"
+        },
+        {
+          "title": "Custom Methods",
+          "depth": 2,
+          "id": "custom-methods"
+        },
+        {
+          "title": "Autojoin",
+          "depth": 2,
+          "id": "autojoin"
+        },
+        {
+          "title": "Chaining",
+          "depth": 2,
+          "id": "chaining"
+        },
+        {
+          "title": "Find/Get",
+          "depth": 2,
+          "id": "findget"
+        },
+        {
+          "title": "Conditions",
+          "depth": 2,
+          "id": "conditions"
+        },
+        {
+          "title": "Aggregate functions",
+          "depth": 2,
+          "id": "aggregate-functions"
+        },
+        {
+          "title": "Joins",
+          "depth": 2,
+          "id": "joins"
+        },
+        {
+          "title": "Includes",
+          "depth": 2,
+          "id": "includes"
+        },
+        {
+          "title": "Limit/Offset",
+          "depth": 2,
+          "id": "limitoffset"
+        },
+        {
+          "title": "Sorting",
+          "depth": 2,
+          "id": "sorting"
+        },
+        {
+          "title": "Group/Having",
+          "depth": 2,
+          "id": "grouphaving"
+        },
+        {
+          "title": "Select",
+          "depth": 2,
+          "id": "select"
+        },
+        {
+          "title": "Context",
+          "depth": 2,
+          "id": "context"
+        },
+        {
+          "title": "Json",
+          "depth": 2,
+          "id": "json"
+        },
+        {
+          "title": "Chaining",
+          "depth": 2,
+          "id": "chaining"
+        },
+        {
+          "title": "Collection",
+          "depth": 2,
+          "id": "collection"
+        },
+        {
+          "title": "Delete/Destroy",
+          "depth": 2,
+          "id": "deletedestroy"
+        },
+        {
+          "title": "Attributes",
+          "depth": 2,
+          "id": "attributes"
+        },
+        {
+          "title": "Validations",
+          "depth": 2,
+          "id": "validations"
+        },
+        {
+          "title": "Relations",
+          "depth": 2,
+          "id": "relations"
+        },
+        {
+          "title": "Json",
+          "depth": 2,
+          "id": "json"
+        },
+        {
+          "title": "Create",
+          "depth": 2,
+          "id": "create"
+        },
+        {
+          "title": "Update",
+          "depth": 2,
+          "id": "update"
+        },
+        {
+          "title": "Destroy",
+          "depth": 2,
+          "id": "destroy",
+          "headings": [
+            {
+              "title": "Cascade",
+              "depth": 3,
+              "id": "cascade"
+            }
+          ]
+        },
+        {
+          "title": "Transactions",
+          "depth": 2,
+          "id": "transactions"
+        },
+        {
+          "title": "Internal Structure",
+          "depth": 2,
+          "id": "internal-structure"
+        }
+      ]
+    }
+  },
+  "sources": {
+    "README.md": "index.html"
+  }
+}

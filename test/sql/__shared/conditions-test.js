@@ -324,6 +324,17 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
 
 
+      it('finds nothing with IS NULL condition (undefined)', function(next){
+        store.ready(function(){
+          var User = store.Model('User')
+          User.where({login: undefined}).exec(function(result){
+            result.length.should.be.equal(0)
+            next()
+          })
+        })
+      })
+
+
       it('finds all with IS NOT NULL condition', function(next){
         store.ready(function(){
           var User = store.Model('User')
@@ -333,6 +344,18 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           })
         })
       })
+
+
+      it('finds all with IS NOT NULL condition (undefined)', function(next){
+        store.ready(function(){
+          var User = store.Model('User')
+          User.where({login_not: undefined}).exec(function(result){
+            result.length.should.be.greaterThan(0)
+            next()
+          })
+        })
+      })
+
 
       it('finds all where created_at is greater than 2014-01-05', function(next){
         store.ready(function(){
