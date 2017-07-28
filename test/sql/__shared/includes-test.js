@@ -30,6 +30,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.hasOne('avatar')
         this.hasMany('unread_posts')
         this.hasMany('unread', {through: 'unread_posts'})
+        this.hasOne('last_post', {model: 'Post', scope: '!recent'})
         this.hasMany('unread_threads', {through: 'unread', relation: 'thread'})
         this.hasMany('poly_things')
         this.hasMany('members', {through: 'poly_things', relation: 'member'})
@@ -44,6 +45,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.belongsTo('user')
         this.belongsTo('thread')
         this.belongsTo('thread_autor', {through: 'thread', relation: 'user'})
+
+        this.scope('recent', function(){
+          this.order('id', true).limit(1)
+        })
       })
       store.Model('Thread', function(){
         this.belongsTo('user')
@@ -592,6 +597,19 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             next()
           }).catch(function(err){
             should.not.exist(err)
+            next()
+          })
+        })
+      })
+
+
+      it('include a relation with scope', function(next){
+        store.ready(function(){
+          var User = store.Model('User')
+          User.include('last_post').exec(function(result){
+            result.length.should.be.equal(3)
+            result[0].last_post.id.should.be.equal(3)
+            result[1].last_post.id.should.be.equal(4)
             next()
           })
         })
