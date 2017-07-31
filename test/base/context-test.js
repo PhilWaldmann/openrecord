@@ -21,6 +21,17 @@ describe('Context', function(){
   store.Model('Post', function(){
     this.attribute('message', String)
 
+    this.hasMany('comments')
+
+    this.beforeValidation(function(){
+      // In the record scope (this == record)
+      this.context.should.be.eql(myContext)
+    })
+  })
+
+  store.Model('Comment', function(){
+    this.attribute('words', String)
+
     this.beforeValidation(function(){
       // In the record scope (this == record)
       this.context.should.be.eql(myContext)
@@ -69,6 +80,15 @@ describe('Context', function(){
 
       user.context.should.be.eql(myContext)
       user.posts[0].context.should.be.eql(myContext)
+    })
+
+    it('passes the context to nested relational objects', function(){
+      var user = User.setContext(myContext).new({login: 'phil', posts: [{message: 'test', comments: [{words: 'words and stuff'}]}]})
+      myContext.should.be.eql({foo: 'bar'})
+
+      user.context.should.be.eql(myContext)
+      user.posts[0].context.should.be.eql(myContext)
+      user.posts[0].comments[0].context.should.be.eql(myContext)
     })
   })
 })
