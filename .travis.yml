@@ -14,13 +14,11 @@ addons:
 before_install:
   - chmod +x .travis/oracle/download.sh
   - chmod +x .travis/oracle/install.sh
-  - chmod +x .travis/setup_accounts.sh
   - psql --version
 
 install:
   - .travis/oracle/download.sh
   - .travis/oracle/install.sh
-  - .travis/setup_accounts.sh
   - $ORACLE_HOME/bin/sqlplus --version
   - npm install
 
