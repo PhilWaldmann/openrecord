@@ -64,6 +64,7 @@
     "mocha-lcov-reporter": ">= 0.0.x",
     "mysql": "latest",
     "pg": "latest",
+    "oracledb": "latest",
     "restify": "latest",
     "restify-clients": "^1.5.0",
     "should": ">= 1.3.0",
