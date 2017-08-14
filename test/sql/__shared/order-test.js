@@ -2,7 +2,7 @@ var Store = require('../../../lib/store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe.only(title + ': Order', function(){
+  describe(title + ': Order', function(){
     var store
 
     before(beforeFn)
