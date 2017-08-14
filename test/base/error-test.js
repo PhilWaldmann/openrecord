@@ -1,6 +1,6 @@
 var Store = require('../../lib/store')
 
-describe.only('Error', function(){
+describe('Error', function(){
   var store = new Store()
 
   store.Model('User', function(){
