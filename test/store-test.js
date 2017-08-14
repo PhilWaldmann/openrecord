@@ -168,6 +168,21 @@ describe('Store: Base', function(){
         next()
       })
     })
+
+    it('model has loaded required plugins (attributes)', function(next){
+      store.ready(function(){
+        should.exist(store.Model('User').definition.attributes.login)
+        next()
+      })
+    })
+
+    it('model has loaded required plugins (model methods)', function(next){
+      store.ready(function(){
+        should.exist(store.Model('User').foobar)
+        store.Model('User').foobar().should.be.equal('foo')
+        next()
+      })
+    })
   })
 
 

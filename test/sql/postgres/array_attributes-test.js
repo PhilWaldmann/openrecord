@@ -159,4 +159,42 @@ describe('Postgres: Array Attributes', function(){
       })
     })(type, testValues[type].attr)
   }
+
+
+
+  it('query ({int_arr: [22]})', function(next){
+    store.ready(function(){
+      var ArrayTest = store.Model('ArrayTest')
+
+      ArrayTest.where({int_arr: [22]}).count().exec(function(count){
+        console.log(count)
+        count.should.be.equal(1)
+        next()
+      })
+    })
+  })
+
+  it('query ({int_arr_in: [22]})', function(next){
+    store.ready(function(){
+      var ArrayTest = store.Model('ArrayTest')
+
+      ArrayTest.where({int_arr_in: [22]}).count().exec(function(count){
+        console.log(count)
+        count.should.be.equal(1)
+        next()
+      })
+    })
+  })
+
+  it('query ({int_arr: 22})', function(next){
+    store.ready(function(){
+      var ArrayTest = store.Model('ArrayTest')
+
+      ArrayTest.where({int_arr: 22}).count().exec(function(count){
+        console.log(count)
+        count.should.be.equal(1)
+        next()
+      })
+    })
+  })
 })
