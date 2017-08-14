@@ -37,6 +37,8 @@ module.exports = {
     beforeActiveDirectory: true,
     afterActiveDirectory: true,
     testActiveDirectory: true,
+    beforeGraphQL: true,
+    afterGraphQL: true,
     LDAP_BASE: true
   }
 }

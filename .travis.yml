@@ -1,9 +1,31 @@
 language: node_js
-sudo: false
+sudo: required
+
+env:
+  global:
+    - ORACLE_COOKIE=sqldev
+    - ORACLE_FILE=oracle11g/xe/oracle-xe-11.2.0-1.0.x86_64.rpm.zip
+    - ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe
+    - ORACLE_SID=XE
+
+addons:
+  postgresql: "9.4"
+
+before_install:
+  - chmod +x .travis/oracle/download.sh
+  - chmod +x .travis/oracle/install.sh
+  - chmod +x .travis/setup_accounts.sh
+  - psql --version
+
+install:
+  - .travis/oracle/download.sh
+  - .travis/oracle/install.sh
+  - .travis/setup_accounts.sh
+  - $ORACLE_HOME/bin/sqlplus --version
+  - npm install
+
 node_js:
   - "4"
   - "6"
-addons:
-  postgresql: "9.4"
-before_install:  psql --version
+
 after_success: npm run report-coverage
