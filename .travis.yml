@@ -19,7 +19,7 @@ before_install:
   - .travis/oracle/install.sh
   - $ORACLE_HOME/bin/sqlplus --version
   - psql --version
-  - npm install oracledb
+  - yarn add oracledb
 
 node_js:
   - "4"
