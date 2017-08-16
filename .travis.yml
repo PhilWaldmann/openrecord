@@ -1,4 +1,5 @@
 language: node_js
+dist: trusty
 sudo: required
 
 env:
@@ -14,13 +15,11 @@ addons:
 before_install:
   - chmod +x .travis/oracle/download.sh
   - chmod +x .travis/oracle/install.sh
-  - psql --version
-
-install:
   - .travis/oracle/download.sh
   - .travis/oracle/install.sh
   - $ORACLE_HOME/bin/sqlplus --version
-  - npm install
+  - psql --version
+  - npm install oracledb
 
 node_js:
   - "4"
