@@ -43,6 +43,9 @@ global.testOracle = function(name, queries){
       type: 'oracle',
       database: db,
       user: 'travis',
-      password: 'travis'
+      password: 'travis',
+      connection: {
+        connectString: 'localhost/XE'
+      }
     })
 }
