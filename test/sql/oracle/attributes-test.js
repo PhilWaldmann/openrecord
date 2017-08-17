@@ -1,7 +1,7 @@
 var Store = require('../../../lib/store')
 
 if(process.env['ORACLE_HOME']){
-  describe('Oracle: all Attributes', function(){
+  describe.only('Oracle: all Attributes', function(){
     var store
     var database = 'all_attributes_test'
 

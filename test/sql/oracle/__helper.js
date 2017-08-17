@@ -1,13 +1,15 @@
 var exec = require('child_process').exec
+let PORT = process.env.ORACLE_PORT || ''
+if(PORT) PORT = ':' + PORT
 
 global.beforeOracle = function(db, sql, next){
-  exec('sqlplus -L -S / AS SYSDBA << "DROP DATABASE ' + db + '"', function(err, result){ // eslint-disable-line
+  exec('echo "DROP DATABASE ' + db + '" | sqlplus -L -S \'system/oracle\'@localhost' + PORT, function(err, result){ // eslint-disable-line
     console.log('DROP', db, result)
     if(err) console.log('ORACLE', err)
-    exec('sqlplus -L -S / AS SYSDBA << "create database ' + db + '"', function(err){ // eslint-disable-line
+    exec('echo "create database ' + db + '" | sqlplus -L -S \'system/oracle\'@localhost' + PORT, function(err){ // eslint-disable-line
       console.log('CREATE', db, result)
       if(err) console.log('ORACLE', err)
-      exec('sqlplus -L -S / AS SYSDBA << "USE ' + db + ';' + sql.join(';') + '"', function(err, result){
+      exec('echo "' + sql.join(';') + '" | sqlplus -L -S \'system/oracle\'@localhost' + PORT, function(err, result){
         console.log('EXEC', db, result)
         if(err) throw new Error(err)
         next()
@@ -39,7 +41,7 @@ global.testOracle = function(name, queries){
       afterOracle(db, next)
     },
     {
-      host: 'localhost',
+      host: 'localhost' + PORT,
       type: 'oracle',
       database: db,
       user: 'travis',
