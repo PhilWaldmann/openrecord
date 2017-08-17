@@ -1,25 +1,39 @@
 var exec = require('child_process').exec
-var PORT = process.env.ORACLE_PORT || ''
-if(PORT) PORT = ':' + PORT
+var PORT = ''
+
+if(process.env.ORACLE_VIA_DOCKER){
+  PORT = 49161
+}
+
+var CONN = "'travis/travis'@localhost"
+if(PORT) CONN += ':' + PORT
+
+// DROP ALL TABLES https://stackoverflow.com/questions/1690404/how-to-drop-all-user-tables
 
 global.beforeOracle = function(db, sql, next){
-  exec('echo "DROP DATABASE ' + db + '" | sqlplus -L -S \'sys/travis\'@localhost' + PORT + ' AS SYSDBA', function(err, result){ // eslint-disable-line
-    console.log('DROP', db, result)
+  exec('cat ' + __dirname + '/clear.sql | sqlplus -L -S ' + CONN, function(err, result){ // eslint-disable-line
     if(err) console.log('ORACLE', err)
-    exec('echo "create database ' + db + '" | sqlplus -L -S \'sys/travis\'@localhost' + PORT + ' AS SYSDBA', function(err){ // eslint-disable-line
-      console.log('CREATE', db, result)
-      if(err) console.log('ORACLE', err)
-      exec('echo "' + sql.join(';') + '" | sqlplus -L -S \'sys/travis\'@localhost' + PORT + ' AS SYSDBA', function(err, result){
-        console.log('EXEC', db, result)
-        if(err) throw new Error(err)
-        next()
-      })
+    exec('sqlplus -L -S ' + CONN + ' <<SQL\n' + sql.join(';\n') + ';\nSQL', function(err, result){
+      if(err) throw new Error(err)
+      next()
     })
   })
 }
 
 global.afterOracle = function(db, next){
   next()
+}
+
+global.getOracleConfig = function(db){
+  var host = 'localhost' + (PORT ? ':' + PORT : '')
+  return {
+    // host: host,
+    type: 'oracle',
+    // database: 'XE',
+    user: 'travis',
+    password: 'travis',
+    connectString: host + '/XE'
+  }
 }
 
 global.testOracle = function(name, queries){
@@ -40,14 +54,5 @@ global.testOracle = function(name, queries){
       })
       afterOracle(db, next)
     },
-    {
-      host: 'localhost' + PORT,
-      type: 'oracle',
-      database: db,
-      user: 'travis',
-      password: 'travis',
-      connection: {
-        connectString: 'localhost/XE'
-      }
-    })
+    getOracleConfig(db))
 }

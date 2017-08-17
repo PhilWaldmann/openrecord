@@ -9,19 +9,13 @@ if(process.env['ORACLE_HOME']){
 
     before(function(next){
       beforeOracle(database, [
-        'CREATE TABLE attribute_tests(char_attribute  varchar(255), float_attribute float, integer_attribute  integer, text_attribute text, boolean_attribute boolean, binary_attribute BLOB, date_attribute date, datetime_attribute datetime, time_attribute time)',
-        "INSERT INTO attribute_tests VALUES('abcd', 2.3345, 3243, 'some text', true, 'some binary data', '2014-02-18', '2014-02-18 15:45:02', '15:45:01')"
+        'CREATE TABLE "attribute_tests"("char_attribute"  VARCHAR2(255), "float_attribute" NUMBER(9,2), "integer_attribute" NUMBER, "text_attribute" VARCHAR2(255), "binary_attribute" BLOB, "date_attribute" DATE, "datetime_attribute" TIMESTAMP)',
+        "INSERT INTO \"attribute_tests\" VALUES('abcd', 2.33, 3243, 'some text', utl_raw.cast_to_raw('some binary data'), TO_DATE('2014-02-18', 'yyyy-mm-dd'), TO_DATE('2014-02-18 15:45:02', 'yyyy-mm-dd hh24:mi:ss'))"
       ], next)
     })
 
     before(function(){
-      store = new Store({
-        host: 'localhost',
-        type: 'oracle',
-        database: database,
-        user: 'travis',
-        password: ''
-      })
+      store = new Store(getOracleConfig(database))
 
       store.Model('AttributeTest', function(){})
 
@@ -45,11 +39,9 @@ if(process.env['ORACLE_HOME']){
         attrs.should.have.property('float_attribute')
         attrs.should.have.property('integer_attribute')
         attrs.should.have.property('text_attribute')
-        attrs.should.have.property('boolean_attribute')
         attrs.should.have.property('binary_attribute')
         attrs.should.have.property('date_attribute')
         attrs.should.have.property('datetime_attribute')
-        attrs.should.have.property('time_attribute')
 
         done()
       })
@@ -61,22 +53,21 @@ if(process.env['ORACLE_HOME']){
         var AttributeTest = store.Model('AttributeTest')
         AttributeTest.limit(1).exec(function(record){
           record.char_attribute.should.be.equal('abcd')
-          record.float_attribute.should.be.equal(2.3345)
+          record.float_attribute.should.be.equal(2.33)
           record.integer_attribute.should.be.equal(3243)
           record.text_attribute.should.be.equal('some text')
-          record.boolean_attribute.should.be.equal(true)
-          record.date_attribute.toString().should.be.equal('2014-02-18')
 
           if(Buffer.from) record.binary_attribute.should.be.eql(Buffer.from('some binary data', 'utf-8'))
           else record.binary_attribute.should.be.eql(new Buffer('some binary data', 'utf-8')) // eslint-disable-line node/no-deprecated-api
 
           if(new Date().getTimezoneOffset() <= -60){ // my local test timezone
-            record.datetime_attribute.toJSON().should.be.equal('2014-02-18T14:45:02.000Z')
+            record.date_attribute.toString().should.be.equal('2014-02-17')
+            record.datetime_attribute.toJSON().should.be.equal('2014-02-18T13:45:02.000Z')
           }else{ // travis-ci timezone
+            record.date_attribute.toString().should.be.equal('2014-02-18')
             record.datetime_attribute.toJSON().should.be.equal('2014-02-18T15:45:02.000Z')
           }
 
-          record.time_attribute.toString().should.be.equal('15:45:01')
           done()
         })
       })

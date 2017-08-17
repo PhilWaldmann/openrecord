@@ -37,6 +37,7 @@ module.exports = {
     testOracle: true,
     afterOracle: true,
     beforeOracle: true,
+    getOracleConfig: true,
     beforeActiveDirectory: true,
     afterActiveDirectory: true,
     testActiveDirectory: true,
