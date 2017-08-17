@@ -3,9 +3,11 @@ var exec = require('child_process').exec
 global.beforeMYSQL = function(db, sql, next){
   exec('mysql -u root -e "DROP DATABASE ' + db + '"', function(err, result){ // eslint-disable-line
     exec('mysql -u root -e "create database ' + db + '"', function(err){ // eslint-disable-line
-      exec('mysql ' + db + ' -e "' + sql.join(';') + '" -u root', function(err, result){
-        if(err) throw new Error(err)
-        next()
+      exec('GRANT ALL PRIVILEGES ON ' + db + '.* TO \'travis\'@\'%\' WITH GRANT OPTION;', function(err){ // eslint-disable-line
+        exec('mysql ' + db + ' -e "' + sql.join(';') + '" -u root', function(err, result){
+          if(err) throw new Error(err)
+          next()
+        })
       })
     })
   })
