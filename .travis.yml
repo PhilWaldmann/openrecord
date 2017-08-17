@@ -24,7 +24,7 @@ before_install:
   - psql --version
   - mysql --version
   - yarn add oracledb
-  - mysql -e 'CREATE USER 'travis'@'%';GRANT ALL PRIVILEGES TO 'travis'@'%' WITH GRANT OPTION;
+  - mysql -e "CREATE USER 'travis'@'%';GRANT ALL PRIVILEGES TO 'travis'@'%' WITH GRANT OPTION";
 
 node_js:
   - "4"
