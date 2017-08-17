@@ -77,7 +77,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         store.ready(function(){
           var User = store.Model('User')
           User.join('posts').toSql(function(sql){
-            sql.should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"')
+            sql.should.be.equal('select "users"."id" "f0", "users"."login" "f1", "users"."email" "f2", "users"."created_at" "f3", "posts"."id" "f4", "posts"."user_id" "f5", "posts"."thread_id" "f6", "posts"."message" "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"')
             next()
           })
         })
@@ -88,7 +88,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         store.ready(function(){
           var User = store.Model('User')
           User.leftJoin('posts').toSql(function(sql){
-            sql.should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"')
+            sql.should.be.equal('select "users"."id" "f0", "users"."login" "f1", "users"."email" "f2", "users"."created_at" "f3", "posts"."id" "f4", "posts"."user_id" "f5", "posts"."thread_id" "f6", "posts"."message" "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"')
             next()
           })
         })
@@ -99,7 +99,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         store.ready(function(){
           var User = store.Model('User')
           User.rightJoin('posts').toSql(function(sql){
-            sql.should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" right join "posts" on "users"."id" = "posts"."user_id"')
+            sql.should.be.equal('select "users"."id" "f0", "users"."login" "f1", "users"."email" "f2", "users"."created_at" "f3", "posts"."id" "f4", "posts"."user_id" "f5", "posts"."thread_id" "f6", "posts"."message" "f7" from "users" right join "posts" on "users"."id" = "posts"."user_id"')
             next()
           })
         })
@@ -110,7 +110,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         store.ready(function(){
           var User = store.Model('User')
           User.innerJoin('posts').toSql(function(sql){
-            sql.should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" inner join "posts" on "users"."id" = "posts"."user_id"')
+            sql.should.be.equal('select "users"."id" "f0", "users"."login" "f1", "users"."email" "f2", "users"."created_at" "f3", "posts"."id" "f4", "posts"."user_id" "f5", "posts"."thread_id" "f6", "posts"."message" "f7" from "users" inner join "posts" on "users"."id" = "posts"."user_id"')
             next()
           })
         })
@@ -121,7 +121,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         store.ready(function(){
           var User = store.Model('User')
           User.outerJoin('posts').toSql(function(sql){
-            sql.should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" outer join "posts" on "users"."id" = "posts"."user_id"')
+            sql.should.be.equal('select "users"."id" "f0", "users"."login" "f1", "users"."email" "f2", "users"."created_at" "f3", "posts"."id" "f4", "posts"."user_id" "f5", "posts"."thread_id" "f6", "posts"."message" "f7" from "users" outer join "posts" on "users"."id" = "posts"."user_id"')
             next()
           })
         })
@@ -132,7 +132,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         store.ready(function(){
           var User = store.Model('User')
           User.join('posts', 'right').toSql(function(sql){
-            sql.should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" right join "posts" on "users"."id" = "posts"."user_id"')
+            sql.should.be.equal('select "users"."id" "f0", "users"."login" "f1", "users"."email" "f2", "users"."created_at" "f3", "posts"."id" "f4", "posts"."user_id" "f5", "posts"."thread_id" "f6", "posts"."message" "f7" from "users" right join "posts" on "users"."id" = "posts"."user_id"')
             next()
           })
         })
@@ -143,7 +143,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         store.ready(function(){
           var Post = store.Model('Post')
           Post.join('user').toSql(function(sql){
-            sql.should.be.equal('select "posts"."id" as "f0", "posts"."user_id" as "f1", "posts"."thread_id" as "f2", "posts"."message" as "f3", "user"."id" as "f4", "user"."login" as "f5", "user"."email" as "f6", "user"."created_at" as "f7" from "posts" left join "users" as "user" on "posts"."user_id" = "user"."id"')
+            sql.should.be.equal('select "posts"."id" "f0", "posts"."user_id" "f1", "posts"."thread_id" "f2", "posts"."message" "f3", "user"."id" "f4", "user"."login" "f5", "user"."email" "f6", "user"."created_at" "f7" from "posts" left join "users" "user" on "posts"."user_id" = "user"."id"')
             next()
           })
         })
@@ -154,7 +154,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         store.ready(function(){
           var User = store.Model('User')
           User.join([['posts']]).toSql(function(sql){
-            sql.should.be.equal('select "users"."id" as "f0", "users"."login" as "f1", "users"."email" as "f2", "users"."created_at" as "f3", "posts"."id" as "f4", "posts"."user_id" as "f5", "posts"."thread_id" as "f6", "posts"."message" as "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"')
+            sql.should.be.equal('select "users"."id" "f0", "users"."login" "f1", "users"."email" "f2", "users"."created_at" "f3", "posts"."id" "f4", "posts"."user_id" "f5", "posts"."thread_id" "f6", "posts"."message" "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"')
             next()
           })
         })
@@ -490,7 +490,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         store.ready(function(){
           var Post = store.Model('Post')
           Post.join('user').toSql(function(sql){
-            sql.should.be.equal('select "posts"."id" as "f0", "posts"."user_id" as "f1", "posts"."thread_id" as "f2", "posts"."message" as "f3", "user"."id" as "f4", "user"."login" as "f5", "user"."email" as "f6", "user"."created_at" as "f7" from "posts" left join "users" as "user" on "posts"."user_id" = "user"."id"')
+            sql.should.be.equal('select "posts"."id" "f0", "posts"."user_id" "f1", "posts"."thread_id" "f2", "posts"."message" "f3", "user"."id" "f4", "user"."login" "f5", "user"."email" "f6", "user"."created_at" "f7" from "posts" left join "users" "user" on "posts"."user_id" = "user"."id"')
             next()
           })
         })

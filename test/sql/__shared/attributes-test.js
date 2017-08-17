@@ -60,7 +60,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-
     it('has automatic validation', function(done){
       store.ready(function(){
         var User = store.Model('User')

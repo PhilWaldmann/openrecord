@@ -60,7 +60,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       store.ready(function(){
         var Post = store.Model('Post')
 
-        Post.group('message').select('message', 'COUNT(*) as count').order('message').exec(function(posts){
+        Post.group('message').select('message', 'COUNT(*) count').order('message').exec(function(posts){
           posts.should.be.eql([
             {message: 'first', count: 2},
             {message: 'second', count: 1},
@@ -75,7 +75,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       store.ready(function(){
         var Post = store.Model('Post')
 
-        Post.group('message').select('message', 'COUNT(*) as count').having('COUNT(*) > ?', 1).order('message').exec(function(posts){
+        Post.group('message').select('message', 'COUNT(*) count').having('COUNT(*) > ?', 1).order('message').exec(function(posts){
           posts.should.be.eql([
             {message: 'first', count: 2}
           ])
@@ -88,7 +88,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       store.ready(function(){
         var Post = store.Model('Post')
 
-        Post.group('message', 'thread_id').select('message', 'COUNT(*) as count').having({thread_id_gt: 1}).order('message').exec(function(posts){
+        Post.group('message', 'thread_id').select('message', 'COUNT(*) count').having({thread_id_gt: 1}).order('message').exec(function(posts){
           posts.should.be.eql([
             { message: 'first', count: 1 },
             { message: 'third', count: 1 }

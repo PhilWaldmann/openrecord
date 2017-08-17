@@ -244,7 +244,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-    it('creates a new record with subrecords defined as unread_ids=[]', function(next){
+    it('creates a new record with subrecords defined unread_ids=[]', function(next){
       store.ready(function(){
         var User = store.Model('User')
         User.create({

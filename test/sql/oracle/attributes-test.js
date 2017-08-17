@@ -1,7 +1,7 @@
 var Store = require('../../../lib/store')
 
 if(process.env['ORACLE_HOME']){
-  describe.only('Oracle: all Attributes', function(){
+  describe('Oracle: all Attributes', function(){
     var store
     var database = 'all_attributes_test'
 
@@ -9,7 +9,7 @@ if(process.env['ORACLE_HOME']){
 
     before(function(next){
       beforeOracle(database, [
-        'CREATE TABLE "attribute_tests"("char_attribute"  VARCHAR2(255), "float_attribute" NUMBER(9,2), "integer_attribute" NUMBER, "text_attribute" VARCHAR2(255), "binary_attribute" BLOB, "date_attribute" DATE, "datetime_attribute" TIMESTAMP)',
+        'CREATE TABLE "attribute_tests"("char_attribute" VARCHAR2(255), "float_attribute" NUMBER(9,2), "integer_attribute" NUMBER, "text_attribute" VARCHAR2(255), "binary_attribute" BLOB, "date_attribute" DATE, "datetime_attribute" TIMESTAMP)',
         "INSERT INTO \"attribute_tests\" VALUES('abcd', 2.33, 3243, 'some text', utl_raw.cast_to_raw('some binary data'), TO_DATE('2014-02-18', 'yyyy-mm-dd'), TO_DATE('2014-02-18 15:45:02', 'yyyy-mm-dd hh24:mi:ss'))"
       ], next)
     })

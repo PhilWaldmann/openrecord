@@ -29,7 +29,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         store.ready(function(){
           var User = store.Model('User')
           User.count('salary').toSql(function(sql){
-            sql.should.be.equal('select count("salary") as "count" from "users"')
+            sql.should.be.equal('select count("salary") "count" from "users"')
             next()
           })
         })
@@ -83,7 +83,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         store.ready(function(){
           var User = store.Model('User')
           User.sum('salary').toSql(function(sql){
-            sql.should.be.equal('select sum("salary") as "sum" from "users"')
+            sql.should.be.equal('select sum("salary") "sum" from "users"')
             next()
           })
         })
@@ -127,7 +127,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         store.ready(function(){
           var User = store.Model('User')
           User.max('salary').toSql(function(sql){
-            sql.should.be.equal('select max("salary") as "max" from "users"')
+            sql.should.be.equal('select max("salary") "max" from "users"')
             next()
           })
         })
@@ -171,7 +171,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         store.ready(function(){
           var User = store.Model('User')
           User.min('salary').toSql(function(sql){
-            sql.should.be.equal('select min("salary") as "min" from "users"')
+            sql.should.be.equal('select min("salary") "min" from "users"')
             next()
           })
         })
@@ -215,7 +215,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         store.ready(function(){
           var User = store.Model('User');
           User.avg('salary').toSql(function(sql){
-            sql.should.be.equal('select avg("salary") as "avg" from "users"');
+            sql.should.be.equal('select avg("salary") "avg" from "users"');
             next();
           })
         });
