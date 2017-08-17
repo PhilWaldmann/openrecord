@@ -1,5 +1,5 @@
 var exec = require('child_process').exec
-let PORT = process.env.ORACLE_PORT || ''
+var PORT = process.env.ORACLE_PORT || ''
 if(PORT) PORT = ':' + PORT
 
 global.beforeOracle = function(db, sql, next){
