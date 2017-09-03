@@ -231,38 +231,48 @@ if(process.env['ORACLE_HOME']){
   //
   //
   //
-  // // plugins
-  // testOracle('plugins/nested_set', [
-  //   'CREATE TABLE "folders"("id" INTEGER, "name" text, "parent_id" integer, "lft" INTEGER, "rgt" integer, "depth" integer)',
-  //   "INSERT INTO \"folders\"(name, parent_id, lft, rgt, depth) VALUES('A', 0, 0, 3, 0), ('A1', 1, 1, 2, 1), ('B', 0, 4, 13, 0), ('B1', 3, 5, 6, 1), ('B2', 3, 7, 12, 1), ('B2.1', 5, 8, 11, 2), ('B2.1.1', 6, 9, 10, 3)"
-  // ])
-  //
-  // testOracle('plugins/paranoid', [
-  //   'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "email" TEXT, "deleted_at" datetime)',
-  //   "INSERT INTO \"users\"(login, email, deleted_at) VALUES('phil', 'phil@mail.com', NULL), ('michl', 'michl@mail.com', TO_DATE('2014-01-10', 'yyyy-mm-dd')), ('admin', 'admin@mail.com', NULL), ('marlene', 'marlene@mail.com', TO_DATE('2014-01-01', 'yyyy-mm-dd')), ('hans', 'hans@mail.com', NULL)"
-  // ])
-  //
+  // plugins
+  testOracle('plugins/nested_set', [
+    'CREATE TABLE "folders"("id" INTEGER, "name" TEXT, "parent_id" INTEGER, "lft" INTEGER, "rgt" INTEGER, "depth" INTEGER)',
+    'PRIMARY:folders:id',
+    "INSERT INTO \"folders\"(\"name\", \"parent_id\", \"lft\", \"rgt\", \"depth\") VALUES('A', 0, 0, 3, 0), ('A1', 1, 1, 2, 1), ('B', 0, 4, 13, 0), ('B1', 3, 5, 6, 1), ('B2', 3, 7, 12, 1), ('B2.1', 5, 8, 11, 2), ('B2.1.1', 6, 9, 10, 3)"
+  ])
+
+  testOracle('plugins/paranoid', [
+    'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "email" TEXT, "deleted_at" DATE)',
+    'PRIMARY:users:id',
+    "INSERT INTO \"users\"(\"login\", \"email\", \"deleted_at\") VALUES('phil', 'phil@mail.com', NULL), ('michl', 'michl@mail.com', TO_DATE('2014-01-10', 'yyyy-mm-dd')), ('admin', 'admin@mail.com', NULL), ('marlene', 'marlene@mail.com', TO_DATE('2014-01-01', 'yyyy-mm-dd')), ('hans', 'hans@mail.com', NULL)"
+  ])
+
   // testOracle('plugins/sorted_list', [
-  //   'CREATE TABLE "my_lists"("id" INTEGER, "name" text, "position" integer)',
+  //   'CREATE TABLE "my_lists"("id" INTEGER, "name" TEXT, "position" INTEGER)',
+  //   'PRIMARY:my_lists:id',
   //   'CREATE TABLE "my_scoped_lists"("id" INTEGER, "name" text, "position" integer, "my_scope" integer)',
-  //   "INSERT INTO \"my_lists\"(name, position) VALUES('D', 3), ('E', 4), ('F', 5), ('G', 6), ('A', 0), ('B', 1), ('C', 2)",
-  //   "INSERT INTO \"my_scoped_lists\"(name, position, my_scope) VALUES('B2', 1, 2), ('D1', 3, 1), ('A3', 0, 3), ('A1', 0, 1), ('A2', 0, 2), ('B1', 1, 1), ('C1', 2, 1)"
+  //   'PRIMARY:my_scoped_lists:id',
+  //   "INSERT INTO \"my_lists\"(\"name\", \"position\") VALUES('D', 3), ('E', 4), ('F', 5), ('G', 6), ('A', 0), ('B', 1), ('C', 2)",
+  //   "INSERT INTO \"my_scoped_lists\"(\"name\", \"position\", \"my_scope\") VALUES('B2', 1, 2), ('D1', 3, 1), ('A3', 0, 3), ('A1', 0, 1), ('A2', 0, 2), ('B1', 1, 1), ('C1', 2, 1)"
   // ])
-  //
-  // testOracle('plugins/stampable', [
-  //   'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "email" TEXT, "created_at" datetime, "updated_at" datetime, "creator_id" integer, "updater_id" integer)',
-  //   'CREATE TABLE "posts"("id" INTEGER, "user_id" INTEGER, "thread_id" INTEGER, "message" TEXT, "created_at" datetime, "updated_at" datetime, "creator_id" integer, "updater_id" integer)',
-  //   "INSERT INTO \"users\"(login, email, created_at) VALUES('phil', 'phil@mail.com', NULL), ('michl', 'michl@mail.com', TO_DATE('2014-01-10', 'yyyy-mm-dd')), ('admin', 'admin@mail.com', NULL), ('marlene', 'marlene@mail.com', TO_DATE('2014-01-01', 'yyyy-mm-dd')), ('hans', 'hans@mail.com', NULL)",
-  //   "INSERT INTO \"posts\"(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post'), (5, 4, 'update me')"
-  // ])
-  //
+
+  testOracle('plugins/stampable', [
+    'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "email" TEXT, "created_at" DATE, "updated_at" DATE, "creator_id" INTEGER, "updater_id" INTEGER)',
+    'PRIMARY:users:id',
+    'CREATE TABLE "posts"("id" INTEGER, "user_id" INTEGER, "thread_id" INTEGER, "message" TEXT, "created_at" DATE, "updated_at" DATE, "creator_id" integer, "updater_id" integer)',
+    'PRIMARY:posts:id',
+    "INSERT INTO \"users\"(\"login\", \"email\", \"created_at\") VALUES('phil', 'phil@mail.com', NULL), ('michl', 'michl@mail.com', TO_DATE('2014-01-10', 'yyyy-mm-dd')), ('admin', 'admin@mail.com', NULL), ('marlene', 'marlene@mail.com', TO_DATE('2014-01-01', 'yyyy-mm-dd')), ('hans', 'hans@mail.com', NULL)",
+    "INSERT INTO \"posts\"(\"user_id\", \"thread_id\", \"message\") VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post'), (5, 4, 'update me')"
+  ])
+
   // testOracle('plugins/promise', [
   //   'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "email" TEXT, "created_at" TEXT)',
+  //   'PRIMARY:users:id',
   //   'CREATE TABLE "posts"("id" INTEGER, "user_id" INTEGER, "thread_id" INTEGER, "message" TEXT)',
-  //   'CREATE TABLE "threads"(id  serial primary key, "user_id" INTEGER, "title" TEXT)'
+  //   'PRIMARY:posts:id',
+  //   'CREATE TABLE "threads"(id INTEGER, "user_id" INTEGER, "title" TEXT)',
+  //   'PRIMARY:threads:id'
   // ])
-  //
-  // testOracle('plugins/serialize', [
-  //   'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "config" TEXT)'
-  // ])
+
+  testOracle('plugins/serialize', [
+    'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "config" TEXT)',
+    'PRIMARY:users:id'
+  ])
 }

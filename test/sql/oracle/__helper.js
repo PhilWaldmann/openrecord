@@ -73,9 +73,9 @@ global.testOracle = function(name, queries){
       beforeOracle(db, queries, next)
     },
     function(next, store){
-      store.close(function(){
-
-      })
+      if(store){
+        store.close(function(){})
+      }
       afterOracle(db, next)
     },
     getOracleConfig(db))

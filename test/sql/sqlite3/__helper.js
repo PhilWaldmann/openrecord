@@ -21,7 +21,10 @@ global.beforeSQLite = function(file, sql, next){
               .replace(/false/g, '0')
           })
 
-        db.run(sql, next)
+        db.run(sql, function(err, result){
+          if(err) throw err
+          next()
+        })
       })
     })(sql[i])
   }
