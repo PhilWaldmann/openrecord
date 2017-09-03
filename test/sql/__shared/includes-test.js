@@ -614,6 +614,23 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           })
         })
       })
+
+
+      it('include relations for a already loaded record', function(next){
+        store.ready(function(){
+          var User = store.Model('User')
+          User.find(1).exec(function(user){
+            user.include('posts').exec()
+              .then(result => {
+                result.id.should.be.equal(1)
+                result.posts.length.should.be.equal(3)
+                true.should.be.equal(result === user)
+                user.posts.length.should.be.equal(3)
+                next()
+              })
+          })
+        })
+      })
     })
   })
 }
