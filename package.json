@@ -11,6 +11,8 @@
     "postgres",
     "pg",
     "mysql",
+    "oracle",
+    "graphql",
     "database",
     "activerecord",
     "promise",

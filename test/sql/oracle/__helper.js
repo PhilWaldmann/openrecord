@@ -48,16 +48,16 @@ global.afterOracle = function(db, next){
   next()
 }
 
-global.getOracleConfig = function(db){
+global.getOracleConfig = function(db, config){
   var host = 'localhost' + (PORT ? ':' + PORT : '')
-  return {
+  return Object.assign({
     // host: host,
     type: 'oracle',
     // database: 'XE',
     user: 'travis',
     password: 'travis',
     connectString: host + '/XE'
-  }
+  }, config)
 }
 
 global.testOracle = function(name, queries){

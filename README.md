@@ -21,7 +21,7 @@ npm install openrecord
 
 ## Features
 
-* SQLite3, MySQL, Postgres, REST and LDAP (+ ActiveDirectory) support
+* SQLite3, MySQL, Postgres, Oracle, REST, GraphQL and LDAP (+ ActiveDirectory) support
 * Runs on Node v4 up to v6
 * Async schema definition: You could even change your model definition temporarily
 * Optional [Fibers](https://github.com/laverdet/node-fibers) support
@@ -38,6 +38,7 @@ npm install openrecord
 * Events
 * Chaining: Everything is chainable!
 * Promises
+* Automatic GraphQL schema creation
 * Migrations: SQL Migrations are build in
 * Plugin support: In fact 99% of OpenRecord is a plugin
 * Build-In SQL plugins:
@@ -45,7 +46,7 @@ npm install openrecord
   * paranoid: Soft delete of records
   * nested set: Build trees easily
   * sorted list: Don't worry about lists
-* ... with more than 1300 tests
+* ... with more than 1500 tests
 
 
 

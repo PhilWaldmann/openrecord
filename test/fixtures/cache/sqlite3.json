@@ -1,0 +1,92 @@
+{
+  "user": {
+    "attributes": [{
+      "name": "id",
+      "type": "integer",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": true,
+        "notnull": false,
+        "default": null,
+        "writable": false
+      },
+      "validations": []
+    }, {
+      "name": "login_changed",
+      "type": "string",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": false,
+        "notnull": false,
+        "default": null,
+        "writable": true
+      },
+      "validations": []
+    }, {
+      "name": "email",
+      "type": "string",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": false,
+        "notnull": false,
+        "default": null,
+        "writable": true
+      },
+      "validations": []
+    }]
+  },
+  "post": {
+    "attributes": [{
+      "name": "id_changed",
+      "type": "integer",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": true,
+        "notnull": false,
+        "default": null,
+        "writable": false
+      },
+      "validations": []
+    }, {
+      "name": "user_id",
+      "type": "integer",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": false,
+        "notnull": false,
+        "default": null,
+        "writable": true
+      },
+      "validations": []
+    }, {
+      "name": "thread_id",
+      "type": "integer",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": false,
+        "notnull": false,
+        "default": null,
+        "writable": true
+      },
+      "validations": []
+    }, {
+      "name": "message",
+      "type": "string",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": false,
+        "notnull": false,
+        "default": null,
+        "writable": true
+      },
+      "validations": []
+    }]
+  }
+}

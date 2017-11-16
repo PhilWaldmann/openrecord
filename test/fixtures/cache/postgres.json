@@ -1,0 +1,166 @@
+{
+  "user": {
+    "attributes": [{
+      "name": "id",
+      "type": "integer",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": true,
+        "notnull": true,
+        "default": null,
+        "writable": false
+      },
+      "validations": []
+    }, {
+      "name": "login_changed",
+      "type": "string",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": false,
+        "notnull": true,
+        "default": null,
+        "writable": true
+      },
+      "validations": [{
+        "name": "validatesPresenceOf",
+        "args": []
+      }]
+    }, {
+      "name": "email",
+      "type": "string",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": false,
+        "notnull": false,
+        "default": null,
+        "writable": true
+      },
+      "validations": []
+    }]
+  },
+  "post": {
+    "attributes": [{
+      "name": "id_changed",
+      "type": "integer",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": true,
+        "notnull": true,
+        "default": null,
+        "writable": false
+      },
+      "validations": []
+    }, {
+      "name": "user_id",
+      "type": "integer",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": false,
+        "notnull": false,
+        "default": null,
+        "writable": true
+      },
+      "validations": []
+    }, {
+      "name": "thread_id",
+      "type": "integer",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": false,
+        "notnull": false,
+        "default": null,
+        "writable": true
+      },
+      "validations": []
+    }, {
+      "name": "message",
+      "type": "string",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": false,
+        "notnull": false,
+        "default": null,
+        "writable": true
+      },
+      "validations": []
+    }]
+  },
+
+  "attribute_test": {
+    "attributes": [{
+      "name": "id",
+      "type": "integer",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": true,
+        "notnull": true,
+        "default": null,
+        "writable": false
+      },
+      "validations": []
+    }, {
+      "name": "composite_attribute",
+      "type": "composite",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": false,
+        "notnull": false,
+        "default": null,
+        "writable": true
+      },
+      "validations": [],
+      "type_name": "customtype",
+      "type_attributes": [{
+        "name": "foo_changed",
+        "type": "integer",
+        "options": {
+          "description": null,
+          "persistent": true,
+          "primary": false,
+          "notnull": false,
+          "default": null,
+          "writable": true
+        },
+        "validations": []
+      }, {
+        "name": "bar_changed",
+        "type": "string",
+        "options": {
+          "description": null,
+          "persistent": true,
+          "primary": false,
+          "notnull": false,
+          "default": null,
+          "writable": true
+        },
+        "validations": []
+      }]
+    }, {
+      "name": "enum_attribute",
+      "type": "string",
+      "options": {
+        "description": null,
+        "persistent": true,
+        "primary": false,
+        "notnull": false,
+        "default": null,
+        "writable": true
+      },
+      "validations": [{
+        "name": "validatesInclusionOf",
+        "args": [
+          ["foo_changed", "bar_changed"]
+        ]
+      }]
+    }]
+  }
+}
