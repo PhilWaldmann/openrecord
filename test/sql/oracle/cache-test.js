@@ -1,7 +1,7 @@
 const Store = require('../../../lib/store')
 const cache = require('../../fixtures/cache/oracle.json')
 
-describe('MySQL: Cache', function(){
+describe('Oracle: Cache', function(){
   var store
   var database = 'cache_test'
 
