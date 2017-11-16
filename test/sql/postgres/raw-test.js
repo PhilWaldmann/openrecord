@@ -40,10 +40,10 @@ describe('Postgres: Raw Query', function(){
       var User = store.Model('User')
 
       User.raw('SELECT COUNT(*) FROM users')
-        .then(function(result) {
-          result.rows.should.be.eql([{count: 1}])
-          next()
-        })
+      .then(function(result) {
+        result.rows.should.be.eql([{count: 1}])
+        next()
+      })
     })
   })
 })

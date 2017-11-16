@@ -58,10 +58,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           Thread.create({
             title: 'foo'
           })
-            .then(function(result){
-              result.title.should.be.equal('foo')
-              next()
-            })
+          .then(function(result){
+            result.title.should.be.equal('foo')
+            next()
+          })
         })
       })
 
@@ -73,13 +73,13 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           Post.create({
             thread_id: 1
           })
-            .then(function(result){
-              should.not.exit(result)
-            })
-            .catch(function(error){
-              error.message.should.be.equal('validation failed')
-              next()
-            })
+          .then(function(result){
+            should.not.exit(result)
+          })
+          .catch(function(error){
+            error.message.should.be.equal('validation failed')
+            next()
+          })
         })
       })
     })
@@ -90,14 +90,14 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var Thread = store.Model('Thread')
 
           Thread.find(1).exec()
-            .then(function(record){
-              record.title = 'bar'
-              return record.save()
-            })
-            .then(function(record){
-              record.title.should.be.equal('bar')
-              next()
-            })
+          .then(function(record){
+            record.title = 'bar'
+            return record.save()
+          })
+          .then(function(record){
+            record.title.should.be.equal('bar')
+            next()
+          })
         })
       })
     })

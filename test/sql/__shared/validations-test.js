@@ -28,7 +28,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
       store.Model('WithArray', function(){
         this.validatesUniquenessOf(['login', 'email'])
-          .validatesFormatOf('email', /^[^@\s;]+@[^@\s;]+\.[^@\s;]+$/)
+        .validatesFormatOf('email', /^[^@\s;]+@[^@\s;]+\.[^@\s;]+$/)
       })
       store.Model('WithScope', function(){
         this.validatesUniquenessOf('name', {scope: 'scope_id'})

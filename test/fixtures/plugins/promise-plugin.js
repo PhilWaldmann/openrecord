@@ -7,10 +7,10 @@ exports.record = {
     }
 
     return this.callParent(options)
-      .then(function(success){
-        if(success) return this
-        throw new Error('validation failed')
-      })
-      .then(resolve, reject)
+    .then(function(success){
+      if(success) return this
+      throw new Error('validation failed')
+    })
+    .then(resolve, reject)
   }
 }

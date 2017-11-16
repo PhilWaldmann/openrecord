@@ -50,15 +50,15 @@ global.beforeGraphQL = function(database, done){
         plugins: path.join(__dirname, '..', 'fixtures', 'plugins', 'promise-*.js'),
         graphql: true
       })
-        .graphQuery('authors', {list: true})
-        .graphQuery('author')
-        .graphQuery('author_count', {model: 'Author', handler: 'count'})
-        .graphQuery('recipe')
-        .graphQuery('ingredient')
-        .graphQuery('me', {model: 'Author', handler: 'me'})
-        .graphMutation('createRecipe', {model: 'Recipe', handler: 'create'})
-        .graphMutation('updateRecipe', {model: 'Recipe', handler: 'findAndUpdate'})
-        .graphMutation('destroyRecipe', {model: 'Recipe', handler: 'findAndDestroy'})
+      .graphQuery('authors', {list: true})
+      .graphQuery('author')
+      .graphQuery('author_count', {model: 'Author', handler: 'count'})
+      .graphQuery('recipe')
+      .graphQuery('ingredient')
+      .graphQuery('me', {model: 'Author', handler: 'me'})
+      .graphMutation('createRecipe', {model: 'Recipe', handler: 'create'})
+      .graphMutation('updateRecipe', {model: 'Recipe', handler: 'findAndUpdate'})
+      .graphMutation('destroyRecipe', {model: 'Recipe', handler: 'findAndDestroy'})
 
       store1.Model('Author', function(){
         this.hasMany('recipes')
@@ -80,19 +80,19 @@ global.beforeGraphQL = function(database, done){
 
         this.staticMethod('findAndUpdate', function(data){
           return this.find(data.id).exec()
-            .then(function(record){
-              record.set(data)
-              return record.save()
-            })
+          .then(function(record){
+            record.set(data)
+            return record.save()
+          })
         }, {
           args: ['id', 'writable_attributes']
         })
 
         this.staticMethod('findAndDestroy', function(id){
           return this.find(id).exec()
-            .then(function(record){
-              return record.destroy()
-            })
+          .then(function(record){
+            return record.destroy()
+          })
         }, {
           args: ['id'],
           args_mapping: ['id'],

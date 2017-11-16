@@ -18,12 +18,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
       store.Model('User', function(){
         this
-          .hasMany('posts')
-          .hasMany('threads')
-          .hasOne('avatar')
-          .hasMany('unread_posts')
-          .hasMany('unread', {through: 'unread_posts'})
-          .hasMany('unread_threads', {through: 'unread', relation: 'thread'})
+        .hasMany('posts')
+        .hasMany('threads')
+        .hasOne('avatar')
+        .hasMany('unread_posts')
+        .hasMany('unread', {through: 'unread_posts'})
+        .hasMany('unread_threads', {through: 'unread', relation: 'thread'})
       })
       store.Model('Avatar', function(){
         this.belongsTo('user')

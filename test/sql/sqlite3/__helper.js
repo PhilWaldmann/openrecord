@@ -13,13 +13,13 @@ global.beforeSQLite = function(file, sql, next){
       tmp.push(function(next){
         // convert mysql or postgres sql to sqlite3 format
         sql = sql
-          .replace('serial primary key', 'INTEGER PRIMARY KEY AUTOINCREMENT')
-          .replace(/VALUES\(.+\)/, function(values){
-            return values
-              .replace(/'/g, '"')
-              .replace(/true/g, '1')
-              .replace(/false/g, '0')
-          })
+        .replace('serial primary key', 'INTEGER PRIMARY KEY AUTOINCREMENT')
+        .replace(/VALUES\(.+\)/, function(values){
+          return values
+          .replace(/'/g, '"')
+          .replace(/true/g, '1')
+          .replace(/false/g, '0')
+        })
 
         db.run(sql, function(err, result){
           if(err) throw err

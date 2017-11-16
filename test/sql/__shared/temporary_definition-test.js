@@ -21,27 +21,27 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
         this.scope('tmpValidation', function(){
           this.temporaryDefinition()
-            .validatesFormatOf('login', /phil.*/)
+          .validatesFormatOf('login', /phil.*/)
         })
 
         this.scope('tmpHook', function(){
           this.temporaryDefinition()
-            .beforeSave(function(){
-              return false
-            })
+          .beforeSave(function(){
+            return false
+          })
         })
 
         this.scope('tmpRelation', function(){
           this.temporaryDefinition()
-            .hasMany('threads')
+          .hasMany('threads')
         })
 
         this.scope('tmpAttribute', function(){
           this.temporaryDefinition()
-            .attribute('LOGIN', String)
-            .convert('output', 'LOGIN', function(){
-              return this.login.toUpperCase()
-            })
+          .attribute('LOGIN', String)
+          .convert('output', 'LOGIN', function(){
+            return this.login.toUpperCase()
+          })
         })
       })
       store.Model('Post', function(){

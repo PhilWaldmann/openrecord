@@ -39,9 +39,9 @@ describe('Default Scope', function(){
 
     this.scope('test', function(){
       this.temporaryDefinition()
-        .instanceMethods['test'] = function(){
-          return 'test'
-        }
+      .instanceMethods['test'] = function(){
+        return 'test'
+      }
     })
 
     this.scope('admin', function(){
