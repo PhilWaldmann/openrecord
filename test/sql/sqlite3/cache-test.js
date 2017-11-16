@@ -2,7 +2,7 @@ var path = require('path')
 const Store = require('../../../lib/store')
 const cache = require('../../fixtures/cache/sqlite3.json')
 
-describe.only('SQLite3: Cache', function(){
+describe('SQLite3: Cache', function(){
   var store
   var database = path.join(__dirname, 'cache_test.sqlite3')
 
