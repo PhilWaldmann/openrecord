@@ -4,7 +4,6 @@ var async = require('async')
 
 global.beforeSQLite = function(file, sql, next){
   afterSQLite(file)
-
   var db = new sqlite.Database(file)
 
   var tmp = []
@@ -29,7 +28,10 @@ global.beforeSQLite = function(file, sql, next){
     })(sql[i])
   }
 
-  async.series(tmp, next)
+  async.series(tmp, function(){
+    db.close()
+    next()
+  })
 }
 
 global.afterSQLite = function(file){

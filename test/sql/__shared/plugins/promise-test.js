@@ -1,5 +1,4 @@
 var should = require('should')
-var path = require('path')
 var Store = require('../../../../lib/store')
 
 
@@ -14,7 +13,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     before(function(){
-      storeConf.plugins = path.join(__dirname, '..', '..', '..', 'fixtures', 'plugins', 'promise-*.js')
+      storeConf.plugins = require('../../../fixtures/plugins/promise-plugin.js')
 
       store = new Store(storeConf)
       store.setMaxListeners(0)
