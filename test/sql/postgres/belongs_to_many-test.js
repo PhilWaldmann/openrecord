@@ -1,4 +1,4 @@
-var Store = require('../../../lib/store')
+var Store = require('../../../store/postgres')
 
 
 describe('Postgres: belongsToMany()', function(){

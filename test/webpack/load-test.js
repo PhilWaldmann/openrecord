@@ -35,7 +35,10 @@ describe('Webpack: Load', function(){
       node: {
         __dirname: true
       },
-      externals: [nodeExternals()]
+      externals: [nodeExternals()],
+      plugins: [
+        new webpack.optimize.UglifyJsPlugin({minimize: true, compress: { warnings: false }})
+      ]
     }, function(err, stats) {
       stats.compilation.errors.should.be.eql([])
       next(err)

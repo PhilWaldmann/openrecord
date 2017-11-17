@@ -1,6 +1,6 @@
 var should = require('should')
 
-var Store = require('../../../lib/store')
+var Store = require('../../../store')
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
   describe(title + ': Promise', function(){

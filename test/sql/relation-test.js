@@ -1,6 +1,6 @@
 var should = require('should')
 
-var Store = require('../../lib/store')
+var Store = require('../../store/sql')
 
 describe('SQL: Relations', function(){
   var store, store2

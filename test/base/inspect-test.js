@@ -1,4 +1,4 @@
-var Store = require('../../lib/store')
+var Store = require('../../store/base')
 
 describe('Inspect', function(){
   var store = new Store()

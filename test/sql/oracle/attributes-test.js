@@ -1,4 +1,4 @@
-var Store = require('../../../lib/store')
+var Store = require('../../../store/oracle')
 
 if(process.env['ORACLE_HOME']){
   describe('Oracle: all Attributes', function(){

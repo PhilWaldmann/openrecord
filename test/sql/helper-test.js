@@ -1,6 +1,6 @@
 var should = require('should')
 var Utils = require('../../lib/utils') // include persisten/utils
-var Store = require('../../lib/store')
+var Store = require('../../store/sql')
 
 describe('SQL: Helper', function(){
   var store

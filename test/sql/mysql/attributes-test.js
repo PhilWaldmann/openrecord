@@ -1,4 +1,4 @@
-var Store = require('../../../lib/store')
+var Store = require('../../../store/mysql')
 
 
 describe('MySQL: all Attributes', function(){

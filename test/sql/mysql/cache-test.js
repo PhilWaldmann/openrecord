@@ -1,4 +1,4 @@
-const Store = require('../../../lib/store')
+const Store = require('../../../store/mysql')
 const cache = require('../../fixtures/cache/mysql.json')
 
 describe('MySQL: Cache', function(){

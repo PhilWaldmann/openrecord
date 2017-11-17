@@ -1,5 +1,5 @@
 var path = require('path')
-const Store = require('../../../lib/store')
+const Store = require('../../../store/sqlite3')
 const cache = require('../../fixtures/cache/sqlite3.json')
 
 describe('SQLite3: Cache', function(){

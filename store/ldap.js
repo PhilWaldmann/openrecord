@@ -1,0 +1,11 @@
+const Store = require('../lib/store')
+
+Store.registeredTypes.ldap = require('../lib/base').concat(
+  require('../lib/persistence'),
+  require('../lib/stores/ldap')
+)
+
+module.exports = function(config){
+  config.type = 'ldap'
+  return new Store(config)
+}

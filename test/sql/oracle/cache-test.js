@@ -1,4 +1,4 @@
-const Store = require('../../../lib/store')
+const Store = require('../../../store/oracle')
 const cache = require('../../fixtures/cache/oracle.json')
 
 if(process.env['ORACLE_HOME']){

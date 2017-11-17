@@ -1,5 +1,5 @@
 
-var Store = require('../../lib/store')
+var Store = require('../../store/base')
 
 describe('Context', function(){
   var store = new Store()

@@ -1,5 +1,5 @@
 var path = require('path')
-var Store = require('../../../lib/store')
+var Store = require('../../../store/sqlite3')
 
 
 

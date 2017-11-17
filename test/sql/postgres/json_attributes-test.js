@@ -1,7 +1,7 @@
 var should = require('should')
 var path = require('path')
 
-var Store = require('../../../lib/store')
+var Store = require('../../../store/postgres')
 
 
 describe('Postgres: Json/Jsonb Attributes', function(){

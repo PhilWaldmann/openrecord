@@ -1,8 +1,7 @@
-const Store = require('../../../lib/store')
+const Store = require('../../../store/sqlite3')
 
 module.exports = function(database){
   const store = new Store({
-    type: 'sqlite3',
     file: database
   })
 

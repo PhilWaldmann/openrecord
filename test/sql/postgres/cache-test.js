@@ -1,4 +1,4 @@
-const Store = require('../../../lib/store')
+const Store = require('../../../store/postgres')
 const cache = require('../../fixtures/cache/postgres.json')
 
 describe('Postgres: Cache', function(){

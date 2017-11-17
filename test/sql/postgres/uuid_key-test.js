@@ -1,5 +1,5 @@
 var should = require('should')
-var Store = require('../../../lib/store')
+var Store = require('../../../store/postgres')
 
 describe('Postgres: UUID Key', function(){
   var store
