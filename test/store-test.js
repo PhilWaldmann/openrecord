@@ -142,7 +142,7 @@ describe('Store: Base', function(){
 
 
 
-  describe('loads models via models:"path/*" config (extra plugin)', function(){
+  describe('loads models via models:"path/*" config (+ plugin)', function(){
     var store = new Store({
       models: path.join(__dirname, 'fixtures', 'models', '*.js'),
       plugins: [require('../lib/base/dynamic_loading')]
@@ -158,7 +158,7 @@ describe('Store: Base', function(){
   })
 
 
-  describe('loads models via models:"path/*" config and uses the function name instead of filename', function(){
+  describe('loads models via models:"path/*" config (+ plugin) and uses the function name instead of filename', function(){
     var store = new Store({
       models: path.join(__dirname, 'fixtures', 'models', '*.js'),
       plugins: [require('../lib/base/dynamic_loading')]
@@ -166,6 +166,59 @@ describe('Store: Base', function(){
 
     it('models are loaded', function(next){
       store.ready(function(){
+        should.exist(store.Model('RightName'))
+        next()
+      })
+    })
+
+    it('model has loaded required plugins (attributes)', function(next){
+      store.ready(function(){
+        should.exist(store.Model('User').definition.attributes.login)
+        next()
+      })
+    })
+
+    it('model has loaded required plugins (model methods)', function(next){
+      store.ready(function(){
+        should.exist(store.Model('User').foobar)
+        store.Model('User').foobar().should.be.equal('foo')
+        next()
+      })
+    })
+  })
+
+  describe('loads models via require (array)', function(){
+    var store = new Store({
+      models: [
+        require('./fixtures/models/camel_cased_model'),
+        require('./fixtures/models/other_name'),
+        require('./fixtures/models/user')
+      ]
+    })
+
+    it('only one model is loaded', function(next){
+      store.ready(function(){
+        should.exist(store.Model('RightName'))
+        store.models.should.not.have.key('user')
+        next()
+      })
+    })
+  })
+
+
+  describe('loads models via require (object)', function(){
+    var store = new Store({
+      models: {
+        CamelCasedModel: require('./fixtures/models/camel_cased_model'),
+        OtherName: require('./fixtures/models/other_name'),
+        User: require('./fixtures/models/user')
+      }
+    })
+
+    it('models are loaded', function(next){
+      store.ready(function(){
+        should.exist(store.Model('RightName'))
+        should.exist(store.Model('User'))
         should.exist(store.Model('RightName'))
         next()
       })
