@@ -14,6 +14,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       storeConf.migrations = path.join(__dirname, '..', '..', 'fixtures', 'migrations', '*')
+      storeConf.plugins = require('../../../lib/base/dynamic_loading')
 
       store = new Store(storeConf)
       store.setMaxListeners(0)

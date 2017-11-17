@@ -4,7 +4,7 @@ var path = require('path')
 var Store = require('../lib/store')
 
 describe('Store: Base', function(){
-  describe('is a function', function(){
+  it('is a function', function(){
     Store.should.be.a.Function()
   })
 
@@ -142,9 +142,10 @@ describe('Store: Base', function(){
 
 
 
-  describe('loads models via models:"path/*" config', function(){
+  describe('loads models via models:"path/*" config (extra plugin)', function(){
     var store = new Store({
-      models: path.join(__dirname, 'fixtures', 'models', '*.js')
+      models: path.join(__dirname, 'fixtures', 'models', '*.js'),
+      plugins: [require('../lib/base/dynamic_loading')]
     })
 
     it('models are loaded', function(next){
@@ -159,7 +160,8 @@ describe('Store: Base', function(){
 
   describe('loads models via models:"path/*" config and uses the function name instead of filename', function(){
     var store = new Store({
-      models: path.join(__dirname, 'fixtures', 'models', '*.js')
+      models: path.join(__dirname, 'fixtures', 'models', '*.js'),
+      plugins: [require('../lib/base/dynamic_loading')]
     })
 
     it('models are loaded', function(next){
@@ -187,9 +189,9 @@ describe('Store: Base', function(){
 
 
 
-  describe('loads plugins via plugins:"path/*" config', function(){
+  describe('loads plugins ', function(){
     var store = new Store({
-      plugins: path.join(__dirname, 'fixtures', 'plugins', '*.js')
+      plugins: require(path.join(__dirname, 'fixtures', 'plugins', 'test-plugin.js'))
     })
 
     it('plugins are loaded on the store', function(){
@@ -207,7 +209,7 @@ describe('Store: Base', function(){
 
   describe('plugin overrides method', function(){
     var store = new Store({
-      plugins: path.join(__dirname, 'fixtures', 'plugins', '*.js')
+      plugins: [require(path.join(__dirname, 'fixtures', 'plugins', 'test-plugin.js'))]
     })
 
     it('calls parent()', function(next){

@@ -47,7 +47,7 @@ global.beforeGraphQL = function(database, done){
       var store1 = new Store({
         type: 'sqlite3',
         file: file1,
-        plugins: path.join(__dirname, '..', 'fixtures', 'plugins', 'promise-*.js'),
+        plugins: require(path.join(__dirname, '..', 'fixtures', 'plugins', 'promise-plugin.js')),
         graphql: true
       })
       .graphQuery('authors', {list: true})
@@ -125,7 +125,7 @@ global.beforeGraphQL = function(database, done){
         type: 'sqlite3',
         file: file2,
         name: 'store2',
-        plugins: path.join(__dirname, '..', 'fixtures', 'plugins', 'promise-*.js'),
+        plugins: require(path.join(__dirname, '..', 'fixtures', 'plugins', 'promise-plugin.js')),
         graphql: true
       })
 

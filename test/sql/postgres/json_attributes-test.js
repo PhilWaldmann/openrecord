@@ -22,7 +22,8 @@ describe('Postgres: Json/Jsonb Attributes', function(){
       database: database,
       user: 'postgres',
       password: '',
-      migrations: path.join(__dirname, 'fixtures', 'migrations', '*')
+      migrations: path.join(__dirname, 'fixtures', 'migrations', '*'),
+      plugins: require('../../../lib/base/dynamic_loading')
     })
 
     store.Model('JsonTest', function(){})

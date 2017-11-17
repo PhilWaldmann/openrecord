@@ -1,5 +1,4 @@
 var should = require('should')
-var Utils = require('../../lib/utils') // include persisten/utils
 var Store = require('../../store/sql')
 
 describe('SQL: Helper', function(){
@@ -68,7 +67,7 @@ describe('SQL: Helper', function(){
     it('works with a single relation', function(next){
       store.ready(function(){
         var User = store.Model('User')
-        var result = Utils.sanitizeRelations(User, 'posts')
+        var result = store.utils.sanitizeRelations(User, 'posts')
         result.length.should.be.equal(1)
         result[0].name_tree.should.be.eql(['posts'])
         next()
@@ -79,7 +78,7 @@ describe('SQL: Helper', function(){
     it('works with a single relation as an array', function(next){
       store.ready(function(){
         var User = store.Model('User')
-        var result = Utils.sanitizeRelations(User, ['posts'])
+        var result = store.utils.sanitizeRelations(User, ['posts'])
         result.length.should.be.equal(1)
         result[0].name_tree.should.be.eql(['posts'])
         next()
@@ -90,7 +89,7 @@ describe('SQL: Helper', function(){
     it('works with a multiple relations', function(next){
       store.ready(function(){
         var User = store.Model('User')
-        var result = Utils.sanitizeRelations(User, ['posts', 'threads'])
+        var result = store.utils.sanitizeRelations(User, ['posts', 'threads'])
         result.length.should.be.equal(2)
         result[0].name_tree.should.be.eql(['posts'])
         result[1].name_tree.should.be.eql(['threads'])
@@ -102,7 +101,7 @@ describe('SQL: Helper', function(){
     it('works with nested relations', function(next){
       store.ready(function(){
         var User = store.Model('User')
-        var result = Utils.sanitizeRelations(User, {posts: 'thread'})
+        var result = store.utils.sanitizeRelations(User, {posts: 'thread'})
         result.length.should.be.equal(2)
         result[0].name_tree.should.be.eql(['posts'])
         result[1].name_tree.should.be.eql(['posts', 'thread'])
@@ -114,7 +113,7 @@ describe('SQL: Helper', function(){
     it('works with nested relations as an array', function(next){
       store.ready(function(){
         var User = store.Model('User')
-        var result = Utils.sanitizeRelations(User, ['posts', {threads: 'posts'}])
+        var result = store.utils.sanitizeRelations(User, ['posts', {threads: 'posts'}])
         result.length.should.be.equal(3)
         result[0].name_tree.should.be.eql(['posts'])
         result[1].name_tree.should.be.eql(['threads'])
@@ -126,7 +125,7 @@ describe('SQL: Helper', function(){
     it('works with deeply nested relations', function(next){
       store.ready(function(){
         var User = store.Model('User')
-        var result = Utils.sanitizeRelations(User, ['posts', {threads: {posts: 'user'}}])
+        var result = store.utils.sanitizeRelations(User, ['posts', {threads: {posts: 'user'}}])
         result.length.should.be.equal(4)
         result[0].name_tree.should.be.eql(['posts'])
         result[1].name_tree.should.be.eql(['threads'])
@@ -139,7 +138,7 @@ describe('SQL: Helper', function(){
     it('works with through relations', function(next){
       store.ready(function(){
         var User = store.Model('User')
-        var result = Utils.sanitizeRelations(User, ['unread'])
+        var result = store.utils.sanitizeRelations(User, ['unread'])
         result.length.should.be.equal(2)
         result[0].name_tree.should.be.eql(['unread_posts'])
         result[1].name_tree.should.be.eql(['unread_posts', 'unread'])
@@ -150,7 +149,7 @@ describe('SQL: Helper', function(){
     it('works with nested relations and through', function(next){
       store.ready(function(){
         var User = store.Model('User')
-        var result = Utils.sanitizeRelations(User, {threads: {user: 'unread'}})
+        var result = store.utils.sanitizeRelations(User, {threads: {user: 'unread'}})
         result.length.should.be.equal(4)
         result[0].name_tree.should.be.eql(['threads'])
         result[1].name_tree.should.be.eql(['threads', 'user'])
@@ -163,7 +162,7 @@ describe('SQL: Helper', function(){
     it('works with multiple through relations', function(next){
       store.ready(function(){
         var User = store.Model('User')
-        var result = Utils.sanitizeRelations(User, ['unread_threads'])
+        var result = store.utils.sanitizeRelations(User, ['unread_threads'])
         result.length.should.be.equal(3)
         result[0].name_tree.should.be.eql(['unread_posts'])
         should.not.exist(result[0].as)
@@ -178,7 +177,7 @@ describe('SQL: Helper', function(){
     it('works with multiple nested through relations', function(next){
       store.ready(function(){
         var User = store.Model('User')
-        var result = Utils.sanitizeRelations(User, {unread_threads: {user: 'unread'}})
+        var result = store.utils.sanitizeRelations(User, {unread_threads: {user: 'unread'}})
         result.length.should.be.equal(6)
         result[0].name_tree.should.be.eql(['unread_posts'])
         result[1].name_tree.should.be.eql(['unread_posts', 'unread'])
@@ -198,7 +197,7 @@ describe('SQL: Helper', function(){
     it('works with nested polymorphic relation', function(next){
       store.ready(function(){
         var User = store.Model('User')
-        var result = Utils.sanitizeRelations(User, {members: 'user'})
+        var result = store.utils.sanitizeRelations(User, {members: 'user'})
         result.length.should.be.equal(2)
         result[0].name_tree.should.be.eql(['poly_things'])
         result[1].name_tree.should.be.eql(['poly_things', 'member'])
@@ -210,7 +209,7 @@ describe('SQL: Helper', function(){
     it('works with nested polymorphic relations', function(next){
       store.ready(function(){
         var User = store.Model('User')
-        var result = Utils.sanitizeRelations(User, {members: ['user', 'thread']})
+        var result = store.utils.sanitizeRelations(User, {members: ['user', 'thread']})
         result.length.should.be.equal(2)
         result[0].name_tree.should.be.eql(['poly_things'])
         result[1].name_tree.should.be.eql(['poly_things', 'member'])
@@ -225,7 +224,7 @@ describe('SQL: Helper', function(){
     it('works with a simple hash conditions', function(next){
       store.ready(function(){
         var User = store.Model('User')
-        var result = Utils.sanitizeConditions(User, {login: 'phil'})
+        var result = store.utils.sanitizeConditions(User, {login: 'phil'})
 
         result.length.should.be.equal(1)
         result[0].name_tree.should.be.eql([])
@@ -239,7 +238,7 @@ describe('SQL: Helper', function(){
       store.ready(function(){
         var User = store.Model('User')
         var Thread = store.Model('Thread')
-        var result = Utils.sanitizeConditions(User, {unread_threads: {title_like: 'first'}})
+        var result = store.utils.sanitizeConditions(User, {unread_threads: {title_like: 'first'}})
         result.length.should.be.equal(1)
         result[0].name_tree.should.be.eql(['unread_posts', 'unread', 'thread'])
         result[0].model.should.be.eql(Thread)
@@ -251,7 +250,7 @@ describe('SQL: Helper', function(){
     it('works with null values', function(next){
       store.ready(function(){
         var User = store.Model('User')
-        var result = Utils.sanitizeConditions(User, {login: null})
+        var result = store.utils.sanitizeConditions(User, {login: null})
         result.length.should.be.equal(1)
         result[0].name_tree.should.be.eql([])
         result[0].model.should.be.eql(User);
@@ -266,7 +265,7 @@ describe('SQL: Helper', function(){
   describe('nameTreeToRelation()', function(){
     it('works with one element', function(next){
       store.ready(function(){
-        var result = Utils.nameTreeToRelation(['aa'])
+        var result = store.utils.nameTreeToRelation(['aa'])
         result.should.be.equal('aa')
         next()
       })
@@ -274,7 +273,7 @@ describe('SQL: Helper', function(){
 
     it('works with two elements', function(next){
       store.ready(function(){
-        var result = Utils.nameTreeToRelation(['aa', 'bb'])
+        var result = store.utils.nameTreeToRelation(['aa', 'bb'])
         result.should.be.eql({aa: 'bb'})
         next()
       })
@@ -282,7 +281,7 @@ describe('SQL: Helper', function(){
 
     it('works with three elements', function(next){
       store.ready(function(){
-        var result = Utils.nameTreeToRelation(['aa', 'bb', 'cc'])
+        var result = store.utils.nameTreeToRelation(['aa', 'bb', 'cc'])
         result.should.be.eql({aa: {bb: 'cc'}})
         next()
       })
@@ -294,7 +293,7 @@ describe('SQL: Helper', function(){
   describe('nameTreeToCondition()', function(){
     it('works with one element', function(next){
       store.ready(function(){
-        var result = Utils.nameTreeToCondition(['aa'], {foo: 'bar'})
+        var result = store.utils.nameTreeToCondition(['aa'], {foo: 'bar'})
         result.should.be.eql({aa: {foo: 'bar'}})
         next()
       })
@@ -302,7 +301,7 @@ describe('SQL: Helper', function(){
 
     it('works with two elements', function(next){
       store.ready(function(){
-        var result = Utils.nameTreeToCondition(['aa', 'bb'], {foo: 'bar'})
+        var result = store.utils.nameTreeToCondition(['aa', 'bb'], {foo: 'bar'})
         result.should.be.eql({aa: {bb: {foo: 'bar'}}})
         next()
       })
@@ -310,7 +309,7 @@ describe('SQL: Helper', function(){
 
     it('works with three elements', function(next){
       store.ready(function(){
-        var result = Utils.nameTreeToCondition(['aa', 'bb', 'cc'], {foo: 'bar'})
+        var result = store.utils.nameTreeToCondition(['aa', 'bb', 'cc'], {foo: 'bar'})
         result.should.be.eql({aa: {bb: {cc: {foo: 'bar'}}}})
         next()
       })
