@@ -1,10 +1,12 @@
 const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
+const OpenRecordCache = require('../../webpack')
+
 const path = require('path')
 const fs = require('fs')
 
-describe('Webpack: Load', function(){
-  var database = path.join(__dirname, 'webpack_load_test.sqlite3')
+describe.skip('Webpack: With cache plugin', function(){
+  var database = path.join(__dirname, 'webpack_cache_test.sqlite3')
   var storePath = path.join(__dirname, '..', 'fixtures', 'stores', 'webpack-sqlite3')
 
   before(function(next){
@@ -37,10 +39,18 @@ describe('Webpack: Load', function(){
       },
       externals: [nodeExternals()],
       plugins: [
+        new OpenRecordCache(require(storePath)(database)),
         new webpack.optimize.UglifyJsPlugin({minimize: true, compress: { warnings: false }})
       ]
     }, function(err, stats) {
       stats.compilation.errors.should.be.eql([])
+      process.stdout.write(stats.toString({
+        colors: true,
+        modules: false,
+        children: false,
+        chunks: false,
+        chunkModules: false
+      }) + '\n\n')
       next(err)
     })
   })
