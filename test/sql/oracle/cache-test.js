@@ -85,8 +85,8 @@ if(process.env['ORACLE_HOME']){
         })
       })
     })
-    
-    
+
+
     describe('Disable autoload', function(){
       var store2
       before(function(){

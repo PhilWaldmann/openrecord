@@ -90,11 +90,11 @@ describe('SQLite3: Cache', function(){
       })
     })
   })
-  
-  
+
+
   describe('Diable autoload', function(){
     var store2
-    
+
     before(function(){
       store2 = new Store({
         type: 'sqlite3',
