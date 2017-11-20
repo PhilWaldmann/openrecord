@@ -1,3 +1,4 @@
+'use strict'
 const Store = require('./store')
 
 function OpenRecordCachePlugin(store) {
