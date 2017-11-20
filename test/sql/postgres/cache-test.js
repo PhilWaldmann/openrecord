@@ -195,9 +195,9 @@ describe('Postgres: Cache', function(){
       })
     })
   })
-  
-  
-  
+
+
+
   describe('Disable autoload', function(){
     var store2
     before(function(){

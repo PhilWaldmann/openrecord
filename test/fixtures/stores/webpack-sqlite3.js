@@ -1,14 +1,15 @@
 var Store
 try{
   Store = require('openrecord/store/sqlite3') // to simulate tests from the outside world
+  require('openrecord/lib/base/dynamic_loading')
 }catch(e){
   Store = require('../../../store/sqlite3')
 }
 
-module.exports = function(database, diableautoload){
+module.exports = function(database, disableAutoload){
   const store = new Store({
     file: database,
-    diableAutoload: diableautoload
+    disableAutoload: disableAutoload
   })
 
   store.Model('user', function(){})

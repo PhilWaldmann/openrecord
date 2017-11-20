@@ -5,7 +5,7 @@ const OpenRecordCache = require('../../webpack')
 const path = require('path')
 const fs = require('fs')
 
-describe.skip('Webpack: With cache plugin', function(){
+describe('Webpack: With cache plugin', function(){
   var root = path.join(__dirname, '..', '..')
   var symlink = path.join(root, 'node_modules', 'openrecord')
   var database = path.join(__dirname, 'webpack_cache_test.sqlite3')
@@ -23,7 +23,7 @@ describe.skip('Webpack: With cache plugin', function(){
   after(function(){
     afterSQLite(database)
     const file = path.join(__dirname, 'bundle.js')
-    // if(fs.existsSync(file)) fs.unlinkSync(file)
+    if(fs.existsSync(file)) fs.unlinkSync(file)
     if(fs.existsSync(symlink)) fs.unlinkSync(symlink)
   })
 
@@ -43,17 +43,11 @@ describe.skip('Webpack: With cache plugin', function(){
       externals: [nodeExternals()],
       plugins: [
         new OpenRecordCache(require(storePath)(database)),
-        // new webpack.optimize.UglifyJsPlugin({minimize: true, compress: { warnings: false }})
+        new webpack.optimize.UglifyJsPlugin({minimize: true, compress: { warnings: false }})
       ]
     }, function(err, stats) {
+      if(err) throw err
       stats.compilation.errors.should.be.eql([])
-      process.stdout.write(stats.toString({
-        colors: true,
-        modules: false,
-        children: false,
-        chunks: false,
-        chunkModules: false
-      }) + '\n\n')
       next(err)
     })
   })
@@ -77,8 +71,8 @@ describe.skip('Webpack: With cache plugin', function(){
       next()
     })
   })
-  
-  
+
+
   it('the packed code can query the db', function(next){
     const store = require('./bundle')(database, true)
     store.ready(function(){

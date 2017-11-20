@@ -171,11 +171,6 @@ testPG('promise', [
 ])
 
 
-testPG('raw', [
-  'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
-  "INSERT INTO users(login, email, created_at) VALUES('phil', 'phil@mail.com', '2014-01-05'), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', '2014-01-01'), ('administrator', 'administrator@mail.com', '2014-01-01')"
-]);
-
 
 testPG('select', [
   'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
