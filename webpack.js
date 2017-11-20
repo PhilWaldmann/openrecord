@@ -1,5 +1,4 @@
 'use strict'
-const Store = require('./store')
 
 function OpenRecordCachePlugin(store) {
   this.store = store
@@ -58,7 +57,6 @@ OpenRecordCacheInfusionDependency.Template = class OpenRecordCacheInfusionDepend
 
 OpenRecordCachePlugin.prototype.apply = function(compiler) {
   var store = this.store
-  if(!(store instanceof Store)) store = new Store(store)
 
   compiler.plugin('compilation', function(compilation, params) {
     compilation.dependencyFactories.set(OpenRecordCacheInfusionDependency, params.normalModuleFactory)
@@ -81,6 +79,11 @@ OpenRecordCachePlugin.prototype.apply = function(compiler) {
 
   compiler.plugin('run', function(compiler, callback) {
     store.ready(callback)
+  })
+
+  compiler.plugin('emit', function(compiler, callback) {
+    if(store.close) store.close()
+    callback()
   })
 }
 
