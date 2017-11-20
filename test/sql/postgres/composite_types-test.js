@@ -13,7 +13,8 @@ describe('Postgres: Composite Types', function(){
       'DROP TYPE IF EXISTS customtype',
       'CREATE type customtype AS (foo integer, bar text)',
       'CREATE TABLE attribute_tests(id serial primary key, composite_attribute customtype)',
-      "INSERT INTO attribute_tests (composite_attribute)VALUES(ROW(1,'foo'))"
+      "INSERT INTO attribute_tests (composite_attribute)VALUES(ROW(1,'foo'))",
+      "INSERT INTO attribute_tests (composite_attribute)VALUES(ROW(2,'foo bar'))"
     ], next)
   })
 
@@ -159,6 +160,24 @@ describe('Postgres: Composite Types', function(){
   })
 
 
+  it('composite field values are parsed correct', function(done){
+    store.ready(function(){
+      var AttributeTest = store.Model('AttributeTest')
+      AttributeTest.find(2).exec().then(function(record){
+        record.toJson().should.be.eql({
+          id: 2,
+          composite_attribute: {
+            foo: 2,
+            bar: 'foo bar'
+          }
+        })
+
+        done()
+      })
+    })
+  })
+
+
   it('changes in composite field are recognised in record', function(done){
     store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
@@ -249,9 +268,9 @@ describe('Postgres: Composite Types', function(){
       }, function(success){
         success.should.be.equal(true)
 
-        AttributeTest.find(2).exec().then(function(record){
+        AttributeTest.find(3).exec().then(function(record){
           record.toJson().should.be.eql({
-            id: 2,
+            id: 3,
             composite_attribute: {
               foo: null,
               bar: 'text'
