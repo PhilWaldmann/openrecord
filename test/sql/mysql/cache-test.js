@@ -95,4 +95,33 @@ describe('MySQL: Cache', function(){
       })
     })
   })
+  
+  
+  describe('Disable autoload', function(){
+    var store2
+    before(function(){
+      store2 = new Store({
+        host: 'localhost',
+        type: 'mysql',
+        database: database,
+        user: 'travis',
+        password: '',
+        disableAutoload: true
+      })
+      store2.Model('user', function(){})
+      store2.Model('post', function(){})
+
+      store2.setMaxListeners(0)
+      store2.on('exception', function(){})
+    })
+
+
+    it('model attributes are not defined', function(next){
+      store2.ready(function(){
+        store2.Model('user').definition.attributes.should.not.have.keys('id', 'login_changed', 'email')
+        store2.Model('post').definition.attributes.should.not.have.keys('id_changed', 'user_id', 'thread_id', 'message')
+        next()
+      })
+    })
+  })
 })

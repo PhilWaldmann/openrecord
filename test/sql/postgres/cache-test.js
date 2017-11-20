@@ -195,4 +195,36 @@ describe('Postgres: Cache', function(){
       })
     })
   })
+  
+  
+  
+  describe('Disable autoload', function(){
+    var store2
+    before(function(){
+      store2 = new Store({
+        host: 'localhost',
+        type: 'postgres',
+        database: database,
+        user: 'postgres',
+        password: '',
+        disableAutoload: true
+      })
+      store2.Model('user', function(){})
+      store2.Model('post', function(){})
+      store2.Model('attribute_test', function(){})
+
+      store2.setMaxListeners(0)
+      store2.on('exception', function(){})
+    })
+
+
+    it('model attributes are not defined', function(next){
+      store2.ready(function(){
+        store2.Model('user').definition.attributes.should.not.have.keys('id', 'login_changed', 'email')
+        store2.Model('post').definition.attributes.should.not.have.keys('id_changed', 'user_id', 'thread_id', 'message')
+        store2.Model('attribute_test').definition.attributes.should.not.have.keys('id', 'composite_attribute', 'enum_attribute')
+        next()
+      })
+    })
+  })
 })

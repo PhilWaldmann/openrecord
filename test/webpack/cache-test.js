@@ -6,11 +6,14 @@ const path = require('path')
 const fs = require('fs')
 
 describe.skip('Webpack: With cache plugin', function(){
+  var root = path.join(__dirname, '..', '..')
+  var symlink = path.join(root, 'node_modules', 'openrecord')
   var database = path.join(__dirname, 'webpack_cache_test.sqlite3')
   var storePath = path.join(__dirname, '..', 'fixtures', 'stores', 'webpack-sqlite3')
 
   before(function(next){
     this.timeout(5000)
+    if(!fs.existsSync(symlink)) fs.symlinkSync(root, symlink, 'dir')
     beforeSQLite(database, [
       'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT)',
       'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)'
@@ -20,9 +23,9 @@ describe.skip('Webpack: With cache plugin', function(){
   after(function(){
     afterSQLite(database)
     const file = path.join(__dirname, 'bundle.js')
-    if(fs.existsSync(file)) fs.unlinkSync(file)
+    // if(fs.existsSync(file)) fs.unlinkSync(file)
+    if(fs.existsSync(symlink)) fs.unlinkSync(symlink)
   })
-
 
 
   it('successfully runs webpack with a sqlite3 store', function(next){
@@ -40,7 +43,7 @@ describe.skip('Webpack: With cache plugin', function(){
       externals: [nodeExternals()],
       plugins: [
         new OpenRecordCache(require(storePath)(database)),
-        new webpack.optimize.UglifyJsPlugin({minimize: true, compress: { warnings: false }})
+        // new webpack.optimize.UglifyJsPlugin({minimize: true, compress: { warnings: false }})
       ]
     }, function(err, stats) {
       stats.compilation.errors.should.be.eql([])
@@ -67,8 +70,17 @@ describe.skip('Webpack: With cache plugin', function(){
   })
 
 
+  it('the packed code contains all attributes via cache', function(next){
+    const store = require('./bundle')(database, true)
+    store.ready(function(){
+      store.Model('user').definition.attributes.should.have.keys('id', 'login')
+      next()
+    })
+  })
+  
+  
   it('the packed code can query the db', function(next){
-    const store = require('./bundle')(database)
+    const store = require('./bundle')(database, true)
     store.ready(function(){
       store.Model('user').count().exec().then(function(result){
         result.should.be.equal(0)
