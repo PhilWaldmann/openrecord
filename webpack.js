@@ -66,7 +66,7 @@ OpenRecordCachePlugin.prototype.apply = function(compiler) {
       // currently we search only for require calls
       parser.plugin('call require', function(node){
         // and check if 'openrecord' or 'openrecord/store/...' was required
-        if(node.arguments[0] && node.arguments[0].value.match(/^openrecord($|\/store\/)/)){
+        if(node.arguments[0] && node.arguments[0].value && node.arguments[0].value.match(/^openrecord($|\/store\/)/)){
           // now we do the fancy webpack dance
           const dep = new OpenRecordCacheInfusionDependency(node.callee.range, node.arguments[0].value, store)
           dep.loc = node.loc

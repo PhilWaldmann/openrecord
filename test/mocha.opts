@@ -2,3 +2,4 @@
 --recursive
 --full-trace
 --timeout 6000
+--exit
