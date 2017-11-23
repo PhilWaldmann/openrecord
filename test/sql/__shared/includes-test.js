@@ -25,12 +25,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
       store.Model('User', function(){
-        this.hasMany('posts')
+        this.hasMany('posts', {scope: 'sorted'})
         this.hasMany('threads')
         this.hasOne('avatar')
         this.hasMany('unread_posts')
         this.hasMany('unread', {through: 'unread_posts'})
-        this.hasOne('last_post', {model: 'Post', scope: '!recent'})
+        this.hasOne('last_post', {model: 'Post', scope: '!recent'}) // scope per record! => expensive!! (leading !)
         this.hasMany('unread_threads', {through: 'unread', relation: 'thread'})
         this.hasMany('poly_things')
         this.hasMany('members', {through: 'poly_things', relation: 'member'})
@@ -48,6 +48,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
         this.scope('recent', function(){
           this.order('id', true).limit(1)
+        })
+
+        this.scope('sorted', function(){
+          this.order('thread_id', true).order('message')
         })
       })
       store.Model('Thread', function(){
@@ -129,6 +133,22 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             result[1].posts.length.should.be.equal(1)
             result[2].login.should.be.equal('admin')
             result[2].posts.length.should.be.equal(0)
+            next()
+          })
+        })
+      })
+
+
+      it('calls the related scope method', function(next){
+        store.ready(function(){
+          var User = store.Model('User')
+          User.include('posts').order('users.id').exec(function(result){
+            result[0].login.should.be.equal('phil')
+            result[0].posts.toJSON().should.be.eql([
+              {id: 3, user_id: 1, thread_id: 2, message: 'third'},
+              {id: 1, user_id: 1, thread_id: 1, message: 'first message'},
+              {id: 2, user_id: 1, thread_id: 1, message: 'second'}
+            ])
             next()
           })
         })
