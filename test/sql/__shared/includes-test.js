@@ -26,6 +26,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
       store.Model('User', function(){
         this.hasMany('posts', {scope: 'sorted'})
+        this.hasMany('posts_contains', {model: 'Post', scope: 'contains'})
         this.hasMany('threads')
         this.hasOne('avatar')
         this.hasMany('unread_posts')
@@ -52,6 +53,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
         this.scope('sorted', function(){
           this.order('thread_id', true).order('message')
+        })
+
+        this.scope('contains', function(str){
+          this.where({message_like: str})
         })
       })
       store.Model('Thread', function(){
@@ -149,6 +154,24 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
               {id: 1, user_id: 1, thread_id: 1, message: 'first message'},
               {id: 2, user_id: 1, thread_id: 1, message: 'second'}
             ])
+            next()
+          })
+        })
+      })
+
+
+      it('calls the related scope method with args', function(next){
+        store.ready(function(){
+          var User = store.Model('User')
+          User.include({posts_contains: {$args: ['sec']}}).order('users.id').exec(function(result){
+            result[0].login.should.be.equal('phil')
+            result[0].posts_contains.toJSON().should.be.eql([
+              {id: 2, user_id: 1, thread_id: 1, message: 'second'}
+            ])
+            result[1].login.should.be.equal('michl')
+            result[1].posts.length.should.be.equal(0)
+            result[2].login.should.be.equal('admin')
+            result[2].posts.length.should.be.equal(0)
             next()
           })
         })
@@ -580,9 +603,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             result.poly_things[0].member_type.should.be.equal('Avatar')
             result.poly_things[0].member_id.should.be.equal(result.id)
             next()
-          }).catch(function(err){
-            should.not.exist(err)
-            next()
           })
         })
       })
@@ -623,7 +643,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
 
 
-      it('include a relation with scope', function(next){
+      it('include a relation with scope per record', function(next){
         store.ready(function(){
           var User = store.Model('User')
           User.include('last_post').exec(function(result){
