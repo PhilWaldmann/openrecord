@@ -123,4 +123,40 @@ describe('Graphql: Mutation', function(){
       })
     })
   })
+
+
+
+  it('executes a mutation defined in the model and returns related data', function(done){
+    store.ready(function(){
+      store.query(`
+        mutation Test{
+          createAuthor(name: "Max", email: "max@openrecord.com") {
+            id
+            name
+            email
+            active
+            recipes{
+              id
+              title
+            }
+          }
+        }
+      `, {id: 1}).then(result => {
+        result.should.be.eql({
+          data: {
+            createAuthor: {
+              id: 4,
+              name: 'Max',
+              email: 'max@openrecord.com',
+              active: true,
+              recipes: [
+                { id: 7, title: 'Example recipe' }
+              ]
+            }
+          }
+        })
+        done()
+      })
+    })
+  })
 })

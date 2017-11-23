@@ -1,7 +1,7 @@
 var Store = require('../../../store/postgres')
 
 
-describe.only('Postgres: belongsToMany()', function(){
+describe('Postgres: belongsToMany()', function(){
   var store
   var database = 'belongs_to_many_test'
 
