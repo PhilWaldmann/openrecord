@@ -22,7 +22,7 @@ describe('Graphql: Mutation', function(){
     store.ready(function(){
       store.query(`
         mutation Test{
-          createRecipe(title: "Mutation Test", description: "Foobar", author_id: 1) {
+          createRecipe(input: {title: "Mutation Test", description: "Foobar", author_id: 1}) {
             id
           }
         }
@@ -45,7 +45,7 @@ describe('Graphql: Mutation', function(){
     store.ready(function(){
       store.query(`
         mutation Test{
-          createRecipe(title: "Mutation Test2", description: "Foobar", author_id: 1) {
+          createRecipe(input: {title: "Mutation Test2", description: "Foobar", author_id: 1}) {
             id
             title
             author_id
@@ -78,7 +78,7 @@ describe('Graphql: Mutation', function(){
     store.ready(function(){
       store.query(`
         mutation Test{
-          updateRecipe(id: 5, title: "Updated") {
+          updateRecipe(input: {id: 5, title: "Updated"}) {
             id
             title
             author_id
@@ -111,7 +111,7 @@ describe('Graphql: Mutation', function(){
     store.ready(function(){
       store.query(`
         mutation Test{
-          destroyRecipe(id: 5)
+          destroyRecipe(input: {id: 5})
         }
       `, {id: 1}).then(result => {
         result.should.be.eql({
@@ -130,7 +130,7 @@ describe('Graphql: Mutation', function(){
     store.ready(function(){
       store.query(`
         mutation Test{
-          createAuthor(name: "Max", email: "max@openrecord.com") {
+          createAuthor(input: {name: "Max", email: "max@openrecord.com"}) {
             id
             name
             email
