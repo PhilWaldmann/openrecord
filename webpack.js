@@ -23,6 +23,8 @@ class OpenRecordCacheInfusionDependency {
   getErrors() {
     return null
   }
+
+  disconnect(){}
 }
 
 OpenRecordCacheInfusionDependency.Template = class OpenRecordCacheInfusionDependencyTemplate {
