@@ -25,10 +25,6 @@ describe('Collection', function(){
     should.exist(Chain.remove)
   })
 
-  it('chained model has each()', function(){
-    should.exist(Chain.each)
-  })
-
 
 
   describe('add()', function(){
@@ -78,27 +74,6 @@ describe('Collection', function(){
   })
 
 
-
-  describe('each()', function(){
-    var Chain
-
-    before(function(){
-      Chain = User.chain()
-      Chain.add({login: 'phil'})
-      Chain.add({login: 'admin'})
-      Chain.add({login: 'michl'})
-    })
-
-    it('loops all records', function(){
-      var tmp = []
-      Chain.each(function(record){
-        tmp.push(record)
-      })
-
-      tmp[0].should.be.equal(Chain[0])
-      tmp.length.should.be.eql(Chain.length)
-    })
-  })
 
 
 

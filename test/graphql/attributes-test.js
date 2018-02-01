@@ -1,4 +1,7 @@
-// var should = require('should')
+var should = require('should')
+
+should.config.checkProtoEql = false
+
 
 describe('Graphql: Attributes', function(){
   var database = 'attributes'
@@ -17,14 +20,13 @@ describe('Graphql: Attributes', function(){
   })
 
 
-  it('returns a single attribute', function(done){
-    store.query(`{
+  it('returns a single attribute', () => {
+    return store.query(`{
       author(id: 1){
         name
       }
     }`).then(result => {
       result.should.be.eql({ data: { author: { name: 'phil' } } })
-      done()
     })
   })
 

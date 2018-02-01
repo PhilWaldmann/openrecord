@@ -98,15 +98,6 @@ testMYSQL('destroy', [
 
 testMYSQL('exec', [])
 
-testMYSQL('fibers', [
-  'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, active boolean)',
-  'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
-  'CREATE TABLE threads(id serial primary key, user_id INTEGER, title TEXT)',
-  "INSERT INTO users(login, email, active) VALUES('phil', 'phil@mail.com', true), ('michl', 'michl@mail.com', false), ('admin', 'admin@mail.com', true)",
-  "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post')",
-  "INSERT INTO threads(user_id, title) VALUES(2, 'first thread'), (1, 'second thread')"
-])
-
 testMYSQL('group', [
   'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
   "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first'), (1, 1, 'second'), (3, 2, 'third'), (2, 2, 'first')"

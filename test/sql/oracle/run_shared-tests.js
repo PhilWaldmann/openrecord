@@ -117,14 +117,6 @@ if(process.env['ORACLE_HOME']){
   //
   // testOracle('exec', [])
   //
-  // testOracle('fibers', [
-  //   'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "email" TEXT, "active" boolean)',
-  //   'CREATE TABLE "posts"("id" INTEGER, "user_id" INTEGER, "thread_id" INTEGER, "message" TEXT)',
-  //   'CREATE TABLE "threads"("id" INTEGER, "user_id" INTEGER, "title" TEXT)',
-  //   "INSERT INTO \"users\"(login, email, active) VALUES('phil', 'phil@mail.com', true), ('michl', 'michl@mail.com', false), ('admin', 'admin@mail.com', true)",
-  //   "INSERT INTO \"posts\"(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post')",
-  //   "INSERT INTO \"threads\"(user_id, title) VALUES(2, 'first thread'), (1, 'second thread')"
-  // ])
   //
   // testOracle('group', [
   //   'CREATE TABLE "posts"("id" INTEGER, "user_id" INTEGER, "thread_id" INTEGER, "message" TEXT)',

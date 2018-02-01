@@ -1,0 +1,4 @@
+remove internal exception handling and put everything into promises
+replace store.ready with store.connect().then(...)
+remove async in favor of promises
+test all exceptions
