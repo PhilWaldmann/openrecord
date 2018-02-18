@@ -10,7 +10,7 @@ describe('Chainable', function(){
 
 
   before(function(){
-    store.ready(function(){
+    return store.ready(function(){
       User = store.Model('User')
     })
   })

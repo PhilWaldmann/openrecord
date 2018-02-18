@@ -31,10 +31,10 @@ npm install mysql
 
 ## OpenRecord with REST-Backend
 
-install `restify` as well
+install `axios` as well
 
 ```bash
-npm install restify
+npm install axios
 ```
 
 
@@ -181,7 +181,7 @@ module.exports = function(){
 	this.attribute('my_attribute', String);
 }
 ```
-	
+
 {{Definition.attribute()}}
 
 OpenRecord has some build in types like `String`, `Number`, `Date`, `Boolean` and `Object`. These types are for custom attributes. But every store type could have it's own attribute types - this depends on the backend. These store dependent types will always map to javascript primitives. So most of the time you don't have to deal with that.
@@ -189,7 +189,7 @@ OpenRecord has some build in types like `String`, `Number`, `Date`, `Boolean` an
 ### setter() & getter()
 
 To provide a nice API OpenRecord uses javascript setter and getter. These setters and getters are created automatically for every attribute and [relation](#relations) and provide the magic behind [record.hasChanged()](#attribute-changes).
-If you need to create a custom setter or getter for your records use `setter()` or `getter()` to do so. 
+If you need to create a custom setter or getter for your records use `setter()` or `getter()` to do so.
 
 {{Definition.setter()}}
 
@@ -205,7 +205,7 @@ The following validation methods are available for every store type:
 
 
 {{Definition.validates()}}
-	
+
 {{Definition.validatesPresenceOf()}}
 
 {{Definition.validatesConfirmationOf()}}
@@ -367,7 +367,7 @@ module.exports = function(){
 	this
 	.validatesPresenceOf('name')
 	.validatesConfirmationOf('password')
-	
+
 	.hasMany('posts')
 	.hasMany('threads');
 }
@@ -395,12 +395,12 @@ To get a single record, call `find(id)`.
 {{Model.find()}}
 
 `get(id)` is very similar to get. The only difference is that `get(id)` will throw an error if no record was found.
-  
+
 {{Model.get()}}
 
 
 ## Conditions
-	
+
 OpenRecord has a realy nice syntax to filter your results.
 There are 3 simple ways to write some conditions:
 
@@ -443,7 +443,7 @@ User.join({posts: {thread: 'rating'}}).where({posts: {thread: {rating: {stars_gt
 })
 ```
 
-{{Model.where()}}	
+{{Model.where()}}
 
 ## Aggregate functions
 
@@ -467,7 +467,7 @@ User.count().sum('failed_logins').where({active: true}).exec(function(result){
 {{Model.count()}}
 
 {{Model.sum()}}
-	
+
 {{Model.max()}}
 
 {{Model.min()}}
@@ -482,7 +482,7 @@ User.join('relation_name').exec(function(users){
 })
 ```
 
-or 
+or
 
 ```js
 User.join('relation_name', 'another_relation', 'and_one_more')
@@ -572,7 +572,7 @@ var user = {role: 'admin', id:1};
 //some update action
 Post.setContext(user).find(id).exec(function(post){
   //make some changes...
-  
+
   post.save(function(){
     ...
   })
@@ -680,7 +680,7 @@ Just change some attributes and OpenRecord will automatically detect the changed
 user.login = 'phil';
 user.save(function(){
   // ...
-}) 
+})
 ```
 ## Destroy
 

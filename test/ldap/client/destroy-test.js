@@ -37,19 +37,16 @@ describe('LDAP Client: Destroy', function(){
 
 
 
-  it('destroys a single record', function(next){
-    store.ready(function(){
+  it('destroys a single record', function(){
+    return store.ready(function(){
       var User = store.Model('User')
 
-      User.find('cn=destroy_me, ou=destroy, dc=test').exec(function(user){
+      return User.find('cn=destroy_me, ou=destroy, dc=test').exec(function(user){
         user.username.should.be.equal('destroy_me')
 
-        user.destroy(function(result){
-          result.should.be.equal(true)
-
-          User.find('cn=destroy_me, ou=destroy, dc=test').exec(function(user){
+        return user.destroy(function(){
+          return User.find('cn=destroy_me, ou=destroy, dc=test').exec(function(user){
             should.not.exists(user)
-            next()
           })
         })
       })

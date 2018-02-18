@@ -16,7 +16,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       storeConf.plugins = require('../../../lib/base/dynamic_loading')
 
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+
 
       store.Model('User', function(){})
       store.Model('Post', function(){})
@@ -26,25 +26,19 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
 
-    it('second migrations was executed as well', function(next){
-      store.ready(function(){
+    it('second migrations was executed as well', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
 
         Post.definition.attributes.should.have.property('id')
-        if(store.type === 'postgres' || store.type === 'mysql'){
-          Post.definition.attributes.should.have.property('message')
-        }else{
-          Post.definition.attributes.should.have.property('messages') // SQLite3 Support in knex is not yet finished
-        }
-
-        next()
+        Post.definition.attributes.should.have.property('message')
       })
     })
 
 
 
-    it('has the right data type', function(next){
-      store.ready(function(){
+    it('has the right data type', function(){
+      return store.ready(function(){
         var AttributeTest = store.Model('AttributeTest')
         AttributeTest.definition.attributes.string_attr.type.name.should.be.equal('string')
         AttributeTest.definition.attributes.text_attr.type.name.should.be.equal('string')
@@ -61,31 +55,26 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           AttributeTest.definition.attributes.binary_attr.type.name.should.be.equal('string') // TODO: SHOULD BE binary
           AttributeTest.definition.attributes.time_attr.type.name.should.be.equal('string') // TODO: SHOULD BE time
         }
-
-        next()
       })
     })
 
 
-    it('has created a view', function(next){
-      store.ready(function(){
+    it('has created a view', function(){
+      return store.ready(function(){
         var Test = store.Model('Test')
-
-        Test.find(1).exec(function(user){
+        return Test.find(1).exec(function(user){
           user.login.should.be.equal('phil')
-          next()
         })
       })
     })
 
 
-    it('has seeded some records', function(next){
-      store.ready(function(){
+    it('has seeded some records', function(){
+      return store.ready(function(){
         var User = store.Model('User')
 
-        User.find(1).exec(function(user){
+        return User.find(1).exec(function(user){
           user.login.should.be.equal('phil')
-          next()
         })
       })
     })

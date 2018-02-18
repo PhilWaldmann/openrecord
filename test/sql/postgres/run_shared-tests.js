@@ -238,11 +238,6 @@ testPG('plugins/stampable', [
   "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post'), (5, 4, 'update me')"
 ])
 
-testPG('plugins/promise', [
-  'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
-  'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
-  'CREATE TABLE threads(id  serial primary key, user_id INTEGER, title TEXT)'
-])
 
 testPG('plugins/serialize', [
   'CREATE TABLE users(id serial primary key, login TEXT, config TEXT)'

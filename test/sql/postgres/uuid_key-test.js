@@ -26,40 +26,36 @@ describe('Postgres: UUID Key', function(){
 
     store.Model('UuidTest', function(){})
 
-    store.setMaxListeners(0)
-    store.on('exception', function(){})
+    
+    
   })
 
   after(function(next){
     afterPG(database, next)
   })
 
-  it('attribute id is type uuid', function(next){
-    store.ready(function(){
+  it('attribute id is type uuid', function(){
+    return store.ready(function(){
       var UuidTest = store.Model('UuidTest')
       UuidTest.definition.attributes.id.type.name.should.be.equal('uuid')
-      next()
     })
   })
 
-  it('new() returns a null id (uuid)', function(next){
-    store.ready(function(){
+  it('new() returns a null id (uuid)', function(){
+    return store.ready(function(){
       var UuidTest = store.Model('UuidTest')
       var test = new UuidTest({ another_column: 'i am setting uuid' })
       should.not.exist(test.id)
-      next()
     })
   })
 
-  it('create() returns a new id (uuid)', function(next){
-    store.ready(function(){
+  it('create() returns a new id (uuid)', function(){
+    return store.ready(function(){
       var UuidTest = store.Model('UuidTest')
       var test = new UuidTest({ another_column: 'i am setting uuid' })
 
-      test.save(function(success) {
+      return test.save(function() {
         should.exist(test.id)
-        success.should.be.equal(true)
-        next()
       })
     })
   })

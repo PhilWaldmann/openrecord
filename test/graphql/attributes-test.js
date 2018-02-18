@@ -3,7 +3,7 @@ var should = require('should')
 should.config.checkProtoEql = false
 
 
-describe('Graphql: Attributes', function(){
+describe('GraphQL: Attributes', function(){
   var database = 'attributes'
   var store
 
@@ -20,51 +20,53 @@ describe('Graphql: Attributes', function(){
   })
 
 
-  it('returns a single attribute', () => {
+  it('returns a single attribute', function(){
     return store.query(`{
       author(id: 1){
         name
       }
-    }`).then(result => {
+    }`)
+    .then(function(result){
       result.should.be.eql({ data: { author: { name: 'phil' } } })
     })
   })
 
 
-  it('returns a multiple attributes', function(done){
-    store.query(`{
+  it('returns a multiple attributes', function(){
+    return store.query(`{
       author(id: 1){
         name
         email
       }
-    }`).then(result => {
+    }`)
+    .then(function(result){
       result.should.be.eql({ data: { author: { name: 'phil', email: 'phil@mail.com' } } })
-      done()
     })
   })
 
 
-  it('returns a single value (count)', function(done){
-    store.ready(function(){
-      store.query(`{
+  it('returns a single value (count)', function(){
+    return store.ready(function(){
+      return store.query(`{
         author_count
-      }`).then(result => {
+      }`)
+      .then(function(result){
         result.should.be.eql({ data: { author_count: 3 } })
-        done()
       })
     })
   })
 
 
-  it('returns multiple records and the total count', function(done){
-    store.ready(function(){
-      store.query(`{
+  it('returns multiple records and the total count', function(){
+    return store.ready(function(){
+      return store.query(`{
         author_count
         authors{
           name
           email
         }
-      }`).then(result => {
+      }`)
+      .then(function(result){
         result.should.be.eql({
           data: {
             author_count: 3,
@@ -75,39 +77,38 @@ describe('Graphql: Attributes', function(){
             ]
           }
         })
-        done()
       })
     })
   })
 
 
-  it('returns data via getter method', function(done){
-    store.query(`{
+  it('returns data via getter method', function(){
+    return store.query(`{
       author(id: 1){
         name,
         info
       }
-    }`).then(result => {
+    }`)
+    .then(function(result){
       result.should.be.eql({ data: { author: {
         name: 'phil',
         info: 'phil <phil@mail.com>'
       } } })
-      done()
     })
   })
 
-  it('returns data via method', function(done){
-    store.query(`{
+  it('returns data via method', function(){
+    return store.query(`{
       ingredient(id: 8){
         name,
         total_amount
       }
-    }`).then(result => {
+    }`)
+    .then(function(result){
       result.should.be.eql({ data: { ingredient: {
         name: 'butter',
         total_amount: 21
       } } })
-      done()
     })
   })
 })

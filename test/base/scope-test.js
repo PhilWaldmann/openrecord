@@ -12,10 +12,9 @@ describe('Scope', function(){
   })
 
   var User
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
-      next()
     })
   })
 
@@ -50,10 +49,9 @@ describe('Default Scope', function(){
   })
 
   var User
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
-      next()
     })
   })
 

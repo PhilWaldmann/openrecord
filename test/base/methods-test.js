@@ -15,7 +15,7 @@ describe('Methods', function(){
   var User, phil
 
   before(function(){
-    store.ready(function(){
+    return store.ready(function(){
       User = store.Model('User')
       phil = new User()
     })

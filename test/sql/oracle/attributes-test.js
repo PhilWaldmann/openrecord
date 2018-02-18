@@ -19,7 +19,7 @@ if(process.env['ORACLE_HOME']){
 
       store.Model('AttributeTest', function(){})
 
-      store.on('exception', function(){})
+      
     })
 
     after(function(next){
@@ -29,8 +29,8 @@ if(process.env['ORACLE_HOME']){
 
 
 
-    it('have all attributes loaded', function(done){
-      store.ready(function(){
+    it('have all attributes loaded', function(){
+      return store.ready(function(){
         var AttributeTest = store.Model('AttributeTest')
 
         var attrs = AttributeTest.definition.attributes
@@ -42,14 +42,12 @@ if(process.env['ORACLE_HOME']){
         attrs.should.have.property('binary_attribute')
         attrs.should.have.property('date_attribute')
         attrs.should.have.property('datetime_attribute')
-
-        done()
       })
     })
 
 
-    it('casts all values', function(done){
-      store.ready(function(){
+    it('casts all values', function(){
+      return store.ready(function(){
         var AttributeTest = store.Model('AttributeTest')
         AttributeTest.limit(1).exec(function(record){
           record.char_attribute.should.be.equal('abcd')
@@ -67,8 +65,6 @@ if(process.env['ORACLE_HOME']){
             record.date_attribute.toString().should.be.equal('2014-02-18')
             record.datetime_attribute.toJSON().should.be.equal('2014-02-18T15:45:02.000Z')
           }
-
-          done()
         })
       })
     })

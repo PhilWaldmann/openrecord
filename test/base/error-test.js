@@ -18,8 +18,8 @@ describe('Error', function(){
 
   var User, phil, michl
 
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
       phil = new User()
       michl = new User({
@@ -31,7 +31,6 @@ describe('Error', function(){
           url: 'http://foo.com/img.png'
         }
       })
-      next()
     })
   })
 
@@ -48,37 +47,13 @@ describe('Error', function(){
 
 
     it('is an array of errors', function(){
-      phil.errors['attribute_name'].should.be.an.instanceOf(Array)
-      phil.errors['attribute_name'][0].should.be.equal('not valid')
+      phil.errors.errors['attribute_name'].should.be.an.instanceOf(Array)
+      phil.errors.errors['attribute_name'][0].should.be.equal('not valid')
     })
 
     it('has base errors', function(){
-      phil.errors['base'].should.be.an.instanceOf(Array)
-      phil.errors['base'][0].should.be.equal('can not be deleted')
-    })
-
-    it('throws an error on reserved word (add)', function(){
-      (function(){
-        phil.errors.add('add', 'msg')
-      }).should.throw()
-    })
-
-    it('throws an error on reserved word (set)', function(){
-      (function(){
-        phil.errors.add('set', 'msg')
-      }).should.throw()
-    })
-
-    it('throws an error on reserved word (each)', function(){
-      (function(){
-        phil.errors.add('each', 'msg')
-      }).should.throw()
-    })
-
-    it('throws an error on reserved word (toJSON)', function(){
-      (function(){
-        phil.errors.add('toJSON', 'msg')
-      }).should.throw()
+      phil.errors.errors['base'].should.be.an.instanceOf(Array)
+      phil.errors.errors['base'][0].should.be.equal('can not be deleted')
     })
   })
 
@@ -89,8 +64,8 @@ describe('Error', function(){
         a: 'Error a',
         b: 'Error b'
       })
-      phil.errors.a.should.be.eql(['Error a'])
-      phil.errors.b.should.be.eql(['Error b'])
+      phil.errors.errors.a.should.be.eql(['Error a'])
+      phil.errors.errors.b.should.be.eql(['Error b'])
     })
   })
 
@@ -141,19 +116,19 @@ describe('Error', function(){
 
 
     it('has the posts error object on its error obj.', function(){
-      michl.errors.should.have.property('posts')
+      michl.errors.toJSON().should.have.property('posts')
     })
 
     it('has the avatar error object on its error obj.', function(){
-      michl.errors.should.have.property('avatar')
+      michl.errors.toJSON().should.have.property('avatar')
     })
 
     it('errors is an array for hasMany', function(){
-      michl.errors.posts.should.be.instanceOf(Array)
+      michl.errors.toJSON().posts.should.be.instanceOf(Array)
     })
 
     it('errors is an object for belongsTo', function(){
-      michl.errors.avatar.should.not.be.instanceOf(Array)
+      michl.errors.toJSON().avatar.should.not.be.instanceOf(Array)
     })
   })
 })

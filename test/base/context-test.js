@@ -50,10 +50,9 @@ describe('Context', function(){
   })
 
   var User
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
-      next()
     })
   })
 
@@ -68,11 +67,9 @@ describe('Context', function(){
       ChainedModel.should.be.an.instanceof(Array)
     })
 
-    it('has the right context on record scope', function(next){
+    it('has the right context on record scope', function(){
       var phil = User.setContext(myContext).new({login: 'phil'})
-      phil.isValid(function(){
-        next()
-      })
+      return phil.isValid()
     })
 
     it('has the right context on model scope', function(){

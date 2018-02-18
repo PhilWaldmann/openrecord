@@ -32,11 +32,10 @@ describe('Attributes', function(){
 
   var User, phil
 
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
       phil = new User()
-      next()
     })
   })
 
@@ -263,14 +262,12 @@ describe('Attributes', function(){
 
 
   describe('unknown type', function(){
-    it('throws an Error', function(next){
+    it('throws an Error', function(){
       store.Model('Test', function(){
-        var self = this;
-        (function(){
-          self.attribute('my_attr', 'unknown_type')
-        }).should.throw()
-        next()
+        this.attribute('my_attr', 'unknown_type')
       })
+      return store.ready()
+      .should.be.rejectedWith(store.UnknownAttributeTypeError, {message: 'Unknown attribute type "unknown_type"'})
     })
   })
 

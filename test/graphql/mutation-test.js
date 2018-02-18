@@ -1,6 +1,6 @@
 // var should = require('should')
 
-describe('Graphql: Mutation', function(){
+describe('GraphQL: Mutation', function(){
   var database = 'attributes'
   var store
 
@@ -18,15 +18,16 @@ describe('Graphql: Mutation', function(){
 
 
 
-  it('executes a mutation and returns the id', function(done){
-    store.ready(function(){
-      store.query(`
+  it('executes a mutation and returns the id', function(){
+    return store.ready(function(){
+      return store.query(`
         mutation Test{
           createRecipe(input: {title: "Mutation Test", description: "Foobar", author_id: 1}) {
             id
           }
         }
-      `, {id: 1}).then(result => {
+      `, {id: 1})
+      .then(function(result){
         result.should.be.eql({
           data: {
             createRecipe: {
@@ -34,16 +35,15 @@ describe('Graphql: Mutation', function(){
             }
           }
         })
-        done()
       })
     })
   })
 
 
 
-  it('executes a mutation and returns the whole record + relational data', function(done){
-    store.ready(function(){
-      store.query(`
+  it('executes a mutation and returns the whole record + relational data', function(){
+    return store.ready(function(){
+      return store.query(`
         mutation Test{
           createRecipe(input: {title: "Mutation Test2", description: "Foobar", author_id: 1}) {
             id
@@ -54,7 +54,8 @@ describe('Graphql: Mutation', function(){
             }
           }
         }
-      `, {id: 1}).then(result => {
+      `, {id: 1})
+      .then(function(result){
         result.should.be.eql({
           data: {
             createRecipe: {
@@ -67,16 +68,15 @@ describe('Graphql: Mutation', function(){
             }
           }
         })
-        done()
       })
     })
   })
 
 
 
-  it('executes a mutation with custom handler', function(done){
-    store.ready(function(){
-      store.query(`
+  it('executes a mutation with custom handler', function(){
+    return store.ready(function(){
+      return store.query(`
         mutation Test{
           updateRecipe(input: {id: 5, title: "Updated"}) {
             id
@@ -87,7 +87,8 @@ describe('Graphql: Mutation', function(){
             }
           }
         }
-      `, {id: 1}).then(result => {
+      `, {id: 1})
+      .then(function(result){
         result.should.be.eql({
           data: {
             updateRecipe: {
@@ -100,35 +101,34 @@ describe('Graphql: Mutation', function(){
             }
           }
         })
-        done()
       })
     })
   })
 
 
 
-  it('executes a mutation with custom return type', function(done){
-    store.ready(function(){
-      store.query(`
+  it('executes a mutation with custom return type', function(){
+    return store.ready(function(){
+      return store.query(`
         mutation Test{
           destroyRecipe(input: {id: 5})
         }
-      `, {id: 1}).then(result => {
+      `, {id: 1})
+      .then(function(result){
         result.should.be.eql({
           data: {
             destroyRecipe: true
           }
         })
-        done()
       })
     })
   })
 
 
 
-  it('executes a mutation defined in the model and returns related data', function(done){
-    store.ready(function(){
-      store.query(`
+  it('executes a mutation defined in the model and returns related data', function(){
+    return store.ready(function(){
+      return store.query(`
         mutation Test{
           createAuthor(input: {name: "Max", email: "max@openrecord.com"}) {
             id
@@ -141,7 +141,8 @@ describe('Graphql: Mutation', function(){
             }
           }
         }
-      `, {id: 1}).then(result => {
+      `, {id: 1})
+      .then(function(result){
         result.should.be.eql({
           data: {
             createAuthor: {
@@ -155,7 +156,6 @@ describe('Graphql: Mutation', function(){
             }
           }
         })
-        done()
       })
     })
   })

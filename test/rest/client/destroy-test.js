@@ -18,15 +18,12 @@ describe('REST Client: Destroy', function(){
   })
 
 
-  it('destroys a record (destroy)', function(next){
-    store.ready(function(){
+  it('destroys a record (destroy)', function(){
+    return store.ready(function(){
       var User = store.Model('User')
-      User.find(3).exec(function(record){
+      return User.find(3).exec(function(record){
         record.id.should.be.equal(3)
-        record.destroy(function(success){
-          success.should.be.equal(true)
-          next()
-        })
+        return record.destroy()
       })
     })
   })

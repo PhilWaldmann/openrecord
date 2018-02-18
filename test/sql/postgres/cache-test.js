@@ -39,8 +39,8 @@ describe('Postgres: Cache', function(){
     store.Model('post', function(){})
     store.Model('attribute_test', function(){})
 
-    store.setMaxListeners(0)
-    store.on('exception', function(){})
+    
+    
   })
 
   after(function(next){
@@ -48,33 +48,30 @@ describe('Postgres: Cache', function(){
   })
 
 
-  it('cache contains all models', function(next){
-    store.ready(function(){
+  it('cache contains all models', function(){
+    return store.ready(function(){
       store.cache.should.have.keys('user', 'post')
-      next()
     })
   })
 
-  it('cache contains model attributes', function(next){
-    store.ready(function(){
+  it('cache contains model attributes', function(){
+    return store.ready(function(){
       store.cache.user.should.have.keys('attributes')
       store.cache.post.should.have.keys('attributes')
       store.cache.user.attributes.should.have.size(3)
       store.cache.post.attributes.should.have.size(4)
-      next()
     })
   })
 
-  it('cache contains only necessary attribute information', function(next){
-    store.ready(function(){
+  it('cache contains only necessary attribute information', function(){
+    return store.ready(function(){
       store.cache.user.attributes.should.be.eql(cache.user.attributes.map(withoutChanged))
       store.cache.post.attributes.should.be.eql(cache.post.attributes.map(withoutChanged))
-      next()
     })
   })
 
-  it('cache contains enum values', function(next){
-    store.ready(function(){
+  it('cache contains enum values', function(){
+    return store.ready(function(){
       store.cache.attribute_test.attributes[2].should.be.eql({
         name: 'enum_attribute',
         type: 'string',
@@ -90,13 +87,12 @@ describe('Postgres: Cache', function(){
           name: 'validatesInclusionOf', args: [[ 'foo', 'bar' ]]
         }]
       })
-      next()
     })
   })
 
 
-  it('cache contains composite values', function(next){
-    store.ready(function(){
+  it('cache contains composite values', function(){
+    return store.ready(function(){
       store.cache.attribute_test.attributes[1].should.be.eql({
         name: 'composite_attribute',
         type: 'composite',
@@ -136,7 +132,6 @@ describe('Postgres: Cache', function(){
           validations: []
         }]
       })
-      next()
     })
   })
 
@@ -163,35 +158,32 @@ describe('Postgres: Cache', function(){
     })
 
 
-    it('model attributes are defined', function(next){
-      store2.ready(function(){
+    it('model attributes are defined', function(){
+      return store2.ready(function(){
         store2.Model('user').definition.attributes.should.have.keys('id', 'login_changed', 'email')
         store2.Model('post').definition.attributes.should.have.keys('id_changed', 'user_id', 'thread_id', 'message')
         store2.Model('attribute_test').definition.attributes.should.have.keys('id', 'composite_attribute', 'enum_attribute')
-        next()
       })
     })
 
-    it('enum validation is defined', function(next){
-      store2.ready(function(){
+    it('enum validation is defined', function(){
+      return store2.ready(function(){
         const AttributeTest = store2.Model('attribute_test')
         const test = AttributeTest.new({enum_attribute: 'foo'})
-        test.isValid(function(valid){
+        return test.isValid(function(valid){
           valid.should.be.equal(false)
-          this.errors.should.be.eql({enum_attribute: [ 'only allow one of [foo_changed, bar_changed]' ]})
-          next()
+          test.errors.toJSON().should.be.eql({enum_attribute: [ 'only allow one of [foo_changed, bar_changed]' ]})
         })
       })
     })
 
 
-    it('composite type is defined', function(next){
-      store2.ready(function(){
+    it('composite type is defined', function(){
+      return store2.ready(function(){
         const AttributeTest = store2.Model('attribute_test')
         const test = AttributeTest.new({composite_attribute: {foo_changed: 7, bar_changed: 7}})
         test.composite_attribute.foo_changed.should.be.equal(7)
         test.composite_attribute.bar_changed.should.be.equal('7') // auto convert to string
-        next()
       })
     })
   })
@@ -218,12 +210,11 @@ describe('Postgres: Cache', function(){
     })
 
 
-    it('model attributes are not defined', function(next){
-      store2.ready(function(){
+    it('model attributes are not defined', function(){
+      return store2.ready(function(){
         store2.Model('user').definition.attributes.should.not.have.keys('id', 'login_changed', 'email')
         store2.Model('post').definition.attributes.should.not.have.keys('id_changed', 'user_id', 'thread_id', 'message')
         store2.Model('attribute_test').definition.attributes.should.not.have.keys('id', 'composite_attribute', 'enum_attribute')
-        next()
       })
     })
   })

@@ -1,5 +1,5 @@
 
-describe('Graphql: Query', function(){
+describe('GraphQL: Query', function(){
   var database = 'attributes'
   var store
 
@@ -17,14 +17,15 @@ describe('Graphql: Query', function(){
 
 
 
-  it('returns all records', function(done){
-    store.ready(function(){
-      store.query(`{
+  it('returns all records', function(){
+    return store.ready(function(){
+      return store.query(`{
         authors{
           name
           email
         }
-      }`).then(result => {
+      }`)
+      .then(function(result){
         result.should.be.eql({
           data: {
             authors: [
@@ -34,21 +35,21 @@ describe('Graphql: Query', function(){
             ]
           }
         })
-        done()
       })
     })
   })
 
 
 
-  it('returns first 2 records', function(done){
-    store.ready(function(){
-      store.query(`{
+  it('returns first 2 records', function(){
+    return store.ready(function(){
+      return store.query(`{
         authors(limit: 2){
           name
           email
         }
-      }`).then(result => {
+      }`)
+      .then(function(result){
         result.should.be.eql({
           data: {
             authors: [
@@ -57,38 +58,38 @@ describe('Graphql: Query', function(){
             ]
           }
         })
-        done()
       })
     })
   })
 
 
-  it('returns a single record', function(done){
-    store.ready(function(){
-      store.query(`{
+  it('returns a single record', function(){
+    return store.ready(function(){
+      return store.query(`{
         author(id: 1){
           name
           email
         }
-      }`).then(result => {
+      }`)
+      .then(function(result){
         result.should.be.eql({
           data: {
             author: { name: 'phil', email: 'phil@mail.com' }
           }
         })
-        done()
       })
     })
   })
 
-  it('returns an error on missing id', function(done){
-    store.ready(function(){
-      store.query(`{
+  it('returns an error on missing id', function(){
+    return store.ready(function(){
+      return store.query(`{
         author{
           name
           email
         }
-      }`).then(result => {
+      }`)
+      .then(function(result){
         result.should.be.eql({
           errors: [{
             message: 'Field "author" argument "id" of type "Int!" is required but not provided.',
@@ -96,16 +97,15 @@ describe('Graphql: Query', function(){
             path: undefined
           }]
         })
-        done()
       })
     })
   })
 
 
 
-  it('returns a single record with related data', function(done){
-    store.ready(function(){
-      store.query(`{
+  it('returns a single record with related data', function(){
+    return store.ready(function(){
+      return store.query(`{
         author(id: 1){
           name
           email
@@ -115,7 +115,8 @@ describe('Graphql: Query', function(){
             rating
           }
         }
-      }`).then(result => {
+      }`)
+      .then(function(result){
         result.should.be.eql({
           data: {
             author: {
@@ -129,15 +130,14 @@ describe('Graphql: Query', function(){
             }
           }
         })
-        done()
       })
     })
   })
 
 
-  it('returns a single record with custom related data', function(done){
-    store.ready(function(){
-      store.query(`{
+  it('returns a single record with custom related data', function(){
+    return store.ready(function(){
+      return store.query(`{
         author(id: 1){
           name
           email
@@ -147,7 +147,8 @@ describe('Graphql: Query', function(){
             rating
           }
         }
-      }`).then(result => {
+      }`)
+      .then(function(result){
         result.should.be.eql({
           data: {
             author: {
@@ -161,7 +162,6 @@ describe('Graphql: Query', function(){
             }
           }
         })
-        done()
       })
     })
   })

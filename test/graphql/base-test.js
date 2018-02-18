@@ -1,6 +1,6 @@
 // var should = require('should')
 
-describe('Graphql: Base', function(){
+describe('GraphQL: Base', function(){
   var database = 'attributes'
   var store
 

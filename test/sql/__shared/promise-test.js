@@ -1,5 +1,3 @@
-var should = require('should')
-
 var Store = require('../../../store')
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
@@ -14,7 +12,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+
 
       store.Model('User', function(){})
       store.Model('Post', function(){
@@ -25,219 +23,161 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
 
-    it('has then() function', function(next){
-      store.ready(function(){
+    it('has then() function', function(){
+      return store.ready(function(){
         var User = store.Model('User')
         User.find(1).exec().then.should.be.a.Function()
-        next()
       })
     })
 
 
-    it('returns select results', function(next){
-      store.ready(function(){
+    it('returns select results', function(){
+      return store.ready(function(){
         var User = store.Model('User')
-        User.find(1).exec().then(function(result){
+        return User.find(1).exec()
+        .then(function(result){
           result.should.be.instanceof(User)
-          next()
         })
       })
     })
 
 
-    it('returns select results multiple times', function(next){
-      store.ready(function(){
+    it('returns select results multiple times', function(){
+      return store.ready(function(){
         var User = store.Model('User')
-        User.find(1).exec(function(result){
+        return User.find(1).exec(function(result){
           result.should.be.instanceof(User)
           return result
         }).then(function(result){
           result.should.be.instanceof(User)
-          next()
         })
       })
     })
 
 
-    it('saves a record', function(next){
-      store.ready(function(){
+    it('saves a record', function(){
+      return store.ready(function(){
         var User = store.Model('User')
-        User.find(1).exec(function(result){
+        return User.find(1).exec(function(result){
           result.login = 'test'
-          result.save().then(function(){
-            next()
+          return result.save()
+          .then(function(){
+
           })
         })
       })
     })
 
-    it('destroys a record', function(next){
-      store.ready(function(){
+    it('destroys a record', function(){
+      return store.ready(function(){
         var User = store.Model('User')
-        User.find(2).exec(function(result){
-          result.destroy().then(function(success){
-            success.should.be.equal(true)
-            next()
+        return User.find(2).exec(function(result){
+          return result.destroy()
+          .then(function(){
+
           })
         })
       })
     })
 
-    it('destroys multiple records', function(next){
-      store.ready(function(){
+    it('destroys multiple records', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
-        Post.find(1, 2).destroyAll(function(success){
-          success.should.be.equal(true)
-          next()
+        return Post.find(1, 2).destroyAll()
+        .then(function(){
+
         })
       })
     })
 
-    it('destroys multiple records', function(next){
-      store.ready(function(){
+    it('destroys multiple records', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
-        Post.find(3, 4).deleteAll(function(success){
-          success.should.be.equal(true)
-          next()
+        return Post.find(3, 4).deleteAll()
+        .then(function(){
+
         })
       })
     })
 
-    it('destroys multiple records', function(next){
-      store.ready(function(){
+    it('destroys multiple records', function(){
+      return store.ready(function(){
         var User = store.Model('User')
-        User.where({id_gt: 2}).destroy().then(function(result){
-          next()
+        return User.where({id_gt: 2}).destroy()
+        .then(function(){
+
         })
       })
     })
 
-    it('calls onReject method on error', function(next){
-      store.ready(function(){
+    it('calls throws an error on invalid query', function(){
+      return store.ready(function(){
         var User = store.Model('User')
-        User.where('foo=blaa').exec(function(result){
-
-        }, function(error){
-          should.exist(error)
-          next()
-        })
+        return User.where('foo=blaa')
       })
+      .should.be.rejectedWith(Error) // TODO: SQLError Object...
     })
 
 
-    it('calls onReject methods on error', function(next){
-      store.ready(function(){
-        var User = store.Model('User')
-        User.where('foo=blaa').exec(function(result){
-
-        }, function(error){
-          should.exist(error)
-        }).then(null, function(error){
-          error.should.be.instanceOf(Store.SQLError)
-          next()
-        })
-      })
-    })
-
-
-    it('calls catch method on error', function(next){
-      store.ready(function(){
-        var User = store.Model('User')
-        User.where('foo=blaa').exec().catch(function(error){
-          error.should.be.instanceOf(Store.SQLError)
-          next()
-        })
-      })
-    })
-
-
-    it('calls catch with exec() first', function(next){
-      store.ready(function(){
-        var User = store.Model('User')
-        User.where('foo=blaa').exec(function(result){
-
-        }).catch(function(error){
-          should.exist(error)
-          next()
-        })
-      })
-    })
-
-
-    it('catches only SQLError', function(next){
-      store.ready(function(){
-        var User = store.Model('User')
-        User.where('foo=blaa').catch(Store.RecordNotFoundError, function(error){
-          error.should.be.instanceOf(Store.RecordNotFoundError)
-        }).catch(Store.SQLError, function(error){
-          error.should.be.instanceOf(Store.SQLError)
-          next()
-        })
-      })
-    })
-
-    it('catches only Store.SQLError', function(next){
-      store.ready(function(){
-        var User = store.Model('User')
-        User.where('foo=blaa').catch(Store.RecordNotFoundError, function(error){
-          error.should.be.instanceOf(Store.RecordNotFoundError)
-        }).catch(Store.SQLError, function(error){
-          error.should.be.instanceOf(Store.SQLError)
-          next()
-        })
-      })
-    })
-
-
-    it('create multiple records', function(next){
-      store.ready(function(){
+    it('create multiple records', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
-        Post.create({message: 'first promise'}).then(function(){
+        return Post.create({message: 'first promise'})
+        .then(function(){
           return Post.create({message: 'second promise'})
-        }).then(function(){
+        })
+        .then(function(){
           return Post.create({message: 'third promise'})
-        }).then(function(){
+        })
+        .then(function(){
           return Post.where({message_like: 'promise'}).exec()
-        }).then(function(posts){
+        })
+        .then(function(posts){
           posts.length.should.be.equal(3)
-          next()
         })
       })
     })
 
 
-    it('create multiple records with an validation error', function(next){
-      store.ready(function(){
+    it('create multiple records with an validation error', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
-        Post.create({message: 'first pro_mise'}).then(function(){
+        return Post.create({message: 'first pro_mise'}).then(function(){
           return Post.create({message: 'second pro_mise'})
-        }).then(function(){
+        })
+        .then(function(){
           return Post.create({})
-        }).then(function(){
+        })
+        .catch(function(error){
+          // creates are not part of the same transaction...
+          if(error instanceof store.ValidationError) return
+          throw error
+        })
+        .then(function(){
           return Post.where({message_like: 'pro_mise'}).exec()
-        }).then(function(posts){
+        })
+        .then(function(posts){
           posts.length.should.be.equal(2)
-          next()
         })
       })
     })
 
 
-    it('create multiple records with all()', function(next){
-      store.ready(function(){
+    it('create multiple records with all()', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
-        Post.all([
+        return Promise.all([
           Post.create({message: 'first element'}),
           Post.create({message: 'second element'}),
           Post.create({message: 'third element'})
-        ]).then(function(results){
-          results[0].should.be.equal(true)
-          results[1].should.be.equal(true)
-          results[2].should.be.equal(true)
+        ])
+        .then(function(results){
+          results[0].id.should.be.equal(11)
+          results[1].id.should.be.equal(12)
+          results[2].id.should.be.equal(13)
           return Post.where({message_like: 'element'}).exec()
         }).then(function(posts){
           posts.length.should.be.equal(3)
-          next()
         })
       })
     })

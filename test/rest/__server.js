@@ -24,7 +24,7 @@ before(function(ready){
     type: 'sqlite3',
     file: database
   })
-  store.setMaxListeners(0)
+  
 
   store.Model('User', function(){
     this.hasMany('posts')
@@ -73,6 +73,14 @@ before(function(ready){
       })
       next()
     })
+    .catch(function(error){
+      res
+      .status(400)
+      .send({
+        error: error
+      })
+      next()
+    })
   })
 
 
@@ -83,35 +91,56 @@ before(function(ready){
       })
       next()
     })
+    .catch(function(error){
+      res
+      .status(400)
+      .send({
+        error: error
+      })
+      next()
+    })
   })
 
 
   server.put('/users/:id', function(req, res, next) {
-    User.find(req.params.id).exec(function(user){
-      if(user){
-        user.set(req.body.data)
-        user.save(function(success){
-          res.send({
-            data: user.toJson(),
-            success: success
-          })
-          next()
-        })
-      }else{
-        res.send({
-          success: false
-        })
-        next()
-      }
+    User.get(req.params.id).exec(function(user){
+      user.set(req.body.data)
+      return user.save()
+    })
+    .then(function(user){
+      res.send({
+        data: user.toJson(),
+        success: true
+      })
+      next()
+    })
+    .catch(function(error){
+      res
+      .status(400)
+      .send({
+        error: error,
+        success: false
+      })
+      next()
     })
   })
 
 
   server.post('/users', function(req, res, next) {
-    User.create(req.body.data, function(success){
+    User.create(req.body.data)
+    .then(function(user){
       res.send({
-        data: this.toJson(),
-        success: success
+        data: user.toJson(),
+        success: true
+      })
+      next()
+    })
+    .catch(function(error){
+      res
+      .status(400)
+      .send({
+        error: error,
+        success: false
       })
       next()
     })
@@ -119,21 +148,23 @@ before(function(ready){
 
 
   server.del('/users/:id', function(req, res, next) {
-    User.find(req.params.id).exec(function(user){
-      if(user){
-        user.set(req.params)
-        user.delete(function(success){
-          res.send({
-            success: success
-          })
-          next()
-        })
-      }else{
-        res.send({
-          success: false
-        })
-        next()
-      }
+    User.get(req.params.id).exec(function(user){
+      return user.delete()
+    })
+    .then(function(user){
+      res.send({
+        success: true
+      })
+      next()
+    })
+    .catch(function(error){
+      res
+      .status(400)
+      .send({
+        error: error,
+        success: false
+      })
+      next()
     })
   })
 
@@ -147,13 +178,31 @@ before(function(ready){
       })
       next()
     })
+    .catch(function(error){
+      res
+      .status(400)
+      .send({
+        error: error,
+        success: false
+      })
+      next()
+    })
   })
 
 
   server.get('/posts/:id', function(req, res, next) {
-    Post.find(req.params.id).exec(function(post){
+    Post.get(req.params.id).exec(function(post){
       res.send({
         data: post.toJson()
+      })
+      next()
+    })
+    .catch(function(error){
+      res
+      .status(400)
+      .send({
+        error: error,
+        success: false
       })
       next()
     })
@@ -161,31 +210,34 @@ before(function(ready){
 
 
   server.put('/posts/:id', function(req, res, next) {
-    Post.find(req.params.id).exec(function(post){
-      if(post){
-        post.set(req.body.data)
-        post.save(function(success){
-          res.send({
-            data: post.toJson(),
-            success: success
-          })
-          next()
-        })
-      }else{
-        res.send({
-          success: false
-        })
-        next()
-      }
+    Post.get(req.params.id).exec(function(post){
+      post.set(req.body.data)
+      return post.save()
+    })
+    .then(function(post){
+      res.send({
+        data: post.toJson(),
+        success: true
+      })
+      next()
+    })
+    .catch(function(error){
+      res
+      .status(400)
+      .send({
+        error: error,
+        success: false
+      })
+      next()
     })
   })
 
 
   server.post('/posts', function(req, res, next) {
-    Post.create(req.body.data, function(success){
+    Post.create(req.body.data, function(post){
       res.send({
-        data: this.toJson(),
-        success: success
+        data: post.toJson(),
+        success: true
       })
       next()
     })
@@ -193,21 +245,24 @@ before(function(ready){
 
 
   server.del('/posts/:id', function(req, res, next) {
-    Post.find(req.params.id).exec(function(post){
-      if(post){
-        post.set(req.params)
-        post.delete(function(success){
-          res.send({
-            success: success
-          })
-          next()
-        })
-      }else{
-        res.send({
-          success: false
-        })
-        next()
-      }
+    Post.get(req.params.id).exec(function(post){
+      post.set(req.params)
+      return post.delete()
+    })
+    .then(function(){
+      res.send({
+        success: true
+      })
+      next()
+    })
+    .catch(function(error){
+      res
+      .status(400)
+      .send({
+        error: error,
+        success: false
+      })
+      next()
     })
   })
 

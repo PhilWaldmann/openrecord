@@ -15,8 +15,8 @@ describe('Inspect', function(){
 
   var User, posts, michl, phil
 
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
 
       posts = [{title: 'foo'}, {title: 'bar'}]
@@ -25,8 +25,6 @@ describe('Inspect', function(){
       michl = User.new({login: 'michl', foo: 'bar', posts: posts})
 
       User.chain().add(phil).add(michl)
-
-      next()
     })
   })
 

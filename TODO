@@ -1,4 +1,16 @@
-remove internal exception handling and put everything into promises
-replace store.ready with store.connect().then(...)
-remove async in favor of promises
-test all exceptions
+[x] remove internal exception handling and put everything into promises
+[?] replace store.ready with store.connect().then(...)
+[x] remove async in favor of promises
+[ ] test all exceptions
+[ ] insert multiple records at once
+
+[ ] graphql variant test
+[ ] graphql pagination -> mit cursor?! + pageInfo
+
+[ ] postgres composite type query
+
+[ ] fix skipped tests -> specially include :totalCount
+
+[x] remove store.handleException
+
+[ ] faster class initialisation !!! Model initialisation braucht zu lange!

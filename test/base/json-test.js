@@ -21,8 +21,8 @@ describe('JSON', function(){
 
   var User, Collection, posts, michl, phil
 
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
 
       posts = [{title: 'foo'}, {title: 'bar'}]
@@ -31,8 +31,6 @@ describe('JSON', function(){
       michl = User.new({login: 'michl', foo: 'bar', a: 'A1', b: 'B1', c: 'C1', posts: posts})
 
       Collection = User.chain().add(phil).add(michl)
-
-      next()
     })
   })
 

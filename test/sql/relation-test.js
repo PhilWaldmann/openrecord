@@ -54,106 +54,100 @@ describe('SQL: Relations', function(){
   })
 
 
-  it('hasMany() has the right foreign key', function(next){
-    store.ready(function(){
+  it('hasMany() has the right foreign key', function(){
+    return store.ready(function(){
       var User = store.Model('User')
       User.definition.relations.posts.foreign_key.should.be.equal('user_id')
-      next()
     })
   })
 
-  it('hasMany() has the right primary key', function(next){
-    store.ready(function(){
+  it('hasMany() has the right primary key', function(){
+    return store.ready(function(){
       var User = store.Model('User')
       User.definition.relations.posts.primary_key.should.be.equal('id')
-      next()
     })
   })
 
-  it('hasMany() with custom model has the right foreign key', function(next){
-    store.ready(function(){
+  it('hasMany() with custom model has the right foreign key', function(){
+    return store.ready(function(){
       var User = store.Model('User')
       User.definition.relations.bar.foreign_key.should.be.equal('user_id')
-      next()
     })
   })
 
-  it('hasMany() with custom model has the right primary key', function(next){
-    store.ready(function(){
+  it('hasMany() with custom model has the right primary key', function(){
+    return store.ready(function(){
       var User = store.Model('User')
       User.definition.relations.bar.primary_key.should.be.equal('id')
-      next()
     })
   })
 
-  it('belongsTo() has the right foreign key', function(next){
-    store.ready(function(){
+  it('belongsTo() has the right foreign key', function(){
+    return store.ready(function(){
       var Post = store.Model('Post')
       Post.definition.relations.user.foreign_key.should.be.equal('id')
-      next()
     })
   })
 
-  it('belongsTo() has the right primary key', function(next){
-    store.ready(function(){
+  it('belongsTo() has the right primary key', function(){
+    return store.ready(function(){
       var Post = store.Model('Post')
       Post.definition.relations.user.primary_key.should.be.equal('user_id')
-      next()
     })
   })
 
-  it('belongsTo() with custom model has the right foreign key', function(next){
-    store.ready(function(){
+  it('belongsTo() with custom model has the right foreign key', function(){
+    return store.ready(function(){
       var Post = store.Model('Post')
       Post.definition.relations.bar.foreign_key.should.be.equal('id')
-      next()
     })
   })
 
-  it('belongsTo() with custom model has the right primary key', function(next){
-    store.ready(function(){
+  it('belongsTo() with custom model has the right primary key', function(){
+    return store.ready(function(){
       var Post = store.Model('Post')
       Post.definition.relations.bar.primary_key.should.be.equal('foo_id')
-      next()
     })
   })
 
-  it('belongsTo() with custom model and same field name has the right foreign key', function(next){
-    store.ready(function(){
+  it('belongsTo() with custom model and same field name has the right foreign key', function(){
+    return store.ready(function(){
       var Post = store.Model('Post')
       Post.definition.relations.bazinga.foreign_key.should.be.equal('id')
-      next()
     })
   })
 
-  it('belongsTo() with custom model and same field name has the right primary key', function(next){
-    store.ready(function(){
+  it('belongsTo() with custom model and same field name has the right primary key', function(){
+    return store.ready(function(){
       var Post = store.Model('Post')
       Post.definition.relations.bazinga.primary_key.should.be.equal('bazinga_id')
-      next()
     })
   })
 
-  it('belongsTo() with cross store relation', function(next){
-    store.ready(function(){
+  it('belongsTo() with cross store relation', function(){
+    return Promise.all([
+      store.ready(),
+      store2.ready()
+    ]).then(function(){
       var User = store.Model('User')
       var User2 = store2.Model('User');
       (User2.definition.relations.user.model === User).should.be.equal(true)
-      next()
     })
   })
 
-  it('belongsTo() with cross store relation from the other side', function(next){
-    store.ready(function(){
+  it('belongsTo() with cross store relation from the other side', function(){
+    return Promise.all([
+      store.ready(),
+      store2.ready()
+    ]).then(function(){
       var User = store.Model('User')
       var User2 = store2.Model('User');
       (User.definition.relations.user.model === User2).should.be.equal(true)
-      next()
     })
   })
 
 
-  it('should not create a relation if the store is not available', function(next){
+  it('should not create a relation if the store is not available', function(){
     var tmp = new Store({
       type: 'sql'
     })
@@ -162,15 +156,14 @@ describe('SQL: Relations', function(){
       this.belongsTo('bar', {store: 'UNKNOWN'})
     })
 
-    tmp.ready(function(){
+    return tmp.ready(function(){
       var Foo = tmp.Model('Foo')
       should.not.exists(Foo.definition.relations.bar)
-      next()
     })
   })
 
 
-  it('should wait until the requested store is available', function(next){
+  it('should wait until the requested store is available', function(){
     var tmp = new Store({
       type: 'sql'
     })
@@ -187,11 +180,10 @@ describe('SQL: Relations', function(){
     tmp2.Model('Bar', function(){})
 
 
-    tmp.ready(function(){
+    return tmp.ready(function(){
       var Foo = tmp.Model('Foo')
       process.nextTick(function(){
         should.exists(Foo.definition.relations.bar)
-        next()
       })
     })
   })

@@ -1,6 +1,6 @@
 // var should = require('should')
 
-describe('Graphql: Context', function(){
+describe('GraphQL: Context', function(){
   var database = 'attributes'
   var store
 
@@ -18,27 +18,27 @@ describe('Graphql: Context', function(){
 
 
 
-  it('get `me` via context', function(done){
-    store.ready(function(){
-      store.query(`{
+  it('get `me` via context', function(){
+    return store.ready(function(){
+      return store.query(`{
         me{
           name
           email
         }
-      }`, {id: 1}).then(result => {
+      }`, {id: 1})
+      .then(function(result){
         result.should.be.eql({
           data: {
             me: { name: 'phil', email: 'phil@mail.com' }
           }
         })
-        done()
       })
     })
   })
 
-  it('get `me` via context and return additonal relations', function(done){
-    store.ready(function(){
-      store.query(`{
+  it('get `me` via context and return additonal relations', function(){
+    return store.ready(function(){
+      return store.query(`{
         me{
           name
           email
@@ -46,10 +46,12 @@ describe('Graphql: Context', function(){
             title
           }
         }
-      }`, {id: 1}).then(result => {
+      }`, {id: 1})
+      .then(function(result){
         result.should.be.eql({
           data: {
-            me: { name: 'phil',
+            me: {
+              name: 'phil',
               email: 'phil@mail.com',
               recipes: [
                 { title: 'Toast Hawaii' },
@@ -59,7 +61,6 @@ describe('Graphql: Context', function(){
             }
           }
         })
-        done()
       })
     })
   })

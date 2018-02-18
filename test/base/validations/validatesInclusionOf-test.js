@@ -10,35 +10,30 @@ describe('validatesInclusionOf()', function(){
   })
 
   var User, valid, invalid
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
       valid = new User({state: 'okay'})
       invalid = new User({state: 'unknown'})
-
-      next()
     })
   })
 
 
-  it('returns true on valid records', function(done){
-    valid.isValid(function(valid){
+  it('returns true on valid records', function(){
+    return valid.isValid(function(valid){
       valid.should.be.equal(true)
-      done()
     })
   })
 
-  it('returns false on invalid records', function(done){
-    invalid.isValid(function(valid){
+  it('returns false on invalid records', function(){
+    return invalid.isValid(function(valid){
       valid.should.be.equal(false)
-      done()
     })
   })
 
-  it('returns the right error message', function(done){
-    invalid.isValid(function(valid){
-      invalid.errors.should.have.property('state')
-      done()
+  it('returns the right error message', function(){
+    return invalid.isValid(function(valid){
+      invalid.errors.toJSON().should.have.property('state')
     })
   })
 
@@ -52,43 +47,37 @@ describe('validatesInclusionOf()', function(){
     })
 
     var User, valid, invalid, invalid2
-    before(function(next){
-      store.ready(function(){
+    before(function(){
+      return store.ready(function(){
         User = store.Model('User')
         valid = new User({state: 'okay'})
         invalid = new User({state: 'unknown'})
         invalid2 = new User({state: 'unknown2', state2: 'something else'})
-
-        next()
       })
     })
 
 
-    it('returns true on valid records', function(done){
-      valid.isValid(function(valid){
+    it('returns true on valid records', function(){
+      return valid.isValid(function(valid){
         valid.should.be.equal(true)
-        done()
       })
     })
 
-    it('returns false on invalid records', function(done){
-      invalid.isValid(function(valid){
+    it('returns false on invalid records', function(){
+      return invalid.isValid(function(valid){
         valid.should.be.equal(false)
-        done()
       })
     })
 
-    it('returns false on invalid records (second field)', function(done){
+    it('returns false on invalid records (second field)', function(){
       invalid2.isValid(function(valid){
         valid.should.be.equal(false)
-        done()
       })
     })
 
-    it('returns the right error message', function(done){
-      invalid.isValid(function(valid){
-        invalid.errors.should.have.property('state')
-        done()
+    it('returns the right error message', function(){
+      return invalid.isValid(function(valid){
+        invalid.errors.toJSON().should.have.property('state')
       })
     })
   })

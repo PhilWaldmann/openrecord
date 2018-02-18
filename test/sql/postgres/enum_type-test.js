@@ -28,7 +28,7 @@ describe('Postgres: ENUM Attribute', function(){
     store.Model('AttributeTest', function(){
     })
 
-    store.on('exception', function(){})
+    
   })
 
   after(function(next){
@@ -38,55 +38,46 @@ describe('Postgres: ENUM Attribute', function(){
 
 
 
-  it('has enum_attribute', function(done){
-    store.ready(function(){
+  it('has enum_attribute', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
 
       var attrs = AttributeTest.definition.attributes
 
       attrs.should.have.property('enum_attribute')
-
-      done()
     })
   })
 
 
-  it('enum_attribute is a string', function(done){
-    store.ready(function(){
+  it('enum_attribute is a string', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
 
       var attrs = AttributeTest.definition.attributes
 
       attrs.enum_attribute.type.name.should.be.equal('string')
-
-      done()
     })
   })
 
 
-  it('does not allow to save any other value than defined in enum', function(done){
-    store.ready(function(){
+  it('does not allow to save any other value than defined in enum', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
 
-      AttributeTest.create({
+      return AttributeTest.create({
         enum_attribute: 'unknown'
-      }).then(function(success){
-        success.should.be.equal(false)
-        this.errors.should.be.eql({ enum_attribute: [ 'only allow one of [foo, bar]' ] })
-        done()
       })
+    }).should.be.rejectedWith(store.ValidationError, {
+      errors: {enum_attribute: [ 'only allow one of [foo, bar]' ]}
     })
   })
 
-  it('saves valid enum value', function(done){
-    store.ready(function(){
+  it('saves valid enum value', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
 
-      AttributeTest.create({
+      return AttributeTest.create({
         enum_attribute: 'foo'
-      }).then(function(success){
-        success.should.be.equal(true)
-        done()
       })
     })
   })

@@ -30,8 +30,8 @@ if(process.env['ORACLE_HOME']){
       store.Model('user', function(){})
       store.Model('post', function(){})
 
-      store.setMaxListeners(0)
-      store.on('exception', function(){})
+      
+      
     })
 
     after(function(next){
@@ -39,28 +39,25 @@ if(process.env['ORACLE_HOME']){
     })
 
 
-    it('cache contains all models', function(next){
-      store.ready(function(){
+    it('cache contains all models', function(){
+      return store.ready(function(){
         store.cache.should.have.keys('user', 'post')
-        next()
       })
     })
 
-    it('cache contains model attributes', function(next){
-      store.ready(function(){
+    it('cache contains model attributes', function(){
+      return store.ready(function(){
         store.cache.user.should.have.keys('attributes')
         store.cache.post.should.have.keys('attributes')
         store.cache.user.attributes.should.have.size(3)
         store.cache.post.attributes.should.have.size(4)
-        next()
       })
     })
 
-    it('cache contains only necessary attribute information', function(next){
-      store.ready(function(){
+    it('cache contains only necessary attribute information', function(){
+      return store.ready(function(){
         store.cache.user.attributes.should.be.eql(cache.user.attributes.map(withoutChanged))
         store.cache.post.attributes.should.be.eql(cache.post.attributes.map(withoutChanged))
-        next()
       })
     })
 
@@ -77,11 +74,10 @@ if(process.env['ORACLE_HOME']){
       })
 
 
-      it('model attributes are defined', function(next){
-        store2.ready(function(){
+      it('model attributes are defined', function(){
+        return store2.ready(function(){
           store2.Model('user').definition.attributes.should.have.keys('id', 'login_changed', 'email')
           store2.Model('post').definition.attributes.should.have.keys('id_changed', 'user_id', 'thread_id', 'message')
-          next()
         })
       })
     })
@@ -99,11 +95,10 @@ if(process.env['ORACLE_HOME']){
       })
 
 
-      it('model attributes are not defined', function(next){
-        store2.ready(function(){
+      it('model attributes are not defined', function(){
+        return store2.ready(function(){
           store2.Model('user').definition.attributes.should.not.have.keys('id', 'login_changed', 'email')
           store2.Model('post').definition.attributes.should.not.have.keys('id_changed', 'user_id', 'thread_id', 'message')
-          next()
         })
       })
     })

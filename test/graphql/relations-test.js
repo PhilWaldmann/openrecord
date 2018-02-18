@@ -1,6 +1,6 @@
 // var should = require('should')
 
-describe('Graphql: Relations', function(){
+describe('GraphQL: Relations', function(){
   var database = 'attributes'
   var store
 
@@ -19,9 +19,9 @@ describe('Graphql: Relations', function(){
 
 
 
-  it('returns a record with relational data', function(done){
-    store.ready(function(){
-      store.query(`{
+  it('returns a record with relational data', function(){
+    return store.ready(function(){
+      return store.query(`{
           authors{
             name
             recipes{
@@ -29,7 +29,8 @@ describe('Graphql: Relations', function(){
               title
             }
           }
-        }`).then(result => {
+        }`)
+      .then(function(result){
         result.should.be.eql({
           data: {
             authors: [
@@ -54,15 +55,14 @@ describe('Graphql: Relations', function(){
             ]
           }
         })
-        done()
       })
     })
   })
 
 
-  it('returns a record with deeply nested relational data', function(done){
-    store.ready(function(){
-      store.query(`{
+  it('returns a record with deeply nested relational data', function(){
+    return store.ready(function(){
+      return store.query(`{
           authors{
             name
             recipes{
@@ -73,7 +73,8 @@ describe('Graphql: Relations', function(){
               }
             }
           }
-        }`).then(result => {
+        }`)
+      .then(function(result){
         result.should.be.eql({
           data: {
             authors: [
@@ -123,16 +124,15 @@ describe('Graphql: Relations', function(){
             ]
           }
         })
-        done()
       })
     })
   })
 
 
 
-  it('returns a record with deeply nested relational data (cross store)', function(done){
-    store.ready(function(){
-      store.query(`{
+  it('returns a record with deeply nested relational data (cross store)', function(){
+    return store.ready(function(){
+      return store.query(`{
           recipe(id: 2){
             title,
             ingredients{
@@ -142,7 +142,8 @@ describe('Graphql: Relations', function(){
               }
             }
           }
-        }`).then(result => {
+        }`)
+      .then(function(result){
         result.should.be.eql({
           data: {
             recipe: {
@@ -156,7 +157,6 @@ describe('Graphql: Relations', function(){
             }
           }
         })
-        done()
       })
     })
   })

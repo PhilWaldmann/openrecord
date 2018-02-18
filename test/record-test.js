@@ -11,9 +11,11 @@ describe('Record: Base', function(){
   var User, phil
 
   before(function(){
-    User = store.Model('User')
-    phil = new User({
-      email: 'phiw@gmx.net'
+    return store.ready(function(){
+      User = store.Model('User')
+      phil = new User({
+        email: 'phiw@gmx.net'
+      })
     })
   })
 

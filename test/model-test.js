@@ -11,7 +11,9 @@ describe('Model: Base', function(){
 
   var User
   before(function(){
-    User = store.Model('User')
+    return store.ready(function(){
+      User = store.Model('User')
+    })
   })
 
   it('is a function', function(){

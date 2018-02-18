@@ -53,32 +53,29 @@ describe('Webpack: With cache plugin (sqlite3)', function(){
   })
 
 
-  it('the original code can query the db', function(next){
+  it('the original code can query the db', function(){
     const store = require(storePath)(database)
-    store.ready(function(){
-      store.Model('user').count().exec().then(function(result){
+    return store.ready(function(){
+      return store.Model('user').count().exec().then(function(result){
         result.should.be.equal(0)
-        next()
       })
     })
   })
 
 
-  it('the packed code contains all attributes via cache', function(next){
+  it('the packed code contains all attributes via cache', function(){
     const store = require('./bundle-sqlite3')(database, true)
-    store.ready(function(){
+    return store.ready(function(){
       store.Model('user').definition.attributes.should.have.keys('id', 'login')
-      next()
     })
   })
 
 
-  it('the packed code can query the db', function(next){
+  it('the packed code can query the db', function(){
     const store = require('./bundle-sqlite3')(database, true)
-    store.ready(function(){
-      store.Model('user').count().exec().then(function(result){
+    return store.ready(function(){
+      return store.Model('user').count().exec().then(function(result){
         result.should.be.equal(0)
-        next()
       })
     })
   })
@@ -139,32 +136,29 @@ describe('Webpack: With cache plugin (postgres)', function(){
   })
 
 
-  it('the original code can query the db', function(next){
+  it('the original code can query the db', function(){
     const store = require(storePath)(database)
-    store.ready(function(){
-      store.Model('user').count().exec().then(function(result){
+    return store.ready(function(){
+      return store.Model('user').count().exec().then(function(result){
         result.should.be.equal(0)
-        next()
       })
     })
   })
 
 
-  it('the packed code contains all attributes via cache', function(next){
+  it('the packed code contains all attributes via cache', function(){
     const store = require('./bundle-postgres')(database, true)
-    store.ready(function(){
+    return store.ready(function(){
       store.Model('user').definition.attributes.should.have.keys('id', 'login')
-      next()
     })
   })
 
 
-  it('the packed code can query the db', function(next){
+  it('the packed code can query the db', function(){
     const store = require('./bundle-postgres')(database, true)
-    store.ready(function(){
-      store.Model('user').count().exec().then(function(result){
+    return store.ready(function(){
+      return store.Model('user').count().exec().then(function(result){
         result.should.be.equal(0)
-        next()
       })
     })
   })

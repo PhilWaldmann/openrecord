@@ -254,15 +254,6 @@ if(process.env['ORACLE_HOME']){
     "INSERT INTO \"posts\"(\"user_id\", \"thread_id\", \"message\") VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post'), (5, 4, 'update me')"
   ])
 
-  // testOracle('plugins/promise', [
-  //   'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "email" TEXT, "created_at" TEXT)',
-  //   'PRIMARY:users:id',
-  //   'CREATE TABLE "posts"("id" INTEGER, "user_id" INTEGER, "thread_id" INTEGER, "message" TEXT)',
-  //   'PRIMARY:posts:id',
-  //   'CREATE TABLE "threads"(id INTEGER, "user_id" INTEGER, "title" TEXT)',
-  //   'PRIMARY:threads:id'
-  // ])
-
   testOracle('plugins/serialize', [
     'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "config" TEXT)',
     'PRIMARY:users:id'

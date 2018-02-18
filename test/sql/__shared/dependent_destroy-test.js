@@ -14,14 +14,14 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+      
 
       store.Model('User', function(){
         this.hasMany('posts')
         this.hasMany('threads')
         this.hasMany('poly_things', {as: 'member', dependent: 'destroy'})
         this.beforeDestroy(function(){
-          return this.id !== 2
+          if(this.id === 2) throw new Error('stop from user')
         })
       })
       store.Model('Post', function(){
@@ -29,12 +29,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.belongsTo('thread', {dependent: 'destroy'})
         this.hasMany('poly_things', {as: 'member', dependent: 'destroy'})
         this.beforeDestroy(function(){
-          return this.id !== 1
+          if(this.id === 1) throw new Error('stop from post')
         })
       })
       store.Model('Thread', function(){
         this.belongsTo('user')
-        this.hasMany('posts', {dependent: 'destroy', validates: false})
+        this.hasMany('posts', {dependent: 'destroy'})
         this.hasMany('poly_things', {as: 'member', dependent: 'destroy'})
       })
       store.Model('PolyThing', function(){
@@ -43,38 +43,47 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('destroy hasMany', function(next){
-      store.ready(function(){
-        var Thread = store.Model('Thread')
-        var Post = store.Model('Post')
+    it('destroy hasMany', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
 
-        Thread.find(1, function(thread){
-          thread.destroy(function(result){
-            result.should.be.equal(true)
-
-            Post.find([1, 2], function(posts){
-              posts.length.should.be.equal(1)
-              posts[0].id.should.be.equal(1)
-              next()
-            })
-          })
+        return User.find(1, function(user){
+          return user.destroy()
         })
       })
     })
 
+    it('destroy hasMany with failing relation destroy', function(){
+      return store.ready(function(){
+        var Thread = store.Model('Thread')
 
-    it('destroy belongsTo', function(next){
-      store.ready(function(){
+        return Thread.find(1, function(thread){
+          return thread.destroy()
+        })
+      }).should.be.rejectedWith(Error, {message: 'stop from post'})
+    })
+
+
+    it('destroy hasMany with failing nested relation destroy', function(){
+      return store.ready(function(){
+        var Thread = store.Model('Thread')
+
+        return Thread.find(3, function(thread){
+          return thread.destroy()
+        })
+      }).should.be.rejectedWith(Error, {message: 'stop from user'})
+    })
+
+
+    it('destroy belongsTo', function(){
+      return store.ready(function(){
         var Thread = store.Model('Thread')
         var Post = store.Model('Post')
 
-        Post.find(3, function(post){
-          post.destroy(function(result){
-            result.should.be.equal(true)
-
-            Thread.find(2, function(thread){
+        return Post.find(3, function(post){
+          return post.destroy(function(){
+            return Thread.find(2, function(thread){
               should.not.exist(thread)
-              next()
             })
           })
         })
@@ -82,33 +91,27 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('destroy belongsTo with failing relation destroy', function(next){
-      store.ready(function(){
+    it('destroy belongsTo with failing relation destroy', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
 
-        Post.find(5, function(post){
-          post.destroy(function(result){
-            result.should.be.equal(false)
-            next()
-          })
+        return Post.find(5, function(post){
+          return post.destroy()
         })
-      })
+      }).should.be.rejectedWith(Error, {message: 'stop from user'})
     })
 
 
 
-    it('destroy polymorph hasMany', function(next){
-      store.ready(function(){
+    it('destroy polymorph hasMany', function(){
+      return store.ready(function(){
         var PolyThing = store.Model('PolyThing')
         var Post = store.Model('Post')
 
-        Post.find(6, function(post){
-          post.destroy(function(result){
-            result.should.be.equal(true)
-
-            PolyThing.find([1, 2], function(polyThings){
+        return Post.find(6, function(post){
+          return post.destroy(function(){
+            return PolyThing.find([1, 2], function(polyThings){
               polyThings.length.should.be.equal(1)
-              next()
             })
           })
         })

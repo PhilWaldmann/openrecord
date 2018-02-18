@@ -48,8 +48,7 @@ global.beforeGraphQL = function(database, done){
         type: 'sqlite3',
         file: file1,
         plugins: [
-          require('../../lib/graphql'),
-          require('../fixtures/plugins/promise-plugin')
+          require('../../lib/graphql')
         ]
       })
       .graphQuery('authors', {list: true})
@@ -135,6 +134,9 @@ global.beforeGraphQL = function(database, done){
           .then(function(record){
             return record.destroy()
           })
+          .then(function(){
+            return true
+          })
         }, {
           args: ['id'],
           args_mapping: ['id'],
@@ -168,8 +170,7 @@ global.beforeGraphQL = function(database, done){
         file: file2,
         name: 'store2',
         plugins: [
-          require('../../lib/graphql'),
-          require('../fixtures/plugins/promise-plugin')
+          require('../../lib/graphql')
         ]
       })
 
@@ -183,8 +184,8 @@ global.beforeGraphQL = function(database, done){
         this.belongsTo('alternative', {model: 'Food'})
       })
 
-      store1.ready(function(){
-        store2.ready(function(){
+      store2.ready(function(){
+        store1.ready(function(){
           done(store1, store2)
         })
       })

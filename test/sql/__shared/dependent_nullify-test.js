@@ -14,7 +14,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+      
 
       store.Model('User', function(){
         this.hasMany('posts')
@@ -31,20 +31,17 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('hasMany', function(next){
-      store.ready(function(){
+    it('hasMany', function(){
+      return store.ready(function(){
         var Thread = store.Model('Thread')
         var Post = store.Model('Post')
 
-        Thread.find(1, function(thread){
-          thread.destroy(function(result){
-            result.should.be.equal(true)
-
-            Post.find([1, 2], function(posts){
+        return Thread.find(1, function(thread){
+          return thread.destroy(function(){
+            return Post.find([1, 2], function(posts){
               posts.length.should.be.equal(2)
               should.not.exist(posts[0].thread_id)
               should.not.exist(posts[1].thread_id)
-              next()
             })
           })
         })

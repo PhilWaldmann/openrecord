@@ -46,23 +46,21 @@ describe('Webpack: Load (sqlite3)', function(){
   })
 
 
-  it('the original code can query the db', function(next){
+  it('the original code can query the db', function(){
     const store = require(storePath)(database)
-    store.ready(function(){
-      store.Model('user').count().exec().then(function(result){
+    return store.ready(function(){
+      return store.Model('user').count().exec().then(function(result){
         result.should.be.equal(0)
-        next()
       })
     })
   })
 
 
-  it('the packed code can query the db', function(next){
+  it('the packed code can query the db', function(){
     const store = require('./bundle-sqlite3')(database)
-    store.ready(function(){
-      store.Model('user').count().exec().then(function(result){
+    return store.ready(function(){
+      return store.Model('user').count().exec().then(function(result){
         result.should.be.equal(0)
-        next()
       })
     })
   })
@@ -116,23 +114,21 @@ describe('Webpack: Load (postgres)', function(){
   })
 
 
-  it('the original code can query the db', function(next){
+  it('the original code can query the db', function(){
     const store = require(storePath)(database)
-    store.ready(function(){
-      store.Model('user').count().exec().then(function(result){
+    return store.ready(function(){
+      return store.Model('user').count().exec().then(function(result){
         result.should.be.equal(0)
-        next()
       })
     })
   })
 
 
-  it('the packed code can query the db', function(next){
+  it('the packed code can query the db', function(){
     const store = require('./bundle-postgres')(database)
-    store.ready(function(){
-      store.Model('user').count().exec().then(function(result){
+    return store.ready(function(){
+      return store.Model('user').count().exec().then(function(result){
         result.should.be.equal(0)
-        next()
       })
     })
   })

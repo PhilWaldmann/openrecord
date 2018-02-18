@@ -46,11 +46,10 @@ describe('Definition: Base', function(){
   })
 
 
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
       Post = store.Model('Post')
-      next()
     })
   })
 

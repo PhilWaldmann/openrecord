@@ -12,40 +12,35 @@ describe('validatesLengthOf()', function(){
   })
 
   var User, valid, invalid
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
       valid = new User({email: 'philipp@email.com'})
       invalid = new User({email: 'philipps.superlong.email@email.com'})
-
-      next()
     })
   })
 
 
   it('exists', function(){
     should.exist(valid.isValid)
-    valid.isValid.should.be.a.Function()
+    return valid.isValid.should.be.a.Function()
   })
 
-  it('returns true on valid records', function(done){
-    valid.isValid(function(valid){
+  it('returns true on valid records', function(){
+    return valid.isValid(function(valid){
       valid.should.be.equal(true)
-      done()
     })
   })
 
-  it('returns false on invalid records', function(done){
-    invalid.isValid(function(valid){
+  it('returns false on invalid records', function(){
+    return invalid.isValid(function(valid){
       valid.should.be.equal(false)
-      done()
     })
   })
 
-  it('returns the right error message', function(done){
-    invalid.isValid(function(valid){
-      invalid.errors.should.have.property('email')
-      done()
+  it('returns the right error message', function(){
+    return invalid.isValid(function(valid){
+      invalid.errors.toJSON().should.have.property('email')
     })
   })
 
@@ -59,43 +54,37 @@ describe('validatesLengthOf()', function(){
     })
 
     var User, valid, invalid, invalid2
-    before(function(next){
-      store.ready(function(){
+    before(function(){
+      return store.ready(function(){
         User = store.Model('User')
         valid = new User({email: 'philipp@email.com'})
         invalid = new User({email: 'philipps.superlong.email@email.com'})
         invalid2 = new User({email: 'fooo', login: 'philipps.superlong.email@email.com'})
-
-        next()
       })
     })
 
 
-    it('returns true on valid records', function(done){
-      valid.isValid(function(valid){
+    it('returns true on valid records', function(){
+      return valid.isValid(function(valid){
         valid.should.be.equal(true)
-        done()
       })
     })
 
-    it('returns false on invalid records', function(done){
-      invalid.isValid(function(valid){
+    it('returns false on invalid records', function(){
+      return invalid.isValid(function(valid){
         valid.should.be.equal(false)
-        done()
       })
     })
 
-    it('returns false on invalid records (second field)', function(done){
+    it('returns false on invalid records (second field)', function(){
       invalid2.isValid(function(valid){
         valid.should.be.equal(false)
-        done()
       })
     })
 
-    it('returns the right error message', function(done){
-      invalid.isValid(function(valid){
-        invalid.errors.should.have.property('email')
-        done()
+    it('returns the right error message', function(){
+      return invalid.isValid(function(valid){
+        invalid.errors.toJSON().should.have.property('email')
       })
     })
   })

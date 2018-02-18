@@ -33,7 +33,7 @@ describe('Postgres: Composite Types', function(){
       })
     })
 
-    store.on('exception', function(){})
+    
   })
 
   after(function(next){
@@ -43,28 +43,24 @@ describe('Postgres: Composite Types', function(){
 
 
 
-  it('has attribute definition', function(done){
-    store.ready(function(){
+  it('has attribute definition', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
       AttributeTest.definition.attributes.should.have.property('composite_attribute')
-
-      done()
     })
   })
 
 
-  it('attribute type is composite', function(done){
-    store.ready(function(){
+  it('attribute type is composite', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
       AttributeTest.definition.attributes.composite_attribute.type.name.should.be.equal('composite')
-
-      done()
     })
   })
 
 
-  it('new record has all composite fields', function(done){
-    store.ready(function(){
+  it('new record has all composite fields', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
       var record = new AttributeTest({})
 
@@ -75,14 +71,12 @@ describe('Postgres: Composite Types', function(){
           bar: null
         }
       })
-
-      done()
     })
   })
 
 
-  it('composite fields are available after assignment', function(done){
-    store.ready(function(){
+  it('composite fields are available after assignment', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
       var record = new AttributeTest({})
 
@@ -95,57 +89,50 @@ describe('Postgres: Composite Types', function(){
           bar: null
         }
       })
-
-      done()
     })
   })
 
 
-  it('uses composite field validations', function(done){
-    store.ready(function(){
+  it('uses composite field validations', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
       var record = new AttributeTest({})
-
-      record.composite_attribute.isValid(function(valid){
+      return record.composite_attribute.isValid(function(valid){
         valid.should.be.equal(false)
-        done()
       })
     })
   })
 
-  it('uses composite field validations on parent record', function(done){
-    store.ready(function(){
+  it('uses composite field validations on parent record', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
       var record = new AttributeTest({})
 
-      record.isValid(function(valid){
+      return record.isValid(function(valid){
         valid.should.be.equal(false)
-        this.errors.should.be.eql({ 'composite_attribute.bar': [ 'not valid' ] })
-        done()
+        record.errors.toJSON().should.be.eql({ 'composite_attribute.bar': [ 'not valid' ] })
       })
     })
   })
 
 
-  it('record with invalid composite field wont save', function(done){
-    store.ready(function(){
+  it('record with invalid composite field wont save', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
       var record = new AttributeTest({})
 
-      record.save(function(success){
-        success.should.be.equal(false)
-        this.errors.should.be.eql({ 'composite_attribute.bar': [ 'not valid' ] })
-        done()
-      })
+      return record.save()
+    }).should.be.rejectedWith(store.ValidationError, {
+      errors: {'composite_attribute.bar': [ 'not valid' ]}
     })
   })
 
 
 
-  it('read composite type', function(done){
-    store.ready(function(){
+  it('read composite type', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
-      AttributeTest.find(1).exec().then(function(record){
+      return AttributeTest.find(1).exec().then(function(record){
         record.toJson().should.be.eql({
           id: 1,
           composite_attribute: {
@@ -153,17 +140,15 @@ describe('Postgres: Composite Types', function(){
             bar: 'foo'
           }
         })
-
-        done()
       })
     })
   })
 
 
-  it('composite field values are parsed correct', function(done){
-    store.ready(function(){
+  it('composite field values are parsed correct', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
-      AttributeTest.find(2).exec().then(function(record){
+      return AttributeTest.find(2).exec().then(function(record){
         record.toJson().should.be.eql({
           id: 2,
           composite_attribute: {
@@ -171,49 +156,41 @@ describe('Postgres: Composite Types', function(){
             bar: 'foo bar'
           }
         })
-
-        done()
       })
     })
   })
 
 
-  it('changes in composite field are recognised in record', function(done){
-    store.ready(function(){
+  it('changes in composite field are recognised in record', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
-      AttributeTest.find(1).exec().then(function(record){
+      return AttributeTest.find(1).exec().then(function(record){
         record.composite_attribute.foo = 2
 
         record.hasChanges().should.be.equal(true)
-
-        done()
       })
     })
   })
 
 
-  it('no changes in composite field are recognised in record as well', function(done){
-    store.ready(function(){
+  it('no changes in composite field are recognised in record as well', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
-      AttributeTest.find(1).exec().then(function(record){
+      return AttributeTest.find(1).exec().then(function(record){
         record.hasChanges().should.be.equal(false)
-
-        done()
       })
     })
   })
 
 
-  it('saves changes in the composite field', function(done){
-    store.ready(function(){
+  it('saves changes in the composite field', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
-      AttributeTest.find(1).exec().then(function(record){
+      return AttributeTest.find(1).exec().then(function(record){
         record.composite_attribute.foo = 2
 
-        record.save(function(success){
-          success.should.be.equal(true)
-
-          AttributeTest.find(1).exec().then(function(record){
+        return record.save(function(){
+          return AttributeTest.find(1).exec().then(function(record){
             record.toJson().should.be.eql({
               id: 1,
               composite_attribute: {
@@ -221,7 +198,6 @@ describe('Postgres: Composite Types', function(){
                 bar: 'foo'
               }
             })
-            done()
           })
         })
       })
@@ -229,19 +205,17 @@ describe('Postgres: Composite Types', function(){
   })
 
 
-  it('changes only composite field changes - not the whole field', function(done){
-    store.ready(function(){
+  it('changes only composite field changes - not the whole field', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
-      AttributeTest.find(1).exec().then(function(record){
+      return AttributeTest.find(1).exec().then(function(record){
         record.composite_attribute.foo = 2
         record.composite_attribute.bar = 'abc'
 
         delete record.composite_attribute.changes.bar // ignore change
 
-        record.save(function(success){
-          success.should.be.equal(true)
-
-          AttributeTest.find(1).exec().then(function(record){
+        return record.save(function(){
+          return AttributeTest.find(1).exec().then(function(record){
             record.toJson().should.be.eql({
               id: 1,
               composite_attribute: {
@@ -249,7 +223,6 @@ describe('Postgres: Composite Types', function(){
                 bar: 'foo'
               }
             })
-            done()
           })
         })
       })
@@ -258,17 +231,15 @@ describe('Postgres: Composite Types', function(){
 
 
 
-  it('creates a new record', function(done){
-    store.ready(function(){
+  it('creates a new record', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
-      AttributeTest.create({
+      return AttributeTest.create({
         composite_attribute: {
           bar: 'text'
         }
-      }, function(success){
-        success.should.be.equal(true)
-
-        AttributeTest.find(3).exec().then(function(record){
+      }, function(){
+        return AttributeTest.find(3).exec().then(function(record){
           record.toJson().should.be.eql({
             id: 3,
             composite_attribute: {
@@ -276,7 +247,6 @@ describe('Postgres: Composite Types', function(){
               bar: 'text'
             }
           })
-          done()
         })
       })
     })
