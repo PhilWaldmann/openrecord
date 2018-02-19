@@ -2,7 +2,7 @@ var Store = require('../../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe.only(title + ': Nested Set', function(){
+  describe(title + ': Nested Set', function(){
     var store
 
     before(beforeFn)
