@@ -38,9 +38,6 @@ describe('Postgres: Cache', function(){
     store.Model('user', function(){})
     store.Model('post', function(){})
     store.Model('attribute_test', function(){})
-
-    
-    
   })
 
   after(function(next){

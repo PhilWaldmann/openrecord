@@ -25,9 +25,6 @@ describe('Postgres: Raw Query', function(){
     })
 
     store.Model('user', function(){})
-
-    
-    
   })
 
   after(function(next){

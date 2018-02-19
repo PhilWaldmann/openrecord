@@ -25,9 +25,6 @@ describe('Postgres: UUID Key', function(){
     })
 
     store.Model('UuidTest', function(){})
-
-    
-    
   })
 
   after(function(next){

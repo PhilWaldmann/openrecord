@@ -17,7 +17,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       storeConf.plugins = require('../../../lib/base/dynamic_loading')
 
       store = new Store(storeConf)
-      
+
 
       store.Model('User', function(){})
       store.Model('Post', function(){})

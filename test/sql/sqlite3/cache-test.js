@@ -30,9 +30,6 @@ describe('SQLite3: Cache', function(){
 
     store.Model('user', function(){})
     store.Model('post', function(){})
-
-    
-    
   })
 
   after(function(){

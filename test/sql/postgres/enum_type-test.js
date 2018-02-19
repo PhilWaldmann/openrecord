@@ -27,8 +27,6 @@ describe('Postgres: ENUM Attribute', function(){
 
     store.Model('AttributeTest', function(){
     })
-
-    
   })
 
   after(function(next){

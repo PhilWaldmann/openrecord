@@ -18,8 +18,6 @@ if(process.env['ORACLE_HOME']){
       store = new Store(getOracleConfig(database))
 
       store.Model('AttributeTest', function(){})
-
-      
     })
 
     after(function(next){

@@ -27,9 +27,6 @@ describe('Postgres: Json/Jsonb Attributes', function(){
     })
 
     store.Model('JsonTest', function(){})
-
-    
-    
   })
 
   after(function(next){

@@ -37,8 +37,6 @@ describe('Postgres: all Attributes', function(){
     })
     store.Model('AttributeHstoreTest', function(){
     })
-
-    
   })
 
   after(function(next){

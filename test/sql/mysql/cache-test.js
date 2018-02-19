@@ -32,9 +32,6 @@ describe('MySQL: Cache', function(){
 
     store.Model('user', function(){})
     store.Model('post', function(){})
-
-    
-    
   })
 
   after(function(next){

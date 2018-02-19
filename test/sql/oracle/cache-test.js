@@ -29,9 +29,6 @@ if(process.env['ORACLE_HOME']){
 
       store.Model('user', function(){})
       store.Model('post', function(){})
-
-      
-      
     })
 
     after(function(next){

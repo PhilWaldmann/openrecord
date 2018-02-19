@@ -33,8 +33,6 @@ describe('Postgres: belongsToMany()', function(){
     store.Model('Folder', function(){
       this.hasMany('users')
     })
-
-    
   })
 
   after(function(next){

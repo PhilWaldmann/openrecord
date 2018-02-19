@@ -27,9 +27,6 @@ describe('Postgres: Array Attributes', function(){
     })
 
     store.Model('ArrayTest', function(){})
-
-    
-    
   })
 
   after(function(next){

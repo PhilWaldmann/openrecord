@@ -24,7 +24,7 @@ before(function(ready){
     type: 'sqlite3',
     file: database
   })
-  
+
 
   store.Model('User', function(){
     this.hasMany('posts')

@@ -24,8 +24,6 @@ describe('MySQL: all Attributes', function(){
     })
 
     store.Model('AttributeTest', function(){})
-
-    
   })
 
   after(function(next){

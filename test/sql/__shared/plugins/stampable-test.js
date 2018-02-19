@@ -14,7 +14,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       store = new Store(storeConf)
-      
+
 
       store.getUserBy(function(){
         return 2 // pseudo user id

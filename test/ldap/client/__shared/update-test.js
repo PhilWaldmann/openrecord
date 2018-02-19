@@ -12,7 +12,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       store = new Store(storeConf)
-      
+
 
       targetOu = 'ou=move_target,ou=update_test,ou=openrecord,' + LDAP_BASE.toLowerCase()
     })

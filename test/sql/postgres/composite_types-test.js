@@ -32,8 +32,6 @@ describe('Postgres: Composite Types', function(){
         this.validatesPresenceOf('bar')
       })
     })
-
-    
   })
 
   after(function(next){
