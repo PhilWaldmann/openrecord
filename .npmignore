@@ -2,11 +2,17 @@ examples/
 documentation/
 wiki/
 test/
+coverage/
 
 npm-debug.log
+TODO
 
 coverage.html
 .coveralls.yml
 .npmignore
+.travis.yml
+.eslintrc.js
 logo.png
 Makefile
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md

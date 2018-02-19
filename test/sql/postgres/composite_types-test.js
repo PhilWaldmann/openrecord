@@ -12,7 +12,7 @@ describe('Postgres: Composite Types', function(){
     beforePG(database, [
       'DROP TYPE IF EXISTS customtype',
       'CREATE type customtype AS (foo integer, bar text)',
-      'CREATE TABLE attribute_tests(id serial primary key, composite_attribute customtype)',
+      'CREATE TABLE attribute_tests(id serial primary key, composite_attribute customtype, second_one customtype)',
       "INSERT INTO attribute_tests (composite_attribute)VALUES(ROW(1,'foo'))",
       "INSERT INTO attribute_tests (composite_attribute)VALUES(ROW(2,'foo bar'))"
     ], next)
@@ -57,6 +57,16 @@ describe('Postgres: Composite Types', function(){
   })
 
 
+  it('the two field share the same dynamicType', function(){
+    return store.ready(function(){
+      var AttributeTest = store.Model('AttributeTest')
+      AttributeTest.definition.attributes.composite_attribute.dynamicType.should.be.equal(
+        AttributeTest.definition.attributes.second_one.dynamicType
+      )
+    })
+  })
+
+
   it('new record has all composite fields', function(){
     return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
@@ -65,6 +75,10 @@ describe('Postgres: Composite Types', function(){
       record.toJson().should.be.eql({
         id: null,
         composite_attribute: {
+          foo: null,
+          bar: null
+        },
+        second_one: {
           foo: null,
           bar: null
         }
@@ -84,6 +98,10 @@ describe('Postgres: Composite Types', function(){
         id: null,
         composite_attribute: {
           foo: 1,
+          bar: null
+        },
+        second_one: {
+          foo: null,
           bar: null
         }
       })
@@ -108,7 +126,10 @@ describe('Postgres: Composite Types', function(){
 
       return record.isValid(function(valid){
         valid.should.be.equal(false)
-        record.errors.toJSON().should.be.eql({ 'composite_attribute.bar': [ 'not valid' ] })
+        record.errors.toJSON().should.be.eql({
+          'composite_attribute.bar': [ 'not valid' ],
+          'second_one.bar': [ 'not valid' ]
+        })
       })
     })
   })
@@ -121,7 +142,10 @@ describe('Postgres: Composite Types', function(){
 
       return record.save()
     }).should.be.rejectedWith(store.ValidationError, {
-      errors: {'composite_attribute.bar': [ 'not valid' ]}
+      errors: {
+        'composite_attribute.bar': [ 'not valid' ],
+        'second_one.bar': [ 'not valid' ]
+      }
     })
   })
 
@@ -136,7 +160,8 @@ describe('Postgres: Composite Types', function(){
           composite_attribute: {
             foo: 1,
             bar: 'foo'
-          }
+          },
+          second_one: null
         })
       })
     })
@@ -152,7 +177,8 @@ describe('Postgres: Composite Types', function(){
           composite_attribute: {
             foo: 2,
             bar: 'foo bar'
-          }
+          },
+          second_one: null
         })
       })
     })
@@ -186,6 +212,7 @@ describe('Postgres: Composite Types', function(){
       var AttributeTest = store.Model('AttributeTest')
       return AttributeTest.find(1).exec().then(function(record){
         record.composite_attribute.foo = 2
+        record.second_one = {bar: 'hello'}
 
         return record.save(function(){
           return AttributeTest.find(1).exec().then(function(record){
@@ -194,6 +221,10 @@ describe('Postgres: Composite Types', function(){
               composite_attribute: {
                 foo: 2,
                 bar: 'foo'
+              },
+              second_one: {
+                foo: null,
+                bar: 'hello'
               }
             })
           })
@@ -219,6 +250,10 @@ describe('Postgres: Composite Types', function(){
               composite_attribute: {
                 foo: 2,
                 bar: 'foo'
+              },
+              second_one: {
+                foo: null,
+                bar: 'hello'
               }
             })
           })
@@ -235,6 +270,9 @@ describe('Postgres: Composite Types', function(){
       return AttributeTest.create({
         composite_attribute: {
           bar: 'text'
+        },
+        second_one: {
+          bar: 'foo'
         }
       }, function(){
         return AttributeTest.find(3).exec().then(function(record){
@@ -243,6 +281,10 @@ describe('Postgres: Composite Types', function(){
             composite_attribute: {
               foo: null,
               bar: 'text'
+            },
+            second_one: {
+              foo: null,
+              bar: 'foo'
             }
           })
         })

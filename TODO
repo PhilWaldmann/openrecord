@@ -1,5 +1,4 @@
 [x] remove internal exception handling and put everything into promises
-[?] replace store.ready with store.connect().then(...)
 [x] remove async in favor of promises
 [ ] test all exceptions
 [ ] insert multiple records at once
