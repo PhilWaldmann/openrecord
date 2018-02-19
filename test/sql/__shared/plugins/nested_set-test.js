@@ -2,7 +2,7 @@ var Store = require('../../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe(title + ': Nested Set', function(){
+  describe.only(title + ': Nested Set', function(){
     var store
 
     before(beforeFn)
@@ -322,6 +322,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
               return folder.save(function(){
                 return Folder.order('lft').exec(function(folders){
+                  console.log(folders)
                   folders[0].id.should.be.equal(3)
                   folders[1].id.should.be.equal(4)
                   folders[2].id.should.be.equal(8)
