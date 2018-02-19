@@ -24,7 +24,7 @@
     "active directory",
     "ad"
   ],
-  "author": "Philipp Waldmann <philipp.waldmann@s-team.at>",
+  "author": "Philipp Waldmann <philipp.waldmann@digitalbits.at>",
   "repository": {
     "type": "git",
     "url": "git://github.com/PhilWaldmann/openrecord.git"
@@ -34,7 +34,7 @@
     "mocha": "NODE_ENV=test TZ='UTC' mocha",
     "lint": "eslint --ext .js lib test",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- --reporter dot",
-    "report-coverage": "NODE_ENV=test istanbul cover _mocha -- --reporter mocha-lcov-reporter && cat ./coverage/lcov.info | coveralls"
+    "report-coverage": "NODE_ENV=test istanbul cover _mocha -- --require blanket --reporter mocha-lcov-reporter && cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
     "bluebird": "^3.5.1",

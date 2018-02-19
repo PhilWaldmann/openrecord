@@ -94,7 +94,7 @@ describe('Relations', function(){
           user: {
             login: 'phil',
             websites: [{
-              url: 'http://www.s-team.at'
+              url: 'http://www.digitalbits.at'
             }, {
               url: 'http://github.com'
             }]

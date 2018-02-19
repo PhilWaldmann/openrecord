@@ -69,7 +69,7 @@ describe('validatesFormatOf()', function(){
         valid = new User({
           email: 'philipp@email.com',
           login: 'philipp@email.com',
-          user_url: 'http://www.s-team.at',
+          user_url: 'http://www.digitalbits.at',
           user_ip: '10.20.30.40',
           user_uuid: '550e8400-e29b-41d4-a716-446655440000',
           created_at: new Date(),
@@ -79,7 +79,7 @@ describe('validatesFormatOf()', function(){
         invalid = new User({
           email: 'not.a.valid@email!',
           login: 'phil',
-          user_url: 'http:www.s-team.at',
+          user_url: 'http:www.digitalbits.at',
           user_ip: '10.620.30.40',
           user_uuid: '550e8400-ZZZZ-41d4-a716-446655440000',
           created_at: 'tomorrow',
