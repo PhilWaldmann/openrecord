@@ -172,9 +172,9 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           Post.create({message: 'third element'})
         ])
         .then(function(results){
-          results[0].id.should.be.equal(11)
-          results[1].id.should.be.equal(12)
-          results[2].id.should.be.equal(13)
+          results.map(function(r){
+            return r.id
+          }).sort().should.be.eql([11, 12, 13])
           return Post.where({message_like: 'element'}).exec()
         }).then(function(posts){
           posts.length.should.be.equal(3)
