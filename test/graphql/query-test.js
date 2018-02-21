@@ -1,40 +1,38 @@
 
 describe('GraphQL: Query', function(){
-  var database = 'attributes'
-  var store
+  var database = 'query'
+  var query
 
 
   before(function(next){
-    beforeGraphQL(database, function(_store){
-      store = _store
-      next()
+    beforeGraphQL(database, function(error, _query){
+      query = _query
+      next(error)
     })
   })
 
-  after(function(){
-    afterGraphQL(database)
+  after(function(next){
+    afterGraphQL(database, next)
   })
 
 
 
   it('returns all records', function(){
-    return store.ready(function(){
-      return store.query(`{
-        authors{
-          name
-          email
+    return query(`{
+      authors{
+        name
+        email
+      }
+    }`)
+    .then(function(result){
+      result.should.be.eql({
+        data: {
+          authors: [
+            { name: 'phil', email: 'phil@mail.com' },
+            { name: 'michl', email: 'michl@mail.com' },
+            { name: 'admin', email: 'admin@mail.com' }
+          ]
         }
-      }`)
-      .then(function(result){
-        result.should.be.eql({
-          data: {
-            authors: [
-              { name: 'phil', email: 'phil@mail.com' },
-              { name: 'michl', email: 'michl@mail.com' },
-              { name: 'admin', email: 'admin@mail.com' }
-            ]
-          }
-        })
       })
     })
   })
@@ -42,61 +40,55 @@ describe('GraphQL: Query', function(){
 
 
   it('returns first 2 records', function(){
-    return store.ready(function(){
-      return store.query(`{
-        authors(limit: 2){
-          name
-          email
+    return query(`{
+      authors(limit: 2){
+        name
+        email
+      }
+    }`)
+    .then(function(result){
+      result.should.be.eql({
+        data: {
+          authors: [
+            { name: 'phil', email: 'phil@mail.com' },
+            { name: 'michl', email: 'michl@mail.com' }
+          ]
         }
-      }`)
-      .then(function(result){
-        result.should.be.eql({
-          data: {
-            authors: [
-              { name: 'phil', email: 'phil@mail.com' },
-              { name: 'michl', email: 'michl@mail.com' }
-            ]
-          }
-        })
       })
     })
   })
 
 
   it('returns a single record', function(){
-    return store.ready(function(){
-      return store.query(`{
-        author(id: 1){
-          name
-          email
+    return query(`{
+      author(id: 1){
+        name
+        email
+      }
+    }`)
+    .then(function(result){
+      result.should.be.eql({
+        data: {
+          author: { name: 'phil', email: 'phil@mail.com' }
         }
-      }`)
-      .then(function(result){
-        result.should.be.eql({
-          data: {
-            author: { name: 'phil', email: 'phil@mail.com' }
-          }
-        })
       })
     })
   })
 
   it('returns an error on missing id', function(){
-    return store.ready(function(){
-      return store.query(`{
-        author{
-          name
-          email
-        }
-      }`)
-      .then(function(result){
-        result.should.be.eql({
-          errors: [{
-            message: 'Field "author" argument "id" of type "Int!" is required but not provided.',
-            locations: [{ line: 2, column: 9 }],
-            path: undefined
-          }]
-        })
+    return query(`{
+      author{
+        name
+        email
+      }
+    }`)
+    .then(function(result){
+      result.should.be.eql({
+        errors: [{
+          message: 'Field "author" argument "id" of type "Int!" is required but not provided.',
+          locations: [{ line: 2, column: 7 }],
+          path: undefined
+        }]
       })
     })
   })
@@ -104,64 +96,60 @@ describe('GraphQL: Query', function(){
 
 
   it('returns a single record with related data', function(){
-    return store.ready(function(){
-      return store.query(`{
-        author(id: 1){
-          name
-          email
-          recipes{
-            id
-            title
-            rating
+    return query(`{
+      author(id: 1){
+        name
+        email
+        recipes{
+          id
+          title
+          rating
+        }
+      }
+    }`)
+    .then(function(result){
+      result.should.be.eql({
+        data: {
+          author: {
+            name: 'phil',
+            email: 'phil@mail.com',
+            recipes: [
+              { id: 1, title: 'Toast Hawaii', rating: 4 },
+              { id: 2, title: 'scrambled eggs', rating: 3 },
+              { id: 3, title: 'Steak', rating: 5 }
+            ]
           }
         }
-      }`)
-      .then(function(result){
-        result.should.be.eql({
-          data: {
-            author: {
-              name: 'phil',
-              email: 'phil@mail.com',
-              recipes: [
-                { id: 1, title: 'Toast Hawaii', rating: 4 },
-                { id: 2, title: 'scrambled eggs', rating: 3 },
-                { id: 3, title: 'Steak', rating: 5 }
-              ]
-            }
-          }
-        })
       })
     })
   })
 
 
   it('returns a single record with custom related data', function(){
-    return store.ready(function(){
-      return store.query(`{
-        author(id: 1){
-          name
-          email
-          topRatedRecipes{
-            id
-            title
-            rating
+    return query(`{
+      author(id: 1){
+        name
+        email
+        topRatedRecipes{
+          id
+          title
+          rating
+        }
+      }
+    }`)
+    .then(function(result){
+      result.should.be.eql({
+        data: {
+          author: {
+            name: 'phil',
+            email: 'phil@mail.com',
+            topRatedRecipes: [
+              { id: 3, title: 'Steak', rating: 5 },
+              { id: 1, title: 'Toast Hawaii', rating: 4 },
+              { id: 2, title: 'scrambled eggs', rating: 3 }
+            ]
           }
         }
-      }`)
-      .then(function(result){
-        result.should.be.eql({
-          data: {
-            author: {
-              name: 'phil',
-              email: 'phil@mail.com',
-              topRatedRecipes: [
-                { id: 3, title: 'Steak', rating: 5 },
-                { id: 1, title: 'Toast Hawaii', rating: 4 },
-                { id: 2, title: 'scrambled eggs', rating: 3 }
-              ]
-            }
-          }
-        })
       })
     })
   })

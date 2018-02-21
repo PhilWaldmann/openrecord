@@ -5,23 +5,23 @@ should.config.checkProtoEql = false
 
 describe('GraphQL: Attributes', function(){
   var database = 'attributes'
-  var store
+  var query
 
 
   before(function(next){
-    beforeGraphQL(database, function(_store){
-      store = _store
-      next()
+    beforeGraphQL(database, function(error, _query){
+      query = _query
+      next(error)
     })
   })
 
-  after(function(){
-    afterGraphQL(database)
+  after(function(next){
+    afterGraphQL(database, next)
   })
 
 
   it('returns a single attribute', function(){
-    return store.query(`{
+    return query(`{
       author(id: 1){
         name
       }
@@ -33,7 +33,7 @@ describe('GraphQL: Attributes', function(){
 
 
   it('returns a multiple attributes', function(){
-    return store.query(`{
+    return query(`{
       author(id: 1){
         name
         email
@@ -45,45 +45,53 @@ describe('GraphQL: Attributes', function(){
   })
 
 
+  it('returns a single attribute with a variant', function(){
+    return query(`{
+      author(id: 1){
+        name(upper: true)
+      }
+    }`)
+    .then(function(result){
+      result.should.be.eql({ data: { author: { name: 'PHIL' } } })
+    })
+  })
+
+
   it('returns a single value (count)', function(){
-    return store.ready(function(){
-      return store.query(`{
-        author_count
-      }`)
-      .then(function(result){
-        result.should.be.eql({ data: { author_count: 3 } })
-      })
+    return query(`{
+      author_count
+    }`)
+    .then(function(result){
+      result.should.be.eql({ data: { author_count: 3 } })
     })
   })
 
 
   it('returns multiple records and the total count', function(){
-    return store.ready(function(){
-      return store.query(`{
-        author_count
-        authors{
-          name
-          email
+    return query(`{
+      author_count
+      authors{
+        name
+        email
+      }
+    }`)
+    .then(function(result){
+      result.should.be.eql({
+        data: {
+          author_count: 3,
+          authors: [
+            { name: 'phil', email: 'phil@mail.com' },
+            { name: 'michl', email: 'michl@mail.com' },
+            { name: 'admin', email: 'admin@mail.com' }
+          ]
         }
-      }`)
-      .then(function(result){
-        result.should.be.eql({
-          data: {
-            author_count: 3,
-            authors: [
-              { name: 'phil', email: 'phil@mail.com' },
-              { name: 'michl', email: 'michl@mail.com' },
-              { name: 'admin', email: 'admin@mail.com' }
-            ]
-          }
-        })
       })
     })
   })
 
 
   it('returns data via getter method', function(){
-    return store.query(`{
+    return query(`{
       author(id: 1){
         name,
         info
@@ -98,7 +106,7 @@ describe('GraphQL: Attributes', function(){
   })
 
   it('returns data via method', function(){
-    return store.query(`{
+    return query(`{
       ingredient(id: 8){
         name,
         total_amount

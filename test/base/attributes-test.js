@@ -289,7 +289,7 @@ describe('Attributes', function(){
 
 
     it('variant returns the right value', function(next){
-      user.my_str$({size: 4}).should.be.equal('phil')
+      user.my_str$({size: 2}).should.be.equal('ph')
       next()
     })
   })

@@ -1,66 +1,62 @@
 // var should = require('should')
 
 describe('GraphQL: Context', function(){
-  var database = 'attributes'
-  var store
+  var database = 'context'
+  var query
 
 
   before(function(next){
-    beforeGraphQL(database, function(_store){
-      store = _store
-      next()
+    beforeGraphQL(database, function(error, _query){
+      query = _query
+      next(error)
     })
   })
 
-  after(function(){
-    afterGraphQL(database)
+  after(function(next){
+    afterGraphQL(database, next)
   })
 
 
 
   it('get `me` via context', function(){
-    return store.ready(function(){
-      return store.query(`{
-        me{
-          name
-          email
+    return query(`{
+      me{
+        name
+        email
+      }
+    }`, {id: 1})
+    .then(function(result){
+      result.should.be.eql({
+        data: {
+          me: { name: 'phil', email: 'phil@mail.com' }
         }
-      }`, {id: 1})
-      .then(function(result){
-        result.should.be.eql({
-          data: {
-            me: { name: 'phil', email: 'phil@mail.com' }
-          }
-        })
       })
     })
   })
 
   it('get `me` via context and return additonal relations', function(){
-    return store.ready(function(){
-      return store.query(`{
-        me{
-          name
-          email
-          recipes{
-            title
+    return query(`{
+      me{
+        name
+        email
+        recipes{
+          title
+        }
+      }
+    }`, {id: 1})
+    .then(function(result){
+      result.should.be.eql({
+        data: {
+          me: {
+            name: 'phil',
+            email: 'phil@mail.com',
+            recipes: [
+              { title: 'Toast Hawaii' },
+              { title: 'scrambled eggs' },
+              { title: 'Steak' }
+            ]
           }
         }
-      }`, {id: 1})
-      .then(function(result){
-        result.should.be.eql({
-          data: {
-            me: {
-              name: 'phil',
-              email: 'phil@mail.com',
-              recipes: [
-                { title: 'Toast Hawaii' },
-                { title: 'scrambled eggs' },
-                { title: 'Steak' }
-              ]
-            }
-          }
-        })
       })
     })
   })

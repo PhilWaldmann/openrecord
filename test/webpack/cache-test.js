@@ -65,6 +65,7 @@ describe('Webpack: With cache plugin (sqlite3)', function(){
 
   it('the packed code contains all attributes via cache', function(){
     const store = require('./bundle-sqlite3')(database, true)
+    store.cache.should.not.be.eql({})
     return store.ready(function(){
       store.Model('user').definition.attributes.should.have.keys('id', 'login')
     })
@@ -148,6 +149,7 @@ describe('Webpack: With cache plugin (postgres)', function(){
 
   it('the packed code contains all attributes via cache', function(){
     const store = require('./bundle-postgres')(database, true)
+    store.cache.should.not.be.eql({})
     return store.ready(function(){
       store.Model('user').definition.attributes.should.have.keys('id', 'login')
     })

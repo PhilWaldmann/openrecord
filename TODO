@@ -3,8 +3,21 @@
 [ ] test all exceptions
 [ ] insert multiple records at once
 
-[ ] graphql variant test
+[x] graphql variant test
 [ ] graphql pagination -> mit cursor?! + pageInfo
+[x] graphql felder ausblenden
+[x] graphql existierendes Feld vom Typ komplett ändern
+    z.B. composite => string mit Param
+[x] graphql relationen ausblenden
+[ ] graphql relation pagination
+[x] graphql existierendes Relation vom Typ komplett ändern
+    mit Params
+[x] graphql bring you own schema
+
+
+
+
+neue Typen hinzufügen
 
 [ ] postgres composite type query
 
@@ -13,3 +26,5 @@
 [x] remove store.handleException
 
 [ ] faster class initialisation !!! Model initialisation braucht zu lange!
+
+[ ] `this.belongsTo('alternative', {model: 'Food', foreign_key: 'food_id'})` sollte kein foreign_key brauchen!
