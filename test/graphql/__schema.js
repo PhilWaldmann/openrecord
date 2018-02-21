@@ -68,23 +68,23 @@ module.exports = function(store1, store2){
 
   const resolvers = {
     Query: {
-      author: resolve(({id}) => Author.find(id).where({active: true})),
-      authors: resolve(({limit}) => Author.limit(limit)),
-      author_count: resolve(() => Author.count()),
-      recipe: resolve(({id}) => Recipe.find(id)),
-      ingredient: resolve(({id}) => Ingredient.find(id)),
-      me: resolve(() => Author.me())
+      author: resolve(function(args){ return Author.find(args.id).where({active: true}) }),
+      authors: resolve(function(args){ return Author.limit(args.limit) }),
+      author_count: resolve(function(){ return Author.count() }),
+      recipe: resolve(function(args){ return Recipe.find(args.id) }),
+      ingredient: resolve(function(args){ return Ingredient.find(args.id) }),
+      me: resolve(function(){ return Author.me() })
     },
 
     Mutation: {
-      createRecipe: resolve(({input}) => Recipe.create(input)),
-      updateRecipe: resolve(({id, input}) => Recipe.findAndUpdate(id, input)),
-      destroyRecipe: resolve(({id}) => Recipe.findAndDestroy(id)),
-      createAuthor: resolve(({input}) => Author.createActive(input))
+      createRecipe: resolve(function(args){ return Recipe.create(args.input) }),
+      updateRecipe: resolve(function(args){ return Recipe.findAndUpdate(args.id, args.input) }),
+      destroyRecipe: resolve(function(args){ return Recipe.findAndDestroy(args.id) }),
+      createAuthor: resolve(function(args){ return Author.createActive(args.input) })
     },
 
     Author: {
-      name: (record, args) => record.name$(args)
+      name: function(record, args){ return record.name$(args) }
     }
   }
 
