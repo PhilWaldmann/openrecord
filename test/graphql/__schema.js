@@ -41,6 +41,9 @@ module.exports = function(store1, store2){
       author_count: Int!
       recipe(id: Int!): Recipe
       ingredient(id: Int!): Ingredient
+    }
+
+    extend type Query {
       me: Author
     }
 

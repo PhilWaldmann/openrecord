@@ -28,3 +28,7 @@ neue Typen hinzufügen
 [ ] faster class initialisation !!! Model initialisation braucht zu lange!
 
 [ ] `this.belongsTo('alternative', {model: 'Food', foreign_key: 'food_id'})` sollte kein foreign_key brauchen!
+
+[ ] Change DEBUG=*
+
+[ ] Broken relations should not load without any conditions!
