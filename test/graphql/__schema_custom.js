@@ -2,7 +2,7 @@ const graphQLTools = require('graphql-tools')
 const graphql = require('graphql')
 
 module.exports = function(store1, store2){
-  const resolve = store1.resolveHelper
+  const resolve = store1.graphQLResolveHelper
   const Author = store1.Model('Author')
   const Ingredient = store1.Model('Ingredient')
   const Recipe = store1.Model('Recipe')
@@ -91,6 +91,7 @@ module.exports = function(store1, store2){
   const author = Author.toGraphQLType({
     exclude: ['name']
   })
+
 
   const schema = graphQLTools.makeExecutableSchema({
     typeDefs: [

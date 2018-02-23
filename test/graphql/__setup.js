@@ -16,7 +16,7 @@ var Store = require('../../lib/store')
  */
 
 
-global.beforeGraphQL = function(database, done){
+global.beforeGraphQL = function(database, type, done){
   database = 'graphql_' + database
   var file1 = path.join(__dirname, database + '1.sqlite3')
   var db2 = database + '2'
@@ -56,6 +56,42 @@ global.beforeGraphQL = function(database, done){
         this.hasMany('recipes')
         this.hasMany('topRatedRecipes', {model: 'Recipe', scope: 'topRated'})
 
+
+        // for auto gen. only!!!
+        if(type === 'auto'){
+          this
+          .graphQLField('name(upper: Boolean): String')
+          .graphQLField('info: String')
+          .graphQLField('recipes: [Recipe]')
+          .graphQLField('topRatedRecipes: [Recipe]')
+
+          .graphQLQuery('author(id: Int!): Author')
+          .graphQLQuery('authors(limit: Int): [Author]')
+          .graphQLQuery('author_count: Int!')
+          .graphQLQuery('me: Author')
+
+          .graphQL(`
+            input AuthorInput {
+              name: String
+              email: String
+            }
+          `)
+          .graphQLMutation('createAuthor(input: AuthorInput!): Author')
+
+          .graphQLResolver({
+            name: function(record, args){ return record.name$(args) }
+          })
+          .graphQLQueryResolver({
+            author: function(args){ return this.find(args.id).where({active: true}) },
+            authors: function(args){ return this.limit(args.limit) },
+            author_count: function(){ return this.count() },
+            me: function(){ return this.me() }
+          })
+          .graphQLMutationResolver({
+            createAuthor: function(args){ return this.createActive(args.input) }
+          })
+        }
+
         this.variant('name', function(value, args){
           if(args.upper) return value.toUpperCase()
           return value
@@ -85,6 +121,38 @@ global.beforeGraphQL = function(database, done){
         this.hasMany('recipe_ingredients')
         this.hasMany('ingredients', {through: 'recipe_ingredients', relation: 'ingredient'})
         this.hasMany('images', {model: 'RecipeImage'})
+
+
+        // for auto gen. only!!!
+        if(type === 'auto'){
+          this
+          .graphQLField('author: Author')
+          .graphQLField('ingredients: [Ingredient]')
+
+          .graphQLQuery('recipe(id: Int!): Recipe')
+
+          .graphQL(`
+            input RecipeInput {
+              title: String
+              description: String
+              author_id: Int
+            }
+          `)
+          .graphQLMutation('createRecipe(input: RecipeInput!): Recipe')
+          .graphQLMutation('updateRecipe(id: Int!, input: RecipeInput!): Recipe')
+          .graphQLMutation('destroyRecipe(id: Int!): Boolean')
+
+          .graphQLQueryResolver({
+            recipe: function(args){ return this.find(args.id) }
+          })
+          .graphQLMutationResolver({
+            createRecipe: function(args){ return this.create(args.input) },
+            updateRecipe: function(args){ return this.findAndUpdate(args.id, args.input) },
+            destroyRecipe: function(args){ return this.findAndDestroy(args.id) }
+          })
+        }
+
+
 
         this.scope('topRated', function(){
           this.order('rating', true)
@@ -119,6 +187,17 @@ global.beforeGraphQL = function(database, done){
         this.hasMany('recipes', {through: 'recipe_ingredients'})
         this.belongsTo('food', {store: 'store2'})
 
+        // for auto gen. only!!!
+        if(type === 'auto'){
+          this
+          .graphQLField('total_amount: Float')
+          .graphQLField('food: Food')
+          .graphQLQuery('ingredient(id: Int!): Ingredient')
+          .graphQLQueryResolver({
+            ingredient: function(args){ return this.find(args.id) }
+          })
+        }
+
         this.method('total_amount', function(){
           return this.recipe_ingredients.sum('amount').exec()
         })
@@ -143,6 +222,11 @@ global.beforeGraphQL = function(database, done){
       store2.Model('Food', function(){
         this.hasMany('alternative_foods', {model: 'Alternative'})
         this.hasMany('alternatives', {through: 'alternative_foods', relation: 'alternative'})
+
+        // for auto gen. only!!!
+        if(type === 'auto'){
+          this.graphQLField('alternatives: [Food]')
+        }
       })
 
       store2.Model('Alternative', function(){
@@ -152,7 +236,7 @@ global.beforeGraphQL = function(database, done){
 
       store2.ready(function(){
         return store1.ready(function(){
-          done(null, require('./__schema.js')(store1, store2))
+          done(null, require('./__schema_' + type + '.js')(store1, store2))
         })
       })
       .catch(function(error){
