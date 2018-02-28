@@ -32,3 +32,7 @@ neue Typen hinzufügen
 [ ] Change DEBUG=*
 
 [ ] Broken relations should not load without any conditions!
+
+[ ] lazy connection -> one Promise for all record relations - which will load relations bulk!
+
+[ ] limit(1) should return an array as well

@@ -35,17 +35,24 @@ module.exports = function(store1, store2){
       alternatives: [Food]
     }
 
+    type RecipeConnection{
+      nodes: [Recipe]
+      totalCount: Int!
+    }
+
     type Query {
       author(id: Int!): Author
       authors(limit: Int): [Author]
       author_count: Int!
       recipe(id: Int!): Recipe
+      recipes(limit: Int = 10): RecipeConnection!
       ingredient(id: Int!): Ingredient
     }
 
     extend type Query {
       me: Author
     }
+
 
     input RecipeInput {
       title: String
@@ -72,6 +79,12 @@ module.exports = function(store1, store2){
       authors: resolve(function(args){ return Author.limit(args.limit) }),
       author_count: resolve(function(){ return Author.count() }),
       recipe: resolve(function(args){ return Recipe.find(args.id) }),
+      recipes: resolve(function(args){
+        return {
+          nodes: Recipe.limit(args.limit),
+          totalCount: Recipe.count()
+        }
+      }),
       ingredient: resolve(function(args){ return Ingredient.find(args.id) }),
       me: resolve(function(){ return Author.me() })
     },

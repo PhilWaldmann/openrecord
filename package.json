@@ -1,6 +1,6 @@
 {
   "name": "openrecord",
-  "version": "2.0.0-rc6",
+  "version": "2.0.0-rc7",
   "description": "Active record like ORM for nodejs",
   "license": "MIT",
   "keywords": [
@@ -52,6 +52,7 @@
     "coveralls": "^3.0.0",
     "eslint": "^4.18.0",
     "eslint-config-digitalbits": "^1.0.4",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-html": "^4.0.2",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-node": "^6.0.0",

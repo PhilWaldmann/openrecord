@@ -77,7 +77,6 @@ describe('Postgres: Json/Jsonb Attributes', function(){
     })
   })
 
-
   it('sort by json attribute', function(){
     return store.ready(function(){
       var JsonTest = store.Model('JsonTest')
@@ -102,6 +101,23 @@ describe('Postgres: Json/Jsonb Attributes', function(){
       return JsonTest.where({json_attr: {bar: 'test'}}).exec(function(result){
         result[0].json_attr.bar.should.be.equal('test')
         result.length.should.be.equal(1)
+      })
+    })
+  })
+
+
+  it('updates json data (root)', function(){
+    return store.ready(function(){
+      var JsonTest = store.Model('JsonTest')
+
+      return JsonTest.find(1).exec(function(test){
+        test.json_attr = [{a: 1, b: 2}, {b: 2}]
+
+        return test.save(function(){
+          return JsonTest.find(test.id).exec(function(t){
+            t.json_attr.should.be.eql([{a: 1, b: 2}, {b: 2}])
+          })
+        })
       })
     })
   })

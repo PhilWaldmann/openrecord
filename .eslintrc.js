@@ -2,7 +2,10 @@
 
 module.exports = {
   root: true,
-  extends: 'digitalbits',
+  extends: [
+    'digitalbits',
+    'prettier'
+  ],
 
   env: {
     node: true,

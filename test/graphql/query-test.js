@@ -61,6 +61,32 @@ types.forEach(function(type){
     })
 
 
+    it('returns a custom connection type with totalCount and nodes', function(){
+      return query(`{
+        recipes(limit: 2){
+          nodes{
+            id
+            title
+          }
+          totalCount
+        }
+      }`)
+      .then(function(result){
+        result.should.be.eql({
+          data: {
+            recipes: {
+              nodes: [
+                { id: 1, title: 'Toast Hawaii' },
+                { id: 2, title: 'scrambled eggs' }
+              ],
+              totalCount: 4
+            }
+          }
+        })
+      })
+    })
+
+
     it('returns a single record', function(){
       return query(`{
         author(id: 1){

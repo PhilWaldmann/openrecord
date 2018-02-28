@@ -78,7 +78,7 @@ global.beforeGraphQL = function(database, type, done){
           `)
           .graphQLMutation('createAuthor(input: AuthorInput!): Author')
 
-          .graphQLResolver({
+          .graphQLTypeResolver({
             name: function(record, args){ return record.name$(args) }
           })
           .graphQLQueryResolver({
@@ -130,8 +130,14 @@ global.beforeGraphQL = function(database, type, done){
           .graphQLField('ingredients: [Ingredient]')
 
           .graphQLQuery('recipe(id: Int!): Recipe')
+          .graphQLQuery('recipes(limit: Int = 10): RecipeConnection!')
 
           .graphQL(`
+            type RecipeConnection{
+              nodes: [Recipe]
+              totalCount: Int!
+            }
+
             input RecipeInput {
               title: String
               description: String
@@ -143,7 +149,13 @@ global.beforeGraphQL = function(database, type, done){
           .graphQLMutation('destroyRecipe(id: Int!): Boolean')
 
           .graphQLQueryResolver({
-            recipe: function(args){ return this.find(args.id) }
+            recipe: function(args){ return this.find(args.id) },
+            recipes: function(args){
+              return {
+                nodes: this.limit(args.limit),
+                totalCount: this.count()
+              }
+            }
           })
           .graphQLMutationResolver({
             createRecipe: function(args){ return this.create(args.input) },
