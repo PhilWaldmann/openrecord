@@ -283,28 +283,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           })
         })
       })
-
-
-
-
-
-      // ASYNC/AWAIT
-      const semver = require('semver')
-      if(semver.gt(process.versions.node, '7.10.0')){
-
-        it('create with `await`', async function(){
-          await store.ready()
-          var User = store.Model('User')
-          const user = User.new({
-            login: 'my_login',
-            email: 'my_mail@mail.com'
-          })
-
-          await user.save()
-          user.id.should.not.be.equal(null)
-        })
-      }
-
     })
   })
 }

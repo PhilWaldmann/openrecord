@@ -87,23 +87,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           })
         })
       })
-
-
-      // ASYNC/AWAIT
-      const semver = require('semver')
-      if(semver.gt(process.versions.node, '7.10.0')){
-
-        it('with `await`', async function(){
-          await store.ready()
-          const User = store.Model('User')
-          let user = await User.find(2)
-
-          await user.destroy()
-
-          user = await User.find(2)
-          should.not.exist(user)
-        })
-      }
     })
 
 

@@ -15,6 +15,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       store = new Store(Object.assign({
         autoLoad: true
       }, storeConf))
+
+      store.Model('Avatar', function(){
+        this.scope('test', function(){
+
+        })
+      })
     })
 
 
@@ -27,6 +33,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     it('Model attributes are loaded', function(){
       return store.ready(function(){
         store.models.user.definition.attributes.should.have.keys('id', 'login', 'email', 'created_at')
+      })
+    })
+
+    it('Custom overwrites work', function(){
+      return store.ready(function(){
+        store.models.avatar.test.should.be.a.Function()
       })
     })
   })

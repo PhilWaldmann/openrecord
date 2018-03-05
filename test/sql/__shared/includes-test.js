@@ -622,23 +622,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           })
         })
       })
-
-
-
-      // ASYNC/AWAIT
-      const semver = require('semver')
-      if(semver.gt(process.versions.node, '7.10.0')){
-
-        it('include with `await`', async function(){
-          await store.ready()
-          var User = store.Model('User')
-          const users = await User.include('last_post')
-
-          users.length.should.be.equal(3)
-          users[0].last_post.id.should.be.equal(3)
-          users[1].last_post.id.should.be.equal(4)
-        })
-      }
     })
   })
 }

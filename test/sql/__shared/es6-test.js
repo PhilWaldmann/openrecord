@@ -1,0 +1,122 @@
+var Store = require('../../../store')
+var should = require('should')
+
+
+module.exports = function(title, beforeFn, afterFn, storeConf){
+  describe(title + ': ES6', function(){
+    var store
+    var User
+
+    before(beforeFn)
+    after(function(next){
+      afterFn(next, store)
+    })
+
+
+    before(function(){
+      storeConf.models = [
+        require('../../fixtures/models/es6_model')
+      ]
+      store = new Store(storeConf)
+
+      User = class User extends store.BaseModel{
+        static definition(){
+          this.hasMany('posts')
+          this.hasMany('threads')          
+          this.scope('michl')
+        }
+
+        recordMethod(){
+          return this.login + '!!'
+        }
+      
+        static modelMethod(){
+          return 'model method!'
+        }
+
+        static michl(){
+          this.where({login: 'michl'})
+        }
+      }
+
+      class Thread extends Store.BaseModel{
+        // to test an empty class, extended from Store constructor
+      }
+
+      store.Model('User', User)
+      store.Model(Thread)
+    })
+
+
+    it('es6 class was loaded', async function(){
+      await store.ready()      
+      const Thread = store.Model('Thread')
+      Thread.find.should.be.a.Function()
+    })
+
+    it('es6 class via model file was loaded', async function(){
+      await store.ready()      
+      const User = store.Model('User')
+      User.find.should.be.a.Function()
+    })
+
+    it('es6 class has static method', async function(){
+      await store.ready()      
+      User.modelMethod.should.be.a.Function()
+      User.modelMethod().should.be.equal('model method!')
+    })
+
+
+    it('include with `await`', async function(){
+      await store.ready()      
+      const users = await User.include('posts')
+      
+      users.length.should.be.equal(3)
+      users[0].posts.length.should.be.equal(3)
+      users[1].posts.length.should.be.equal(1)
+    })
+
+
+    it('es6 class instance has method', async function(){
+      await store.ready()      
+      const user = await User.find(1)
+      user.id.should.be.equal(1)
+      user.recordMethod.should.be.a.Function()
+      user.recordMethod().should.be.equal('phil!!')
+    })
+
+
+    it('works with scopes', async function(){
+      await store.ready()      
+      const users = await User.michl()
+      
+      users.length.should.be.equal(1)
+      users[0].login.should.be.equal('michl')
+    })
+
+
+    it('create with `await`', async function(){
+      await store.ready()
+      var User = store.Model('User')
+      const user = User.new({
+        login: 'my_login',
+        email: 'my_mail@mail.com'
+      })
+      
+      await user.save()      
+      user.id.should.not.be.equal(null)
+    })
+
+
+    it('destroy with `await`', async function(){
+      await store.ready()
+      const User = store.Model('User')
+      let user = await User.find(2)
+
+      await user.destroy()
+
+      user = await User.find(2)
+      should.not.exist(user)
+    })
+  })
+}
