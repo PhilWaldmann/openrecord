@@ -36,6 +36,24 @@ if(process.env['ORACLE_HOME']){
     "INSERT INTO \"users\"(\"login\", \"email\") VALUES('phil', 'phil@mail.com')"
   ])
 
+  testOracle('autoload', [
+    'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "email" TEXT, "created_at" DATE)',
+    'PRIMARY:users:id',
+    'CREATE TABLE "posts"("id" INTEGER, "user_id" INTEGER, "thread_id" INTEGER, "message" TEXT)',
+    'PRIMARY:posts:id',
+    'CREATE TABLE "threads"("id" INTEGER, "user_id" INTEGER, "title" TEXT)',
+    'PRIMARY:threads:id',
+    'CREATE TABLE "avatars"("id" INTEGER, "user_id" INTEGER, "url" TEXT)',
+    'PRIMARY:avatars:id',
+    'CREATE TABLE "unread_posts"("id" INTEGER, "user_id" INTEGER, "post_id" INTEGER)',
+    'CREATE TABLE "poly_things"("id" INTEGER, "member_id" INTEGER, "member_type" TEXT, "message" TEXT)',
+    "INSERT INTO \"users\"(\"login\", \"email\", \"created_at\") VALUES('phil', 'phil@mail.com', TO_DATE('2014-01-05', 'yyyy-mm-dd')), ('michl', 'michl@mail.com', TO_DATE('2014-01-10', 'yyyy-mm-dd')), ('admin', 'admin@mail.com', TO_DATE('2014-01-01', 'yyyy-mm-dd')), ('administrator', 'administrator@mail.com', TO_DATE('2014-01-01', 'yyyy-mm-dd')), ('marlene', 'marlene@mail.com', TO_DATE('2014-01-01', 'yyyy-mm-dd'))",
+    "INSERT INTO \"posts\"(\"user_id\", \"thread_id\", \"message\") VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post')",
+    "INSERT INTO \"threads\"(\"user_id\", \"title\") VALUES(2, 'first thread'), (1, 'second thread'), (3, 'third thread')",
+    "INSERT INTO \"avatars\"(\"user_id\", \"url\") VALUES(1, 'http://awesome-avatar.com/avatar.png'), (1, 'http://awesome-avatar.com/foo.png')",
+    'INSERT INTO "unread_posts"("user_id", "post_id") VALUES(1, 3)'
+  ])
+
   testOracle('collection', [
     'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "email" TEXT, "created_at" DATE)',
     'PRIMARY:users:id',
