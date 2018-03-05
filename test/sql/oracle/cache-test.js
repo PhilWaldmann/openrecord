@@ -83,7 +83,7 @@ if(process.env['ORACLE_HOME']){
     describe('Disable autoload', function(){
       var store2
       before(function(){
-        store2 = new Store(getOracleConfig(database, {disableAutoload: true}))
+        store2 = new Store(getOracleConfig(database, {autoAttributes: false}))
         store2.Model('user', function(){})
         store2.Model('post', function(){})
 

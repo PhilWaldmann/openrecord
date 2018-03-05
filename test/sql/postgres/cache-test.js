@@ -196,7 +196,7 @@ describe('Postgres: Cache', function(){
         database: database,
         user: 'postgres',
         password: '',
-        disableAutoload: true
+        autoAttributes: false
       })
       store2.Model('user', function(){})
       store2.Model('post', function(){})

@@ -92,7 +92,7 @@ describe('SQLite3: Cache', function(){
       store2 = new Store({
         type: 'sqlite3',
         file: database,
-        disableAutoload: true
+        autoAttributes: false
       })
       store2.Model('user', function(){})
       store2.Model('post', function(){})

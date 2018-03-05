@@ -13,7 +13,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     before(function(){
-      storeConf.throw_errors = false
       store = new Store(storeConf)
 
       store.Model('User', function(){})

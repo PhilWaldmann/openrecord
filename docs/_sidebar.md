@@ -10,4 +10,6 @@
 
 * **[Webpack](webpack.md)**
 
+* **[Plugins](plugins.md)**
+
 * **[Migrations](migrations.md)**

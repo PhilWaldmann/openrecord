@@ -5,15 +5,15 @@ try{
   Store = require('../../../store/postgres')
 }
 
-module.exports = function(database, disableAutoload){
+module.exports = function(database, autoAttributes){
   const store = new Store({
     host: 'localhost',
     type: 'postgres',
     database: database,
     user: 'postgres',
     password: '',
-    disableAutoload: disableAutoload,
-    disableAutoConnect: true
+    autoAttributes: autoAttributes,
+    autoConnect: false
   })
 
   store.Model('user', function(){})

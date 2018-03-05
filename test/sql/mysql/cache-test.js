@@ -99,7 +99,7 @@ describe('MySQL: Cache', function(){
         database: database,
         user: 'travis',
         password: '',
-        disableAutoload: true
+        autoAttributes: false
       })
       store2.Model('user', function(){})
       store2.Model('post', function(){})

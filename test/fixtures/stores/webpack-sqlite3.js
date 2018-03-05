@@ -6,10 +6,10 @@ try{
   Store = require('../../../store/sqlite3')
 }
 
-module.exports = function(database, disableAutoload){
+module.exports = function(database, autoAttributes){
   const store = new Store({
     file: database,
-    disableAutoload: disableAutoload
+    autoAttributes: autoAttributes
   })
 
   store.Model('user', function(){})
