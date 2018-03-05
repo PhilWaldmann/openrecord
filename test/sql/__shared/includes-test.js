@@ -31,7 +31,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.hasOne('avatar')
         this.hasMany('unread_posts')
         this.hasMany('unread', {through: 'unread_posts'})
-        this.hasOne('last_post', {model: 'Post', scope: '!recent'}) // scope per record! => expensive!! (leading !)
+        this.hasOne('last_post', {model: 'Post', scope: '!recent'}) // scope per record! => expensive!! (the leading `!`)
         this.hasMany('unread_threads', {through: 'unread', relation: 'thread'})
         this.hasMany('poly_things')
         this.hasMany('members', {through: 'poly_things', relation: 'member'})
@@ -622,6 +622,23 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           })
         })
       })
+
+
+
+      // ASYNC/AWAIT
+      const semver = require('semver')
+      if(semver.gt(process.versions.node, '7.10.0')){
+
+        it('include with `await`', async function(){
+          await store.ready()
+          var User = store.Model('User')
+          const users = await User.include('last_post')
+
+          users.length.should.be.equal(3)
+          users[0].last_post.id.should.be.equal(3)
+          users[1].last_post.id.should.be.equal(4)
+        })
+      }
     })
   })
 }
