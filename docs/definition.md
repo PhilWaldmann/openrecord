@@ -35,6 +35,11 @@ class User extends Store.BaseModel{
   }
 }
 store.Model(User)
+
+store.ready(async () => {
+  const user = await User.find(1)
+  console.log(user.fullName())
+})
 ```
 
 For a big project you want to create one file per model (or multiple files per model, see [Mixins](#mixins))
@@ -65,7 +70,20 @@ module.exports = User
 
 ?> You could also return a `function` like in the first example. The function name (e.g. `function User(){...}`) will be used as the model name!
 
+There is only a small difference between the `function` and the `class` style model definition. And that's the the definition of static and instance methods.
+For [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes) is's obvious, but for the `function` style you'll need to use helpers:
 
+```js
+module.exports = function User(){
+  // via this.method()
+  this.method('fullName', function(){/*...*/})
+  // or the short form
+  this.fullName = function(){/*...*/}
+
+  // for static methods you have to use this.staticMethod()
+  this.staticMethod('findAndReplace', function(id, data){/*...*/})
+}
+```
 
 
 

@@ -39,10 +39,10 @@ global.afterSQLite = function(file){
 }
 
 
-global.testSQLite = function(name, queries){
+global.testSQLite = function(name, queries, prefix){
   var db = name.replace('/', '_') + '_test'
 
-  require('../__shared/' + name + '-test')(
+  require('../__shared/' + name + '-test' + (prefix || ''))(
     'SQL (SQLite3)',
     function(next){
       beforeSQLite(db, queries, next)

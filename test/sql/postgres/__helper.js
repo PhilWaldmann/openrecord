@@ -18,9 +18,9 @@ global.afterPG = function(db, next){
   next()
 }
 
-global.testPG = function(name, queries){
+global.testPG = function(name, queries, prefix){
   var db = name.replace('/', '_') + '_test'
-  require('../__shared/' + name + '-test')(
+  require('../__shared/' + name + '-test' + (prefix || ''))(
     'SQL (Postgres)',
     function(next){
       this.timeout(5000)

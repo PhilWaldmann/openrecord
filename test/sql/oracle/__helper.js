@@ -60,14 +60,14 @@ global.getOracleConfig = function(db, config){
   }, config)
 }
 
-global.testOracle = function(name, queries){
+global.testOracle = function(name, queries, prefix){
   if(!process.env['ORACLE_HOME']){
     console.log('Needs Oracle database for tests.')
     return
   }
 
   var db = name.replace('/', '_') + '_test'
-  require('../__shared/' + name + '-test')(
+  require('../__shared/' + name + '-test' + (prefix || ''))(
     'SQL (Oracle)',
     function(next){
       beforeOracle(db, queries, next)

@@ -14,8 +14,13 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     before(function(){
+      // in order to run the same test on multiple databases
+      // The `Post` class will be altered and will change the output of the folowing tests
+      const OriginalPost = require('../../fixtures/classes/Post')
+      class Post extends OriginalPost{}
+
       storeConf.models = [
-        require('../../fixtures/models/es6_model')
+        Post
       ]
       store = new Store(storeConf)
 
@@ -105,6 +110,18 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       
       await user.save()      
       user.id.should.not.be.equal(null)
+    })
+
+    it('works with class inheritance', async function(){
+      await store.ready()
+      var Post = store.Model('Post')
+      
+      const post = Post.new({
+        user_id: 1
+      })
+      
+      const valid = await post.isValid()
+      valid.should.be.equal(false)      
     })
 
 
