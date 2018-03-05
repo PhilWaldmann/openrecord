@@ -16,7 +16,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     before(function(){
       // in order to run the same test on multiple databases
       // The `Post` class will be altered and will change the output of the folowing tests
-      const OriginalPost = require('../../fixtures/classes/Post')
+      const OriginalPost = require('../../fixtures/classes/Post.es6')
       class Post extends OriginalPost{}
 
       storeConf.models = [
