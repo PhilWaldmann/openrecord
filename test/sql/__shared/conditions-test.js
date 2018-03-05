@@ -15,6 +15,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     before(function(){
       store = new Store(storeConf)
 
+      store.attribute_types.string.operators.is_phil = {
+        on: { all: false,  boolean: true },
+        method: function(attr, value, query, cond){
+          if(value) query.where(store.utils.getAttributeName(this, cond), 'like', '%phil%')
+        }
+      }
 
       store.Model('User', function(){
         this.attribute('created_at', 'date')
@@ -26,17 +32,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('find()', function(){
-      /*
-      it('finds with one id returns the right sql', function(){
-        return store.ready(function(){
-          var User = store.Model('User');
-          return User.find(1).toSql(function(sql){
-            sql.should.be.equal('select * from "users" where "users"."id" = 1 limit 1');
-            ;
-          })
-        });
-      });
-    */
 
       it('finds nothing', function(){
         return store.ready(function(){
@@ -391,6 +386,16 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return store.ready(function(){
           var User = store.Model('User')
           return User.where({email: {attribute: 'private_email'}}).exec(function(result){
+            result.length.should.be.equal(1)
+          })
+        })
+      })
+
+
+      it('finds with custom operator', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          return User.where({login_is_phil: true}).exec(function(result){
             result.length.should.be.equal(1)
           })
         })
