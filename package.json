@@ -35,7 +35,7 @@
     "lint": "eslint --ext .js lib test",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- --reporter dot",
     "report-coverage": "NODE_ENV=test istanbul cover _mocha -- --require blanket --reporter mocha-lcov-reporter && cat ./coverage/lcov.info | coveralls",
-    "benchmark": "node benchmark/run"
+    "dev-docs": "docsify serve docs --port 4444"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
@@ -50,6 +50,7 @@
     "benchmark": "^2.1.4",
     "blanket": ">= 1.1.x",
     "coveralls": "^3.0.0",
+    "docsify-cli": "^4.2.0",
     "eslint": "^4.18.0",
     "eslint-config-digitalbits": "^1.0.4",
     "eslint-config-prettier": "^2.9.0",
@@ -69,6 +70,7 @@
     "mysql": "latest",
     "pg": "^7.4.1",
     "restify": "^6.3.4",
+    "semver": "^5.5.0",
     "should": "^13.2.1",
     "sqlite3": "latest",
     "webpack": "^3.11.0",
