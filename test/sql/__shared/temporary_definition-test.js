@@ -43,6 +43,14 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             return this.login.toUpperCase()
           })
         })
+
+        this.scope('tmpConversion', function(){
+          this.temporaryDefinition()
+          .convertOutput('login', function(value){
+            if(!value) return value            
+            return value.split('').reverse().join('')
+          }, false)
+        })
       })
       store.Model('Post', function(){
         this.belongsTo('user')
@@ -129,7 +137,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('does not pollute the model relations definition', function(){
+    it('does not pollute the model attribute definition', function(){
       return store.ready(function(){
         var User = store.Model('User')
         return User.find(1).exec(function(user){
@@ -137,5 +145,27 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         })
       })
     })
+
+
+
+    it('adds a temporary conversion', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.tmpConversion().find(1).exec(function(user){
+          user.login.should.be.equal('lihp')
+        })
+      })
+    })
+
+
+    it('does not pollute the model conversion definition', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.find(1).exec(function(user){
+          user.login.should.be.equal('phil')
+        })
+      })
+    })
+    
   })
 }
