@@ -64,7 +64,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('works with joins', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.count('salary').join('posts').exec(function(result){
+          return User.count('salary').leftJoin('posts').exec(function(result){
             result.should.be.equal(7)
           })
         })
@@ -105,7 +105,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return store.ready(function(){
           var User = store.Model('User')
           return User.sum('salary').join('posts').exec(function(result){
-            result.should.be.equal(2200)
+            result.should.be.equal(500)
           })
         })
       })
@@ -145,7 +145,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return store.ready(function(){
           var User = store.Model('User')
           return User.max('salary').join('posts').exec(function(result){
-            result.should.be.equal(1000)
+            result.should.be.equal(200)
           })
         })
       })
@@ -223,7 +223,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('works with joins', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.avg('salary').join('posts').exec(function(result){
+          return User.avg('salary').leftJoin('posts').exec(function(result){
             result.should.be.approximately((100 + 100 + 100 + 200 + 400 + 300 + 1000) / 7, 0.1)
           })
         })

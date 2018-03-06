@@ -83,7 +83,7 @@ describe('Postgres: belongsToMany()', function(){
   it('does join a belongs_to_many relation', function(){
     return store.ready(function(){
       var User = store.Model('User')
-      return User.join('folders').order('users.id').exec(function(users){
+      return User.leftJoin('folders').order('users.id').exec(function(users){
         users.length.should.be.equal(4)
         users[0].folders.length.should.be.equal(1)
         users[0].folders[0].name.should.be.equal('A')

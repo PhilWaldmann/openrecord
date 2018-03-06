@@ -71,7 +71,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return store.ready(function(){
           var User = store.Model('User')
           return User.join('posts').toSql(function(sql){
-            sql.should.be.equal('select "users"."id" "f0", "users"."login" "f1", "users"."email" "f2", "users"."created_at" "f3", "posts"."id" "f4", "posts"."user_id" "f5", "posts"."thread_id" "f6", "posts"."message" "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"')
+            sql.should.be.equal('select "users"."id" "f0", "users"."login" "f1", "users"."email" "f2", "users"."created_at" "f3", "posts"."id" "f4", "posts"."user_id" "f5", "posts"."thread_id" "f6", "posts"."message" "f7" from "users" inner join "posts" on "users"."id" = "posts"."user_id"')
           })
         })
       })
@@ -131,7 +131,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return store.ready(function(){
           var Post = store.Model('Post')
           return Post.join('user').toSql(function(sql){
-            sql.should.be.equal('select "posts"."id" "f0", "posts"."user_id" "f1", "posts"."thread_id" "f2", "posts"."message" "f3", "user"."id" "f4", "user"."login" "f5", "user"."email" "f6", "user"."created_at" "f7" from "posts" left join "users" "user" on "posts"."user_id" = "user"."id"')
+            sql.should.be.equal('select "posts"."id" "f0", "posts"."user_id" "f1", "posts"."thread_id" "f2", "posts"."message" "f3", "user"."id" "f4", "user"."login" "f5", "user"."email" "f6", "user"."created_at" "f7" from "posts" inner join "users" "user" on "posts"."user_id" = "user"."id"')
           })
         })
       })
@@ -141,7 +141,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return store.ready(function(){
           var User = store.Model('User')
           return User.join([['posts']]).toSql(function(sql){
-            sql.should.be.equal('select "users"."id" "f0", "users"."login" "f1", "users"."email" "f2", "users"."created_at" "f3", "posts"."id" "f4", "posts"."user_id" "f5", "posts"."thread_id" "f6", "posts"."message" "f7" from "users" left join "posts" on "users"."id" = "posts"."user_id"')
+            sql.should.be.equal('select "users"."id" "f0", "users"."login" "f1", "users"."email" "f2", "users"."created_at" "f3", "posts"."id" "f4", "posts"."user_id" "f5", "posts"."thread_id" "f6", "posts"."message" "f7" from "users" inner join "posts" on "users"."id" = "posts"."user_id"')
           })
         })
       })
@@ -155,8 +155,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             result[0].posts.length.should.be.equal(3)
             result[1].login.should.be.equal('michl')
             result[1].posts.length.should.be.equal(1)
-            result[2].login.should.be.equal('admin')
-            result[2].posts.length.should.be.equal(0)
+            result[2].login.should.be.equal('marlene')
+            result[2].posts.length.should.be.equal(1)
           })
         })
       })
@@ -192,9 +192,9 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             result[1].login.should.be.equal('michl')
             result[1].posts.length.should.be.equal(1)
             result[1].threads.length.should.be.equal(1)
-            result[2].login.should.be.equal('admin')
-            result[2].posts.length.should.be.equal(0)
-            result[2].threads.length.should.be.equal(0)
+            result[2].login.should.be.equal('marlene')
+            result[2].posts.length.should.be.equal(1)
+            result[2].threads.length.should.be.equal(1)
           })
         })
       })
@@ -302,7 +302,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on hasOne relations', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.join('avatar').exec(function(result){
+          return User.join('avatar', 'left').exec(function(result){
             result.length.should.be.equal(4)
             result[0].avatar.url.should.be.equal('http://awesome-avatar.com/avatar.png')
             should.not.exist(result[1].avatar)
@@ -315,7 +315,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on hasMany through', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.join('unread').order('users.id').exec(function(result){
+          return User.leftJoin('unread').order('users.id').exec(function(result){
             result.length.should.be.equal(4)
             result[0].unread.length.should.be.equal(1)
             result[1].unread.length.should.be.equal(0)
@@ -329,7 +329,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on nested hasMany through', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.join('unread_threads').order('users.id').exec(function(result){
+          return User.leftJoin('unread_threads').order('users.id').exec(function(result){
             result.length.should.be.equal(4)
             result[0].unread_threads.length.should.be.equal(1)
             result[0].unread_threads[0].title.should.be.equal('second thread')
@@ -344,12 +344,11 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return store.ready(function(){
           var Post = store.Model('Post')
           return Post.join('thread_autor').order('posts.id').exec(function(result){
-            result.length.should.be.equal(5)
+            result.length.should.be.equal(4)
             result[0].thread_autor.login.should.be.equal('michl')
             result[1].thread_autor.login.should.be.equal('michl')
             result[2].thread_autor.login.should.be.equal('phil')
             result[3].thread_autor.login.should.be.equal('michl')
-            should.not.exist(result[4].thread_autor)
           })
         })
       })
@@ -359,17 +358,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return store.ready(function(){
           var User = store.Model('User')
           return User.join({threads: {user: 'unread_threads'}}).order('users.id').exec(function(result){
-            result.length.should.be.equal(4)
-            result[0].unread_threads.length.should.be.equal(0)
-            result[1].unread_threads.length.should.be.equal(0)
-            result[2].unread_threads.length.should.be.equal(0)
-
-            result[0].threads.length.should.be.equal(1)
-            result[1].threads.length.should.be.equal(1)
-            result[2].threads.length.should.be.equal(0)
-
+            result.length.should.be.equal(1)
+            result[0].unread_threads.length.should.be.equal(0)            
+            result[0].threads.length.should.be.equal(1)            
             result[0].threads[0].user.unread_threads.length.should.be.equal(1)
-            result[1].threads[0].user.unread_threads.length.should.be.equal(0)
           })
         })
       })
@@ -447,7 +439,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return store.ready(function(){
           var Post = store.Model('Post')
           return Post.join('user').toSql(function(sql){
-            sql.should.be.equal('select "posts"."id" "f0", "posts"."user_id" "f1", "posts"."thread_id" "f2", "posts"."message" "f3", "user"."id" "f4", "user"."login" "f5", "user"."email" "f6", "user"."created_at" "f7" from "posts" left join "users" "user" on "posts"."user_id" = "user"."id"')
+            sql.should.be.equal('select "posts"."id" "f0", "posts"."user_id" "f1", "posts"."thread_id" "f2", "posts"."message" "f3", "user"."id" "f4", "user"."login" "f5", "user"."email" "f6", "user"."created_at" "f7" from "posts" inner join "users" "user" on "posts"."user_id" = "user"."id"')
           })
         })
       })
