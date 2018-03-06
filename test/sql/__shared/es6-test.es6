@@ -72,6 +72,13 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
+    it('all with `await`', async function(){
+      await store.ready()      
+      const users = await User
+      
+      users.length.should.be.equal(3)
+    })
+
     it('include with `await`', async function(){
       await store.ready()      
       const users = await User.include('posts')
