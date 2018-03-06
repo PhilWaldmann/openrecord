@@ -31,10 +31,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('returns all records with with_deleted() scope', function(){
+    it('returns all records with withDeleted() scope', function(){
       return store.ready(function(){
         var User = store.Model('User')
-        return User.where({login_not: 'hans'}).with_deleted().exec(function(records){
+        return User.where({login_not: 'hans'}).withDeleted().exec(function(records){
           records.length.should.be.equal(4)
         })
       })
@@ -49,7 +49,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             return User.find(5).exec(function(delHans){
               should.not.exist(delHans)
 
-              return User.find(5).with_deleted().exec(function(existingHans){
+              return User.find(5).withDeleted().exec(function(existingHans){
                 existingHans.login.should.be.equal('hans')
                 should.exist(existingHans.deleted_at)
               })
