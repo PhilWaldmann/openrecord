@@ -18,7 +18,7 @@ store.ready(async () => {
 })
 ```
 
-?> The above example assumes that there is a `posts` table with a primary key field  
+?> The above example assumes that there is a `posts` table with a primary key field inside your `my-posts-db.sqlite3` file  
 
 
 The `Store` constructor takes the following config parameter:
@@ -41,7 +41,7 @@ The `Store` constructor takes the following config parameter:
 * **inflection**: OpenRecord will take your model name and pluralizes it to get e.g. the table name with the help of the [inflection](https://github.com/dreamerslab/node.inflection) module  
   If you want to overwrite certain names, pass an object with the format `{'wrong name': 'right name'}`.
 * **plugins**: Array of plugins (See [Plugins](./plugins.md))
-* **models**: Array of models (See [Definition](./definition.md))
+* **models**: Array of models (See [Definition](./definition.md#model-definition))
 
 
 # Require only what you need
