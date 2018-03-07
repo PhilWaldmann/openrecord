@@ -42,6 +42,7 @@ The `Store` constructor takes the following config parameter:
   If you want to overwrite certain names, pass an object with the format `{'wrong name': 'right name'}`.
 * **plugins**: Array of plugins (See [Plugins](./plugins.md))
 * **models**: Array of models (See [Definition](./definition.md#model-definition))
+* **migrations**: Array of migrations (See [Migrations](./migrations.md))
 
 
 # Require only what you need

@@ -5,6 +5,7 @@
   * [Model Definition](definition.md)
   * [Query](query.md)
   * [Modify](modify.md)
+  * [Context](context.md)
 
 * **[GraphQL](graphql.md)**
 
