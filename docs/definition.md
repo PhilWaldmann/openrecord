@@ -227,13 +227,13 @@ The `options` parameter is optional, if it can autodetect your target model. Oth
 * **as**: Set the `<polymorhic name>`
 * **conditions**: Optional `conditions` object (See [Query](./query.md#with-conditions))
 * **dependent**: What should happen with the related record after a record of this model will be deleted. Valid values are: `destroy`, `delete`, `nullify` or null. (Default null)
-
+* **autoSave**: Automatically save loaded or new related records (See [save](./modify#save) and [setup](./setup.md))
 ### hasMany(name[, options])
 The target model contains the primary key of this model
 
 ```js
 // models/User.js
-this.hasMany('posts', {foreign_key: 'author_id'})
+this.hasMany('posts', {foreign_key: 'author_id', autoSave: true})
 ```
 
 ### hasOne(name[, options])

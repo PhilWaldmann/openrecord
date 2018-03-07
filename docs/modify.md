@@ -74,36 +74,101 @@ await user.save()
 await user.save() // will be ignored!
 ```
 
-If you call `save()` it will also automatically check all loaded or new relations and save them as well
+If you call `save()` it will also automatically check all loaded or new relations and save them as well, if you have activated `autoSave` in your [relation defintion](./definition#relations)!
 
 ```js
 const user = User.find(2)
 user.posts.new({title: 'Awesome'})
-await user.save() // will only create the new post
+await user.save() // will only create the new post, because user has not changed!
 ```
 
 ## updateAll(data)
 !> *sqlite3*, *postgres*, *mysql* and *oracle* only!  
 
+Change records without loading them:
+
+```js
+await User.where({active: true}).updateAll({failed_login_count: 0})
+```
+
+You can use almost any [query](./query.md) method to filter your records.
+
+!> Note, that no hooks will be executed!
 
 ## hasChanges()
 
+To manually check if a record has changes
+
+```js
+const user = User.find(2)
+user.last_name = 'Waldmann'
+console.log(user.hasChanges()) // outputs `true`
+```
+
 ## getChanges()
+
+To get all changes
+
+```js
+const user = User.find(2)
+user.last_name = 'Waldmann'
+console.log(user.getChanges()) // outputs `{last_name: ['Old Value', 'Waldmann']}`
+```
 
 ## resetChanges()
 
-## validate()
+Undo all unsaved changes.
 
+```js
+const user = User.find(2)
+user.last_name = 'Waldmann'
+user.resetChanges()
+console.log(user.hasChanges()) // outputs `false`
+```
+
+## isValid()
+
+To manually validate a record
+
+```js
+const user = User.find(2)
+user.last_name = 'Waldmann'
+const valid = await user.isValid()
+console.log(valid) // outputs `true`
+```
 
 # Remove records
 
-## delete()
-
 ## destroy()
+
+To remove a record from your datastore use `destroy()`
+
+```js
+const user = User.find(2)
+await user.destroy()
+```
+
+If you have set `dependent` on a [relation](./definition.md#relations), all relational records will be removed or nullified as well.
+
+## delete()
+!> *sqlite3*, *postgres*, *mysql* and *oracle* only!  
+
+Does basically the same as `destroy`, but won't call any hooks and does not remove `dependent` [relations](./definition.md#relations)
+
+## destroyAll()
+!> *sqlite3*, *postgres*, *mysql*, *oracle* and *ldap/activedirectory* only!  
+
+The usage is simmilar to `updateAll`.
+
+```js
+await User.where({active: false}).destroyAll()
+```
+
+Internally OpenRecord will load all records and call `destroy()` on each.  
+So hooks are fired for every record!
 
 ## deleteAll()
 !> *sqlite3*, *postgres*, *mysql* and *oracle* only!  
 
-
-## destroyAll()
-!> *sqlite3*, *postgres*, *mysql* and *oracle* only!  
+It's the same as `destroyAll()` but without the initial record loading and without hooks and `dependent` [relations](./definition.md#relations).  
+A single delete query will be executed on your database.

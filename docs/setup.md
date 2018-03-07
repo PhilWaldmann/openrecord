@@ -38,6 +38,7 @@ The `Store` constructor takes the following config parameter:
 * **autoAttributes**: Set to `false` if you don't want to automatically define your model attributes via your database tables (*sqlite3*, *postgres*, *mysql* and *oracle* only)
 * **autoLoad**: Set to `true` if you want all your models automatically created from your database tables (*sqlite3*, *postgres*, *mysql* and *oracle* only)  
   With a `postgres` database it will take the `public` schema by default to get your tables. If you want to change that, set `autoLoad` to the schema name instead of `true`.
+* **autoSave**: Set the default value for `autoSave` on all [relations](./definition#relations)
 * **inflection**: OpenRecord will take your model name and pluralizes it to get e.g. the table name with the help of the [inflection](https://github.com/dreamerslab/node.inflection) module  
   If you want to overwrite certain names, pass an object with the format `{'wrong name': 'right name'}`.
 * **plugins**: Array of plugins (See [Plugins](./plugins.md))
