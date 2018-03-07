@@ -1,6 +1,6 @@
 var should = require('should')
 
-var Store = require('../../lib/store')
+var Store = require('../../store/base')
 
 describe('Chainable', function(){
   var store = new Store()
@@ -10,7 +10,7 @@ describe('Chainable', function(){
 
 
   before(function(){
-    store.ready(function(){
+    return store.ready(function(){
       User = store.Model('User')
     })
   })

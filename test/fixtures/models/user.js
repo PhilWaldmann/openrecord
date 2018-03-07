@@ -1,5 +1,5 @@
-var path = require('path')
 
 module.exports = function(){
-  this.require(path.join(__dirname, '_user', '*'))
+  this.mixin(require('./_user/attribute'))
+  this.mixin(require('./_user/model-functions'))
 }

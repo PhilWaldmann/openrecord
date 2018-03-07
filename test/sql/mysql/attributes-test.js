@@ -1,4 +1,4 @@
-var Store = require('../../../lib/store')
+var Store = require('../../../store/mysql')
 
 
 describe('MySQL: all Attributes', function(){
@@ -24,8 +24,6 @@ describe('MySQL: all Attributes', function(){
     })
 
     store.Model('AttributeTest', function(){})
-
-    store.on('exception', function(){})
   })
 
   after(function(next){
@@ -35,8 +33,8 @@ describe('MySQL: all Attributes', function(){
 
 
 
-  it('have all attributes loaded', function(done){
-    store.ready(function(){
+  it('have all attributes loaded', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
 
       var attrs = AttributeTest.definition.attributes
@@ -50,14 +48,12 @@ describe('MySQL: all Attributes', function(){
       attrs.should.have.property('date_attribute')
       attrs.should.have.property('datetime_attribute')
       attrs.should.have.property('time_attribute')
-
-      done()
     })
   })
 
 
-  it('casts all values', function(done){
-    store.ready(function(){
+  it('casts all values', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
       AttributeTest.limit(1).exec(function(record){
         record.char_attribute.should.be.equal('abcd')
@@ -77,7 +73,6 @@ describe('MySQL: all Attributes', function(){
         }
 
         record.time_attribute.toString().should.be.equal('15:45:01')
-        done()
       })
     })
   })

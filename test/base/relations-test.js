@@ -1,6 +1,6 @@
 var should = require('should')
 
-var Store = require('../../lib/store')
+var Store = require('../../store/base')
 
 describe('Relations', function(){
   describe('hasMany()', function(){
@@ -18,13 +18,15 @@ describe('Relations', function(){
     var User, Post, phil
 
     before(function(){
-      User = store.Model('User')
-      Post = store.Model('Post')
-      phil = new User({login: 'phil',
-        posts: [{
-          title: 'Title A'},
-        {title: 'Title B', invalid_attribute: 'test'}
-        ]})
+      return store.ready(function(){
+        User = store.Model('User')
+        Post = store.Model('Post')
+        phil = new User({login: 'phil',
+          posts: [{
+            title: 'Title A'},
+          {title: 'Title B', invalid_attribute: 'test'}
+          ]})
+      })
     })
 
 
@@ -78,8 +80,8 @@ describe('Relations', function(){
 
     var User, Post, post, nestedPost
 
-    before(function(next){
-      store.ready(function(){
+    before(function(){
+      return store.ready(function(){
         User = store.Model('User')
         Post = store.Model('Post')
         post = new Post({
@@ -92,14 +94,12 @@ describe('Relations', function(){
           user: {
             login: 'phil',
             websites: [{
-              url: 'http://www.s-team.at'
+              url: 'http://www.digitalbits.at'
             }, {
               url: 'http://github.com'
             }]
           }
         })
-
-        next()
       })
     })
 
@@ -170,8 +170,8 @@ describe('Relations', function(){
 
 
     var User, Post, phil
-    before(function(next){
-      store.ready(function(){
+    before(function(){
+      return store.ready(function(){
         User = store.Model('User')
         Post = store.Model('Post')
         phil = new User({login: 'phil',
@@ -179,8 +179,6 @@ describe('Relations', function(){
             title: 'Title A'},
           {title: 'Title B', invalid_attribute: 'test'}
           ]})
-
-        next()
       })
     })
 
@@ -217,26 +215,29 @@ describe('Relations', function(){
   describe('async loading', function(){
     var store = new Store()
 
-    store.Model('User', function(next){
+    store.Model('User', function(){
       this.hasMany('posts')
-      setTimeout(next, 10)
+      return new Promise(function(resolve){
+        setTimeout(resolve, 10)
+      })
     })
 
-    store.Model('Post', function(next){
+    store.Model('Post', function(){
       this.belongsTo('user')
-      setTimeout(next, 20)
+      return new Promise(function(resolve){
+        setTimeout(resolve, 20)
+      })
     })
 
 
-    it('all relations are loaded', function(next){
-      store.ready(function(){
+    it('all relations are loaded', function(){
+      return store.ready(function(){
         var User = store.Model('User')
         var Post = store.Model('Post')
 
         User.definition.relations.should.have.property('posts')
         Post.definition.relations.should.have.property('user')
       })
-      next()
     })
   })
 })

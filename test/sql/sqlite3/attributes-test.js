@@ -1,5 +1,5 @@
 var path = require('path')
-var Store = require('../../../lib/store')
+var Store = require('../../../store/sqlite3')
 
 
 
@@ -33,8 +33,8 @@ describe('SQLite3: Attributes', function(){
 
 
 
-  it('have all attributes loaded', function(done){
-    store.ready(function(){
+  it('have all attributes loaded', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
 
       var attrs = AttributeTest.definition.attributes
@@ -44,13 +44,11 @@ describe('SQLite3: Attributes', function(){
       attrs.should.have.property('integer_attribute')
       attrs.should.have.property('real_attribute')
       attrs.should.have.property('blob_attribute')
-
-      done()
     })
   })
 
-  it('have the right attribute types', function(done){
-    store.ready(function(){
+  it('have the right attribute types', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
 
       var attrs = AttributeTest.definition.attributes
@@ -60,14 +58,12 @@ describe('SQLite3: Attributes', function(){
       attrs.integer_attribute.type.name.should.be.equal('integer')
       attrs.real_attribute.type.name.should.be.equal('float')
       attrs.blob_attribute.type.name.should.be.equal('string')
-
-      done()
     })
   })
 
 
-  it('have all attributes loaded (lowercase)', function(done){
-    store.ready(function(){
+  it('have all attributes loaded (lowercase)', function(){
+    return store.ready(function(){
       var AttributeLowercaseTest = store.Model('AttributeLowercaseTest')
 
       var attrs = AttributeLowercaseTest.definition.attributes
@@ -77,13 +73,11 @@ describe('SQLite3: Attributes', function(){
       attrs.should.have.property('integer_attribute')
       attrs.should.have.property('real_attribute')
       attrs.should.have.property('blob_attribute')
-
-      done()
     })
   })
 
-  it('have the right attribute types (lowercase)', function(done){
-    store.ready(function(){
+  it('have the right attribute types (lowercase)', function(){
+    return store.ready(function(){
       var AttributeLowercaseTest = store.Model('AttributeLowercaseTest')
 
       var attrs = AttributeLowercaseTest.definition.attributes
@@ -93,8 +87,6 @@ describe('SQLite3: Attributes', function(){
       attrs.integer_attribute.type.name.should.be.equal('integer')
       attrs.real_attribute.type.name.should.be.equal('float')
       attrs.blob_attribute.type.name.should.be.equal('string')
-
-      done()
     })
   })
 })

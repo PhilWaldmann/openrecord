@@ -1,5 +1,5 @@
 var should = require('should')
-var Store = require('../../../lib/store')
+var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
@@ -13,8 +13,9 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     before(function(){
+      storeConf.autoSave = true
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+
 
 
       store.Model('User', function(){
@@ -23,22 +24,22 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
         this.beforeUpdate(function(){
           this.save.should.be.a.Function()
-          return this.login !== 'max'
+          if(this.login === 'max') throw new Error('stop')
         })
 
         this.beforeUpdate(function(){
           this.save.should.be.a.Function()
-          return this.login !== 'maxi'
+          if(this.login === 'maxi') throw new Error('stop')
         })
 
         this.beforeSave(function(){
           this.save.should.be.a.Function()
-          return this.login !== '_max'
+          if(this.login === '_max') throw new Error('stop')
         })
 
         this.afterSave(function(){
           this.save.should.be.a.Function()
-          return this.login !== '_maxi'
+          if(this.login === '_maxi') throw new Error('stop')
         })
       })
       store.Model('Post', function(){
@@ -56,73 +57,56 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('beforeUpdate()', function(){
-      it('gets called', function(next){
-        store.ready(function(){
+      it('gets called', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.find(1, function(phil){
+          return User.find(1, function(phil){
             phil.login = 'max'
-            phil.save(function(result){
-              result.should.be.equal(false)
-              next()
-            })
+            return phil.save()
           })
-        })
+        }).should.be.rejectedWith(Error, {message: 'stop'})
       })
     })
 
 
     describe('afterUpdate()', function(){
-      it('gets called', function(next){
-        store.ready(function(){
+      it('gets called', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.find(1, function(phil){
+          return User.find(1)
+          .then(function(phil){
             phil.login = 'maxi'
-            phil.save(function(result){
-              result.should.be.equal(false)
-
-              User.where({login: 'maxi'}).count().exec(function(result){
-                result.should.be.equal(0)
-                next()
-              })
-            })
+            return phil.save()
           })
-        })
+        }).should.be.rejectedWith(Error, {message: 'stop'})
       })
     })
 
 
     describe('beforeSave()', function(){
-      it('gets called', function(next){
-        store.ready(function(){
+      it('gets called', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.find(1, function(phil){
+          return User.find(1)
+          .then(function(phil){
             phil.login = '_max'
-            phil.save(function(result){
-              result.should.be.equal(false)
-              next()
-            })
+            return phil.save()
           })
-        })
+        }).should.be.rejectedWith(Error, {message: 'stop'})
       })
     })
 
 
     describe('afterSave()', function(){
-      it('gets called', function(next){
-        store.ready(function(){
+      it('gets called', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.find(1, function(phil){
+          return User.find(1)
+          .then(function(phil){
             phil.login = '_maxi'
-            phil.save(function(result){
-              result.should.be.equal(false)
-
-              User.where({login: '_maxi'}).count().exec(function(result){
-                result.should.be.equal(0)
-                next()
-              })
-            })
+            return phil.save()
           })
-        })
+        }).should.be.rejectedWith(Error, {message: 'stop'})
       })
     })
 
@@ -130,57 +114,58 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('update()', function(){
-      it('updates a single record', function(next){
-        store.ready(function(){
+      it('updates a single record', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.find(4, function(admin){
+          return User.find(4)
+          .then(function(admin){
             admin.login = 'philipp'
-            admin.save(function(result){
-              result.should.be.equal(true)
-
-              User.where({login: 'philipp'}).limit(1).exec(function(philipp){
-                philipp.login.should.be.equal('philipp')
-                philipp.id.should.be.equal(admin.id)
-                next()
-              })
-            })
+            return admin.save()
+          })
+          .then(function(){
+            return User.where({login: 'philipp'}).limit(1)
+          })
+          .then(function(philipp){
+            philipp.login.should.be.equal('philipp')
+            philipp.id.should.be.equal(4)
           })
         })
       })
 
 
 
-      it('updates a single record and set a value to null', function(next){
-        store.ready(function(){
+      it('updates a single record and set a value to null', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.find(3, function(admin){
+          return User.find(3)
+          .then(function(admin){
             admin.login.should.be.equal('admin')
 
             admin.login = 'sysadmin'
             admin.email = null
 
-            admin.save(function(result){
-              result.should.be.equal(true)
-
-              User.where({login: 'sysadmin'}).limit(1).exec(function(administrator){
-                administrator.login.should.be.equal('sysadmin')
-                administrator.id.should.be.equal(admin.id)
-                should.not.exist(administrator.email)
-                next()
-              })
-            })
+            return admin.save()
+          })
+          .then(function(){
+            return User.where({login: 'sysadmin'}).limit(1)
+          })
+          .then(function(administrator){
+            administrator.login.should.be.equal('sysadmin')
+            administrator.id.should.be.equal(3)
+            should.not.exist(administrator.email)
           })
         })
       })
 
 
 
-      it('updates a nested records', function(next){
-        store.ready(function(){
+      it('updates a nested records', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.find(2).include('posts').exec(function(michl){
+          return User.find(2).include('posts').exec(function(michl){
             michl.login.should.be.equal('michl')
             michl.posts.length.should.be.equal(1)
+            michl.posts[0].id.should.be.equal(4)
             michl.posts[0].message.should.be.equal('michls post')
 
             michl.login = 'michael'
@@ -188,40 +173,38 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
             michl.posts[0].__exists.should.be.equal(true)
 
-            michl.save(function(result){
-              result.should.be.equal(true)
-
-              User.where({login: 'michael'}).include('posts').limit(1).exec(function(michael){
-                michael.login.should.be.equal('michael')
-                michael.id.should.be.equal(michl.id)
-                michael.posts[0].message.should.be.equal('michaels post')
-                michael.posts[0].id.should.be.equal(michl.posts[0].id)
-                michael.posts.length.should.be.equal(1)
-                next()
-              })
-            })
+            return michl.save()
+          })
+          .then(function(){
+            return User.where({login: 'michael'}).include('posts').limit(1)
+          })
+          .then(function(michael){
+            michael.login.should.be.equal('michael')
+            michael.id.should.be.equal(2)
+            michael.posts[0].message.should.be.equal('michaels post')
+            michael.posts[0].id.should.be.equal(4)
+            michael.posts.length.should.be.equal(1)
           })
         })
       })
 
 
-      it('create only nested record', function(next){
-        store.ready(function(){
+      it('create only nested record', function(){
+        return store.ready(function(){
           var User = store.Model('User')
           var Post = store.Model('Post')
-          User.find(3).include('posts').exec(function(admin){
+          return User.find(3).include('posts').exec(function(admin){
             admin.posts.length.should.be.equal(0)
 
             admin.posts.add({thread_id: 99, message: 'admin was here'})
 
-            admin.save(function(result){
-              result.should.be.equal(true)
-
-              Post.where({user_id: 3}).count().exec(function(result){
-                result.should.be.equal(1)
-                next()
-              })
-            })
+            return admin.save()
+          })
+          .then(function(){
+            return Post.where({user_id: 3}).count()
+          })
+          .then(function(result){
+            result.should.be.equal(1)
           })
         })
       })
@@ -230,10 +213,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
 
-      it('updates a record and adds new nested records', function(next){
-        store.ready(function(){
+      it('updates a record and adds new nested records', function(){
+        return store.ready(function(){
           var Thread = store.Model('Thread')
-          Thread.find(1).include('posts').exec(function(thread){
+          return Thread.find(1).include('posts').exec(function(thread){
             thread.title.should.be.equal('first thread')
             thread.posts.length.should.be.equal(3)
 
@@ -241,16 +224,14 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             thread.posts.add({user_id: 1, message: 'another post'})
             thread.posts.add({user_id: 2, message: 'one more'})
 
-            thread.save(function(result){
-              result.should.be.equal(true)
-
-              Thread.find(1).include('posts').exec(function(michael){
-                thread.title.should.be.equal('Phils first thread')
-                thread.posts.length.should.be.equal(5)
-
-                next()
-              })
-            })
+            return thread.save()
+          })
+          .then(function(){
+            return Thread.find(1).include('posts')
+          })
+          .then(function(thread){
+            thread.title.should.be.equal('Phils first thread')
+            thread.posts.length.should.be.equal(5)
           })
         })
       })
@@ -258,10 +239,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
 
-      it('updates relations via set()', function(next){
-        store.ready(function(){
+      it('updates relations via set()', function(){
+        return store.ready(function(){
           var Thread = store.Model('Thread')
-          Thread.find(2).include('posts').exec(function(thread){
+          return Thread.find(2).include('posts').exec(function(thread){
             thread.title.should.be.equal('second thread')
             thread.posts.length.should.be.equal(1)
             thread.posts[0].message.should.be.equal('third')
@@ -274,27 +255,25 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
               }]
             })
 
-            thread.save(function(result){
-              result.should.be.equal(true)
-
-              Thread.find(2).include('posts').exec(function(thread){
-                thread.title.should.be.equal('second awesome thread')
-                thread.posts.length.should.be.equal(1)
-                thread.posts[0].message.should.be.equal('third awesome post')
-
-                next()
-              })
-            })
+            return thread.save()
+          })
+          .then(function(){
+            return Thread.find(2).include('posts')
+          })
+          .then(function(thread){
+            thread.title.should.be.equal('second awesome thread')
+            thread.posts.length.should.be.equal(1)
+            thread.posts[0].message.should.be.equal('third awesome post')
           })
         })
       })
 
 
 
-      it('adds relations via set()', function(next){
-        store.ready(function(){
+      it('adds relations via set()', function(){
+        return store.ready(function(){
           var Thread = store.Model('Thread')
-          Thread.find(3).include('posts').exec(function(thread){
+          return Thread.find(3).include('posts').exec(function(thread){
             thread.title.should.be.equal('another')
             thread.posts.length.should.be.equal(0)
 
@@ -305,27 +284,25 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
               }]
             })
 
-            thread.save(function(result){
-              result.should.be.equal(true)
-
-              Thread.find(3).include('posts').exec(function(thread){
-                thread.title.should.be.equal('another awesome thread')
-                thread.posts.length.should.be.equal(1)
-                thread.posts[0].message.should.be.equal('another awesome post')
-
-                next()
-              })
-            })
+            return thread.save()
+          })
+          .then(function(){
+            return Thread.find(3).include('posts')
+          })
+          .then(function(thread){
+            thread.title.should.be.equal('another awesome thread')
+            thread.posts.length.should.be.equal(1)
+            thread.posts[0].message.should.be.equal('another awesome post')
           })
         })
       })
 
 
 
-      it('updates relations via set() without including the relation', function(next){
-        store.ready(function(){
+      it('updates relations via set() without including the relation', function(){
+        return store.ready(function(){
           var Thread = store.Model('Thread')
-          Thread.find(4).exec(function(thread){
+          return Thread.find(4).exec(function(thread){
             thread.title.should.be.equal('thread 4')
 
             thread.set({
@@ -336,39 +313,35 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
               }]
             })
 
-            thread.save(function(result){
-              result.should.be.equal(true)
-
-              Thread.find(4).include('posts').exec(function(thread){
-                thread.title.should.be.equal('awesome thread 4')
-                thread.posts.length.should.be.equal(1)
-                thread.posts[0].message.should.be.equal('you got an update')
-
-                next()
-              })
-            })
+            return thread.save()
+          })
+          .then(function(){
+            return Thread.find(4).include('posts')
+          })
+          .then(function(thread){
+            thread.title.should.be.equal('awesome thread 4')
+            thread.posts.length.should.be.equal(1)
+            thread.posts[0].message.should.be.equal('you got an update')
           })
         })
       })
 
 
-      it('updates a relation id with original relation loaded', function(next){
-        store.ready(function(){
+      it('updates a relation id with original relation loaded', function(){
+        return store.ready(function(){
           var Thread = store.Model('Thread')
-          Thread.find(4).include('user').exec(function(thread){
+          return Thread.find(4).include('user').exec(function(thread){
             thread.user.login.should.be.equal('phil')
 
             thread.user_id = 5
 
-            thread.save(function(result){
-              result.should.be.equal(true)
-
-              Thread.find(4).include('user').exec(function(thread){
-                thread.user.login.should.be.equal('new_owner')
-
-                next()
-              })
-            })
+            return thread.save()
+          })
+          .then(function(){
+            return Thread.find(4).include('user')
+          })
+          .then(function(thread){
+            thread.user.login.should.be.equal('new_owner')
           })
         })
       })

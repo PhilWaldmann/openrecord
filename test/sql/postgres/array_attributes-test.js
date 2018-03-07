@@ -1,5 +1,5 @@
 var path = require('path')
-var Store = require('../../../lib/store')
+var Store = require('../../../store/postgres')
 
 
 describe('Postgres: Array Attributes', function(){
@@ -22,13 +22,11 @@ describe('Postgres: Array Attributes', function(){
       database: database,
       user: 'postgres',
       password: '',
-      migrations: path.join(__dirname, 'fixtures', 'migrations', '*')
+      migrations: path.join(__dirname, 'fixtures', 'migrations', '*'),
+      plugins: require('../../../lib/base/dynamic_loading')
     })
 
     store.Model('ArrayTest', function(){})
-
-    store.setMaxListeners(0)
-    store.on('exception', function(){})
   })
 
   after(function(next){
@@ -119,40 +117,34 @@ describe('Postgres: Array Attributes', function(){
 
   for(var type in testValues){
     (function(type, attr){
-      it('does have the ' + type + ' array attribute', function(next){
-        store.ready(function(){
+      it('does have the ' + type + ' array attribute', function(){
+        return store.ready(function(){
           var ArrayTest = store.Model('ArrayTest')
           ArrayTest.definition.attributes[attr].type.name.should.be.equal(type + '_array')
-          next()
         })
       })
 
-      it('casts to ' + type + ' array', function(next){
-        store.ready(function(){
+      it('casts to ' + type + ' array', function(){
+        return store.ready(function(){
           var ArrayTest = store.Model('ArrayTest')
 
           for(var i = 0; i < testValues[type].testValues; i++){
             ArrayTest.definition.attributes[attr].type.cast.read(testValues[type].testValues[i].input).should.be.eql(testValues[type].testValues[i].output)
           }
-
-          next()
         })
       })
 
-      it('can write and read ' + type + ' array values', function(next){
-        store.ready(function(){
+      it('can write and read ' + type + ' array values', function(){
+        return store.ready(function(){
           var ArrayTest = store.Model('ArrayTest')
           var tmp = {}
 
           tmp[attr] = testValues[type].testValues[1].input
 
-          ArrayTest.create(tmp, function(success){
-            success.should.be.equal(true)
-
-            ArrayTest.find(this.id).exec(function(record){
+          return ArrayTest.create(tmp)
+          .then(function(result){
+            return ArrayTest.find(result.id).exec(function(record){
               record[attr].should.be.eql(testValues[type].testValues[1].output)
-
-              next()
             })
           })
         })
@@ -162,38 +154,32 @@ describe('Postgres: Array Attributes', function(){
 
 
 
-  it('query ({int_arr: [22]})', function(next){
-    store.ready(function(){
+  it('query ({int_arr: [22]})', function(){
+    return store.ready(function(){
       var ArrayTest = store.Model('ArrayTest')
 
-      ArrayTest.where({int_arr: [22]}).count().exec(function(count){
-        console.log(count)
+      return ArrayTest.where({int_arr: [22]}).count().exec(function(count){
         count.should.be.equal(1)
-        next()
       })
     })
   })
 
-  it('query ({int_arr_in: [22]})', function(next){
-    store.ready(function(){
+  it('query ({int_arr_in: [22]})', function(){
+    return store.ready(function(){
       var ArrayTest = store.Model('ArrayTest')
 
-      ArrayTest.where({int_arr_in: [22]}).count().exec(function(count){
-        console.log(count)
+      return ArrayTest.where({int_arr_in: [22]}).count().exec(function(count){
         count.should.be.equal(1)
-        next()
       })
     })
   })
 
-  it('query ({int_arr: 22})', function(next){
-    store.ready(function(){
+  it('query ({int_arr: 22})', function(){
+    return store.ready(function(){
       var ArrayTest = store.Model('ArrayTest')
 
-      ArrayTest.where({int_arr: 22}).count().exec(function(count){
-        console.log(count)
+      return ArrayTest.where({int_arr: 22}).count().exec(function(count){
         count.should.be.equal(1)
-        next()
       })
     })
   })

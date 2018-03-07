@@ -1,5 +1,5 @@
 var should = require('should')
-var Store = require('../../../lib/store')
+var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
@@ -14,7 +14,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+
 
       store.Model('User', function(){
         this.hasMany('posts')
@@ -22,12 +22,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
         this.beforeDestroy(function(){
           this.save.should.be.a.Function()
-          return this.login !== 'max'
+          if(this.login === 'max') throw new Error('stop from user before')
         })
 
         this.afterDestroy(function(){
           this.save.should.be.a.Function()
-          return this.login !== 'maxi'
+          if(this.login === 'maxi') throw new Error('stop from user after')
         })
       })
       store.Model('Post', function(){
@@ -40,78 +40,50 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.belongsTo('user')
         this.hasMany('posts')
         this.beforeDestroy(function(){
-          return this.title !== 'do not destroy'
+          if(this.title === 'do not destroy') throw new Error('stop from thread before')
         })
       })
     })
 
 
     describe('beforeDestroy()', function(){
-      it('gets called', function(next){
-        store.ready(function(){
+      it('gets called', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.find(1, function(phil){
+          return User.find(1, function(phil){
             phil.login = 'max'
-            phil.destroy(function(result){
-              result.should.be.equal(false)
-              next()
-            })
+            return phil.destroy()
           })
         })
+        .should.be.rejectedWith(Error, {message: 'stop from user before'})
       })
     })
 
     describe('afterDestroy()', function(){
-      it('gets called', function(next){
-        store.ready(function(){
+      it('gets called', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.find(1, function(phil){
+          return User.find(1, function(phil){
             phil.login = 'maxi'
-            phil.destroy(function(result){
-              result.should.be.equal(false)
-
-              User.find(1, function(phil){
-                should.exist(phil)
-                phil.login.should.be.equal('phil')
-                next()
-              })
-            })
+            return phil.destroy()
           })
-        })
+        }).should.be.rejectedWith(Error, {message: 'stop from user after'})
       })
     })
 
 
     describe('destroy()', function(){
-      it('destroy a single record', function(next){
-        store.ready(function(){
+      it('destroy a single record', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.find(1, function(phil){
+          return User.find(1, function(phil){
             phil.login.should.be.equal('phil')
 
-            phil.destroy(function(result){
-              result.should.be.equal(true)
-
-              User.find(1, function(phil){
+            return phil.destroy()
+            .then(function(){
+              return User.find(1, function(phil){
                 should.not.exist(phil)
-                next()
               })
-            })
-          })
-        })
-      })
-
-
-      it('has the right scope', function(next){
-        store.ready(function(){
-          var User = store.Model('User')
-          User.find(2, function(michl){
-            michl.login.should.be.equal('michl')
-
-            michl.destroy(function(result){
-              result.should.be.equal(true)
-              michl.should.be.equal(this)
-              next()
             })
           })
         })
@@ -122,35 +94,31 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('deleteAll()', function(){
-      it('delets all records without calling beforeDestroy or afterDestroy', function(next){
-        store.ready(function(){
+      it('delets all records without calling beforeDestroy or afterDestroy', function(){
+        return store.ready(function(){
           var Thread = store.Model('Thread')
-          Thread.where({title_like: 'delete'}).deleteAll(function(success){
-            success.should.be.equal(true)
-
-            Thread.where({title_like: 'delete'}).count().exec(function(result){
+          return Thread.where({title_like: 'delete'}).deleteAll()
+          .then(function(){
+            return Thread.where({title_like: 'delete'}).count().exec(function(result){
               result.should.be.equal(0)
-              next()
             })
           })
         })
       })
 
 
-      it('delets all records of a relation', function(next){
-        store.ready(function(){
+      it('delets all records of a relation', function(){
+        return store.ready(function(){
           var Thread = store.Model('Thread')
           var Post = store.Model('Post')
 
-          Thread.find(1, function(thread){
+          return Thread.find(1, function(thread){
             should.exist(thread)
 
-            thread.posts.deleteAll(function(success){
-              success.should.be.equal(true)
-
-              Post.where({thread_id: thread.id}).count().exec(function(result){
+            return thread.posts.deleteAll()
+            .then(function(){
+              return Post.where({thread_id: thread.id}).count().exec(function(result){
                 result.should.be.equal(0)
-                next()
               })
             })
           })
@@ -160,19 +128,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('destroyAll()', function(){
-      it('delets all records with calling beforeDestroy or afterDestroy', function(next){
-        store.ready(function(){
+      it('delets all records with calling beforeDestroy or afterDestroy', function(){
+        return store.ready(function(){
           var Thread = store.Model('Thread')
 
-          Thread.where({title_like: 'destroy'}).destroyAll(function(success){
-            success.should.be.equal(false)
-
-            Thread.where({title_like: 'destroy'}).count().exec(function(result){
-              result.should.be.equal(1)
-              next()
-            })
-          })
-        })
+          return Thread.where({title_like: 'destroy'}).destroyAll()
+        }).should.be.rejectedWith(Error, {message: 'stop from thread before'})
       })
     })
   })

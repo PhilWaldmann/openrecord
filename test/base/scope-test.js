@@ -1,6 +1,6 @@
 var should = require('should')
 
-var Store = require('../../lib/store')
+var Store = require('../../store/base')
 
 describe('Scope', function(){
   var store = new Store()
@@ -12,10 +12,9 @@ describe('Scope', function(){
   })
 
   var User
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
-      next()
     })
   })
 
@@ -39,9 +38,9 @@ describe('Default Scope', function(){
 
     this.scope('test', function(){
       this.temporaryDefinition()
-        .instanceMethods['test'] = function(){
-          return 'test'
-        }
+      .instanceMethods['test'] = function(){
+        return 'test'
+      }
     })
 
     this.scope('admin', function(){
@@ -50,10 +49,9 @@ describe('Default Scope', function(){
   })
 
   var User
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
-      next()
     })
   })
 

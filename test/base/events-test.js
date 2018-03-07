@@ -1,9 +1,13 @@
 var should = require('should')
 
-var Store = require('../../lib/store')
+var Store = require('../../store/base')
 
 describe('Events', function(){
   var store = new Store()
+
+  before(function(){
+    return store.ready()
+  })
 
 
   describe('Store', function(){

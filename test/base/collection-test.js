@@ -1,6 +1,6 @@
 var should = require('should')
 
-var Store = require('../../lib/store')
+var Store = require('../../store/base')
 
 describe('Collection', function(){
   var store = new Store()
@@ -12,8 +12,10 @@ describe('Collection', function(){
   var User, Chain
 
   before(function(){
-    User = store.Model('User')
-    Chain = User.chain()
+    return store.ready(function(){
+      User = store.Model('User')
+      Chain = User.chain()
+    })
   })
 
 
@@ -23,10 +25,6 @@ describe('Collection', function(){
 
   it('chained model has remove()', function(){
     should.exist(Chain.remove)
-  })
-
-  it('chained model has each()', function(){
-    should.exist(Chain.each)
   })
 
 
@@ -79,27 +77,6 @@ describe('Collection', function(){
 
 
 
-  describe('each()', function(){
-    var Chain
-
-    before(function(){
-      Chain = User.chain()
-      Chain.add({login: 'phil'})
-      Chain.add({login: 'admin'})
-      Chain.add({login: 'michl'})
-    })
-
-    it('loops all records', function(){
-      var tmp = []
-      Chain.each(function(record){
-        tmp.push(record)
-      })
-
-      tmp[0].should.be.equal(Chain[0])
-      tmp.length.should.be.eql(Chain.length)
-    })
-  })
-
 
 
   describe('new()', function(){
@@ -145,14 +122,5 @@ describe('Collection', function(){
       Chain[1].login.should.be.equal('max')
       Chain[2].login.should.be.equal('max')
     })
-
-    /* //do we really want to get callbacks called multiple times?
-    it('all.isValid()', function(done){
-      Chain.all.isValid(function(valid){
-        console.log('VALID', valid);
-        done();
-      });
-    });
-    */
   })
 })

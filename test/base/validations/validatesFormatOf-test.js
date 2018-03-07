@@ -1,4 +1,4 @@
-var Store = require('../../../lib/store')
+var Store = require('../../../store/base')
 
 
 
@@ -11,36 +11,31 @@ describe('validatesFormatOf()', function(){
   })
 
   var User, valid, invalid
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
       valid = new User({mail: 'philipp@email.com'})
       invalid = new User({mail: 'not.a.valid@email!'})
-
-      next()
     })
   })
 
 
 
-  it('returns true on valid records', function(done){
-    valid.isValid(function(valid){
+  it('returns true on valid records', function(){
+    return valid.isValid(function(valid){
       valid.should.be.equal(true)
-      done()
     })
   })
 
-  it('returns false on invalid records', function(done){
-    invalid.isValid(function(valid){
+  it('returns false on invalid records', function(){
+    return invalid.isValid(function(valid){
       valid.should.be.equal(false)
-      done()
     })
   })
 
-  it('returns the right error message', function(done){
-    invalid.isValid(function(valid){
-      invalid.errors.should.have.property('mail')
-      done()
+  it('returns the right error message', function(){
+    return invalid.isValid(function(valid){
+      invalid.errors.toJSON().should.have.property('mail')
     })
   })
 
@@ -68,13 +63,13 @@ describe('validatesFormatOf()', function(){
     })
 
     var User, valid, invalid, invalid2
-    before(function(next){
-      store.ready(function(){
+    before(function(){
+      return store.ready(function(){
         User = store.Model('User')
         valid = new User({
           email: 'philipp@email.com',
           login: 'philipp@email.com',
-          user_url: 'http://www.s-team.at',
+          user_url: 'http://www.digitalbits.at',
           user_ip: '10.20.30.40',
           user_uuid: '550e8400-e29b-41d4-a716-446655440000',
           created_at: new Date(),
@@ -84,7 +79,7 @@ describe('validatesFormatOf()', function(){
         invalid = new User({
           email: 'not.a.valid@email!',
           login: 'phil',
-          user_url: 'http:www.s-team.at',
+          user_url: 'http:www.digitalbits.at',
           user_ip: '10.620.30.40',
           user_uuid: '550e8400-ZZZZ-41d4-a716-446655440000',
           created_at: 'tomorrow',
@@ -95,44 +90,39 @@ describe('validatesFormatOf()', function(){
         invalid2 = new User({
           login: 'phil'
         })
-
-        next()
       })
     })
 
 
 
-    it('returns true on valid records', function(done){
-      valid.isValid(function(_valid){
+    it('returns true on valid records', function(){
+      return valid.isValid(function(_valid){
         _valid.should.be.equal(true)
-        done()
       })
     })
 
-    it('returns false on invalid records', function(done){
-      invalid.isValid(function(valid){
+    it('returns false on invalid records', function(){
+      return invalid.isValid(function(valid){
         valid.should.be.equal(false)
-        done()
       })
     })
 
-    it('returns false on invalid records (second field)', function(done){
-      invalid2.isValid(function(valid){
+    it('returns false on invalid records (second field)', function(){
+      return invalid2.isValid(function(valid){
         valid.should.be.equal(false)
-        done()
       })
     })
 
-    it('returns the right error message', function(done){
-      invalid.isValid(function(valid){
-        invalid.errors.should.have.property('email')
-        invalid.errors.should.have.property('user_url')
-        invalid.errors.should.have.property('user_ip')
-        invalid.errors.should.have.property('user_uuid')
-        invalid.errors.should.have.property('created_at')
-        invalid.errors.should.have.property('blocked_at')
-        invalid.errors.should.have.property('first_name')
-        done()
+    it('returns the right error message', function(){
+      return invalid.isValid(function(valid){
+        const errors = invalid.errors.toJSON()
+        errors.should.have.property('email')
+        errors.should.have.property('user_url')
+        errors.should.have.property('user_ip')
+        errors.should.have.property('user_uuid')
+        errors.should.have.property('created_at')
+        errors.should.have.property('blocked_at')
+        errors.should.have.property('first_name')
       })
     })
   })

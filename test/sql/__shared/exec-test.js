@@ -1,5 +1,4 @@
-var should = require('should')
-var Store = require('../../../lib/store')
+var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
@@ -14,39 +13,17 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       store = new Store(storeConf)
-      store.setMaxListeners(0)
-      store.on('exception', function(){})
+
+
 
       store.Model('User', function(){})
-      store.Model('Stop', function(){
-        this.beforeFind(function(){
-          return false
-        })
-      })
     })
 
-    it('throws an error on unknown table', function(next){
-      store.throw = false
-      store.ready(function(){
+    it('throws an error on unknown table', function(){
+      return store.ready(function(){
         var User = store.Model('User')
-        User.where({login_like: 'phi'}).exec(function(){
-
-        }, function(err){
-          err.should.be.an.instanceof(Error)
-          next()
-        })
-      })
-    })
-
-
-    it('returns null', function(next){
-      store.ready(function(){
-        var Stop = store.Model('Stop')
-        Stop.where({login_like: 'phi'}).exec(function(result){
-          should.not.exists(result)
-          next()
-        })
-      })
+        return User.where({login_like: 'phi'}).exec()
+      }).should.be.rejectedWith(store.Error) // TODO: custom error!!
     })
   })
 }

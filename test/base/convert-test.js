@@ -1,4 +1,4 @@
-var Store = require('../../lib/store')
+var Store = require('../../store/base')
 
 describe('Convert', function(){
   describe('convertInput()', function(){
@@ -15,7 +15,7 @@ describe('Convert', function(){
 
     var User, user
     before(function(){
-      store.ready(function(){
+      return store.ready(function(){
         User = store.Model('User')
         user = new User({login: 'admin', other: 'foo'})
       })
@@ -49,7 +49,7 @@ describe('Convert', function(){
 
     var User, user
     before(function(){
-      store.ready(function(){
+      return store.ready(function(){
         User = store.Model('User')
         user = new User({login: 'admin', other: 'foo'})
       })

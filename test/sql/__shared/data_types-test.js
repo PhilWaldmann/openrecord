@@ -1,4 +1,4 @@
-var Store = require('../../../lib/store')
+var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
@@ -13,7 +13,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+
 
       store.Model('User', function(){})
     })
@@ -21,30 +21,27 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('cast()', function(){
-      it('casts BLOB to string', function(next){
-        store.ready(function(){
+      it('casts BLOB to string', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.definition.cast('my_blob', 45454, 'read').should.be.equal('45454')
-          next()
+          return User.definition.cast('my_blob', 45454, 'read').should.be.equal('45454')
         })
       })
 
 
-      it('casts INTEGER to number', function(next){
-        store.ready(function(){
+      it('casts INTEGER to number', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.definition.cast('my_integer', '123.55', 'read').should.be.equal(123)
-          next()
+          return User.definition.cast('my_integer', '123.55', 'read').should.be.equal(123)
         })
       })
 
 
 
-      it('casts REAL to float', function(next){
-        store.ready(function(){
+      it('casts REAL to float', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.definition.cast('my_real', '123.55', 'read').should.be.equal(123.55)
-          next()
+          return User.definition.cast('my_real', '123.55', 'read').should.be.equal(123.55)
         })
       })
     })

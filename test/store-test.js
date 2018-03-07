@@ -4,7 +4,7 @@ var path = require('path')
 var Store = require('../lib/store')
 
 describe('Store: Base', function(){
-  describe('is a function', function(){
+  it('is a function', function(){
     Store.should.be.a.Function()
   })
 
@@ -26,14 +26,16 @@ describe('Store: Base', function(){
     describe('without params', function(){
       var store = new Store()
 
-      store.Model('User', function(done){
-        done()
+      store.Model('User', function(){
+
       })
 
 
       it('returns the model', function(){
-        var User = store.Model('User')
-        should.exist(User)
+        return store.ready(function(){
+          var User = store.Model('User')
+          should.exist(User)
+        })
       })
     })
 
@@ -45,8 +47,10 @@ describe('Store: Base', function(){
       })
 
       it('returns the model', function(){
-        var User = store.Model('User')
-        should.exist(User)
+        return store.ready(function(){
+          var User = store.Model('User')
+          should.exist(User)
+        })
       })
     })
 
@@ -56,12 +60,14 @@ describe('Store: Base', function(){
         global: true
       })
 
-      store.Model('User', function(done){
-        done()
+      store.Model('User', function(){
+
       })
 
       it('creates global models', function(){
-        should.exist(User)
+        return store.ready(function(){
+          should.exist(User)
+        })
       })
     })
   })
@@ -69,61 +75,73 @@ describe('Store: Base', function(){
   describe('ready()', function(){
     var store = new Store()
 
-    store.Model('User', function(done){
-      done()
+    store.Model('User', function(){
+
     })
 
-    store.Model('Post', function(done){
-      setTimeout(done, 30)
+    store.Model('Post', function(){
+      return new Promise(function(resolve){
+        setTimeout(resolve, 30)
+      })
     })
 
-    it('will be called after all models are ready', function(done){
-      store.ready(function(){
+    it('will be called after all models are ready', function(){
+      return store.ready(function(){
         should.exist(store.Model('User'))
         should.exist(store.Model('Post'))
-        done()
+        return 'finished'
       })
+      .should.be.fulfilledWith('finished')
     })
   })
 
 
 
   describe('ready() with more models', function(){
-    it('will be called after all models are ready', function(done){
+    it('will be called after all models are ready', function(){
       var store = new Store()
 
-      store.Model('A', function(done){
-        done()
+      store.Model('A', function(){
+
       })
 
-      store.Model('B', function(done){
-        setTimeout(done, 1)
+      store.Model('B', function(){
+        return new Promise(function(resolve){
+          setTimeout(resolve, 1)
+        })
       })
 
-      store.Model('C', function(done){
-        setTimeout(done, 5)
+      store.Model('C', function(){
+        return new Promise(function(resolve){
+          setTimeout(resolve, 5)
+        })
       })
 
-      store.Model('D', function(done){
-        setTimeout(done, 10)
+      store.Model('D', function(){
+        return new Promise(function(resolve){
+          setTimeout(resolve, 10)
+        })
       })
 
-      store.Model('E', function(done){
-        setTimeout(done, 7)
+      store.Model('E', function(){
+        return new Promise(function(resolve){
+          setTimeout(resolve, 7)
+        })
       })
 
-      store.Model('F', function(done){
-        setTimeout(done, 5)
+      store.Model('F', function(){
+        return new Promise(function(resolve){
+          setTimeout(resolve, 5)
+        })
       })
 
-      store.ready(function(){
+      return store.ready(function(){
         should.exist(store.Model('A'))
         should.exist(store.Model('B'))
         should.exist(store.Model('C'))
         should.exist(store.Model('D'))
         should.exist(store.Model('E'))
         should.exist(store.Model('F'))
-        done()
       })
     })
   })
@@ -133,73 +151,120 @@ describe('Store: Base', function(){
   describe('ready() with any models', function(){
     var store = new Store()
 
-    it('will be called after all models are ready', function(done){
-      store.ready(function(){
-        done()
+    it('will be called after all models are ready', function(){
+      return store.ready(function(){
+        return 'finished'
       })
+      .should.be.fulfilledWith('finished')
     })
   })
 
 
 
-  describe('loads models via models:"path/*" config', function(){
+  describe('loads models via models:"path/*" config (+ plugin)', function(){
     var store = new Store({
-      models: path.join(__dirname, 'fixtures', 'models', '*.js')
+      models: path.join(__dirname, 'fixtures', 'models', '*.js'),
+      plugins: [require('../lib/base/dynamic_loading')]
     })
 
-    it('models are loaded', function(next){
-      store.ready(function(){
+    it('models are loaded', function(){
+      return store.ready(function(){
         should.exist(store.Model('User'))
         should.exist(store.Model('CamelCasedModel'))
-        next()
       })
     })
   })
 
 
-  describe('loads models via models:"path/*" config and uses the function name instead of filename', function(){
+  describe('loads models via models:"path/*" config (+ plugin) and uses the function name instead of filename', function(){
     var store = new Store({
-      models: path.join(__dirname, 'fixtures', 'models', '*.js')
+      models: path.join(__dirname, 'fixtures', 'models', '*.js'),
+      plugins: [require('../lib/base/dynamic_loading')]
     })
 
-    it('models are loaded', function(next){
-      store.ready(function(){
+    it('models are loaded', function(){
+      return store.ready(function(){
         should.exist(store.Model('RightName'))
-        next()
       })
     })
 
-    it('model has loaded required plugins (attributes)', function(next){
-      store.ready(function(){
+    it('model has loaded required plugins (attributes)', function(){
+      return store.ready(function(){
         should.exist(store.Model('User').definition.attributes.login)
-        next()
       })
     })
 
-    it('model has loaded required plugins (model methods)', function(next){
-      store.ready(function(){
+    it('model has loaded required plugins (model methods)', function(){
+      return store.ready(function(){
         should.exist(store.Model('User').foobar)
         store.Model('User').foobar().should.be.equal('foo')
-        next()
+      })
+    })
+  })
+
+  describe('loads models via require (array)', function(){
+    var store = new Store({
+      models: [
+        require('./fixtures/models/camel_cased_model'),
+        require('./fixtures/models/other_name'),
+        require('./fixtures/models/user')
+      ]
+    })
+
+    it('only one model is loaded', function(){
+      return store.ready(function(){
+        should.exist(store.Model('RightName'))
+        store.models.should.not.have.key('user')
+      })
+    })
+  })
+
+
+  describe('loads models via require (object)', function(){
+    var store = new Store({
+      models: {
+        CamelCasedModel: require('./fixtures/models/camel_cased_model'),
+        OtherName: require('./fixtures/models/other_name'),
+        User: require('./fixtures/models/user')
+      }
+    })
+
+    it('models are loaded', function(){
+      return store.ready(function(){
+        should.exist(store.Model('RightName'))
+        should.exist(store.Model('User'))
+        should.exist(store.Model('RightName'))
+      })
+    })
+
+    it('model has loaded required plugins (attributes)', function(){
+      return store.ready(function(){
+        should.exist(store.Model('User').definition.attributes.login)
+      })
+    })
+
+    it('model has loaded required plugins (model methods)', function(){
+      return store.ready(function(){
+        should.exist(store.Model('User').foobar)
+        store.Model('User').foobar().should.be.equal('foo')
       })
     })
   })
 
 
 
-  describe('loads plugins via plugins:"path/*" config', function(){
+  describe('loads plugins ', function(){
     var store = new Store({
-      plugins: path.join(__dirname, 'fixtures', 'plugins', '*.js')
+      plugins: require(path.join(__dirname, 'fixtures', 'plugins', 'test-plugin.js'))
     })
 
     it('plugins are loaded on the store', function(){
       store.myStoreFunction.should.be.a.Function()
     })
 
-    it('plugins are loaded on the store', function(next){
+    it('plugins are loaded on the store', function(){
       store.Model('test', function(){
         this.myDefinitionFunction.should.be.a.Function()
-        next()
       })
     })
   })
@@ -207,18 +272,17 @@ describe('Store: Base', function(){
 
   describe('plugin overrides method', function(){
     var store = new Store({
-      plugins: path.join(__dirname, 'fixtures', 'plugins', '*.js')
+      plugins: [require(path.join(__dirname, 'fixtures', 'plugins', 'test-plugin.js'))]
     })
 
-    it('calls parent()', function(next){
+    it('calls parent()', function(){
       store.Model('A', 'B', function(){
         this.attribute('test', String)
       })
 
-      store.ready(function(){
+      return store.ready(function(){
         var AB = store.Model('A', 'B')
         AB.definition.attributes.should.have.property('test')
-        next()
       })
     })
   })

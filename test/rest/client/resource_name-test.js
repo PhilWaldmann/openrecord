@@ -15,27 +15,24 @@ describe('REST Client: Resource Name', function(){
   })
 
 
-  it('has the right resource name', function(next){
-    store.ready(function(){
+  it('has the right resource name', function(){
+    return store.ready(function(){
       var User = store.Model('User')
       User.definition.resource.should.be.equal('users')
-      next()
     })
   })
 
-  it('has the right resource name on camelcased models', function(next){
-    store.ready(function(){
+  it('has the right resource name on camelcased models', function(){
+    return store.ready(function(){
       var CamelCasedResourceName = store.Model('CamelCasedResourceName')
       CamelCasedResourceName.definition.resource.should.be.equal('camel_cased_resource_names')
-      next()
     })
   })
 
-  it('returns a model by it\'s resource name', function(next){
-    store.ready(function(){
+  it('returns a model by it\'s resource name', function(){
+    return store.ready(function(){
       var CamelCasedResourceName = store.getByResource('camel_cased_resource_names')
       CamelCasedResourceName.definition.resource.should.be.equal('camel_cased_resource_names')
-      next()
     })
   })
 })

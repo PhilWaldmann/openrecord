@@ -1,6 +1,6 @@
 var should = require('should')
 
-var Store = require('../../lib/store')
+var Store = require('../../store/base')
 
 describe('Attributes', function(){
   var store = new Store()
@@ -24,15 +24,18 @@ describe('Attributes', function(){
     this.attribute('my_date', Date, {})
     this.attribute('my_number', Number, {})
     this.attribute('my_bool', Boolean, {})
+
+    this.variant('my_str', function(value, args, record){
+      return value.substr(0, args.size)
+    })
   })
 
   var User, phil
 
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
       phil = new User()
-      next()
     })
   })
 
@@ -259,14 +262,35 @@ describe('Attributes', function(){
 
 
   describe('unknown type', function(){
-    it('throws an Error', function(next){
+    it('throws an Error', function(){
       store.Model('Test', function(){
-        var self = this;
-        (function(){
-          self.attribute('my_attr', 'unknown_type')
-        }).should.throw()
-        next()
+        this.attribute('my_attr', 'unknown_type')
       })
+      return store.ready()
+      .should.be.rejectedWith(store.UnknownAttributeTypeError, {message: 'Unknown attribute type "unknown_type"'})
+    })
+  })
+
+
+  describe('variants', function(){
+    var user
+
+    before(function(){
+      user = new User({
+        my_str: 'phil'
+      })
+    })
+
+    it('if a attribute variant is defined there is a special attr_name$() method', function(next){
+      should.exist(user.my_str$)
+      user.my_str$.should.be.a.Function()
+      next()
+    })
+
+
+    it('variant returns the right value', function(next){
+      user.my_str$({size: 2}).should.be.equal('ph')
+      next()
     })
   })
 })

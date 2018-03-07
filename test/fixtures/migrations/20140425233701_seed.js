@@ -1,9 +1,6 @@
 module.exports = function(){
-  this.seed(function(store, done){
+  this.seed(function(store){
     var User = store.Model('User')
-
-    User.create({login: 'phil'}).then(function(success){
-      done()
-    })
+    return User.create({login: 'phil'})
   })
 }

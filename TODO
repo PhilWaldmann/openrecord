@@ -1,0 +1,51 @@
+[x] remove internal exception handling and put everything into promises
+[x] remove async in favor of promises
+[ ] test all exceptions
+[ ] insert multiple records at once
+
+[x] graphql variant test
+[ ] graphql pagination -> mit cursor?! + pageInfo
+[x] graphql felder ausblenden
+[x] graphql existierendes Feld vom Typ komplett ändern
+    z.B. composite => string mit Param
+[x] graphql relationen ausblenden
+[ ] graphql relation pagination
+[x] graphql existierendes Relation vom Typ komplett ändern
+    mit Params
+[x] graphql bring you own schema
+
+
+[ ] definition: this.has() relation testen
+
+neue Typen hinzufügen
+
+[ ] postgres composite type query
+
+[ ] fix skipped tests -> specially include :totalCount
+
+[x] remove store.handleException
+
+[ ] faster class initialisation !!! Model initialisation braucht zu lange!
+
+[ ] `this.belongsTo('alternative', {model: 'Food', foreign_key: 'food_id'})` sollte kein foreign_key brauchen!
+
+[ ] Change DEBUG=*
+
+[ ] Broken relations should not load without any conditions!
+
+[ ] lazy connection -> one Promise for all record relations - which will load relations bulk!
+
+[ ] limit(1) should return an array as well
+
+[ ] combine sql, rest and ldap `relation` before and after save hooks
+
+
+BREAKING CHANGES:
+`plugins` and `models` store config does not autoload via `glob`
+`paranoid` plugin scope is not `withDeleted`
+`join()` does an inner join by default
+failed validations will throw an error
+`save`, `delete`, `create`,... won't return `success`, but instead the record itself
+hooks must return a promise. The `done` callback was removed
+`create`, `save`, `destroy`, ... won't take callbacks any more. use `.then(callback)`
+relations wont be saved anymore. except you set autoSave to `true`

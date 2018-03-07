@@ -1,7 +1,7 @@
 var should = require('should')
 var path = require('path')
 
-var Store = require('../../../lib/store')
+var Store = require('../../../store/postgres')
 
 
 describe('Postgres: Json/Jsonb Attributes', function(){
@@ -22,13 +22,11 @@ describe('Postgres: Json/Jsonb Attributes', function(){
       database: database,
       user: 'postgres',
       password: '',
-      migrations: path.join(__dirname, 'fixtures', 'migrations', '*')
+      migrations: path.join(__dirname, 'fixtures', 'migrations', '*'),
+      plugins: require('../../../lib/base/dynamic_loading')
     })
 
     store.Model('JsonTest', function(){})
-
-    store.setMaxListeners(0)
-    store.on('exception', function(){})
   })
 
   after(function(next){
@@ -36,87 +34,95 @@ describe('Postgres: Json/Jsonb Attributes', function(){
   })
 
 
-  it('writes and ready json data', function(next){
-    store.ready(function(){
+  it('writes and ready json data', function(){
+    return store.ready(function(){
       var JsonTest = store.Model('JsonTest')
       var test = new JsonTest({ json_attr: {foo: {bar: [1, 2, 3]}} })
 
-      test.save(function(success) {
-        success.should.be.equal(true)
-
-        JsonTest.find(test.id).exec(function(t){
+      return test.save()
+      .then(function() {
+        return JsonTest.find(test.id).exec(function(t){
           t.json_attr.should.be.eql({foo: {bar: [1, 2, 3]}})
-          next()
         })
       })
     })
   })
 
-  it('writes and ready jsonb data', function(next){
-    store.ready(function(){
+  it('writes and ready jsonb data', function(){
+    return store.ready(function(){
       var JsonTest = store.Model('JsonTest')
       var test = new JsonTest({ jsonb_attr: {foo: {bar: [1, 2, 3]}} })
 
-      test.save(function(success) {
-        success.should.be.equal(true)
-
-        JsonTest.find(test.id).exec(function(t){
+      return test.save()
+      .then(function() {
+        return JsonTest.find(test.id).exec(function(t){
           t.jsonb_attr.should.be.eql({foo: {bar: [1, 2, 3]}})
-          next()
         })
       })
     })
   })
 
-  it('updates json data', function(next){
-    store.ready(function(){
+  it('updates json data', function(){
+    return store.ready(function(){
       var JsonTest = store.Model('JsonTest')
 
-      JsonTest.find(1).exec(function(test){
+      return JsonTest.find(1).exec(function(test){
         test.json_attr.foo.bar.push(4)
         test.json_attr.bar = 'test'
 
-        test.save(function(success){
-          success.should.be.equal(true)
-
-          JsonTest.find(test.id).exec(function(t){
+        return test.save()
+        .then(function(){
+          return JsonTest.find(test.id).exec(function(t){
             t.json_attr.should.be.eql({foo: {bar: [1, 2, 3, 4]}, bar: 'test'})
-            next()
           })
         })
       })
     })
   })
 
-
-  it('sort by json attribute', function(next){
-    store.ready(function(){
+  it('sort by json attribute', function(){
+    return store.ready(function(){
       var JsonTest = store.Model('JsonTest')
       var test = new JsonTest({ json_attr: {bar: 'foo'} })
 
-      test.save(function(success) {
-        success.should.be.equal(true)
-
-        JsonTest.order('json_attr.bar').exec(function(result){
+      return test.save()
+      .then(function() {
+        return JsonTest.order('json_attr.bar').exec(function(result){
           result[0].json_attr.bar.should.be.equal('foo')
           result[1].json_attr.bar.should.be.equal('test')
           should.not.exist(result[2].json_attr.bar)
           result.length.should.be.equal(3)
-          next()
         })
       })
     })
   })
 
 
-  it('condition with json attribute', function(next){
-    store.ready(function(){
+  it('condition with json attribute', function(){
+    return store.ready(function(){
       var JsonTest = store.Model('JsonTest')
 
-      JsonTest.where({json_attr: {bar: 'test'}}).exec(function(result){
+      return JsonTest.where({json_attr: {bar: 'test'}}).exec(function(result){
         result[0].json_attr.bar.should.be.equal('test')
         result.length.should.be.equal(1)
-        next()
+      })
+    })
+  })
+
+
+  it('updates json data (root)', function(){
+    return store.ready(function(){
+      var JsonTest = store.Model('JsonTest')
+
+      return JsonTest.find(1).exec(function(test){
+        test.json_attr = [{a: 1, b: 2}, {b: 2}]
+
+        return test.save()
+        .then(function(){
+          return JsonTest.find(test.id).exec(function(t){
+            t.json_attr.should.be.eql([{a: 1, b: 2}, {b: 2}])
+          })
+        })
       })
     })
   })

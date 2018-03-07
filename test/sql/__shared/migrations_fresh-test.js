@@ -1,6 +1,6 @@
 var should = require('should')
 var path = require('path')
-var Store = require('../../../lib/store')
+var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
@@ -14,9 +14,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       storeConf.migrations = path.join(__dirname, '..', '..', 'fixtures', 'migrations', '*')
+      storeConf.plugins = require('../../../lib/base/dynamic_loading')
 
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+
 
       store.Model('User', function(){})
       store.Model('Post', function(){})
@@ -27,70 +28,58 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
 
-    it('are finished before ready() gets called', function(next){
-      store.ready(function(){
+    it('are finished before ready() gets called', function(){
+      return store.ready(function(){
         var User = store.Model('User')
         should.exist(User)
-        next()
       })
     })
 
 
-    it('has all attributes loaded', function(next){
-      store.ready(function(){
+    it('has all attributes loaded', function(){
+      return store.ready(function(){
         var User = store.Model('User')
         User.definition.attributes.should.have.property('id')
         User.definition.attributes.should.have.property('login')
         User.definition.attributes.should.have.property('first_name')
         User.definition.attributes.should.have.property('last_name')
-        next()
       })
     })
 
 
-    it('has a primary key', function(next){
-      store.ready(function(){
+    it('has a primary key', function(){
+      return store.ready(function(){
         var User = store.Model('User')
         User.definition.primary_keys.length.should.be.equal(1)
         User.definition.primary_keys.should.be.eql(['id'])
-        next()
       })
     })
 
 
-    it('has not_null definition', function(next){
-      store.ready(function(){
+    it('has not_null definition', function(){
+      return store.ready(function(){
         var User = store.Model('User')
 
         User.definition.attributes.id.notnull.should.be.equal(true)
         User.definition.attributes.login.notnull.should.be.equal(true)
         User.definition.attributes.first_name.notnull.should.be.equal(false)
-
-        next()
       })
     })
 
 
-    it('second migrations was executed as well', function(next){
-      store.ready(function(){
+    it('second migrations was executed as well', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
 
         Post.definition.attributes.should.have.property('id')
-
-        if(store.type === 'postgres' || store.type === 'mysql'){
-          Post.definition.attributes.should.have.property('message')
-        }else{
-          Post.definition.attributes.should.have.property('messages') // SQLite3 Support in knex is not yet finished
-        }
-
-        next()
+        Post.definition.attributes.should.have.property('message')
       })
     })
 
 
 
-    it('has the right data type', function(next){
-      store.ready(function(){
+    it('has the right data type', function(){
+      return store.ready(function(){
         var AttributeTest = store.Model('AttributeTest')
 
         AttributeTest.definition.attributes.string_attr.type.name.should.be.equal('string')
@@ -108,117 +97,105 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           AttributeTest.definition.attributes.binary_attr.type.name.should.be.equal('string') // TODO: SHOULD BE binary
           AttributeTest.definition.attributes.time_attr.type.name.should.be.equal('string') // TODO: SHOULD BE time
         }
-
-        next()
       })
     })
 
 
 
-    it('has all stampable() attributes', function(next){
-      store.ready(function(){
+    it('has all stampable() attributes', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
         Post.definition.attributes.should.have.property('updated_at')
         Post.definition.attributes.should.have.property('created_at')
         Post.definition.attributes.should.have.property('updater_id')
         Post.definition.attributes.should.have.property('creator_id')
-        next()
       })
     })
 
 
-    it('has all polymorph() attributes', function(next){
-      store.ready(function(){
+    it('has all polymorph() attributes', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
         Post.definition.attributes.should.have.property('foo_id')
         Post.definition.attributes.should.have.property('foo_type')
-        next()
       })
     })
 
 
-    it('has all nestedSet() attributes', function(next){
-      store.ready(function(){
+    it('has all nestedSet() attributes', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
         Post.definition.attributes.should.have.property('lft')
         Post.definition.attributes.should.have.property('rgt')
         Post.definition.attributes.should.have.property('depth')
         Post.definition.attributes.should.have.property('parent_id')
-        next()
       })
     })
 
 
-    it('has all paranoid() attributes', function(next){
-      store.ready(function(){
+    it('has all paranoid() attributes', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
         Post.definition.attributes.should.have.property('deleted_at')
         Post.definition.attributes.should.have.property('deleter_id')
-        next()
       })
     })
 
 
-    it('has created a view', function(next){
-      store.ready(function(){
+    it('has created a view', function(){
+      return store.ready(function(){
         var Test = store.Model('Test')
-
-        Test.find(1).exec(function(user){
+        return Test.find(1).exec(function(user){
           user.login.should.be.equal('phil')
-          next()
         })
       })
     })
 
 
-    it('has seeded some records', function(next){
-      store.ready(function(){
+    it('has seeded some records', function(){
+      return store.ready(function(){
         var User = store.Model('User')
 
-        User.find(1).exec(function(user){
+        return User.find(1).exec(function(user){
           user.login.should.be.equal('phil')
-          next()
         })
       })
     })
 
 
-    it('has default text value', function(next){
-      store.ready(function(){
+    it('has default text value', function(){
+      return store.ready(function(){
         var AttributeTest = store.Model('AttributeTest')
 
-        AttributeTest.create().then(function(){
-          AttributeTest.find(this.id).exec(function(record){
+        return AttributeTest.create().then(function(){
+          return AttributeTest.find(this.id).exec(function(record){
             record.with_default_text.should.be.equal('foo')
-            next()
           })
         })
       })
     })
 
 
-    it('has default integer value', function(next){
-      store.ready(function(){
+    it('has default integer value', function(){
+      return store.ready(function(){
         var AttributeTest = store.Model('AttributeTest')
 
-        AttributeTest.create().then(function(){
-          AttributeTest.find(this.id).exec(function(record){
+        return AttributeTest.create().then(function(){
+          return AttributeTest.find(this.id).exec(function(record){
             record.with_default_integer.should.be.equal(55)
-            next()
           })
         })
       })
     })
 
 
-    it('has default boolean value', function(next){
-      store.ready(function(){
+    it('has default boolean value', function(){
+      return store.ready(function(){
         var AttributeTest = store.Model('AttributeTest')
 
-        AttributeTest.create().then(function(){
-          AttributeTest.find(this.id).exec(function(record){
+        return AttributeTest.create().then(function(){
+          return AttributeTest.find(this.id).exec(function(record){
             record.with_default_boolean.should.be.equal(true)
-            next()
           })
         })
       })

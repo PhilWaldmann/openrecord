@@ -1,4 +1,4 @@
-var Store = require('../../../lib/store')
+var Store = require('../../../store/postgres')
 
 
 describe('Postgres: Raw Query', function(){
@@ -25,9 +25,6 @@ describe('Postgres: Raw Query', function(){
     })
 
     store.Model('user', function(){})
-
-    store.setMaxListeners(0)
-    store.on('exception', function(){})
   })
 
   after(function(next){
@@ -35,15 +32,14 @@ describe('Postgres: Raw Query', function(){
   })
 
 
-  it('raw() runs the raw sql query', function(next){
-    store.ready(function(){
+  it('raw() runs the raw sql query', function(){
+    return store.ready(function(){
       var User = store.Model('User')
 
-      User.raw('SELECT COUNT(*) FROM users')
-        .then(function(result) {
-          result.rows.should.be.eql([{count: 1}])
-          next()
-        })
+      return User.raw('SELECT COUNT(*) FROM users')
+      .then(function(result) {
+        result.rows.should.be.eql([{count: 1}])
+      })
     })
   })
 })
