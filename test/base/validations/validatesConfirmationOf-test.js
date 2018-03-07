@@ -1,4 +1,4 @@
-var Store = require('../../../lib/store')
+var Store = require('../../../store/base')
 
 
 describe('validatesConfirmationOf()', function(){
@@ -12,36 +12,31 @@ describe('validatesConfirmationOf()', function(){
 
   var User, valid, invalid
 
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
       valid = new User({password: 'my!secret?password', password_confirmation: 'my!secret?password'})
       invalid = new User({password: '1234', password_connfirmation: 'abc'})
-
-      next()
     })
   })
 
 
 
-  it('returns true on valid records', function(done){
-    valid.isValid(function(valid){
+  it('returns true on valid records', function(){
+    return valid.isValid(function(valid){
       valid.should.be.equal(true)
-      done()
     })
   })
 
-  it('returns false on wrong confirmation', function(done){
-    invalid.isValid(function(valid){
+  it('returns false on wrong confirmation', function(){
+    return invalid.isValid(function(valid){
       valid.should.be.equal(false)
-      done()
     })
   })
 
-  it('returns the right error message', function(done){
-    invalid.isValid(function(valid){
-      invalid.errors.should.have.property('password')
-      done()
+  it('returns the right error message', function(){
+    return invalid.isValid(function(valid){
+      invalid.errors.toJSON().should.have.property('password')
     })
   })
 
@@ -61,36 +56,31 @@ describe('validatesConfirmationOf()', function(){
 
     var User, valid, invalid
 
-    before(function(next){
-      store.ready(function(){
+    before(function(){
+      return store.ready(function(){
         User = store.Model('User')
         valid = new User({password: 'my!secret?password', password_confirmation: 'my!secret?password', email: 'philipp@email.com', email_confirmation: 'philipp@email.com'})
         invalid = new User({password: '1234', password_connfirmation: 'abc', email: 'philipp@email.com', email_confirmation: 'philw@gmx.at'})
-
-        next()
       })
     })
 
 
-    it('returns true on valid records', function(done){
-      valid.isValid(function(valid){
+    it('returns true on valid records', function(){
+      return valid.isValid(function(valid){
         valid.should.be.equal(true)
-        done()
       })
     })
 
-    it('returns false on wrong confirmation', function(done){
-      invalid.isValid(function(valid){
+    it('returns false on wrong confirmation', function(){
+      return invalid.isValid(function(valid){
         valid.should.be.equal(false)
-        done()
       })
     })
 
-    it('returns the right error message', function(done){
-      invalid.isValid(function(valid){
-        invalid.errors.should.have.property('password')
-        invalid.errors.should.have.property('email')
-        done()
+    it('returns the right error message', function(){
+      return invalid.isValid(function(valid){
+        invalid.errors.toJSON().should.have.property('password')
+        invalid.errors.toJSON().should.have.property('email')
       })
     })
   })

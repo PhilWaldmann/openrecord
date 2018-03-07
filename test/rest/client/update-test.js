@@ -7,7 +7,8 @@ describe('REST Client: Update', function(){
     store = new Store({
       type: 'rest',
       url: 'http://localhost:8889',
-      version: '~1.0'
+      version: '~1.0',
+      autoSave: true
     })
 
     store.Model('User', function(){
@@ -29,40 +30,33 @@ describe('REST Client: Update', function(){
   })
 
 
-  it('updates a record (update)', function(next){
-    store.ready(function(){
+  it('updates a record (update)', function(){
+    return store.ready(function(){
       var User = store.Model('User')
-      User.find(1).exec(function(record){
+      return User.find(1).exec(function(record){
         record.id.should.be.equal(1)
         record.login = 'philipp'
-        record.save(function(success){
-          success.should.be.equal(true)
-          next()
-        })
+        return record.save()
       })
     })
   })
 
 
-  it('updates nested records (update)', function(next){
-    store.ready(function(){
+  it('updates nested records (update)', function(){
+    return store.ready(function(){
       var User = store.Model('User')
-      User.find(2).include('posts').exec(function(record){
-        record.login = 'michael'
-
+      return User.find(2).include('posts').exec(function(record){
+        record.login.should.be.equal('michl')
         record.posts.length.should.be.equal(1)
 
+        record.login = 'michael'
         record.posts[0].message = 'michaels post'
 
-        record.save(function(success){
-          success.should.be.equal(true)
-
-          User.find(2).include('posts').exec(function(record){
+        return record.save(function(){
+          return User.find(2).include('posts').exec(function(record){
             record.login.should.be.equal('michael')
             record.posts.length.should.be.equal(1)
             record.posts[0].message.should.be.equal('michaels post')
-
-            next()
           })
         })
       })

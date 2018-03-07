@@ -1,4 +1,4 @@
-var Store = require('../../lib/store')
+var Store = require('../../store/base')
 
 describe('Validation', function(){
   describe('validates()', function(){
@@ -7,50 +7,59 @@ describe('Validation', function(){
     store.Model('User', function(){
       this.attribute('login', String)
 
-      this.validates('login', function(next){
+      this.validates('login', function(){
         var context = this
         context.should.have.property('login')
-        setTimeout(function(){
-          if(context.login === 'admin'){
-            next()
-          }else{
-            context.errors.add('login', 'is not admin')
-            next(false)
-          }
-        }, 10)
+
+        return new Promise(function(resolve, reject){
+          setTimeout(function(){
+            if(context.login === 'admin'){
+              resolve()
+            }else{
+              context.errors.add('login', 'is not admin')
+              reject(context.errors)
+            }
+          }, 10)
+        })
       })
     })
 
     var User, valid, invalid
-    before(function(next){
-      store.ready(function(){
+    before(function(){
+      return store.ready(function(){
         User = store.Model('User')
         valid = new User({login: 'admin'})
         invalid = new User({login: 'phil'})
-
-        next()
       })
     })
 
 
-    it('returns true on valid records', function(done){
-      valid.isValid(function(valid){
+    it('returns true on valid records', function(){
+      return valid.isValid(function(valid){
         valid.should.be.equal(true)
-        done()
       })
     })
 
-    it('returns false on invalid records', function(done){
-      invalid.isValid(function(valid){
+    it('returns false on invalid records', function(){
+      return invalid.isValid(function(valid){
         valid.should.be.equal(false)
-        done()
       })
     })
 
-    it('returns the right error message', function(done){
-      invalid.isValid(function(valid){
-        invalid.errors.should.have.property('login')
-        done()
+    it('returns the right error message', function(){
+      return invalid.isValid(function(valid){
+        invalid.errors.toJSON().should.have.property('login')
+      })
+    })
+
+
+    describe('with validate()', function(){
+      it('returns nothing on valid records', function(){
+        return valid.validate().should.be.fulfilled()
+      })
+
+      it('throws an Error on invalid records', function(){
+        return invalid.validate().should.be.rejectedWith(store.ValidationError, { errors: {login: ['is not admin']} })
       })
     })
 
@@ -74,37 +83,45 @@ describe('Validation', function(){
       })
 
       var User, valid, invalid
-      before(function(next){
-        store.ready(function(){
+      before(function(){
+        return store.ready(function(){
           User = store.Model('User')
           valid = new User({login: 'phil', email: 'philipp@email.com'})
           invalid = new User({login: 'philipp@email.com', email: 'philipp@email.com'})
-
-          next()
         })
       })
 
 
 
-      it('returns true on valid records', function(done){
-        valid.isValid(function(valid){
+      it('returns true on valid records', function(){
+        return valid.isValid(function(valid){
           valid.should.be.equal(true)
-          done()
         })
       })
 
-      it('returns false on invalid records', function(done){
-        invalid.isValid(function(valid){
+      it('returns false on invalid records', function(){
+        return invalid.isValid(function(valid){
           valid.should.be.equal(false)
-          done()
         })
       })
 
-      it('returns the right error message', function(done){
-        invalid.isValid(function(valid){
-          invalid.errors.should.not.have.property('login')
-          invalid.errors.should.have.property('base')
-          done()
+      it('returns the right error message', function(){
+        return invalid.isValid(function(valid){
+          invalid.errors.toJSON().should.not.have.property('login')
+          invalid.errors.toJSON().should.have.property('base')
+        })
+      })
+
+
+      describe('with validate()', function(){
+        it('returns nothing on valid records', function(){
+          return valid.validate().should.be.fulfilled()
+        })
+
+        it('throws an ValidationError on invalid records', function(){
+          return invalid.validate().should.be.rejectedWith(store.ValidationError, {
+            errors: {base: []}
+          })
         })
       })
     })

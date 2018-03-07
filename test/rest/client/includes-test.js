@@ -1,4 +1,3 @@
-var should = require('should')
 var Store = require('../../../lib/store')
 
 describe('REST Client: Include', function(){
@@ -31,40 +30,30 @@ describe('REST Client: Include', function(){
 
 
 
-  it('includes a hasMany relation', function(next){
-    store.ready(function(){
+  it('includes a hasMany relation', function(){
+    return store.ready(function(){
       var User = store.Model('User')
 
-      User.include('posts').exec(function(results){
+      return User.include('posts').exec(function(results){
         results.length.should.be.above(3)
         results[0].posts.length.should.be.equal(3)
         results[1].posts.length.should.be.equal(1)
         results[2].posts.length.should.be.equal(0)
-
-        next()
-      }, function(err){
-        should.not.exist(err)
-        next()
       })
     })
   })
 
 
-  it('includes a belongsTo relation', function(next){
-    store.ready(function(){
+  it('includes a belongsTo relation', function(){
+    return store.ready(function(){
       var Post = store.Model('Post')
 
-      Post.include('user').exec(function(results){
+      return Post.include('user').exec(function(results){
         results.length.should.be.equal(5)
         results[0].user.id.should.be.equal(1)
         results[1].user.id.should.be.equal(1)
         results[2].user.id.should.be.equal(1)
         results[3].user.id.should.be.equal(2)
-
-        next()
-      }, function(err){
-        should.not.exist(err)
-        next()
       })
     })
   })

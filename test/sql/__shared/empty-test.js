@@ -1,4 +1,4 @@
-var Store = require('../../../lib/store')
+var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
@@ -13,7 +13,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+
       // Models here
     })
 

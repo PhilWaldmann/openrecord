@@ -37,46 +37,46 @@ describe('LDAP Client: Update', function(){
 
 
 
-  it('updates a records attributes', function(next){
-    store.ready(function(){
+  it('updates a records attributes', function(){
+    return store.ready(function(){
       var User = store.Model('User')
 
-      User.find('cn=change_me, ou=update, dc=test').exec(function(user){
+      return User.find('cn=change_me, ou=update, dc=test').exec(function(user){
         user.username.should.be.equal('change_me')
 
         user.username = 'changed!'
 
-        user.save(function(result){
-          result.should.be.equal(true)
+        return user.save()
+      })
+      .then(function(user){
+        user.username.should.be.equal('changed!')
 
-          User.find('cn=change_me, ou=update, dc=test').exec(function(user){
-            user.username.should.be.equal('changed!')
-            next()
-          })
-        })
+        return User.find('cn=change_me, ou=update, dc=test')
+      })
+      .then(function(user){
+        user.username.should.be.equal('changed!')
       })
     })
   })
 
 
 
-  it('moves a record', function(next){
-    store.ready(function(){
+  it('moves a record', function(){
+    return store.ready(function(){
       var User = store.Model('User')
 
-      User.find('cn=move_me, ou=update, dc=test').exec(function(user){
+      return User.find('cn=move_me, ou=update, dc=test').exec(function(user){
         user.username.should.be.equal('move_me')
         user.dn = 'cn=move_me, ou=target, ou=update, dc=test'
 
-        user.save(function(result){
-          result.should.be.equal(true)
+        return user.save(function(result){
+          result.should.be.equal(user)
 
-          User.find('cn=move_me, ou=update, dc=test').exec(function(user){
+          return User.find('cn=move_me, ou=update, dc=test').exec(function(user){
             should.not.exist(user)
 
-            User.find('cn=move_me, ou=target, ou=update, dc=test').exec(function(user){
+            return User.find('cn=move_me, ou=target, ou=update, dc=test').exec(function(user){
               user.username.should.be.equal('move_me')
-              next()
             })
           })
         })
@@ -85,29 +85,30 @@ describe('LDAP Client: Update', function(){
   })
 
 
-  it('moves and updates a record', function(next){
-    store.ready(function(){
+  it('moves and updates a record', function(){
+    return store.ready(function(){
       var User = store.Model('User')
 
-      User.find('cn=move_and_update_me, ou=update, dc=test').exec(function(user){
+      return User.find('cn=move_and_update_me, ou=update, dc=test')
+      .then(function(user){
         user.username.should.be.equal('move_and_update_me')
 
         user.dn = 'cn=move_and_update_me, ou=target, ou=update, dc=test'
         user.username = 'moved...'
 
-        user.save(function(result){
-          result.should.be.equal(true)
+        return user.save()
+      })
+      .then(function(user){
+        user.username.should.be.equal('moved...')
+        return User.find('cn=move_and_update_me, ou=update, dc=test')
+      })
+      .then(function(user){
+        should.not.exist(user)
 
-          User.find('cn=move_and_update_me, ou=update, dc=test').exec(function(user){
-            should.not.exist(user)
-
-            User.find('cn=move_and_update_me, ou=target, ou=update, dc=test').exec(function(user){
-              user.username.should.be.equal('moved...')
-
-              next()
-            })
-          })
-        })
+        return User.find('cn=move_and_update_me, ou=target, ou=update, dc=test')
+      })
+      .then(function(user){
+        user.username.should.be.equal('moved...')
       })
     })
   })

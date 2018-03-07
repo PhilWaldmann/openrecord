@@ -1,5 +1,5 @@
 var should = require('should')
-var Store = require('../../../../lib/store')
+var Store = require('../../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
@@ -14,7 +14,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+
 
       store.getUserBy(function(){
         return 2 // pseudo user id
@@ -29,97 +29,97 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-    it('set created_at on create', function(next){
-      store.ready(function(){
+    it('set created_at on create', function(){
+      return store.ready(function(){
         var User = store.Model('User')
-        User.create({}, function(success){
-          success.should.be.equal(true)
-          should.exist(this.created_at)
-          next()
+        return User.create({})
+        .then(function(result){
+          should.exist(result.created_at)
         })
       })
     })
 
-    it('set updated_at on create', function(next){
-      store.ready(function(){
+    it('set updated_at on create', function(){
+      return store.ready(function(){
         var User = store.Model('User')
-        User.create({}, function(success){
-          success.should.be.equal(true)
-          should.exist(this.updated_at)
-          next()
-        })
+        return User.create({})
+      })
+      .then(function(result){
+        should.exist(result.updated_at)
       })
     })
 
-    it('set updated_at on update', function(next){
-      store.ready(function(){
+    it('set updated_at on update', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
-        Post.find(1, function(post){
+        return Post.find(1)
+        .then(function(post){
           post.message = 'foo'
-          post.save(function(){
-            should.exist(this.updated_at)
-            next()
-          })
+          return post.save()
+        })
+        .then(function(result){
+          should.exist(result.updated_at)
         })
       })
     })
 
-    it('does not set updated_at on unnecesary update', function(next){
-      store.ready(function(){
+    it('does not set updated_at on unnecesary update', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
-        Post.find(2, function(post){
-          post.save(function(){
-            should.not.exist(this.updated_at)
-            next()
-          })
+        return Post.find(2)
+        .then(function(post){
+          return post.save()
+        })
+        .then(function(result){
+          should.not.exist(result.updated_at)
         })
       })
     })
 
 
-    it('set creator_id on create', function(next){
-      store.ready(function(){
+    it('set creator_id on create', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
-        Post.create({}, function(success){
-          success.should.be.equal(true)
-          this.creator_id.should.be.equal(2)
-          next()
+        return Post.create({})
+        .then(function(result){
+          result.creator_id.should.be.equal(2)
         })
       })
     })
 
-    it('set updater_id on create', function(next){
-      store.ready(function(){
+    it('set updater_id on create', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
-        Post.create({}, function(success){
-          success.should.be.equal(true)
-          this.updater_id.should.be.equal(2)
-          next()
+        return Post.create({})
+        .then(function(result){
+          result.updater_id.should.be.equal(2)
         })
       })
     })
 
-    it('set updater_id on update', function(next){
-      store.ready(function(){
+    it('set updater_id on update', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
-        Post.find(3, function(post){
+        return Post.find(3)
+        .then(function(post){
           post.message = 'foo2'
-          post.save(function(){
-            this.updater_id.should.be.equal(2)
-            next()
-          })
+          return post.save()
+        })
+        .then(function(result){
+          result.updater_id.should.be.equal(2)
         })
       })
     })
 
-    it('does not set updater_id on unnecesary update', function(next){
-      store.ready(function(){
+    it('does not set updater_id on unnecesary update', function(){
+      return store.ready(function(){
         var Post = store.Model('Post')
-        Post.find(4, function(post){
-          post.save(function(){
-            should.not.exist(this.updater_id)
-            next()
-          })
+        return Post.find(4)
+        .then(function(post){
+          return post.save()
+        })
+        .then(function(result){
+          should.not.exist(result.updater_id)
         })
       })
     })

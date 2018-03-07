@@ -1,5 +1,5 @@
 var should = require('should')
-var Store = require('../../../lib/store')
+var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
@@ -14,7 +14,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+
 
       store.Model('User', function(){
         this.hasMany('posts')
@@ -37,18 +37,16 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('delete hasMany', function(next){
-      store.ready(function(){
+    it('delete hasMany', function(){
+      return store.ready(function(){
         var Thread = store.Model('Thread')
         var Post = store.Model('Post')
 
-        Thread.find(1, function(thread){
-          thread.destroy(function(result){
-            result.should.be.equal(true)
-
-            Post.find([1, 2], function(posts){
+        return Thread.find(1, function(thread){
+          return thread.destroy()
+          .then(function(){
+            return Post.find([1, 2], function(posts){
               posts.length.should.be.equal(0)
-              next()
             })
           })
         })
@@ -56,18 +54,16 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('delete belongsTo', function(next){
-      store.ready(function(){
+    it('delete belongsTo', function(){
+      return store.ready(function(){
         var Thread = store.Model('Thread')
         var Post = store.Model('Post')
 
-        Post.find(3, function(post){
-          post.destroy(function(result){
-            result.should.be.equal(true)
-
-            Thread.find(2, function(thread){
+        return Post.find(3, function(post){
+          return post.destroy()
+          .then(function(){
+            return Thread.find(2, function(thread){
               should.not.exist(thread)
-              next()
             })
           })
         })
@@ -75,18 +71,16 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('delete polymorph hasMany', function(next){
-      store.ready(function(){
+    it('delete polymorph hasMany', function(){
+      return store.ready(function(){
         var PolyThing = store.Model('PolyThing')
         var Post = store.Model('Post')
 
-        Post.find(4, function(post){
-          post.destroy(function(result){
-            result.should.be.equal(true)
-
-            PolyThing.find(1, function(polyThing){
+        return Post.find(4, function(post){
+          return post.destroy()
+          .then(function(){
+            return PolyThing.find(1, function(polyThing){
               should.not.exist(polyThing)
-              next()
             })
           })
         })

@@ -1,4 +1,4 @@
-var Store = require('../../../lib/store')
+var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
@@ -13,14 +13,14 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+
 
       store.Model('User', function(){
         this.validatesUniquenessOf('login', 'email')
 
         this.beforeValidation(function(){
           this.save.should.be.a.Function()
-          return this.login !== 'max'
+          if(this.login === 'max') throw new Error('stop')
         })
       })
       store.Model('MultipleKey', function(){
@@ -28,7 +28,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
       store.Model('WithArray', function(){
         this.validatesUniquenessOf(['login', 'email'])
-          .validatesFormatOf('email', /^[^@\s;]+@[^@\s;]+\.[^@\s;]+$/)
+        .validatesFormatOf('email', /^[^@\s;]+@[^@\s;]+\.[^@\s;]+$/)
       })
       store.Model('WithScope', function(){
         this.validatesUniquenessOf('name', {scope: 'scope_id'})
@@ -38,114 +38,101 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('beforeValidation()', function(){
-      it('gets called on create', function(next){
-        store.ready(function(){
+      it('gets called on create', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.create({
-            login: 'max'
-          }, function(result){
-            result.should.be.equal(false)
-            next()
-          })
-        })
+          return User.create({ login: 'max' })
+        }).should.be.rejectedWith(Error, {message: 'stop'})
       })
 
 
-      it('gets called on update', function(next){
-        store.ready(function(){
+      it('gets called on update', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.find(1, function(phil){
+          return User.find(1, function(phil){
             phil.login = 'max'
-            phil.save(function(result){
-              result.should.be.equal(false)
-              next()
-            })
+            return phil.save()
           })
-        })
+        }).should.be.rejectedWith(Error, {message: 'stop'})
       })
     })
 
 
 
     describe('validatesUniquenessOf()', function(){
-      it('returns false on duplicate entries (create)', function(next){
-        store.ready(function(){
+      it('returns false on duplicate entries (create)', function(){
+        return store.ready(function(){
           var User = store.Model('User')
           var phil2 = User.new({
             login: 'phil'
           })
 
-          phil2.isValid(function(valid){
+          return phil2.isValid(function(valid){
             valid.should.be.equal(false)
-            next()
           })
         })
       })
 
-      it('returns false on duplicate entries (create, with array syntax)', function(next){
-        store.ready(function(){
+      it('returns false on duplicate entries (create, with array syntax)', function(){
+        return store.ready(function(){
           var WithArray = store.Model('WithArray')
           var phil2 = WithArray.new({
             login: 'phil',
             email: 'phil@mail.com'
           })
 
-          phil2.isValid(function(valid){
+          return phil2.isValid(function(valid){
             valid.should.be.equal(false)
-            next()
           })
         })
       })
 
 
-      it('returns true on valid entry (create)', function(next){
-        store.ready(function(){
+      it('returns true on valid entry (create)', function(){
+        return store.ready(function(){
           var User = store.Model('User')
           var phil2 = User.new({
             login: 'phil2'
           })
 
-          phil2.isValid(function(valid){
+          return phil2.isValid(function(valid){
             valid.should.be.equal(true)
-            next()
           })
         })
       })
 
-      it('returns false on duplicate entries (update)', function(next){
-        store.ready(function(){
+      it('returns false on duplicate entries (update)', function(){
+        return store.ready(function(){
           var User = store.Model('User')
           var phil2 = User.new({
             id: 5,
             login: 'phil'
           })
 
-          phil2.isValid(function(valid){
+          return phil2.isValid(function(valid){
             valid.should.be.equal(false)
-            next()
           })
         })
       })
 
 
-      it('returns true on valid entry (update)', function(next){
-        store.ready(function(){
+      it('returns true on valid entry (update)', function(){
+        return store.ready(function(){
           var User = store.Model('User')
           var phil2 = User.new({
             id: 1,
             login: 'phil'
           })
 
-          phil2.isValid(function(valid){
+          return phil2.isValid(function(valid){
             valid.should.be.equal(true)
-            next()
           })
         })
       })
 
 
-      it('works with multiple primary_keys (create)', function(next){
-        store.ready(function(){
+      it('works with multiple primary_keys (create)', function(){
+        return store.ready(function(){
           var MultipleKey = store.Model('MultipleKey')
           var phil = MultipleKey.new({
             id: 5,
@@ -153,16 +140,15 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             name: 'phil'
           })
 
-          phil.isValid(function(valid){
+          return phil.isValid(function(valid){
             valid.should.be.equal(false)
-            next()
           })
         })
       })
 
 
-      it('works with multiple primary_keys (update)', function(next){
-        store.ready(function(){
+      it('works with multiple primary_keys (update)', function(){
+        return store.ready(function(){
           var MultipleKey = store.Model('MultipleKey')
           var phil = MultipleKey.new({
             id: 1,
@@ -170,48 +156,45 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             name: 'phil'
           })
 
-          phil.isValid(function(valid){
+          return phil.isValid(function(valid){
             valid.should.be.equal(true)
-            next()
           })
         })
       })
 
 
 
-      it('returns false with scopes (create)', function(next){
-        store.ready(function(){
+      it('returns false with scopes (create)', function(){
+        return store.ready(function(){
           var WithScope = store.Model('WithScope')
           var phil = WithScope.new({
             name: 'phil',
             scope_id: 1
           })
 
-          phil.isValid(function(valid){
+          return phil.isValid(function(valid){
             valid.should.be.equal(false)
-            next()
           })
         })
       })
 
-      it('returns true with scopes (create)', function(next){
-        store.ready(function(){
+      it('returns true with scopes (create)', function(){
+        return store.ready(function(){
           var WithScope = store.Model('WithScope')
           var phil = WithScope.new({
             name: 'michl',
             scope_id: 2
           })
 
-          phil.isValid(function(valid){
+          return phil.isValid(function(valid){
             valid.should.be.equal(true)
-            next()
           })
         })
       })
 
 
-      it('returns false with scopes (update)', function(next){
-        store.ready(function(){
+      it('returns false with scopes (update)', function(){
+        return store.ready(function(){
           var WithScope = store.Model('WithScope')
           var phil = WithScope.new({
             id: 2,
@@ -219,15 +202,14 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             scope_id: 1
           })
 
-          phil.isValid(function(valid){
+          return phil.isValid(function(valid){
             valid.should.be.equal(false)
-            next()
           })
         })
       })
 
-      it('returns true with scopes (update)', function(next){
-        store.ready(function(){
+      it('returns true with scopes (update)', function(){
+        return store.ready(function(){
           var WithScope = store.Model('WithScope')
           var phil = WithScope.new({
             id: 1,
@@ -235,9 +217,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             scope_id: 1
           })
 
-          phil.isValid(function(valid){
+          return phil.isValid(function(valid){
             valid.should.be.equal(true)
-            next()
           })
         })
       })

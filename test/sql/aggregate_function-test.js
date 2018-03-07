@@ -1,10 +1,10 @@
-var Store = require('../../lib/store')
+var Store = require('../../store/sql')
 
 describe('SQL: Aggregate Functions', function(){
   var store
   var User
 
-  before(function(next){
+  before(function(){
     store = new Store({
       type: 'sql'
     })
@@ -13,9 +13,8 @@ describe('SQL: Aggregate Functions', function(){
       this.attribute('salary', Number)
     })
 
-    store.ready(function(){
+    return store.ready(function(){
       User = store.Model('User')
-      next()
     })
   })
 

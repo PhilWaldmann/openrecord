@@ -1,4 +1,4 @@
-var Store = require('../../../lib/store')
+var Store = require('../../../store/postgres')
 
 
 describe('Postgres: all Attributes', function(){
@@ -37,8 +37,6 @@ describe('Postgres: all Attributes', function(){
     })
     store.Model('AttributeHstoreTest', function(){
     })
-
-    store.on('exception', function(){})
   })
 
   after(function(next){
@@ -48,8 +46,8 @@ describe('Postgres: all Attributes', function(){
 
 
 
-  it('has all attributes loaded', function(done){
-    store.ready(function(){
+  it('has all attributes loaded', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
 
       var attrs = AttributeTest.definition.attributes
@@ -64,16 +62,14 @@ describe('Postgres: all Attributes', function(){
       attrs.should.have.property('datetime_attribute')
       attrs.should.have.property('time_attribute')
       attrs.should.have.property('hstore_attribute')
-
-      done()
     })
   })
 
 
-  it('casts all values', function(done){
-    store.ready(function(){
+  it('casts all values', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
-      AttributeTest.limit(1).exec(function(record){
+      return AttributeTest.limit(1).exec(function(record){
         record.char_attribute.should.be.equal('abcd')
         record.float_attribute.should.be.equal(2.3345)
         record.integer_attribute.should.be.equal(3243)
@@ -93,17 +89,15 @@ describe('Postgres: all Attributes', function(){
 
         record.time_attribute.toString().should.be.equal('15:45:01')
         record.hstore_attribute.should.be.eql({key: 'value', nested: {key: 'value'}})
-
-        done()
       })
     })
   })
 
 
-  it('casts all values on a join', function(done){
-    store.ready(function(){
+  it('casts all values on a join', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
-      AttributeTest.join('attribute_join_tests').limit(1).exec(function(record){
+      return AttributeTest.join('attribute_join_tests').limit(1).exec(function(record){
         record.char_attribute.should.be.equal('abcd')
         record.float_attribute.should.be.equal(2.3345)
         record.integer_attribute.should.be.equal(3243)
@@ -123,15 +117,13 @@ describe('Postgres: all Attributes', function(){
 
         record.time_attribute.toString().should.be.equal('15:45:01')
         record.hstore_attribute.should.be.eql({key: 'value', nested: {key: 'value'}})
-
-        done()
       })
     })
   })
 
 
-  it('write all values', function(done){
-    store.ready(function(){
+  it('write all values', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
       var now = new Date('2014-04-25 20:04:00')
       var buffer
@@ -139,7 +131,7 @@ describe('Postgres: all Attributes', function(){
       if(Buffer.from) buffer = Buffer.from('abcdefghijklmnopqrstuvwxyz', 'utf-8')
       else buffer = new Buffer('abcdefghijklmnopqrstuvwxyz', 'utf-8') // eslint-disable-line node/no-deprecated-api
 
-      AttributeTest.create({
+      return AttributeTest.create({
         char_attribute: 'aaaa',
         float_attribute: 1.00001,
         integer_attribute: 5555,
@@ -150,10 +142,9 @@ describe('Postgres: all Attributes', function(){
         datetime_attribute: now,
         time_attribute: now,
         hstore_attribute: {a: 11, b: 22, foo: {bar: ['phil', 'michl']}}
-      }, function(success){
-        success.should.be.equal(true)
-
-        AttributeTest.find(this.id).exec(function(record){
+      })
+      .then(function(result){
+        return AttributeTest.find(result.id).exec(function(record){
           record.char_attribute.should.be.equal('aaaa')
           record.float_attribute.should.be.equal(1.00001)
           record.integer_attribute.should.be.equal(5555)
@@ -170,58 +161,51 @@ describe('Postgres: all Attributes', function(){
           record.time_attribute.toString().should.be.equal('20:04:00')
 
           record.hstore_attribute.should.be.eql({a: 11, b: 22, foo: {bar: ['phil', 'michl']}})
-
-          done()
         })
       })
     })
   })
 
 
-  it('write complex hstore value', function(done){
-    store.ready(function(){
+  it('write complex hstore value', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
 
       var obj = {a: '\\"', b: true, c: 22, d: null, e: '{=>/?öä#+-,.,1:23\'"}', f: 'C:\\files\\shares\\user.name', g: 'H:', foo: {bar: ['phil', 'michl\\/', {a: 1, b: true}]}}
 
-      AttributeTest.create({
+      return AttributeTest.create({
         hstore_attribute: obj
-      }, function(success){
-        success.should.be.equal(true)
-
-        AttributeTest.find(this.id).exec(function(record){
+      })
+      .then(function(result){
+        return AttributeTest.find(result.id).exec(function(record){
           record.hstore_attribute.should.be.eql(obj)
-
-          done()
         })
       })
     })
   })
 
 
-  it('write complex hstore value multiple times', function(done){
-    store.ready(function(){
+  it('write complex hstore value multiple times', function(){
+    return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
 
       var obj = {a: '\\"', b: true, c: 40, d: null, e: '{=>/?öä#+-,.,123\'"}', f: 'C:\\files\\shares\\user.name', g: 'H:', h: ' \'', i: '\\\\', j: '"foo"=>"bar"', k: 'null', l: [1, 2, 3, 4], foo: {bar: ['phil', 'michl\\/', {a: 1, b: true}]}}
       var after = {a: '\\"', b: false, c: 40, d: null, e: '{=>/?öä#+-,.,123\'"}', f: 'C:\\files\\shares\\user.name', g: 'H:', h: ' \'', i: '\\\\', j: '"foo"=>"bar"', k: 'null', l: [1, 2, 3, 4], foo: {bar: ['phil', 'michl\\/', {a: 1, b: true}, 'foo']}}
 
-      AttributeTest.create({
+      return AttributeTest.create({
         hstore_attribute: obj
-      }, function(success){
-        success.should.be.equal(true)
-
-        AttributeTest.find(this.id).exec(function(record){
+      })
+      .then(function(result){
+        return AttributeTest.find(result.id).exec(function(record){
           record.hstore_attribute.should.be.eql(obj)
           record.hstore_attribute.b = false
           record.hstore_attribute.foo.bar.push('foo')
-          record.save(function(success){
-            success.should.be.equal(true)
+          return record.save()
+          .then(function(){
             record.hstore_attribute.should.be.eql(after)
 
-            AttributeTest.find(record.id).exec(function(record){
+            return AttributeTest.find(record.id).exec(function(record){
               record.hstore_attribute.should.be.eql(after)
-              done()
             })
           })
         })
@@ -231,33 +215,31 @@ describe('Postgres: all Attributes', function(){
 
 
 
-  it.skip('sort by hstore attribute', function(done){
+  it.skip('sort by hstore attribute', function(){
     // TODO: set a specific COLLATE to avoid test problems
-    store.ready(function(){
+    return store.ready(function(){
       var AttributeHstoreTest = store.Model('AttributeHstoreTest')
-      AttributeHstoreTest.order('properties.foo').exec(function(records){
+      return AttributeHstoreTest.order('properties.foo').exec(function(records){
         records.length.should.be.equal(5)
         records[0].name.should.be.equal('A')
         records[1].name.should.be.equal('A2')
         records[2].name.should.be.equal('B')
         records[3].name.should.be.equal('C')
         records[4].name.should.be.equal('c')
-        done()
       })
     })
   })
 
-  it('sort by multiple hstore attributes', function(done){
-    store.ready(function(){
+  it('sort by multiple hstore attributes', function(){
+    return store.ready(function(){
       var AttributeHstoreTest = store.Model('AttributeHstoreTest')
-      AttributeHstoreTest.order('properties.bar', 'properties.foo').exec(function(records){
+      return AttributeHstoreTest.order('properties.bar', 'properties.foo').exec(function(records){
         records.length.should.be.equal(5)
         records[0].name.should.be.equal('C')
         records[1].name.should.be.equal('A')
         records[2].name.should.be.equal('A2')
         records[3].name.should.be.equal('B')
         records[4].name.should.be.equal('c')
-        done()
       })
     })
   })

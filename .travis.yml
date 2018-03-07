@@ -1,10 +1,37 @@
 language: node_js
-sudo: false
+dist: trusty
+sudo: required
+
+env:
+  global:
+    - ORACLE_COOKIE=sqldev
+    - ORACLE_FILE=oracle11g/xe/oracle-xe-11.2.0-1.0.x86_64.rpm.zip
+    - ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe
+    - OCI_LIB_DIR=/u01/app/oracle/product/11.2.0/xe/lib
+    - LD_LIBRARY_PATH=/u01/app/oracle/product/11.2.0/xe/lib
+    - ORACLE_SID=XE
+
+
+services:
+  - mysql
+  - postgresql
+
 addons:
-  postgresql: "9.4"
+  postgresql: "9.6"
+
+before_install:
+  - mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'travis'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;";
+  - wget https://raw.githubusercontent.com/Vincit/travis-oracledb-xe/master/accept_the_license_agreement_for_oracledb_xe_11g_and_install.sh
+  - bash ./accept_the_license_agreement_for_oracledb_xe_11g_and_install.sh
+  - export PATH=$ORACLE_HOME/bin/:$PATH
+  - sqlplus -V
+  - psql --version
+  - mysql --version
+  - yarn add oracledb
 
 node_js:
   - "4"
   - "6"
+  - "8"
 
 after_success: npm run report-coverage

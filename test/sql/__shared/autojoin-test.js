@@ -1,5 +1,5 @@
 var should = require('should')
-var Store = require('../../../lib/store')
+var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
@@ -14,7 +14,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+
 
       store.Model('User', function(){
         this.hasMany('posts')
@@ -34,16 +34,15 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('autoJoin()', function(){
-      it('returns the right results on nested joins with nested conditions', function(next){
-        store.ready(function(){
+      it('returns the right results on nested joins with nested conditions', function(){
+        return store.ready(function(){
           var Thread = store.Model('Thread')
-          Thread.where({posts: {user: {login_like: 'phi'}}}, {title_like: 'first'}).order('title', 'posts_user.id').exec(function(result){
+          return Thread.where({posts: {user: {login_like: 'phi'}}}, {title_like: 'first'}).order('title', 'posts_user.id').exec(function(result){
             result[0].title.should.be.equal('first thread')
             result[0].posts.length.should.be.equal(2)
             result[0].posts[0].user.login.should.be.equal('phil')
             result[0].posts[1].user.login.should.be.equal('phil')
             should.not.exist(result[1])
-            next()
           })
         })
       })

@@ -1,4 +1,4 @@
-var Store = require('../../../lib/store')
+var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
@@ -13,7 +13,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
     before(function(){
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+
 
       store.Model('User', function(){
         this.hasMany('posts')
@@ -25,52 +25,47 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('count()', function(){
-      it('returns the right sql', function(next){
-        store.ready(function(){
+      it('returns the right sql', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.count('salary').toSql(function(sql){
-            sql.should.be.equal('select count("salary") as "count" from "users"')
-            next()
+          return User.count('salary').toSql(function(sql){
+            sql.should.be.equal('select count("salary") "count" from "users"')
           })
         })
       })
 
-      it('returns the right result', function(next){
-        store.ready(function(){
+      it('returns the right result', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.count('salary').exec(function(result){
+          return User.count('salary').exec(function(result){
             result.should.be.equal(5)
-            next()
           })
         })
       })
 
-      it('returns the right result without a param (*)', function(next){
-        store.ready(function(){
+      it('returns the right result without a param (*)', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.count().exec(function(result){
+          return User.count().exec(function(result){
             result.should.be.equal(5)
-            next()
           })
         })
       })
 
-      it('works with conditions', function(next){
-        store.ready(function(){
+      it('works with conditions', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.count('salary').where({salary_gt: 500}).exec(function(result){
+          return User.count('salary').where({salary_gt: 500}).exec(function(result){
             result.should.be.equal(1)
-            next()
           })
         })
       })
 
-      it('works with joins', function(next){
-        store.ready(function(){
+      it('works with joins', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.count('salary').join('posts').exec(function(result){
+          return User.count('salary').leftJoin('posts').exec(function(result){
             result.should.be.equal(7)
-            next()
           })
         })
       })
@@ -79,42 +74,38 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('sum()', function(){
-      it('returns the right sql', function(next){
-        store.ready(function(){
+      it('returns the right sql', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.sum('salary').toSql(function(sql){
-            sql.should.be.equal('select sum("salary") as "sum" from "users"')
-            next()
+          return User.sum('salary').toSql(function(sql){
+            sql.should.be.equal('select sum("salary") "sum" from "users"')
           })
         })
       })
 
-      it('returns the right result', function(next){
-        store.ready(function(){
+      it('returns the right result', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.sum('salary').exec(function(result){
+          return User.sum('salary').exec(function(result){
             result.should.be.equal(2000)
-            next()
           })
         })
       })
 
-      it('works with conditions', function(next){
-        store.ready(function(){
+      it('works with conditions', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.sum('salary').where({salary_gt: 500}).exec(function(result){
+          return User.sum('salary').where({salary_gt: 500}).exec(function(result){
             result.should.be.equal(1000)
-            next()
           })
         })
       })
 
-      it('works with joins', function(next){
-        store.ready(function(){
+      it('works with joins', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.sum('salary').join('posts').exec(function(result){
-            result.should.be.equal(2200)
-            next()
+          return User.sum('salary').join('posts').exec(function(result){
+            result.should.be.equal(500)
           })
         })
       })
@@ -123,42 +114,38 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('max()', function(){
-      it('returns the right sql', function(next){
-        store.ready(function(){
+      it('returns the right sql', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.max('salary').toSql(function(sql){
-            sql.should.be.equal('select max("salary") as "max" from "users"')
-            next()
+          return User.max('salary').toSql(function(sql){
+            sql.should.be.equal('select max("salary") "max" from "users"')
           })
         })
       })
 
-      it('returns the right result', function(next){
-        store.ready(function(){
+      it('returns the right result', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.max('salary').exec(function(result){
+          return User.max('salary').exec(function(result){
             result.should.be.equal(1000)
-            next()
           })
         })
       })
 
-      it('works with conditions', function(next){
-        store.ready(function(){
+      it('works with conditions', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.max('salary').where({salary_gt: 500}).exec(function(result){
+          return User.max('salary').where({salary_gt: 500}).exec(function(result){
             result.should.be.equal(1000)
-            next()
           })
         })
       })
 
-      it('works with joins', function(next){
-        store.ready(function(){
+      it('works with joins', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.max('salary').join('posts').exec(function(result){
-            result.should.be.equal(1000)
-            next()
+          return User.max('salary').join('posts').exec(function(result){
+            result.should.be.equal(200)
           })
         })
       })
@@ -167,90 +154,80 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('min()', function(){
-      it('returns the right sql', function(next){
-        store.ready(function(){
+      it('returns the right sql', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.min('salary').toSql(function(sql){
-            sql.should.be.equal('select min("salary") as "min" from "users"')
-            next()
+          return User.min('salary').toSql(function(sql){
+            sql.should.be.equal('select min("salary") "min" from "users"')
           })
         })
       })
 
-      it('returns the right result', function(next){
-        store.ready(function(){
+      it('returns the right result', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.min('salary').exec(function(result){
+          return User.min('salary').exec(function(result){
             result.should.be.equal(100)
-            next()
           })
         })
       })
 
-      it('works with conditions', function(next){
-        store.ready(function(){
+      it('works with conditions', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.min('salary').where({salary_gt: 500}).exec(function(result){
+          return User.min('salary').where({salary_gt: 500}).exec(function(result){
             result.should.be.equal(1000)
-            next()
           })
         })
       })
 
-      it('works with joins', function(next){
-        store.ready(function(){
+      it('works with joins', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.min('salary').join('posts').exec(function(result){
+          return User.min('salary').join('posts').exec(function(result){
             result.should.be.equal(100)
-            next()
           })
         })
       })
     })
 
 
-    /* not yet supported by knex
     describe('avg()', function(){
-      it('returns the right sql', function(next){
-        store.ready(function(){
-          var User = store.Model('User');
-          User.avg('salary').toSql(function(sql){
-            sql.should.be.equal('select avg("salary") as "avg" from "users"');
-            next();
+      it('returns the right sql', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          return User.avg('salary').toSql(function(sql){
+            sql.should.be.equal('select avg("salary") "avg" from "users"')
           })
-        });
-      });
+        })
+      })
 
-      it('returns the right result', function(next){
-        store.ready(function(){
-          var User = store.Model('User');
-          User.avg('salary').exec(function(result){
-            result.should.be.equal(400);
-            next();
-          });
-        });
-      });
+      it('returns the right result', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          return User.avg('salary').exec(function(result){
+            result.should.be.equal(400)
+          })
+        })
+      })
 
-      it('works with conditions', function(next){
-        store.ready(function(){
-          var User = store.Model('User');
-          User.avg('salary').where({salary_gt: 300}).exec(function(result){
-            result.should.be.equal(700);
-            next();
-          });
-        });
-      });
+      it('works with conditions', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          return User.avg('salary').where({salary_gt: 300}).exec(function(result){
+            result.should.be.equal(700)
+          })
+        })
+      })
 
-      it('works with joins', function(next){
-        store.ready(function(){
-          var User = store.Model('User');
-          User.avg('salary').join('posts').exec(function(result){
-            result.should.be.equal(400);
-            next();
-          });
-        });
-      });
-    });
-    */
+      it('works with joins', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          return User.avg('salary').leftJoin('posts').exec(function(result){
+            result.should.be.approximately((100 + 100 + 100 + 200 + 400 + 300 + 1000) / 7, 0.1)
+          })
+        })
+      })
+    })
   })
 }

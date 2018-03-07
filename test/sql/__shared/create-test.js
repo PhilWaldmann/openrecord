@@ -1,5 +1,5 @@
 var should = require('should')
-var Store = require('../../../lib/store')
+var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
@@ -13,41 +13,38 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     before(function(){
+      storeConf.autoSave = true
       store = new Store(storeConf)
-      store.setMaxListeners(0)
+
 
       store.Model('User', function(){
         this.belongsTo('nothing')
         this.hasMany('posts')
         this.hasMany('threads')
 
-        this.beforeCreate(function(record, transaction, done){
+        this.beforeCreate(function(record, options){
           this.save.should.be.a.Function()
-          done.should.be.a.Function()
-
           if(this.login === 'find_inside'){
-            Post.find(1).transaction(transaction).exec(function(){
-              done(true)
-            })
+            return Post.find(1).useTransaction(options.transaction)
           }else{
-            done(this.login !== 'max')
+            if(this.login === 'max') throw new Error('stop')
           }
         })
 
         this.afterCreate(function(){
           this.save.should.be.a.Function()
-          return this.login !== 'maxi'
+          if(this.login === 'maxi') return Promise.reject(new Error('stop'))
         })
 
 
         this.beforeSave(function(){
           this.save.should.be.a.Function()
-          return this.login !== '_max'
+          if(this.login === '_max') return Promise.reject(new Error('stop'))
         })
 
         this.afterSave(function(){
           this.save.should.be.a.Function()
-          return this.login !== '_maxi'
+          if(this.login === '_maxi') return Promise.reject(new Error('stop'))
         })
       })
       store.Model('Post', function(){
@@ -67,30 +64,28 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('beforeCreate()', function(){
-      it('gets called', function(next){
-        store.ready(function(){
+      it('gets called', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.create({
+          return User.create({
             login: 'max'
-          }, function(result){
-            result.should.be.equal(false)
-            next()
           })
-        })
+        }).should.be.rejectedWith(Error, {message: 'stop'})
       })
     })
 
 
     describe('beforeCreate() with a find() inside', function(){
-      it('gets called', function(next){
-        store.ready(function(){
+      it('gets called', function(){
+        return store.ready(function(){
           Post = store.Model('Post') // for the beforeCreate Hook
           var User = store.Model('User')
-          User.create({
+
+          return User.create({
             login: 'find_inside'
-          }, function(result){
-            result.should.be.equal(true)
-            next()
+          })
+          .then(function(result){
+            result.id.should.be.equal(1)
           })
         })
       })
@@ -98,18 +93,21 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('afterCreate()', function(){
-      it('gets called', function(next){
-        store.ready(function(){
+      it('gets called', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.create({
-            login: 'maxi'
-          }, function(result){
-            result.should.be.equal(false)
 
-            User.where({login: 'maxi'}).count().exec(function(result){
-              result.should.be.equal(0)
-              next()
-            })
+          return User.create({
+            login: 'maxi'
+          })
+        }).should.be.rejectedWith(Error, {message: 'stop'})
+      })
+
+      it('rolls back the transaction', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          return User.where({login: 'maxi'}).count().exec(function(result){
+            result.should.be.equal(0)
           })
         })
       })
@@ -117,33 +115,32 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('beforeSave()', function(){
-      it('gets called', function(next){
-        store.ready(function(){
+      it('gets called', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.create({
+          return User.create({
             login: '_max'
-          }, function(result){
-            result.should.be.equal(false)
-            next()
           })
-        })
+        }).should.be.rejectedWith(Error, {message: 'stop'})
       })
     })
 
 
     describe('afterSave()', function(){
-      it('gets called', function(next){
-        store.ready(function(){
+      it('gets called', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.create({
+          return User.create({
             login: '_maxi'
-          }, function(result){
-            result.should.be.equal(false)
+          })
+        }).should.be.rejectedWith(Error, {message: 'stop'})
+      })
 
-            User.where({login: '_maxi'}).count().exec(function(result){
-              result.should.be.equal(0)
-              next()
-            })
+      it('rolls back the transaction', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          return User.where({login: '_maxi'}).count().exec(function(result){
+            result.should.be.equal(0)
           })
         })
       })
@@ -152,77 +149,73 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     describe('create()', function(){
-      it('has the right context', function(next){
-        store.ready(function(){
+      it('has the right context', function(){
+        return store.ready(function(){
           var User = store.Model('User')
 
-          User.create({
+          return User.create({
             login: 'my_login',
             email: 'my_mail@mail.com'
-          }, function(result){
-            this.login.should.be.equal('my_login')
-            result.should.be.equal(true)
-            next()
+          })
+          .then(function(user){
+            user.login.should.be.equal('my_login')
           })
         })
       })
 
 
-      it('works on a chain', function(next){
-        store.ready(function(){
+      it('works on a chain', function(){
+        return store.ready(function(){
           var User = store.Model('User')
 
-          User.setContext({foo: 'bar'}).create({
+          return User.setContext({foo: 'bar'}).create({
             login: 'my_login2',
             email: 'my_mail@mail.com'
-          }, function(result){
-            this.login.should.be.equal('my_login2')
-            result.should.be.equal(true)
-            next()
+          })
+          .then(function(user){
+            user.login.should.be.equal('my_login2')
           })
         })
       })
 
 
-      it('writes a new record', function(next){
-        store.ready(function(){
+      it('writes a new record', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.create({
+          return User.create({
             login: 'phil',
             email: 'phil@mail.com'
-          }, function(result){
-            result.should.be.equal(true)
-            User.where({login: 'phil'}).count().exec(function(result){
+          })
+          .then(function(){
+            return User.where({login: 'phil'}).count().exec(function(result){
               result.should.be.equal(1)
-              next()
             })
           })
         })
       })
 
 
-      it('writes a new record, but ignores the id (auto increment)', function(next){
-        store.ready(function(){
+      it('writes a new record, but ignores the id (auto increment)', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.create({
+          return User.create({
             id: 99,
             login: 'philipp',
             email: 'philipp@mail.com'
-          }, function(result){
-            result.should.be.equal(true)
-            User.where({login: 'philipp'}).limit(1).exec(function(result){
+          })
+          .then(function(){
+            return User.where({login: 'philipp'}).limit(1).exec(function(result){
               result.id.should.not.be.equal(99)
-              next()
             })
           })
         })
       })
 
 
-      it('writes a new record with subrecords', function(next){
-        store.ready(function(){
+      it('writes a new record with subrecords', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.create({
+          return User.create({
             login: 'michl',
             email: 'michl@mail.com',
             threads: [{
@@ -230,23 +223,21 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             }, {
               title: 'Thread two'
             }]
-          }, function(result){
-            result.should.be.equal(true)
-
-            User.where({login: 'michl'}).include('threads').limit(1).exec(function(result){
+          })
+          .then(function(){
+            return User.where({login: 'michl'}).include('threads').limit(1).exec(function(result){
               result.login.should.be.equal('michl')
               result.threads.length.should.be.equal(2)
-              next()
             })
           })
         })
       })
 
 
-      it('writes a new record with nested subrecords', function(next){
-        store.ready(function(){
+      it('writes a new record with nested subrecords', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.create({
+          return User.create({
             login: 'admin',
             email: 'admin@mail.com',
             threads: [{
@@ -259,24 +250,22 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             }, {
               title: 'Thread two'
             }]
-          }, function(result){
-            result.should.be.equal(true)
-
-            User.where({login: 'admin'}).include({threads: 'posts'}).limit(1).exec(function(result){
+          })
+          .then(function(){
+            return User.where({login: 'admin'}).include({threads: 'posts'}).limit(1).exec(function(result){
               result.login.should.be.equal('admin')
               result.threads.length.should.be.equal(2)
               result.threads[0].posts.length.should.be.equal(2)
-              next()
             })
           })
         })
       })
 
 
-      it('does not write on validation errors', function(next){
-        store.ready(function(){
+      it('does not write on validation errors', function(){
+        return store.ready(function(){
           var User = store.Model('User')
-          User.create({
+          return User.create({
             login: 'max',
             email: 'max@mail.com',
             threads: [{
@@ -289,13 +278,54 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             }, {
               title: 'Thread two'
             }]
-          }, function(result){
-            result.should.be.equal(false)
+          })
+        }).should.be.rejectedWith(Error, {message: 'stop'})
+      })
 
-            User.where({login: 'max'}).include({threads: 'posts'}).limit(1).exec(function(result){
-              should.not.exist(result)
-              next()
-            })
+
+      it('rolls back the transaction', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          return User.where({login: 'max'}).include({threads: 'posts'}).limit(1).exec(function(result){
+            should.not.exist(result)
+          })
+        })
+      })
+
+
+      it('create multiple records at once', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          return User.create([
+            {login: 'user1'},
+            {login: 'user2'},
+            {login: 'user3'}
+          ])
+          .then(function(result){
+            result.length.should.be.equal(3)
+            should.exist(result[0].id)
+            should.exist(result[1].id)
+            should.exist(result[2].id)
+          })
+        })
+      })
+
+
+      it('always adds the right ids', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          var id
+
+          return User.create({login: 'test1'})
+          .then(function(user){
+            id = user.id
+            return User.find(id).delete()
+          })
+          .then(function(){
+            return User.create({login: 'test2'})
+          })
+          .then(function(user2){
+            user2.id.should.be.equal(id + 1)
           })
         })
       })

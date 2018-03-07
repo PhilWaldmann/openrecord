@@ -1,6 +1,6 @@
 var should = require('should')
 
-var Store = require('../../../lib/store')
+var Store = require('../../../store/base')
 
 
 describe('validatesPresenceOf()', function(){
@@ -12,40 +12,35 @@ describe('validatesPresenceOf()', function(){
   })
 
   var User, valid, invalid
-  before(function(next){
-    store.ready(function(){
+  before(function(){
+    return store.ready(function(){
       User = store.Model('User')
       valid = new User({email: 'philipp@email.com'})
       invalid = new User()
-
-      next()
     })
   })
 
 
   it('exists', function(){
     should.exist(valid.isValid)
-    valid.isValid.should.be.a.Function()
+    return valid.isValid.should.be.a.Function()
   })
 
-  it('returns true on valid records', function(done){
-    valid.isValid(function(valid){
+  it('returns true on valid records', function(){
+    return valid.isValid(function(valid){
       valid.should.be.equal(true)
-      done()
     })
   })
 
-  it('returns false on invalid records', function(done){
-    invalid.isValid(function(valid){
+  it('returns false on invalid records', function(){
+    return invalid.isValid(function(valid){
       valid.should.be.equal(false)
-      done()
     })
   })
 
-  it('returns the right error message', function(done){
-    invalid.isValid(function(valid){
-      invalid.errors.should.have.property('email')
-      done()
+  it('returns the right error message', function(){
+    return invalid.isValid(function(valid){
+      invalid.errors.toJSON().should.have.property('email')
     })
   })
 
@@ -64,35 +59,30 @@ describe('validatesPresenceOf()', function(){
     })
 
     var User, valid, invalid
-    before(function(next){
-      store.ready(function(){
+    before(function(){
+      return store.ready(function(){
         User = store.Model('User')
         valid = new User({email: 'philipp@email.com', login: 'phil'})
         invalid = new User({login: 'phil'})
-
-        next()
       })
     })
 
 
-    it('returns true on valid records', function(done){
-      valid.isValid(function(valid){
+    it('returns true on valid records', function(){
+      return valid.isValid(function(valid){
         valid.should.be.equal(true)
-        done()
       })
     })
 
-    it('returns false on invalid records', function(done){
-      invalid.isValid(function(valid){
+    it('returns false on invalid records', function(){
+      return invalid.isValid(function(valid){
         valid.should.be.equal(false)
-        done()
       })
     })
 
-    it('returns the right error message', function(done){
-      invalid.isValid(function(valid){
-        invalid.errors.should.have.property('email')
-        done()
+    it('returns the right error message', function(){
+      return invalid.isValid(function(valid){
+        invalid.errors.toJSON().should.have.property('email')
       })
     })
   })
@@ -109,35 +99,30 @@ describe('validatesPresenceOf()', function(){
     })
 
     var User, valid, invalid
-    before(function(next){
-      store.ready(function(){
+    before(function(){
+      return store.ready(function(){
         User = store.Model('User')
         valid = new User({email: 'philipp@email.com', login: 'phil'})
         invalid = new User({login: 'phil'})
-
-        next()
       })
     })
 
 
-    it('returns true on valid records', function(done){
-      valid.isValid(function(valid){
+    it('returns true on valid records', function(){
+      return valid.isValid(function(valid){
         valid.should.be.equal(true)
-        done()
       })
     })
 
-    it('returns false on invalid records', function(done){
-      invalid.isValid(function(valid){
+    it('returns false on invalid records', function(){
+      return invalid.isValid(function(valid){
         valid.should.be.equal(false)
-        done()
       })
     })
 
-    it('returns the right error message', function(done){
-      invalid.isValid(function(valid){
-        invalid.errors.should.have.property('email')
-        done()
+    it('returns the right error message', function(){
+      return invalid.isValid(function(valid){
+        invalid.errors.toJSON().should.have.property('email')
       })
     })
   })

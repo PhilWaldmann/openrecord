@@ -8,7 +8,8 @@ describe('REST Client: Create', function(){
     store = new Store({
       type: 'rest',
       url: 'http://localhost:8889',
-      version: '~1.0'
+      version: '~1.0',
+      autoSave: true
     })
 
     store.Model('User', function(){
@@ -31,25 +32,21 @@ describe('REST Client: Create', function(){
 
 
 
-  it('creates a new record (create)', function(next){
-    store.ready(function(){
+  it('creates a new record (create)', function(){
+    return store.ready(function(){
       var User = store.Model('User')
 
-      User.create({login: 'max', email: 'max@mail.com'}, function(success){
-        success.should.be.equal(true)
-        should.exist(this.id)
-        next()
-      }, function(err){
-        should.not.exist(err)
-        next()
+      return User.create({login: 'max', email: 'max@mail.com'})
+      .then(function(user){
+        should.exist(user.id)
       })
     })
   })
 
 
 
-  it('creates nested records (create)', function(next){
-    store.ready(function(){
+  it('creates nested records (create)', function(){
+    return store.ready(function(){
       var User = store.Model('User')
 
       var user = User.new({login: 'hugo', email: 'hugo@mail.com'})
@@ -59,14 +56,10 @@ describe('REST Client: Create', function(){
         thread_id: 3
       })
 
-      user.save(function(success){
-        success.should.be.equal(true)
-
-        User.find(this.id).include('posts').exec(function(user){
+      return user.save(function(user){
+        return User.find(user.id).include('posts').exec(function(user){
           user.posts.length.should.be.equal(1)
           user.posts[0].message.should.be.equal('hugo post')
-
-          next()
         })
       })
     })
