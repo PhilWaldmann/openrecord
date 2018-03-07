@@ -79,7 +79,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return User.find(1, function(phil){
             phil.login.should.be.equal('phil')
 
-            return phil.destroy(function(){
+            return phil.destroy()
+            .then(function(){
               return User.find(1, function(phil){
                 should.not.exist(phil)
               })
@@ -96,7 +97,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('delets all records without calling beforeDestroy or afterDestroy', function(){
         return store.ready(function(){
           var Thread = store.Model('Thread')
-          return Thread.where({title_like: 'delete'}).deleteAll(function(){
+          return Thread.where({title_like: 'delete'}).deleteAll()
+          .then(function(){
             return Thread.where({title_like: 'delete'}).count().exec(function(result){
               result.should.be.equal(0)
             })
@@ -113,7 +115,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return Thread.find(1, function(thread){
             should.exist(thread)
 
-            return thread.posts.deleteAll(function(){
+            return thread.posts.deleteAll()
+            .then(function(){
               return Post.where({thread_id: thread.id}).count().exec(function(result){
                 result.should.be.equal(0)
               })

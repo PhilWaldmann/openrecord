@@ -13,6 +13,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     before(function(){
+      storeConf.autoSave = true
       store = new Store(storeConf)
 
 
@@ -24,7 +25,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.beforeCreate(function(record, options){
           this.save.should.be.a.Function()
           if(this.login === 'find_inside'){
-            return Post.find(1).transaction(options.transaction)
+            return Post.find(1).useTransaction(options.transaction)
           }else{
             if(this.login === 'max') throw new Error('stop')
           }
@@ -82,7 +83,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
           return User.create({
             login: 'find_inside'
-          }, function(result){
+          })
+          .then(function(result){
             result.id.should.be.equal(1)
           })
         })
@@ -154,7 +156,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return User.create({
             login: 'my_login',
             email: 'my_mail@mail.com'
-          }, function(user){
+          })
+          .then(function(user){
             user.login.should.be.equal('my_login')
           })
         })
@@ -168,7 +171,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return User.setContext({foo: 'bar'}).create({
             login: 'my_login2',
             email: 'my_mail@mail.com'
-          }, function(user){
+          })
+          .then(function(user){
             user.login.should.be.equal('my_login2')
           })
         })
@@ -181,7 +185,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return User.create({
             login: 'phil',
             email: 'phil@mail.com'
-          }, function(){
+          })
+          .then(function(){
             return User.where({login: 'phil'}).count().exec(function(result){
               result.should.be.equal(1)
             })
@@ -197,7 +202,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             id: 99,
             login: 'philipp',
             email: 'philipp@mail.com'
-          }, function(){
+          })
+          .then(function(){
             return User.where({login: 'philipp'}).limit(1).exec(function(result){
               result.id.should.not.be.equal(99)
             })
@@ -217,7 +223,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             }, {
               title: 'Thread two'
             }]
-          }, function(){
+          })
+          .then(function(){
             return User.where({login: 'michl'}).include('threads').limit(1).exec(function(result){
               result.login.should.be.equal('michl')
               result.threads.length.should.be.equal(2)
@@ -243,7 +250,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             }, {
               title: 'Thread two'
             }]
-          }, function(){
+          })
+          .then(function(){
             return User.where({login: 'admin'}).include({threads: 'posts'}).limit(1).exec(function(result){
               result.login.should.be.equal('admin')
               result.threads.length.should.be.equal(2)
@@ -280,6 +288,44 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var User = store.Model('User')
           return User.where({login: 'max'}).include({threads: 'posts'}).limit(1).exec(function(result){
             should.not.exist(result)
+          })
+        })
+      })
+
+
+      it('create multiple records at once', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          return User.create([
+            {login: 'user1'},
+            {login: 'user2'},
+            {login: 'user3'}
+          ])
+          .then(function(result){
+            result.length.should.be.equal(3)
+            should.exist(result[0].id)
+            should.exist(result[1].id)
+            should.exist(result[2].id)
+          })
+        })
+      })
+
+
+      it('always adds the right ids', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          var id
+
+          return User.create({login: 'test1'})
+          .then(function(user){
+            id = user.id
+            return User.find(id).delete()
+          })
+          .then(function(){
+            return User.create({login: 'test2'})
+          })
+          .then(function(user2){
+            user2.id.should.be.equal(id + 1)
           })
         })
       })

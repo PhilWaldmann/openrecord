@@ -84,7 +84,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           not_in_the_database: 'foo'
         })
 
-        return phil.save(function(){
+        return phil.save()
+        .then(function(){
           phil.id.should.be.equal(2)
         })
       })

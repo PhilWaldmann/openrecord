@@ -8,7 +8,8 @@ describe('REST Client: Create', function(){
     store = new Store({
       type: 'rest',
       url: 'http://localhost:8889',
-      version: '~1.0'
+      version: '~1.0',
+      autoSave: true
     })
 
     store.Model('User', function(){

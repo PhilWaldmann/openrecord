@@ -3,7 +3,7 @@ var should = require('should')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe(title + ': ES6', function(){
+  describe(title + ': ES6++', function(){
     var store
     var User
 
@@ -110,12 +110,11 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     it('create with `await`', async function(){
       await store.ready()
       var User = store.Model('User')
-      const user = User.new({
+
+      const user = await User.create({
         login: 'my_login',
         email: 'my_mail@mail.com'
       })
-      
-      await user.save()      
       user.id.should.not.be.equal(null)
     })
 
@@ -141,6 +140,40 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
       user = await User.find(2)
       should.not.exist(user)
+    })
+
+
+    it('parallel queries', async function(){
+      await store.ready()
+      const User = store.Model('User')
+      const myContext = {}
+
+      const query = User.setContext(myContext)
+      const [users, totalCount] = await Promise.all([
+        query.limit(2),
+        query.clone().totalCount()
+      ])
+
+      users.length.should.be.equal(2)
+      totalCount.should.be.equal(3)
+    })
+
+
+
+    it('bulk create', async function(){
+      await store.ready()
+      const User = store.Model('User')
+
+      const users = await User.create([
+        {login: 'user1'},
+        {login: 'user2'},
+        {login: 'user3'}
+      ])
+
+      users.length.should.be.equal(3)
+      should.exist(users[0].id)
+      should.exist(users[1].id)
+      should.exist(users[2].id)
     })
   })
 }

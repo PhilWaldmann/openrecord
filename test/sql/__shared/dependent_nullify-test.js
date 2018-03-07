@@ -37,7 +37,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         var Post = store.Model('Post')
 
         return Thread.find(1, function(thread){
-          return thread.destroy(function(){
+          return thread.destroy()
+          .then(function(){
             return Post.find([1, 2], function(posts){
               posts.length.should.be.equal(2)
               should.not.exist(posts[0].thread_id)

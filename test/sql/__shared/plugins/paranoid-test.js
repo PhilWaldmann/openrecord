@@ -45,7 +45,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       return store.ready(function(){
         var User = store.Model('User')
         return User.find(5).exec(function(hans){
-          return hans.destroy(function(){
+          return hans.destroy()
+          .then(function(){
             return User.find(5).exec(function(delHans){
               should.not.exist(delHans)
 

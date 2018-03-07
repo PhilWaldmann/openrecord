@@ -53,8 +53,8 @@ global.beforeGraphQL = function(database, type, done){
       })
 
       store1.Model('Author', function(){
-        this.hasMany('recipes')
-        this.hasMany('topRatedRecipes', {model: 'Recipe', scope: 'topRated'})
+        this.hasMany('recipes', {autoSave: true})
+        this.hasMany('topRatedRecipes', {model: 'Recipe', scope: 'topRated', autoSave: true})
 
 
         // for auto gen. only!!!
@@ -117,10 +117,10 @@ global.beforeGraphQL = function(database, type, done){
       })
 
       store1.Model('Recipe', function(){
-        this.belongsTo('author')
-        this.hasMany('recipe_ingredients')
+        this.belongsTo('author', {autoSave: true})
+        this.hasMany('recipe_ingredients', {autoSave: true})
         this.hasMany('ingredients', {through: 'recipe_ingredients', relation: 'ingredient'})
-        this.hasMany('images', {model: 'RecipeImage'})
+        this.hasMany('images', {model: 'RecipeImage', autoSave: true})
 
 
         // for auto gen. only!!!
@@ -190,14 +190,14 @@ global.beforeGraphQL = function(database, type, done){
       })
 
       store1.Model('RecipeIngredient', function(){
-        this.belongsTo('recipe')
-        this.belongsTo('ingredient')
+        this.belongsTo('recipe', {autoSave: true})
+        this.belongsTo('ingredient', {autoSave: true})
       })
 
       store1.Model('Ingredient', function(){
-        this.hasMany('recipe_ingredients')
+        this.hasMany('recipe_ingredients', {autoSave: true})
         this.hasMany('recipes', {through: 'recipe_ingredients'})
-        this.belongsTo('food', {store: 'store2'})
+        this.belongsTo('food', {store: 'store2', autoSave: true})
 
         // for auto gen. only!!!
         if(type === 'auto'){
@@ -216,7 +216,7 @@ global.beforeGraphQL = function(database, type, done){
       })
 
       store1.Model('RecipeImage', function(){
-        this.belongsTo('recipe')
+        this.belongsTo('recipe', {autoSave: true})
       })
 
       var store2 = new Store({
@@ -232,7 +232,7 @@ global.beforeGraphQL = function(database, type, done){
       })
 
       store2.Model('Food', function(){
-        this.hasMany('alternative_foods', {model: 'Alternative'})
+        this.hasMany('alternative_foods', {model: 'Alternative', autoSave: true})
         this.hasMany('alternatives', {through: 'alternative_foods', relation: 'alternative'})
 
         // for auto gen. only!!!
@@ -242,8 +242,8 @@ global.beforeGraphQL = function(database, type, done){
       })
 
       store2.Model('Alternative', function(){
-        this.belongsTo('food')
-        this.belongsTo('alternative', {model: 'Food', primary_key: 'alternative_id'})
+        this.belongsTo('food', {autoSave: true})
+        this.belongsTo('alternative', {model: 'Food', primary_key: 'alternative_id', autoSave: true})
       })
 
       store2.ready(function(){

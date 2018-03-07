@@ -51,7 +51,8 @@ describe('Postgres: UUID Key', function(){
       var UuidTest = store.Model('UuidTest')
       var test = new UuidTest({ another_column: 'i am setting uuid' })
 
-      return test.save(function() {
+      return test.save()
+      .then(function() {
         should.exist(test.id)
       })
     })

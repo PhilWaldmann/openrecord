@@ -12,6 +12,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     before(function(){
+      storeConf.autoSave = true
       store = new Store(storeConf)
 
 
@@ -56,7 +57,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return User.find(1).include('posts').exec(function(user){
           user.posts.length.should.be.equal(3)
 
-          return user.posts.create({thread_id: 1, message: 'another post'}, function(post){
+          return user.posts.create({thread_id: 1, message: 'another post'})
+          .then(function(post){
             post.id.should.be.equal(5)
             post.user_id.should.be.equal(user.id)
           })
@@ -97,7 +99,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           user.posts.new({thread_id: 1, message: 'michls post2'})
           user.posts.new({thread_id: 1, message: 'post 3'})
 
-          return user.save(function(){
+          return user.save()
+          .then(function(){
             return Post.where({user_id: user.id}).count().exec(function(result){
               result.should.be.equal(2)
             })
@@ -116,7 +119,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
           user.posts = Post.new({thread_id: 1, message: 'with ='})
 
-          return user.save(function(){
+          return user.save()
+          .then(function(){
             return Post.where({user_id: user.id}).count().exec(function(result){
               result.should.be.equal(1)
             })
@@ -134,7 +138,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
           user.posts = [Post.new({thread_id: 1, message: 'with = [] 1'}), Post.new({thread_id: 1, message: 'with = [] 2'})]
 
-          return user.save(function(){
+          return user.save()
+          .then(function(){
             return Post.where({user_id: user.id}).count().exec(function(result){
               result.should.be.equal(2)
             })
@@ -151,7 +156,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return Thread.find(1).exec(function(thread){
           thread.user = User.new({login: 'new_user', email: 'new_user@mail.com'})
 
-          return thread.save(function(){
+          return thread.save()
+          .then(function(){
             return User.where({login: 'new_user'}).include('threads').limit(1).exec(function(user){
               user.email.should.be.equal('new_user@mail.com')
               user.threads.length.should.be.equal(1)
@@ -168,7 +174,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         var Avatar = store.Model('Avatar')
         return User.find(1).exec(function(user){
           user.avatar = Avatar.new({url: 'http://better-avatar.com/strong.png'})
-          return user.save(function(){
+          return user.save()
+          .then(function(){
             return Avatar.where({url_like: 'better'}).include('user').limit(1).exec(function(avatar){
               avatar.url.should.be.equal('http://better-avatar.com/strong.png')
               avatar.user.id.should.be.equal(user.id)
@@ -185,7 +192,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return User.find(1).exec(function(user){
           user.unread.add([1, 2])
 
-          return user.save(function(){
+          return user.save()
+          .then(function(){
             return User.find(1).include('unread').exec(function(phil){
               phil.unread.length.should.be.equal(3)
             })
@@ -203,7 +211,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
           user.unread.new({thread_id: 3, user_id: 3, message: 'unread message'})
 
-          return user.save(function(){
+          return user.save()
+          .then(function(){
             return User.find(2).include('unread').exec(function(michl){
               michl.unread.length.should.be.equal(1)
               user.unread[0].attributes.user_id.should.be.equal(3)
@@ -222,7 +231,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return User.find(4).exec(function(user){
           user.unread_ids = [1, 2]
 
-          return user.save(function(){
+          return user.save()
+          .then(function(){
             return User.find(4).include('unread').exec(function(user){
               user.unread.length.should.be.equal(2)
             })
@@ -238,7 +248,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           login: 'A',
           email: 'A@mail.com',
           unread_ids: [2, 3, 4]
-        }, function(result){
+        })
+        .then(function(result){
           return User.where({login: 'A'}).include('unread').limit(1).exec(function(result){
             result.login.should.be.equal('A')
             result.unread.length.should.be.equal(3)
@@ -254,7 +265,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return User.find(1).include('threads').exec(function(user){
           user.thread_ids = [1, 2]
 
-          return user.save(function(){
+          return user.save()
+          .then(function(){
             return User.find(1).include('threads').exec(function(phil){
               phil.threads.length.should.be.equal(2)
             })
@@ -285,7 +297,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return User.find(1).exec(function(user){
           user.poly_things.new({message: 'foo'})
 
-          return user.save(function(){
+          return user.save()
+          .then(function(){
             return User.find(1).include('poly_things').exec(function(phil){
               phil.poly_things.length.should.be.equal(1)
               phil.poly_things[0].message.should.be.eql('foo')

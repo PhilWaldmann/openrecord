@@ -142,7 +142,8 @@ describe('Postgres: all Attributes', function(){
         datetime_attribute: now,
         time_attribute: now,
         hstore_attribute: {a: 11, b: 22, foo: {bar: ['phil', 'michl']}}
-      }, function(result){
+      })
+      .then(function(result){
         return AttributeTest.find(result.id).exec(function(record){
           record.char_attribute.should.be.equal('aaaa')
           record.float_attribute.should.be.equal(1.00001)
@@ -174,7 +175,8 @@ describe('Postgres: all Attributes', function(){
 
       return AttributeTest.create({
         hstore_attribute: obj
-      }, function(result){
+      })
+      .then(function(result){
         return AttributeTest.find(result.id).exec(function(record){
           record.hstore_attribute.should.be.eql(obj)
         })
@@ -192,12 +194,14 @@ describe('Postgres: all Attributes', function(){
 
       return AttributeTest.create({
         hstore_attribute: obj
-      }, function(result){
+      })
+      .then(function(result){
         return AttributeTest.find(result.id).exec(function(record){
           record.hstore_attribute.should.be.eql(obj)
           record.hstore_attribute.b = false
           record.hstore_attribute.foo.bar.push('foo')
-          return record.save(function(){
+          return record.save()
+          .then(function(){
             record.hstore_attribute.should.be.eql(after)
 
             return AttributeTest.find(record.id).exec(function(record){

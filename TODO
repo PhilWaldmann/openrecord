@@ -15,7 +15,7 @@
 [x] graphql bring you own schema
 
 
-
+[ ] definition: this.has() relation testen
 
 neue Typen hinzufügen
 
@@ -36,3 +36,16 @@ neue Typen hinzufügen
 [ ] lazy connection -> one Promise for all record relations - which will load relations bulk!
 
 [ ] limit(1) should return an array as well
+
+[ ] combine sql, rest and ldap `relation` before and after save hooks
+
+
+BREAKING CHANGES:
+`plugins` and `models` store config does not autoload via `glob`
+`paranoid` plugin scope is not `withDeleted`
+`join()` does an inner join by default
+failed validations will throw an error
+`save`, `delete`, `create`,... won't return `success`, but instead the record itself
+hooks must return a promise. The `done` callback was removed
+`create`, `save`, `destroy`, ... won't take callbacks any more. use `.then(callback)`
+relations wont be saved anymore. except you set autoSave to `true`

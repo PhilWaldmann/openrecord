@@ -13,6 +13,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     before(function(){
+      storeConf.autoSave = true
       store = new Store(storeConf)
 
 

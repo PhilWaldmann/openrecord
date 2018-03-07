@@ -12,6 +12,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
     before(function(){
+      storeConf.autoSave = true
       store = new Store(storeConf)
 
 
@@ -100,7 +101,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             name: 'B1.1'
           })
 
-          return folder.save(function(){
+          return folder.save()
+          .then(function(){
             return Folder.find(3).withAllChildren(2).exec(function(folder){
               folder.children[0].name.should.be.equal('B1')
               folder.children[0].lft.should.be.equal(folder.lft + 1)
@@ -128,7 +130,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             name: 'B2.1.2'
           })
 
-          return folder.save(function(){
+          return folder.save()
+          .then(function(){
             return Folder.find(5).withAllChildren().exec(function(folder){
               folder.children[0].name.should.be.equal('B2.1')
               folder.children[0].lft.should.be.equal(folder.lft + 1)
@@ -158,7 +161,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return Folder.find(1).exec(function(folder){ // => A
           folder.moveToChildOf(3) // => B
 
-          return folder.save(function(){
+          return folder.save()
+          .then(function(){
             return Folder.find(3).withAllChildren(2).order('lft').exec(function(folder){
               folder.children.length.should.be.equal(3)
 
@@ -180,7 +184,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return Folder.find(6).exec(function(folder){ // => B2.1
           folder.moveToChildOf(4) // => B1
 
-          return folder.save(function(){
+          return folder.save()
+          .then(function(){
             return Folder.find(4).withAllChildren().order('lft').exec(function(folder){
               folder.children.length.should.be.equal(2)
 
@@ -197,7 +202,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       return store.ready(function(){
         var Folder = store.Model('Folder')
         return Folder.find(1).exec(function(folder){ // => A
-          return folder.destroy(function(){
+          return folder.destroy()
+          .then(function(){
             return Folder.order('lft').exec(function(folders){
               folders.length.should.be.equal(7)
 
@@ -218,7 +224,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return Folder.find(6).exec(function(folder){ // => B2.1
           folder.parent_id = 3
 
-          return folder.save(function(){
+          return folder.save()
+          .then(function(){
             return Folder.order('lft').exec(function(folders){
               folders[0].id.should.be.equal(3)
               folders[1].id.should.be.equal(4)
@@ -249,7 +256,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return Folder.find(6).exec(function(folder){ // => B2.1
           folder.parent_id = 0
 
-          return folder.save(function(){
+          return folder.save()
+          .then(function(){
             return Folder.order('lft').exec(function(folders){
               folders[0].id.should.be.equal(3)
               folders[1].id.should.be.equal(4)
@@ -298,7 +306,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return Folder.find(6).exec(function(folder){ // => B2.1
           folder.parent_id = 8
 
-          return folder.save(function(){
+          return folder.save()
+          .then(function(){
             return Folder.order('lft').exec(function(folders){
               folders[0].id.should.be.equal(3)
               folders[1].id.should.be.equal(4)
@@ -320,7 +329,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
               folder = folders[3] // => B2.1
               folder.parent_id = 0
 
-              return folder.save(function(){
+              return folder.save()
+              .then(function(){
                 return Folder.order('lft').exec(function(folders){
                   folders[0].id.should.be.equal(3)
                   folders[1].id.should.be.equal(4)

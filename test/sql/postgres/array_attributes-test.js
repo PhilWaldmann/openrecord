@@ -141,7 +141,8 @@ describe('Postgres: Array Attributes', function(){
 
           tmp[attr] = testValues[type].testValues[1].input
 
-          return ArrayTest.create(tmp, function(result){
+          return ArrayTest.create(tmp)
+          .then(function(result){
             return ArrayTest.find(result.id).exec(function(record){
               record[attr].should.be.eql(testValues[type].testValues[1].output)
             })

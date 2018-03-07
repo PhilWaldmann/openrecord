@@ -81,7 +81,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         var Post = store.Model('Post')
 
         return Post.find(3, function(post){
-          return post.destroy(function(){
+          return post.destroy()
+          .then(function(){
             return Thread.find(2, function(thread){
               should.not.exist(thread)
             })
@@ -109,7 +110,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         var Post = store.Model('Post')
 
         return Post.find(6, function(post){
-          return post.destroy(function(){
+          return post.destroy()
+          .then(function(){
             return PolyThing.find([1, 2], function(polyThings){
               polyThings.length.should.be.equal(1)
             })

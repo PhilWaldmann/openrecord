@@ -234,7 +234,8 @@ before(function(ready){
 
 
   server.post('/posts', function(req, res, next) {
-    Post.create(req.body.data, function(post){
+    Post.create(req.body.data)
+    .then(function(post){
       res.send({
         data: post.toJson(),
         success: true

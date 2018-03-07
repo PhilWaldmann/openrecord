@@ -39,7 +39,8 @@ describe('Postgres: Json/Jsonb Attributes', function(){
       var JsonTest = store.Model('JsonTest')
       var test = new JsonTest({ json_attr: {foo: {bar: [1, 2, 3]}} })
 
-      return test.save(function() {
+      return test.save()
+      .then(function() {
         return JsonTest.find(test.id).exec(function(t){
           t.json_attr.should.be.eql({foo: {bar: [1, 2, 3]}})
         })
@@ -52,7 +53,8 @@ describe('Postgres: Json/Jsonb Attributes', function(){
       var JsonTest = store.Model('JsonTest')
       var test = new JsonTest({ jsonb_attr: {foo: {bar: [1, 2, 3]}} })
 
-      return test.save(function() {
+      return test.save()
+      .then(function() {
         return JsonTest.find(test.id).exec(function(t){
           t.jsonb_attr.should.be.eql({foo: {bar: [1, 2, 3]}})
         })
@@ -68,7 +70,8 @@ describe('Postgres: Json/Jsonb Attributes', function(){
         test.json_attr.foo.bar.push(4)
         test.json_attr.bar = 'test'
 
-        return test.save(function(){
+        return test.save()
+        .then(function(){
           return JsonTest.find(test.id).exec(function(t){
             t.json_attr.should.be.eql({foo: {bar: [1, 2, 3, 4]}, bar: 'test'})
           })
@@ -82,7 +85,8 @@ describe('Postgres: Json/Jsonb Attributes', function(){
       var JsonTest = store.Model('JsonTest')
       var test = new JsonTest({ json_attr: {bar: 'foo'} })
 
-      return test.save(function() {
+      return test.save()
+      .then(function() {
         return JsonTest.order('json_attr.bar').exec(function(result){
           result[0].json_attr.bar.should.be.equal('foo')
           result[1].json_attr.bar.should.be.equal('test')
@@ -113,7 +117,8 @@ describe('Postgres: Json/Jsonb Attributes', function(){
       return JsonTest.find(1).exec(function(test){
         test.json_attr = [{a: 1, b: 2}, {b: 2}]
 
-        return test.save(function(){
+        return test.save()
+        .then(function(){
           return JsonTest.find(test.id).exec(function(t){
             t.json_attr.should.be.eql([{a: 1, b: 2}, {b: 2}])
           })

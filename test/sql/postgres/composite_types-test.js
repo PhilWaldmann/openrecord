@@ -214,7 +214,8 @@ describe('Postgres: Composite Types', function(){
         record.composite_attribute.foo = 2
         record.second_one = {bar: 'hello'}
 
-        return record.save(function(){
+        return record.save()
+        .then(function(){
           return AttributeTest.find(1).exec().then(function(record){
             record.toJson().should.be.eql({
               id: 1,
@@ -243,7 +244,8 @@ describe('Postgres: Composite Types', function(){
 
         delete record.composite_attribute.changes.bar // ignore change
 
-        return record.save(function(){
+        return record.save()
+        .then(function(){
           return AttributeTest.find(1).exec().then(function(record){
             record.toJson().should.be.eql({
               id: 1,
@@ -274,7 +276,8 @@ describe('Postgres: Composite Types', function(){
         second_one: {
           bar: 'foo'
         }
-      }, function(){
+      })
+      .then(function(){
         return AttributeTest.find(3).exec().then(function(record){
           record.toJson().should.be.eql({
             id: 3,

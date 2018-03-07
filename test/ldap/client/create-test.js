@@ -9,7 +9,8 @@ describe('LDAP Client: Create', function(){
       url: 'ldap://0.0.0.0:1389',
       base: 'dc=test',
       user: 'cn=root',
-      password: 'secret'
+      password: 'secret',
+      autoSave: true
     })
 
     store.Model('User', function(){
@@ -42,7 +43,8 @@ describe('LDAP Client: Create', function(){
     return store.ready(function(){
       var User = store.Model('User')
 
-      return User.create({dn: 'cn=fifi, ou=create, dc=test', username: 'fifi', age: 35}, function(user){
+      return User.create({dn: 'cn=fifi, ou=create, dc=test', username: 'fifi', age: 35})
+      .then(function(user){
         user.username.should.be.equal('fifi')
         return User.find('cn=fifi, ou=create, dc=test').exec(function(user){
           user.username.should.be.equal('fifi')
