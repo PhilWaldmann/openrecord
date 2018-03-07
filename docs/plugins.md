@@ -196,3 +196,5 @@ const store = new Store({
 
 This plugin allows you to define a `glob` pattern and OpenRecord will load all matching files for you.  
 Works for `migrations` as well!
+
+!> Will not work with webpack or any other bundler!!
