@@ -3,7 +3,7 @@ var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe(title + ': Conditions', function(){
+  describe.only(title + ': Conditions', function(){
     var store
 
     before(beforeFn)
@@ -15,14 +15,13 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     before(function(){
       store = new Store(storeConf)
 
-      store.attributeTypes.string.operators.is_phil = {
-        on: { all: false,  boolean: true },
-        defaultMethod: function(attr, value, query, cond){
-          if(value) query.where(store.utils.getAttributeName(this, cond), 'like', '%phil%')
-        }
-      }
+      store.addOperator('is_phil', function(attr, value, query, cond){
+        if(value) query.where(store.utils.getAttributeName(this, cond), 'like', '%phil%')
+      }, {
+        on: { all: false,  boolean: true }
+      })
 
-      store.attributeTypes.string.operators.length = {
+      store.addOperator('length', {
         on: {
           number: function(attr, value, query, cond){
             var fn = 'char_length'
@@ -37,7 +36,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             query.whereRaw(fn + '(' + store.utils.getAttributeName(this, cond) + ') BETWEEN ? AND ?', [min, max])
           }
         }
-      }
+      })
+
+      store.appendOperator('string', 'is_phil')
+      store.appendOperator('string', 'length')
 
       store.Model('User', function(){
         this.attribute('created_at', 'date')

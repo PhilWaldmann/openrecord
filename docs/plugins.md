@@ -105,6 +105,52 @@ exports.definition = {
 
 This time the `scope` will be created for every model!
 
+## Custom operators
+
+OpenRecord has all [basic operators](./query.md#with-conditions) predefined.  
+An `operator` is define on a [type](./definitoin.md#attributes) and will be available for all attributes of that type.
+
+Here is an example on how to add your own operator:
+
+```js
+// the new operator is called `regexp`
+store.addOperator('regexp', function(field, value, query, condition){
+  const sqlColumnName = store.utils.getAttributeName(this, condition)
+  query.where(sqlColumnName, '~', value.toString().replace(/(^\/|\/$)/g, '')) // naiv conversion of js regexpt to postgres regexp!
+})
+// and it will be appended to the `string` type
+store.appendOperator('string', 'regexp')
+```
+
+Now it's possible to [query](./query.md#with-conditions) your datastore in the following way:
+```js
+User.where({login_regexp: /p.il/})
+```
+
+
+Here is another example:
+
+```js
+store.addOperator('length', {
+  on: {
+    // it will only accept values of type `number` ...
+    number: function(field, value, query, condition){
+      const sqlColumnName = store.utils.getAttributeName(this, condition)
+      query.whereRaw(`char_length(${sqlColumnName}) = ?`, [value])
+    },
+    
+    // ... and `array`.
+    array: function(attr, value, query, cond){
+      const sqlColumnName = store.utils.getAttributeName(this, condition)
+      query.whereRaw(`char_length(${sqlColumnName}) BETWEEN ? AND ?`, value.splice(0, 2)) // only take the first 2 elements of the array
+    }
+  }
+})
+store.appendOperator('string', 'length')
+```
+
+!> The examples above are for a *postgres* database
+
 ## Build in plugins
 
 Stores of type *sqlite3*, *postgres*, *mysql* and *oracle* does have the following plugins automatically loaded:

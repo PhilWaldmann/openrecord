@@ -59,6 +59,8 @@ Depending on the [attribute type](./definition.md#attributes), the `operator` an
 build in `operators` for SQL stores are: `not`, `gt`, `gte`, `lt`, `lte`, `between`, `like`, `ilike`  
 *ldap* stores support only: `not`, `gt`, `gte`, `lt`, `lte`, `between`
 
+?> Want to add your [own operators](./plugins.md#custom-operators)?
+
 Here is an example how to filter an *postgres* database via a jsonb field:
 ```js
 User.where({json_attr: {bar: 'test'}}) // json_attr->>'bar' = 'test'
