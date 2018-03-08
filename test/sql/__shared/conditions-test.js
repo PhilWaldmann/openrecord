@@ -17,8 +17,25 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
       store.attributeTypes.string.operators.is_phil = {
         on: { all: false,  boolean: true },
-        method: function(attr, value, query, cond){
+        defaultMethod: function(attr, value, query, cond){
           if(value) query.where(store.utils.getAttributeName(this, cond), 'like', '%phil%')
+        }
+      }
+
+      store.attributeTypes.string.operators.length = {
+        on: {
+          number: function(attr, value, query, cond){
+            var fn = 'char_length'
+            if(store.type === 'sqlite3' || store.type === 'oracle') fn = 'length'
+            query.whereRaw(fn + '(' + store.utils.getAttributeName(this, cond) + ') = ?', [value])
+          },
+          array: function(attr, value, query, cond){
+            var min = value[0]
+            var max = value[1]
+            var fn = 'char_length'
+            if(store.type === 'sqlite3' || store.type === 'oracle') fn = 'length'
+            query.whereRaw(fn + '(' + store.utils.getAttributeName(this, cond) + ') BETWEEN ? AND ?', [min, max])
+          }
         }
       }
 
@@ -399,6 +416,30 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             result.length.should.be.equal(1)
           })
         })
+      })
+
+
+      it('another custom operator with multiple input types', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          return User.where({login_length: 4}).exec(function(result){
+            result.length.should.be.equal(1)
+          })
+          .then(function(){
+            return User.where({login_length: [4, 6]}).exec(function(result){
+              result.length.should.be.equal(3)
+            })
+          })
+        })
+      })
+
+      it('throws an error on invalid use of custom operator', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          return User.where({login_length: 'awesome?'}).exec(function(result){
+            result.length.should.be.equal(1)
+          })
+        }).should.be.rejectedWith(Error, {message: "Operator 'length' of attribute 'login' (type 'string') can't process value of type 'string'"})
       })
     })
   })
