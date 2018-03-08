@@ -92,7 +92,7 @@ exports.definition = {
     var self = this
 
     this.scope('totalCount', function(){
-      var key = self.primary_keys[0]
+      var key = self.primaryKeys[0]
       this // reset limit, offset and order
       .count(self.getName() + '.' + key, true)
       .limit()

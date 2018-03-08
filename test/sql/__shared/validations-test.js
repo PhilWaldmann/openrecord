@@ -131,7 +131,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
 
 
-      it('works with multiple primary_keys (create)', function(){
+      it('works with multiple primaryKeys (create)', function(){
         return store.ready(function(){
           var MultipleKey = store.Model('MultipleKey')
           var phil = MultipleKey.new({
@@ -147,7 +147,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
 
 
-      it('works with multiple primary_keys (update)', function(){
+      it('works with multiple primaryKeys (update)', function(){
         return store.ready(function(){
           var MultipleKey = store.Model('MultipleKey')
           var phil = MultipleKey.new({

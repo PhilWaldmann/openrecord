@@ -50,8 +50,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     it('has a primary key', function(){
       return store.ready(function(){
         var User = store.Model('User')
-        User.definition.primary_keys.length.should.be.equal(1)
-        User.definition.primary_keys.should.be.eql(['id'])
+        User.definition.primaryKeys.length.should.be.equal(1)
+        User.definition.primaryKeys.should.be.eql(['id'])
       })
     })
 

@@ -15,7 +15,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     before(function(){
       store = new Store(storeConf)
 
-      store.attribute_types.string.operators.is_phil = {
+      store.attributeTypes.string.operators.is_phil = {
         on: { all: false,  boolean: true },
         method: function(attr, value, query, cond){
           if(value) query.where(store.utils.getAttributeName(this, cond), 'like', '%phil%')

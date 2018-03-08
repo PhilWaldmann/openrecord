@@ -25,16 +25,16 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       return store.ready(function(){
         var User = store.Model('User')
 
-        var primaryKeys = User.definition.primary_keys
+        var primaryKeys = User.definition.primaryKeys
         primaryKeys.should.be.eql(['id'])
       })
     })
 
-    it('has multiple primary_keys', function(){
+    it('has multiple primaryKeys', function(){
       return store.ready(function(){
         var MultipleKey = store.Model('MultipleKey')
 
-        var primaryKeys = MultipleKey.definition.primary_keys
+        var primaryKeys = MultipleKey.definition.primaryKeys
         primaryKeys.should.be.eql(['id', 'id2'])
       })
     })
