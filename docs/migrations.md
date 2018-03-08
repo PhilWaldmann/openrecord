@@ -39,7 +39,7 @@ const store = new Store({
 })
 ```
 
-?> If you don't want to `require` all migrations by hand. You could use the [Automatic Model Loading Plugin](./plugins.md#automatic_model_loading).
+?> If you don't want to `require` all migrations by hand. You could use the [Automatic Model Loading Plugin](./plugins.md#automatic-model-loading).
 
 
 Available methods in the `migration scope` are:
