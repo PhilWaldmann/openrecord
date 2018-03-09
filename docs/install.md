@@ -2,35 +2,37 @@
 
 In order to use OpenRecord with your database you need to install `openrecord` **and** the corresponding database package.
 
+!> **The docs are for version 2 only! Install with `@next` until version 2 was released.**
+
 ## For a Postgres Database
 ```
-npm i openrecord pg
+npm i openrecord@next pg
 ```
 
 
 ## For a MySQL Database
 ```
-npm i openrecord mysql
+npm i openrecord@next mysql
 ```
 
 ## For a SQLite3 Database
 ```
-npm i openrecord sqlite3
+npm i openrecord@next sqlite3
 ```
 
 ## For an Oracle Database
 ```
-npm i openrecord oracledb
+npm i openrecord@next oracledb
 ```
 
 ## For a REST Backend
 ```
-npm i openrecord axios
+npm i openrecord@next axios
 ```
 
 ## For a LDAP Compatible Backend (e.g. OpenLdap or Microsofts Active Directory)
 ```
-npm i openrecord ldapjs
+npm i openrecord@next ldapjs
 ```
 
 
