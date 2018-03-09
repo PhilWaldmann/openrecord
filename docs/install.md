@@ -20,7 +20,7 @@ npm i openrecord sqlite3
 
 ## For an Oracle Database
 ```
-npm i openrecord oracle
+npm i openrecord oracledb
 ```
 
 ## For a REST Backend

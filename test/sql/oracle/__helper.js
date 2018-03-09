@@ -10,6 +10,23 @@ if(PORT) CONN += ':' + PORT
 
 // DROP ALL TABLES https://stackoverflow.com/questions/1690404/how-to-drop-all-user-tables
 
+/*
+  For local oracle tests:
+  1. download oracle docker image (wnameless/oracle-xe-11g)
+  2. Download oracle instantclient (SQLPlus). (in this case ~/Desktop/instantclient_12_1)
+  3. $ OCI_INC_DIR=~/Desktop/instantclient_12_1/sdk/include OCI_LIB_DIR=~/Desktop/instantclient_12_1 LD_LIBRARY_PATH=~/Desktop/instantclient_12_1 npm i oracledb --save-dev
+  4. $ mkdir ~/lib
+  5. $ ln -s ~/Desktop/instantclient_12_1/libclntsh.dylib.12.1 ~/lib/
+  3. $ docker run -d -p 49160:22 -p 49161:1521 -p 46162:8080 -e ORACLE_ALLOW_REMOTE=true wnameless/oracle-xe-11g 
+  4. $ export PATH=~/Desktop/instantclient_12_1:$PATH
+  5. $ ORACLE_SID=XE sqlplus -L -S 'system/oracle'@localhost:49161  <<SQL
+CREATE USER travis IDENTIFIED BY travis;
+GRANT CONNECT, RESOURCE TO travis;
+GRANT EXECUTE ON SYS.DBMS_LOCK TO travis;
+SQL
+  5. ORACLE_VIA_DOCKER=1 ORACLE_HOME=1 npm run mocha
+*/
+
 global.beforeOracle = function(db, sql, next){
   sql = sql.map(function(line){
     var tmp = line.match(/^PRIMARY:(\w+):(\w+)$/)

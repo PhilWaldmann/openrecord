@@ -24,16 +24,20 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       store.addOperator('length', {
         on: {
           number: function(attr, value, query, cond){
+            var columnName = store.utils.getAttributeName(this, cond)
             var fn = 'char_length'
             if(store.type === 'sqlite3' || store.type === 'oracle') fn = 'length'
-            query.whereRaw(fn + '(' + store.utils.getAttributeName(this, cond) + ') = ?', [value])
+            if(store.type === 'oracle') columnName = '"' + attr + '"'
+            query.whereRaw(fn + '(' + columnName + ') = ?', [value])
           },
           array: function(attr, value, query, cond){
+            var columnName = store.utils.getAttributeName(this, cond)
             var min = value[0]
             var max = value[1]
             var fn = 'char_length'
             if(store.type === 'sqlite3' || store.type === 'oracle') fn = 'length'
-            query.whereRaw(fn + '(' + store.utils.getAttributeName(this, cond) + ') BETWEEN ? AND ?', [min, max])
+            if(store.type === 'oracle') columnName = '"' + attr + '"'
+            query.whereRaw(fn + '(' + columnName + ') BETWEEN ? AND ?', [min, max])
           }
         }
       })
