@@ -1,7 +1,7 @@
 # Context
 
-If you use OpenRecord in a web application or simmilar, you most probably want to have access to some request information (e.g. the user session).  
-Instead of calling a [scope](./definition#scopes) with this information it's better to use `setContext(context)`. OpenRecord will provide you with the context everywhere you need it.  
+If you use OPENRECORD in a web application or simmilar, you most probably want to have access to some request information (e.g. the user session).  
+Instead of calling a [scope](./definition#scopes) with this information it's better to use `setContext(context)`. OPENRECORD will provide you with the context everywhere you need it.  
 
 Here is a very basic example:
 ```js
@@ -27,7 +27,7 @@ module.exports = function(){
 var myContext = {role: 'admin', id: 1}
 
 post = await Post.setContext(myContext).find(id)
-post.title = 'OpenRecord!!'
+post.title = 'OPENRECORD!!'
 await post.save()
 ```
 

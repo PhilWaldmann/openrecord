@@ -65,7 +65,7 @@ user.set('first_name', 'Philipp')
 ## save()
 
 To save a record back to your datastore, just call `save()`.  
-OpenRecord will automatically [validate](#validate) your record and checks for [changes](#haschanges). It will only update your datastore if something has changed.  
+OPENRECORD will automatically [validate](#validate) your record and checks for [changes](#haschanges). It will only update your datastore if something has changed.  
 
 ```js
 const user = User.find(2)
@@ -164,7 +164,7 @@ The usage is simmilar to `updateAll`.
 await User.where({active: false}).destroyAll()
 ```
 
-Internally OpenRecord will load all records and call `destroy()` on each.  
+Internally OPENRECORD will load all records and call `destroy()` on each.  
 So hooks are fired for every record!
 
 ## deleteAll()

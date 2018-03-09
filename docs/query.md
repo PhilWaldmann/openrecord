@@ -1,4 +1,4 @@
-# Query OpenRecord Models
+# Query OPENRECORD Models
 
 After you've [initialized your store](./setup.md) and [defined your models](./definition.md) you are ready to query your datastore.  
 
@@ -35,7 +35,7 @@ But in most cases you want to [filter](#with-conditions) or [limit](#limitoffset
 
 ## With Conditions
 
-OpenRecord has a realy nice syntax to filter your results.
+OPENRECORD has a realy nice syntax to filter your results.
 
 Here are some examples to filtern a SQL store:
 ```js
@@ -53,7 +53,7 @@ User.where({failed_logins_lte: 10}) // failed_logins <= 10
 User.where({failed_logins_between: [5, 8]}) // failed_logins between 5 and 8
 ```
 
-OpenRecord supports a lot of different `operators` like `not`, `gt` or `between` (separated from the field name by an underscore).  
+OPENRECORD supports a lot of different `operators` like `not`, `gt` or `between` (separated from the field name by an underscore).  
 Depending on the [attribute type](./definition.md#attributes), the `operator` and the actual value it will create (in this case) the conditions for the SQL query.
 
 build in `operators` for SQL stores are: `not`, `gt`, `gte`, `lt`, `lte`, `between`, `like`, `ilike`  
@@ -84,7 +84,7 @@ console.log(threads[0].posts)
 ```
 
 The above example will load all sticky threads and all it's posts.  
-OpenRecord will query your datastore only two times:
+OPENRECORD will query your datastore only two times:
 1. To get all sticky threads
 2. To get all posts that belongs to the previously loaded threads
 
@@ -99,9 +99,9 @@ Thread.include([{posts: {author: 'last_post'}}, 'author])
 ```
 
 Filtering these relations could be done with `where` as well.  
-The following example loads all threads, but only posts where the title contains `OpenRecord`
+The following example loads all threads, but only posts where the title contains `OPENRECORD`
 ```js
-Thread.include('posts').where({posts:{title_like: 'OpenRecord'}})
+Thread.include('posts').where({posts:{title_like: 'OPENRECORD'}})
 ```
 
 Conditions and includes could be nested indefinitely!
@@ -117,9 +117,9 @@ User.include({posts: {thread: 'rating'}}).where({posts: {thread: {rating: {stars
 [Includes](#preloading-relations) are a little bit like offline joins. To do real joins in your database you have to use `join()`.  
 `join()` takes the same input as `include()` and will do an `INNER JOIN` by default.
 
-The following example loads all threads and posts where one of it's posts title contains `OpenRecord`.
+The following example loads all threads and posts where one of it's posts title contains `OPENRECORD`.
 ```js
-Thread.join('posts').where({posts:{title_like: 'OpenRecord'}})
+Thread.join('posts').where({posts:{title_like: 'OPENRECORD'}})
 ```
 
 There are also dedicated methods to do other types of joins: `leftJoin()`, `rightJoin()`, `innerJoin()` and `outerJoin()`.  
@@ -207,7 +207,7 @@ Post.group('message').order('message')
 ## Select
 !> For **SQL** databases only!
 
-By default OpenRecord will select all fields (`*`).
+By default OPENRECORD will select all fields (`*`).
 You could change that via the `select()` method.
 
 ### select(field ...)

@@ -1,6 +1,6 @@
 # Install
 
-In order to use OpenRecord with your database you need to install `openrecord` **and** the corresponding database package.
+In order to use OPENRECORD with your database you need to install `openrecord` **and** the corresponding database package.
 
 !> **The docs are for version 2 only! Install with `@next` until version 2 was released.**
 
@@ -38,5 +38,5 @@ npm i openrecord@next ldapjs
 
 ## GraphQL
 
-If you you want to use OpenRecord with [GraphQL](http://graphql.org/graphql-js/), you'll need to install `graphql` as well.
-See [GraphQL with OpenRecord](graphql.md)
+If you you want to use OPENRECORD with [GraphQL](http://graphql.org/graphql-js/), you'll need to install `graphql` as well.
+See [GraphQL with OPENRECORD](graphql.md)

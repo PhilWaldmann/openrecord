@@ -1,9 +1,9 @@
 # Model Definition
 
-OpenRecord allows you to define your models in multiple ways.  
-The easiest and quickest way is to let OpenRecord define your models for you. Use the `autoLoad` config like in the [setup example](setup.md).  
+OPENRECORD allows you to define your models in multiple ways.  
+The easiest and quickest way is to let OPENRECORD define your models for you. Use the `autoLoad` config like in the [setup example](setup.md).  
   
-An OpenRecord model, in contrast to a typical OOP class, consists of 3 parts:
+An OPENRECORD model, in contrast to a typical OOP class, consists of 3 parts:
 1. static methods (e.g. `find`, `sort`, `deleteAll`, ...)
 2. instance methods (e.g. `save`, `delete`, ...)
 3. definition methods (e.g. `validatedPresenceOf`, `hasMany`, `isParanoid`, ...)
@@ -91,7 +91,7 @@ module.exports = User
 ?> You could also return a `function` like in the first example. The function name (e.g. `function User(){...}`) will be used as the model name!
 
 As you can see in the above examples, the difference between `class` and `function` style is the way how you define your custom methods.  
-Internally OpenRecord will work the same!
+Internally OPENRECORD will work the same!
 
 The scope of the `class` style `definition` method and the `function` style method are the same. That's the `definition scope`.  
 Every model has an internal definition which connects to the store, contains [validations](#validations), [relations](#relations) and more.
@@ -128,7 +128,7 @@ Of cours you could throw your own `Error` as well! But be aware, that throwing a
 ?> The value of a fulfilled `Promise` will be ignored.
 
 
-OpenRecord has a lot of build in validation methods and could be [extended easily](#plugins).  
+OPENRECORD has a lot of build in validation methods and could be [extended easily](#plugins).  
 Stores that automatically load and define your attributes (*sqlite3*, *postgres*, *mysql* and *oracle*) also automatically apply certain validations based on e.g. `NOT NULL` or `varchar(255)`.
 
 The following validation methods are available for every store type:
@@ -209,13 +209,13 @@ this.validatesUniquenessOf('teacher_id', {scope: ['semester_id', 'class_id']})
 
 ## Relations
 
-OpenRecord supports `belongs to`, `has many`, `has one` and `belongs to many` relations as well has `has many through`, `belongs to through` and `polymorphic` relations.
+OPENRECORD supports `belongs to`, `has many`, `has one` and `belongs to many` relations as well has `has many through`, `belongs to through` and `polymorphic` relations.
 
 A relation - except for a polymorphic relations - always needs a target model. The model name will be automatically taken from the relation name. If needed, you could always define the model name via the `model` config option.
 
 The relation will be initialized after the target model is ready - to automatically get the primary and foreign key. The default for the foreign key is `<model_name>_<primary_key>` - all lower case! You could manually set the `primary_key` and `foreign_key` if you need.
 
-The `name` of the relation is a string and could be anything you like. If you use the plural oder singular version of an existing model name, OpenRecord will automatically detect it and will set most of the options for you.  
+The `name` of the relation is a string and could be anything you like. If you use the plural oder singular version of an existing model name, OPENRECORD will automatically detect it and will set most of the options for you.  
 The `options` parameter is optional, if it can autodetect your target model. Otherwise you need to privide an object with the following config options:
 * **model**: The target model name as a string
 * **store**: Optional store `name`. Only needed for cross store relations!
@@ -352,7 +352,7 @@ this.setter('full_name', function(){
 
 ## Type Conversion
 Sometimes you need to convert your field from the internal structure of you datastore to another format.  
-OpenRecord has 4 types of conversions: `read`, `write`, `input` and `ouput`.
+OPENRECORD has 4 types of conversions: `read`, `write`, `input` and `ouput`.
 
 The `read` converter will be used to convert the raw ouput of your datastore to the internal value of your record. Cice versa `write` will convert the internal value to the value of your data store.  
 E.g. a date your be stored as a timestamp in your datastore and provided by the record as a native `Date` object.  
@@ -407,8 +407,8 @@ If `forceType` is set to `false`, the returned value wont be converted to the or
 
 ## Hooks
 
-OpenRecord provides hooks to intercept almost every bit of querying or modifying records.  
-In fact, almost all of OpenRecords internals are build on top of these hooks.
+OPENRECORD provides hooks to intercept almost every bit of querying or modifying records.  
+In fact, almost all of OPENRECORDs internals are build on top of these hooks.
 
 ?> A hook can be asynchronous if you return a `Promise`.
 

@@ -1,7 +1,7 @@
-# Write migrations with OpenRecord
+# Write migrations with OPENRECORD
 !> For **SQL** databases only!
 
-Migrations are totally optional, but a nice addition to OpenRecord.  
+Migrations are totally optional, but a nice addition to OPENRECORD.  
 You write a migration the same way you would write a function style `model definiton`. The function will contain the `migration scope`:
 
 ```js
@@ -16,7 +16,7 @@ module.exports = function(){
 ```
 
 The name of your migration file is up to you, but it's recommended to add a timestamp or simmilar to the name. Because every migration will run only once (if successfull).  
-OpenRecord will store all successfully finished migrations and wont execute them again! So if you want to add another field to your table, create a new migration:
+OPENRECORD will store all successfully finished migrations and wont execute them again! So if you want to add another field to your table, create a new migration:
 
 ```js
 // ./migrations/20180307172711_add_email_to_users.js
@@ -27,7 +27,7 @@ module.exports = function(){
 }
 ```
 
-In order to execute your migrations just add the `migrations` config to your store and start your application. OpenRecord will run all missing migrations and starts the store afterwards.
+In order to execute your migrations just add the `migrations` config to your store and start your application. OPENRECORD will run all missing migrations and starts the store afterwards.
 
 ```js
 const store = new Store({

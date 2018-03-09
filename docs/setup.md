@@ -1,6 +1,6 @@
 # Setup
 
-The easies way to get started is to point OpenRecord to an exsting database.  
+The easies way to get started is to point OPENRECORD to an exsting database.  
 E.g. a [SQLite3](https://sqlite.org) database file:
 
 ```js
@@ -39,7 +39,7 @@ The `Store` constructor takes the following config parameter:
 * **autoLoad**: Set to `true` if you want all your models automatically created from your database tables (*sqlite3*, *postgres*, *mysql* and *oracle* only)  
   With a `postgres` database it will take the `public` schema by default to get your tables. If you want to change that, set `autoLoad` to the schema name instead of `true`.
 * **autoSave**: Set the default value for `autoSave` on all [relations](./definition#relations)
-* **inflection**: OpenRecord will take your model name and pluralizes it to get e.g. the table name with the help of the [inflection](https://github.com/dreamerslab/node.inflection) module  
+* **inflection**: OPENRECORD will take your model name and pluralizes it to get e.g. the table name with the help of the [inflection](https://github.com/dreamerslab/node.inflection) module  
   If you want to overwrite certain names, pass an object with the format `{'wrong name': 'right name'}`.
 * **plugins**: Array of plugins (See [Plugins](./plugins.md))
 * **models**: Array of models (See [Definition](./definition.md#model-definition))
@@ -48,9 +48,9 @@ The `Store` constructor takes the following config parameter:
 
 # Require only what you need
 
-OpenRecord supports different databases and backends.
+OPENRECORD supports different databases and backends.
 If you are using e.g. [Postgres](https://www.postgresql.org/) only, it won't make any sense to load code for `ldap` or `rest` stores.
-In order to avoid this useless memory overhead, you could `require` OpenRecord in the following way:
+In order to avoid this useless memory overhead, you could `require` OPENRECORD in the following way:
 
 ```js
 const Store = require('openrecord/store/postgres')

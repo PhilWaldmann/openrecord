@@ -1,18 +1,18 @@
 # Bundle your store with Webpack
 
-If you are using *sqlite3*, *postgres*, *mysql* and *oracle* OpenRecord will automatically load all models and it's attribute definitions from your database (If `autoLoad` or `autoAttributes` is active).
-To avoid this overhead (e.g. in a [serverless](https://serverless.com/) environment), you can use [webpack](https://webpack.js.org/) and the OpenRecord webpack plugin to build your code with cacheed model and attribute definitions.
+If you are using *sqlite3*, *postgres*, *mysql* and *oracle* OPENRECORD will automatically load all models and it's attribute definitions from your database (If `autoLoad` or `autoAttributes` is active).
+To avoid this overhead (e.g. in a [serverless](https://serverless.com/) environment), you can use [webpack](https://webpack.js.org/) and the OPENRECORD webpack plugin to build your code with cacheed model and attribute definitions.
 
 In your [webpack config]() add the following plugin:
 
 ```js
-const OpenRecordCache = require('openrecord/webpack')
+const OpenrecordCache = require('openrecord/webpack')
 const myStore = require('./store.js')
 
 module.exports = {
   // ... your webpack config
   plugins: [
-    new OpenRecordCache(myStore)
+    new OpenrecordCache(myStore)
     // ... other webpack plugins
   ]
 }

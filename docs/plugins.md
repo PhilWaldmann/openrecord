@@ -1,7 +1,7 @@
 
 # Plugins
 
-`plugins` are first class citizens in OpenRecord, because everything of OpenRecord is build that way.  
+`plugins` are first class citizens in OPENRECORD, because everything of OPENRECORD is build that way.  
 
 To use a plugin globally specify it via the `plugins` [store config](./setup.md).
 ```js
@@ -107,7 +107,7 @@ This time the `scope` will be created for every model!
 
 ## Custom operators
 
-OpenRecord has all [basic operators](./query.md#with-conditions) predefined.  
+OPENRECORD has all [basic operators](./query.md#with-conditions) predefined.  
 An `operator` is define on a [type](./definitoin.md#attributes) and will be available for all attributes of that type.
 
 Here is an example on how to add your own operator:
@@ -240,7 +240,7 @@ const store = new Store({
 })
 ```
 
-This plugin allows you to define a `glob` pattern and OpenRecord will load all matching files for you.  
+This plugin allows you to define a `glob` pattern and OPENRECORD will load all matching files for you.  
 Works for `migrations` as well!
 
 !> Will not work with webpack or any other bundler!!

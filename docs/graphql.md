@@ -1,8 +1,8 @@
-# GraphQL with OpenRecord
+# GraphQL with OPENRECORD
 
 To get started with [GraphQL](http://graphql.org/) you'll need to install the [graphql](https://www.npmjs.com/package/graphql) and [graphql-tools](https://www.npmjs.com/package/graphql-tools) package.
 
-OpenRecord offers you differen helper methods, depending on the degree of control you want to have.  
+OPENRECORD offers you differen helper methods, depending on the degree of control you want to have.  
 To activate the helper methods add the following plugin to your [store config](./setup.md)
 
 ```js
@@ -70,7 +70,7 @@ query{
 }
 ```
 
-OpenRecord will automatically load all requested information.
+OPENRECORD will automatically load all requested information.
 
 Lets extend our example to include a `threads` root query:
 
