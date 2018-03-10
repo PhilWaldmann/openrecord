@@ -3,7 +3,7 @@ var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe.only(title + ': Conditions', function(){
+  describe(title + ': Conditions', function(){
     var store
 
     before(beforeFn)
