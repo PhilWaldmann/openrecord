@@ -6,8 +6,6 @@
 [![npm package version](http://badge.fury.io/js/openrecord.png)](https://npmjs.org/package/openrecord)
 [![Dependency Status](https://gemnasium.com/PhilWaldmann/openrecord.svg)](https://gemnasium.com/PhilWaldmann/openrecord)
 
-> Make ORMs great again!
-
 **Docs are for v2.0 - currently available with tag `next` on npm**
 
 OPENRECORD is an ActiveRecord inspired ORM for nodejs.
@@ -15,9 +13,9 @@ OPENRECORD is an ActiveRecord inspired ORM for nodejs.
 Currently it supports the following databases/datastores: SQLite3, MySQL, Postgres, Oracle, REST and LDAP (+ ActiveDirectory)  
 If you want to build a GraphQL endpoint for any of these databases, OPENRECORD has some build in features to support you!
 
-As the name imply, OPENRECORD is very easy to extend. The whole project was build that way.
+As the name imply, it's open and very easy to extend. The whole package was build that way.
 
-OPENRECORD has a lot of features, just take a look at the [docs](https://philwaldmann.github.io/openrecord)!
+It has a lot of features, just take a look at the [docs](https://philwaldmann.github.io/openrecord)!
 
 ## Usage example
 
@@ -41,5 +39,5 @@ Take a look at the [docs](https://philwaldmann.github.io/openrecord) to get star
 
 ## Contributing
 
-If you've found a bug please report it via the [issues](https://github.com/PhilWaldmann/openrecord/issues) page. Please make sure to add a unit test with the bug report!
-Before submit pull request make sure all tests still passed.
+If you've found a bug please report it via the [issues](https://github.com/PhilWaldmann/openrecord/issues) page.
+Before submit pull request make sure all tests still pass.

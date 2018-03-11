@@ -3,12 +3,12 @@
 OPENRECORD is a powerfull but simple to use ORM for nodejs.  
 The primary goal is to offer a clean and easy to use API to your datastore. No matter if you want to connect to Postgres, MySQL or an ActiveDirectory. The API should be simmilar, but support all the important features of your database!
 
-As the name imply, OPENRECORD is open and very easy to extend. The whole package was build that way.
+As the name imply, it's open and very easy to extend. The whole package was build that way.
 
 Currently it supports the following databases/datastores: SQLite3, MySQL, Postgres, Oracle, REST and LDAP (+ ActiveDirectory)  
 If you want to build a GraphQL endpoint for any of these databases, OPENRECORD has some build in features to support you!
 
-OPENRECORD has a lot of features, just take a look at the [docs](https://philwaldmann.github.io/openrecord)!
+It has a lot of features, just take a look at the [docs](https://philwaldmann.github.io/openrecord)!
 
 # Why?
 
