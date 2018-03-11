@@ -1,4 +1,4 @@
-![OpenRecord](logo.png)
+![OpenRecord](docs/logo.png)
 ==========
 
 [![Build Status](https://travis-ci.org/PhilWaldmann/openrecord.svg?branch=master)](https://travis-ci.org/PhilWaldmann/openrecord)

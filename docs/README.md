@@ -1,6 +1,6 @@
-# OPENRECORD
+![OpenRecord](logo.png)
 
-OPENRECORD is a powerfull but simple to use ORM for nodejs.  
+## A powerfull but simple to use ORM for nodejs.  
 The primary goal is to offer a clean and easy to use API to your datastore. No matter if you want to connect to Postgres, MySQL or an ActiveDirectory. The API should be simmilar, but support all the important features of your database!
 
 As the name imply, it's open and very easy to extend. The whole package was build [that way](./plugins.md#plugins).
