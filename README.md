@@ -6,143 +6,38 @@
 [![npm package version](http://badge.fury.io/js/openrecord.png)](https://npmjs.org/package/openrecord)
 [![Dependency Status](https://gemnasium.com/PhilWaldmann/openrecord.svg)](https://gemnasium.com/PhilWaldmann/openrecord)
 
-> A hackable, ActiveRecord-like ORM for nodejs
+> Make ORMs great again!
 
-There are currently a hand full of nodejs ORMs available - but there is no one with a nice syntax similar to ActiveRecord (Ruby).
-OpenRecord has a nice syntax, a ton of features, over 1300 unit tests and could be extended easily!
+**Docs are for v2.0 - currently available with tag `next` on npm**
 
-## Installation
+OPENRECORD is an ActiveRecord inspired ORM for nodejs.
 
-```bash
-npm install openrecord
-```
+Currently it supports the following databases/datastores: SQLite3, MySQL, Postgres, Oracle, REST and LDAP (+ ActiveDirectory)  
+If you want to build a GraphQL endpoint for any of these databases, OPENRECORD has some build in features to support you!
 
-## [Documentation](https://github.com/PhilWaldmann/openrecord/wiki)
+As the name imply, OPENRECORD is very easy to extend. The whole project was build that way.
 
-## Features
+OPENRECORD has a lot of features, just take a look at the [docs](https://philwaldmann.github.io/openrecord)!
 
-* SQLite3, MySQL, Postgres, Oracle, REST, GraphQL and LDAP (+ ActiveDirectory) support
-* Tested on Node v4 up to v6
-* Async schema definition: You could even change your model definition temporarily
-* Automatic field definition loading (SQL): You don't need to define your database fields twice! OpenRerecord will automatically load your schema definition
-* Relations (hasMany, hasOne, belongsTo with through, polymorph, **cross-store**)
-* Nested Cascade delete
-* Nested Eager Loading
-* Nested Creates
-* Nested Updates
-* Nested Joins
-* Validations
-* Scopes: Makro like methods
-* Before and After Hooks: For validation, find, create, update, destroy and some more...
-* Events
-* Chaining: Everything is chainable!
-* Promises
-* Automatic GraphQL schema creation
-* Migrations: SQL Migrations are build in
-* Plugin support: In fact 99% of OpenRecord is a plugin
-* Build-In SQL plugins:
-  * stampable: automatically set `created_at`, `updated_at`, `updater_id` or `creator_id`
-  * paranoid: Soft delete of records
-  * nested set: Build trees easily
-  * sorted list: Don't worry about lists
-* ... with more than 1500 tests
+## Usage example
 
-
-
-## Usage
-
+Here is an example how to get a single `post` from an existing sqlite3 file (by primary key).
 ```js
-var OpenRecord = require('openrecord');
+const Store = require('openrecord/store/sqlite3')
 
-var sqlite = new OpenRecord({
-  type: 'sqlite3',
-  file: 'test.sqlite'
-});
+const store = new Store({
+  file: './my-posts-db.sqlite3',
+  autoLoad: true
+})
 
-
-sqlite.Model('User', function(){
-  this.hasMany('posts');
-
-  this.scope('active', function(){
-    this.where({active: true});
-  });
-});
-
-
-sqlite.Model('Post', function(){
-  this.belongsTo('user');
-});
-
-
-sqlite.ready(function(){
-  var User = sqlite.Model('User');
-
-  User.active().where({posts: {title_like:'openrecord' }}).include('posts').exec(function(records){
-    console.log(records);
-  });
-});
-
-```
-
-
-## Examples
-
-Hooks:
-
-```js
-sqlite.Model('User', function(){
-  this.hasMany('posts');
-
-  this.afterCreate(function(record, transaction, next){
-    //send email
-    next();
-  })
-});
-```
-
-Synchronous (via fibers)
-
-```js
-sqlite.sync(function(){
-  var user = User.find(1).exec();
-  user.active = false;
-  user.save();
+store.ready(async () => {
+  const post = await store.Model('Post').find(1)
+  console.log(post)
 })
 ```
 
-Cross store relations
-
-```js
-var sqlite = new OpenRecord({
-  type: 'sqlite3',
-  file: 'test.sqlite',
-  global: true, //expose all Models as globals (default: false)
-  name: 'sqlite'
-});
-
-rest = new OpenRecord({
-  type: 'rest',
-  url: 'http://api.yourservice.com',
-  name: 'rest'
-});
-
-sqlite.Model('Book', function(){
-  this.belongsTo('author', {store: 'rest'});
-})
-
-rest.Model('Author', function(){
-  this.hasMany('books', {store: 'sqlite'});
-});
-
-sqlite.ready(function(){
-  Book.include('author').where({created_at_lt:'1990-01-01'}).exec(function(books){
-    //books[0].author
-  })
-});
-
-```
-
-
+You don't have to define your model (optional) and you also don't have to define your model's attributes (optional).  
+Take a look at the [docs](https://philwaldmann.github.io/openrecord) to get started!
 
 ## Contributing
 
