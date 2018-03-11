@@ -10,8 +10,8 @@ describe('SQL: Conditions', function(){
 
     // a store of type sql does not have any data types
     // so just create some dummy types
-    store.addOperator('eq', function(){}, {default: true})
-    store.addOperator('like', function(){})
+    // store.addOperator('eq', function(){}, {default: true})
+    // store.addOperator('like', function(){})
 
     store.addType('string', function(value){
       return value
