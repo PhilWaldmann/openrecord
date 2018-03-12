@@ -15,7 +15,7 @@ If you want to build a GraphQL endpoint for any of these databases, OPENRECORD h
 
 As the name imply, it's open and very easy to extend. The whole package was build that way.
 
-It has a lot of features, just take a look at the [docs](https://philwaldmann.github.io/openrecord)!
+It has a lot of features, just take a look at the [docs](https://openrecord.js.org)!
 
 ## Usage example
 
@@ -35,7 +35,7 @@ store.ready(async () => {
 ```
 
 You don't have to define your model (optional) and you also don't have to define your model's attributes (optional).  
-Take a look at the [docs](https://philwaldmann.github.io/openrecord) to get started!
+Take a look at the [docs](https://openrecord.js.org) to get started!
 
 ## Contributing
 
