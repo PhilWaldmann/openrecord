@@ -259,7 +259,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it.skip('updates a record`s has_many relation with thread_ids=[1, 2]', function(){
+    it('updates a record`s has_many relation with thread_ids=[1, 2]', function(){
       return store.ready(function(){
         var User = store.Model('User')
         return User.find(1).include('threads').exec(function(user){

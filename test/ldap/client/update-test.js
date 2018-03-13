@@ -10,7 +10,8 @@ describe('LDAP Client: Update', function(){
       url: 'ldap://0.0.0.0:1389',
       base: 'dc=test',
       user: 'cn=root',
-      password: 'secret'
+      password: 'secret',
+      autoSave: true
     })
 
     store.Model('User', function(){
@@ -69,7 +70,8 @@ describe('LDAP Client: Update', function(){
         user.username.should.be.equal('move_me')
         user.dn = 'cn=move_me, ou=target, ou=update, dc=test'
 
-        return user.save(function(result){
+        return user.save()
+        .then(function(result){
           result.should.be.equal(user)
 
           return User.find('cn=move_me, ou=update, dc=test').exec(function(user){

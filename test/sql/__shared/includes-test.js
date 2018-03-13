@@ -35,7 +35,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.hasMany('unread_threads', {through: 'unread', relation: 'thread'})
         this.hasMany('poly_things')
         this.hasMany('members', {through: 'poly_things', relation: 'member'})
-
         this.belongsTo('user', {store: 'IncludeRestStore', primary_key: 'id'})
       })
       store.Model('Avatar', function(){
@@ -522,38 +521,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           })
         })
       })
-
-      it.skip('returns the result as json + the totalCount', function(){
-        return store.ready(function(){
-          var User = store.Model('User')
-          return User.limit(2).include(':totalCount').asJson().exec(function(result){
-            result.length.should.be.equal(2)
-            result.$totalCount.should.be.equal(3)
-          })
-        })
-      })
-
-      it.skip('returns the result + the totalCount with conditions', function(){
-        return store.ready(function(){
-          var User = store.Model('User')
-          return User.include(':totalCount').where({login_like: 'phil'}).exec(function(result){
-            result.length.should.be.equal(1)
-            result.$totalCount.should.be.equal(1)
-          })
-        })
-      })
-
-
-      it.skip('returns the result + the totalCount with conditions and joins', function(){
-        return store.ready(function(){
-          var User = store.Model('User')
-          return User.include(':totalCount').join('posts').where({login_like: 'phil'}).exec(function(result){
-            result.length.should.be.equal(1)
-            result.$totalCount.should.be.equal(1)
-          })
-        })
-      })
-
 
 
       it('does only one include, even include(table) was called twice', function(){

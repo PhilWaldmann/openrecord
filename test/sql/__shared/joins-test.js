@@ -87,7 +87,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
 
 
-      it.skip('rightJoin returns the right sql', function(){
+      it('rightJoin returns the right sql', function(){
+        if(title === 'SQL (SQLite3)') return Promise.resolve() // not supported for SQLite3
         return store.ready(function(){
           var User = store.Model('User')
           return User.rightJoin('posts').toSql(function(sql){
@@ -107,17 +108,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
 
 
-      it.skip('outerJoin returns the right sql', function(){
-        return store.ready(function(){
-          var User = store.Model('User')
-          return User.outerJoin('posts').toSql(function(sql){
-            sql.should.be.equal('select "users"."id" "f0", "users"."login" "f1", "users"."email" "f2", "users"."created_at" "f3", "posts"."id" "f4", "posts"."user_id" "f5", "posts"."thread_id" "f6", "posts"."message" "f7" from "users" outer join "posts" on "users"."id" = "posts"."user_id"')
-          })
-        })
-      })
-
-
-      it.skip('join returns the right sql (type=right)', function(){
+      it('join returns the right sql (type=right)', function(){
+        if(title === 'SQL (SQLite3)') return Promise.resolve() // not supported for SQLite3
         return store.ready(function(){
           var User = store.Model('User')
           return User.join('posts', 'right').toSql(function(sql){

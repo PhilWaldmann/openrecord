@@ -9,7 +9,8 @@ describe('LDAP Client: Conditions', function(){
       url: 'ldap://0.0.0.0:1389',
       base: 'dc=test',
       user: 'cn=root',
-      password: 'secret'
+      password: 'secret',
+      autoSave: true
     })
 
     store.Model('User', function(){

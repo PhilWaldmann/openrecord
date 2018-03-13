@@ -130,12 +130,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
 
-    it.skip('find with objectGUID', function(){
+    it('find with objectGUID', function(){
       return store.ready(function(){
         var User = store.Model('User')
-        return User.find('cn=openerecord_test_user6,ou=sub_ou3,ou=exec_test,ou=openrecord,' + LDAP_BASE).exec(function(user){
-          return User.where({objectGUID: user.objectGUID}).exec(function(sameUser){
-            user.dn.should.be.equal(sameUser.dn)
+        return User.find('cn=openerecord_test_user6,ou=sub_ou3,ou=exec_test,ou=openrecord,' + LDAP_BASE).exec(function(user){          
+          return User.where({objectGUID: user.objectGUID}).exec(function(sameUsers){
+            user.dn.should.be.equal(sameUsers[0].dn)
           })
         })
       })

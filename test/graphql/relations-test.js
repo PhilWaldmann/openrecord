@@ -163,5 +163,31 @@ types.forEach(function(type){
         })
       })
     })
+
+
+    it.skip('returns a record with deeply nested relational via scope', function(){
+      return query(`{
+          recipe(id: 1){
+            title,
+            ingredients(limit: 2){
+              name
+            }
+          }
+        }`)
+      .then(function(result){
+        // true.should.be.equal(false)
+        result.should.be.eql({
+          data: {
+            recipe: {
+              title: 'Toast Hawaii',
+              ingredients: [
+                { name: 'toast' },
+                { name: 'pinapple' }
+              ]
+            }
+          }
+        })
+      })
+    })
   })
 })

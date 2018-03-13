@@ -80,7 +80,8 @@ describe('LDAP Client: Create', function(){
         age: 44
       }))
 
-      return ou.save(function(result){
+      return ou.save()
+      .then(function(result){
         result.name.should.be.equal('Sub')
 
         return Ou.find('ou=sub, ou=create, dc=test').include('children').exec(function(ou){

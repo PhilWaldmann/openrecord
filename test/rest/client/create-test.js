@@ -56,7 +56,8 @@ describe('REST Client: Create', function(){
         thread_id: 3
       })
 
-      return user.save(function(user){
+      return user.save()
+      .then(function(user){
         return User.find(user.id).include('posts').exec(function(user){
           user.posts.length.should.be.equal(1)
           user.posts[0].message.should.be.equal('hugo post')

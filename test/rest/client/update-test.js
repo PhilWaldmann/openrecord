@@ -52,7 +52,8 @@ describe('REST Client: Update', function(){
         record.login = 'michael'
         record.posts[0].message = 'michaels post'
 
-        return record.save(function(){
+        return record.save()
+        .then(function(){
           return User.find(2).include('posts').exec(function(record){
             record.login.should.be.equal('michael')
             record.posts.length.should.be.equal(1)

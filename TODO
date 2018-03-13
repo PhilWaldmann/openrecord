@@ -1,42 +1,14 @@
-[x] remove internal exception handling and put everything into promises
-[x] remove async in favor of promises
 [ ] test all exceptions
 [ ] insert multiple records at once
-
-[x] graphql variant test
 [ ] graphql pagination -> mit cursor?! + pageInfo
-[x] graphql felder ausblenden
-[x] graphql existierendes Feld vom Typ komplett ändern
-    z.B. composite => string mit Param
-[x] graphql relationen ausblenden
 [ ] graphql relation pagination
-[x] graphql existierendes Relation vom Typ komplett ändern
-    mit Params
-[x] graphql bring you own schema
-
-
 [ ] definition: this.has() relation testen
-
-neue Typen hinzufügen
-
 [ ] postgres composite type query
-
-[ ] fix skipped tests -> specially include :totalCount
-
-[x] remove store.handleException
-
-[ ] faster class initialisation !!! Model initialisation braucht zu lange!
-
 [ ] `this.belongsTo('alternative', {model: 'Food', foreign_key: 'food_id'})` sollte kein foreign_key brauchen!
-
-[ ] Change DEBUG=*
-
 [ ] Broken relations should not load without any conditions!
-
 [ ] lazy connection -> one Promise for all record relations - which will load relations bulk!
-
 [ ] limit(1) should return an array as well
-
+[ ] faster class initialisation !!! Model initialisation braucht zu lange!
 [ ] combine sql, rest and ldap `relation` before and after save hooks
 
 

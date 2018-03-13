@@ -1,7 +1,7 @@
 var Store = require('../../../../lib/store')
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe(title + ': Update (' + storeConf.url + ')', function(){
+  describe.only(title + ': Update (' + storeConf.url + ')', function(){
     var store, targetOu
 
     before(beforeFn)
@@ -28,18 +28,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             return ou.save()
           })
         }).should.be.rejectedWith(store.ValidationError, {errors: {parent_dn: ['not valid']}})
-      })
-
-
-      it.skip('returns an error on invalid name', function(){ // new ldapjs will escape the "=" symbol
-        return store.ready(function(){
-          var Ou = store.Model('OrganizationalUnit')
-          return Ou.find('ou=move_me_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
-            ou.name = 'cn=foooo'
-
-            return ou.save()
-          })
-        }).should.be.rejectedWith(store.ValidationError, {errors: {name: ['not valid']}})
       })
 
 
@@ -127,17 +115,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
 
 
-      it.skip('returns an error on invalid characters in name', function(){ // new ldapjs version will escape the '#' symbol
-        return store.ready(function(){
-          var Ou = store.Model('OrganizationalUnit')
-          return Ou.find('ou=move_me_test_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
-            ou.name = '#test'
-
-            return ou.save()
-          })
-        }).should.be.rejectedWith(store.ValidationError, {errors: {name: [ 'not valid' ]}})
-      })
-
 
       it('changes an ou', function(){
         return store.ready(function(){
@@ -170,17 +147,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             return group.save()
           })
         }).should.be.rejectedWith(store.ValidationError, {errors: {parent_dn: [ 'not valid' ]}})
-      })
-
-      it.skip('returns an error on invalid name', function(){ // new ldapjs version will escape the '=' symbol
-        return store.ready(function(){
-          var Group = store.Model('Group')
-          return Group.find('cn=rename_me_group,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(group){
-            group.name = 'cn=foooo'
-
-            return group.save()
-          })
-        }).should.be.rejectedWith(store.ValidationError, {errors: {name: [ 'not valid' ]}})
       })
 
 
@@ -353,17 +319,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
 
 
-      it.skip('returns an error on invalid name', function(){ // new ldapjs version will escape the '=' symbol
-        return store.ready(function(){
-          var Computer = store.Model('Computer')
-          return Computer.find('cn=rename_me_computer,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(computer){
-            computer.name = 'cn=foooo'
-
-            return computer.save()
-          })
-        }).should.be.rejectedWith(store.ValidationError, {errors: {name: [ 'not valid' ]}})
-      })
-
 
       it('moves an computer to another parent', function(){
         return store.ready(function(){
@@ -459,16 +414,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
 
 
-      it.skip('returns an error on invalid name', function(){ // new ldapjs version will escape the '=' symbol
-        return store.ready(function(){
-          var User = store.Model('User')
-          return User.find('cn=rename_me_user,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(user){
-            user.name = 'cn=fooooo'
-
-            return user.save()
-          })
-        }).should.be.rejectedWith(store.ValidationError, {errors: {name: [ 'not valid' ]}})
-      })
 
 
 
