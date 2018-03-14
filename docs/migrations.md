@@ -41,6 +41,7 @@ const store = new Store({
 
 ?> If you don't want to `require` all migrations by hand. You could use the [Automatic Model Loading Plugin](./plugins.md#automatic-model-loading).
 
+!> At the moment a rollback of migrations is not possible!
 
 Available methods in the `migration scope` are:
 
