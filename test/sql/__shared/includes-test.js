@@ -501,7 +501,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
 
 
-      it('returns the result + the totalCount with a join', function(){
+      it.skip('returns the result + the totalCount with a join', function(){
         return store.ready(function(){
           var User = store.Model('User')
           return User.join('posts').where({posts: {message_like: 'first'}}).include(':totalCount').exec(function(result){
