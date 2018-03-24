@@ -1,6 +1,6 @@
 # Context
 
-If you use OPENRECORD in a web application or simmilar, you most probably want to have access to some request information (e.g. the user session).  
+If you use OPENRECORD in a web application or similar, you most probably want to have access to some request information (e.g. the user session).  
 Instead of calling a [scope](./definition#scopes) with this information it's better to use `setContext(context)`. OPENRECORD will provide you with the context everywhere you need it.  
 
 Here is a very basic example:

@@ -1,7 +1,7 @@
 # Bundle your store with Webpack
 
-If you are using *sqlite3*, *postgres*, *mysql* and *oracle* OPENRECORD will automatically load all models and it's attribute definitions from your database (If `autoLoad` or `autoAttributes` is active).
-To avoid this overhead (e.g. in a [serverless](https://serverless.com/) environment), you can use [webpack](https://webpack.js.org/) and the OPENRECORD webpack plugin to build your code with cacheed model and attribute definitions.
+If you are using *sqlite3*, *postgres*, *mysql* and *oracle* OPENRECORD will automatically load all models and its attribute definitions from your database (If `autoLoad` or `autoAttributes` is active).
+To avoid this overhead (e.g. in a [serverless](https://serverless.com/) environment), you can use [webpack](https://webpack.js.org/) and the OPENRECORD webpack plugin to build your code with cached model and attribute definitions.
 
 In your [webpack config]() add the following plugin:
 
@@ -18,7 +18,7 @@ module.exports = {
 }
 ```
 
-The plugin constructor takes your store as it's only input. 
+The plugin constructor takes your store as its only input. 
 So you have to `export` your store. e.g.
 
 ```js
@@ -34,5 +34,5 @@ module.exports = store
 !> This plugin wont work in [watch](https://webpack.js.org/configuration/watch/) mode!
 
 Your store will be initialized on build, so make sure a connection to your database could be established.  
-After the store is ready, it will take the model and attribute definition and writes it into a cache. This cache will be bundled with your source and automatically used.  
-So your bundled store will be faster at start, because it wont query your database for schema information.
+After the store is ready, it will take the model and attribute definition and write it into a cache. This cache will be bundled with your source and automatically used.  
+So your bundled store will be faster at start, because it won't query your database for schema information.

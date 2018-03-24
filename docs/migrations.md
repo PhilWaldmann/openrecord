@@ -15,8 +15,8 @@ module.exports = function(){
 }
 ```
 
-The name of your migration file is up to you, but it's recommended to add a timestamp or simmilar to the name. Because every migration will run only once (if successfull).  
-OPENRECORD will store all successfully finished migrations and wont execute them again! So if you want to add another field to your table, create a new migration:
+The name of your migration file is up to you, but it's recommended to add a timestamp or similar to the name. Because every migration will run only once (if successfull).  
+OPENRECORD will store all successfully finished migrations and won't execute them again! So if you want to add another field to your table, create a new migration:
 
 ```js
 // ./migrations/20180307172711_add_email_to_users.js

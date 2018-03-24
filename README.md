@@ -11,7 +11,7 @@
 OPENRECORD is an ActiveRecord inspired ORM for nodejs.
 
 Currently it supports the following databases/datastores: SQLite3, MySQL, Postgres, Oracle, REST and LDAP (+ ActiveDirectory)  
-If you want to build a GraphQL endpoint for any of these databases, OPENRECORD has some build in features to support you!
+If you want to build a GraphQL endpoint for any of these databases, OPENRECORD has some built in features to support you!
 
 As the name imply, it's open and very easy to extend. The whole package was build that way.
 
