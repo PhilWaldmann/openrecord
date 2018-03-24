@@ -158,7 +158,7 @@ Does basically the same as `destroy`, but won't call any hooks and does not remo
 ## destroyAll()
 !> *sqlite3*, *postgres*, *mysql*, *oracle* and *ldap/activedirectory* only!  
 
-The usage is simmilar to `updateAll`.
+The usage is similar to `updateAll`.
 
 ```js
 await User.where({active: false}).destroyAll()

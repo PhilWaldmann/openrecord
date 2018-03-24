@@ -35,7 +35,7 @@ But in most cases you want to [filter](#with-conditions) or [limit](#limitoffset
 
 ## With Conditions
 
-OPENRECORD has a realy nice syntax to filter your results.
+OPENRECORD has a really nice syntax to filter your results.
 
 Here are some examples to filtern a SQL store:
 ```js
@@ -56,7 +56,7 @@ User.where({failed_logins_between: [5, 8]}) // failed_logins between 5 and 8
 OPENRECORD supports a lot of different `operators` like `not`, `gt` or `between` (separated from the field name by an underscore).  
 Depending on the [attribute type](./definition.md#attributes), the `operator` and the actual value it will create (in this case) the conditions for the SQL query.
 
-build in `operators` for SQL stores are: `not`, `gt`, `gte`, `lt`, `lte`, `between`, `like`, `ilike`  
+built in `operators` for SQL stores are: `not`, `gt`, `gte`, `lt`, `lte`, `between`, `like`, `ilike`  
 *ldap* stores support only: `not`, `gt`, `gte`, `lt`, `lte`, `between`
 
 ?> Want to add your [own operators](./plugins.md#custom-operators)?
@@ -83,14 +83,14 @@ const threads = Thread.where({sticky: true}).include('posts')
 console.log(threads[0].posts)
 ```
 
-The above example will load all sticky threads and all it's posts.  
+The above example will load all sticky threads and all their posts.  
 OPENRECORD will query your datastore only two times:
 1. To get all sticky threads
 2. To get all posts that belongs to the previously loaded threads
 
 
 Imaging we have a model `Thread` which has many `posts` and an `author`. The `Post` model also has an `author` and the `Author` model has a relation to the `last_post`.   
-We could use `include()` to preload this relations the following ways:
+We could use `include()` to preload these relations the following way:
 ```js
 Thread.include(['posts', 'author'])
 Thread.include({posts: {author: 'last_post'}})
@@ -117,7 +117,7 @@ User.include({posts: {thread: 'rating'}}).where({posts: {thread: {rating: {stars
 [Includes](#preloading-relations) are a little bit like offline joins. To do real joins in your database you have to use `join()`.  
 `join()` takes the same input as `include()` and will do an `INNER JOIN` by default.
 
-The following example loads all threads and posts where one of it's posts title contains `OPENRECORD`.
+The following example loads all threads and posts where one of its posts title contains `OPENRECORD`.
 ```js
 Thread.join('posts').where({posts:{title_like: 'OPENRECORD'}})
 ```
