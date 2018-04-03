@@ -20,12 +20,12 @@ npm i openrecord@next mysql
 npm i openrecord@next sqlite3
 ```
 
-## For an Oracle Database
+## For an Oracle Database (EXPERIMENTAL)
 ```
 npm i openrecord@next oracledb
 ```
 
-## For a REST Backend
+## For a REST Backend (EXPERIMENTAL)
 ```
 npm i openrecord@next axios
 ```

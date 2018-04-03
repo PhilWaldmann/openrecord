@@ -144,7 +144,6 @@ types.forEach(function(type){
           }
         }`)
       .then(function(result){
-        // true.should.be.equal(false)
         result.should.be.eql({
           data: {
             recipe: {

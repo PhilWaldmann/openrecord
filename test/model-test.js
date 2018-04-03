@@ -35,6 +35,6 @@ describe('Model: Base', function(){
   })
 
   it('has correct model name', function(){
-    User.definition.model_name.should.be.equal('User')
+    User.definition.modelName.should.be.equal('User')
   })
 })

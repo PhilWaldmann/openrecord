@@ -36,15 +36,15 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         var Thread = store.Model('Thread')
         var Post = store.Model('Post')
 
-        return Thread.find(1, function(thread){
+        return Thread.find(1)
+        .then(function(thread){
           return thread.destroy()
-          .then(function(){
-            return Post.find([1, 2], function(posts){
-              posts.length.should.be.equal(2)
-              should.not.exist(posts[0].thread_id)
-              should.not.exist(posts[1].thread_id)
-            })
-          })
+        }).then(function(){
+          return Post.find([1, 2])
+        }).then(function(posts){
+          posts.length.should.be.equal(2)
+          should.not.exist(posts[0].thread_id)
+          should.not.exist(posts[1].thread_id)
         })
       })
     })

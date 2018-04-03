@@ -196,7 +196,7 @@ global.beforeGraphQL = function(database, type, done){
 
       store1.Model('Ingredient', function(){
         this.hasMany('recipe_ingredients', {autoSave: true})
-        this.hasMany('recipes', {through: 'recipe_ingredients'})
+        this.hasMany('recipes', {through: 'recipe_ingredients', relation: 'recipe'})
         this.belongsTo('food', {store: 'store2', autoSave: true})
 
         // for auto gen. only!!!
@@ -210,7 +210,7 @@ global.beforeGraphQL = function(database, type, done){
           })
         }
 
-        this.method('total_amount', function(){
+        this.method('total_amount', function(){          
           return this.recipe_ingredients.sum('amount').exec()
         })
       })
@@ -243,7 +243,7 @@ global.beforeGraphQL = function(database, type, done){
 
       store2.Model('Alternative', function(){
         this.belongsTo('food', {autoSave: true})
-        this.belongsTo('alternative', {model: 'Food', primary_key: 'alternative_id', autoSave: true})
+        this.belongsTo('alternative', {model: 'Food', from: 'alternative_id', autoSave: true})
       })
 
       store2.ready(function(){

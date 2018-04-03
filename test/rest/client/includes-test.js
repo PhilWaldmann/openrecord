@@ -50,10 +50,10 @@ describe('REST Client: Include', function(){
 
       return Post.include('user').exec(function(results){
         results.length.should.be.equal(5)
-        results[0].user.id.should.be.equal(1)
-        results[1].user.id.should.be.equal(1)
-        results[2].user.id.should.be.equal(1)
-        results[3].user.id.should.be.equal(2)
+        results[0]._user.id.should.be.equal(1)
+        results[1]._user.id.should.be.equal(1)
+        results[2]._user.id.should.be.equal(1)
+        results[3]._user.id.should.be.equal(2)
       })
     })
   })

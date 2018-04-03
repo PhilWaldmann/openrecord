@@ -45,7 +45,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.belongsTo('unread', {model: 'Post'})
       })
       store.Model('PolyThing', function(){
-        this.belongsTo('member', {polymorph: true})
+        this.belongsToPolymorphic('member')
       })
     })
 
@@ -55,7 +55,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       return store.ready(function(){
         var User = store.Model('User')
         return User.find(1).include('posts').exec(function(user){
-          user.posts.length.should.be.equal(3)
+          user._posts.length.should.be.equal(3)
 
           return user.posts.create({thread_id: 1, message: 'another post'})
           .then(function(post){
@@ -178,7 +178,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           .then(function(){
             return Avatar.where({url_like: 'better'}).include('user').limit(1).exec(function(avatar){
               avatar.url.should.be.equal('http://better-avatar.com/strong.png')
-              avatar.user.id.should.be.equal(user.id)
+              avatar._user.id.should.be.equal(user.id)
             })
           })
         })
@@ -190,12 +190,11 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       return store.ready(function(){
         var User = store.Model('User')
         return User.find(1).exec(function(user){
-          user.unread.add([1, 2])
-
+          user.unread.add([1, 2])          
           return user.save()
-          .then(function(){
+          .then(function(){            
             return User.find(1).include('unread').exec(function(phil){
-              phil.unread.length.should.be.equal(3)
+              phil._unread.length.should.be.equal(3)
             })
           })
         })
@@ -229,7 +228,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       return store.ready(function(){
         var User = store.Model('User')
         return User.find(4).exec(function(user){
-          user.unread_ids = [1, 2]
+          user.unread_ids = [1, 2]         
 
           return user.save()
           .then(function(){
@@ -241,7 +240,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-    it('creates a new record with subrecords defined unread_ids=[]', function(){
+    it('creates a new record with subrecords defined with unread_ids=[]', function(){
       return store.ready(function(){
         var User = store.Model('User')
         return User.create({
@@ -262,9 +261,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     it('updates a record`s has_many relation with thread_ids=[1, 2]', function(){
       return store.ready(function(){
         var User = store.Model('User')
-        return User.find(1).include('threads').exec(function(user){
+        return User.find(1).include('threads').exec(function(user){ 
+                 
           user.thread_ids = [1, 2]
-
+          
           return user.save()
           .then(function(){
             return User.find(1).include('threads').exec(function(phil){

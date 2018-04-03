@@ -30,10 +30,10 @@ describe('Postgres: all Attributes', function(){
     })
 
     store.Model('AttributeTest', function(){
-      this.hasMany('attribute_join_tests', {primary_key: 'integer_attribute', foreign_key: 'attribute_test_id'})
+      this.hasMany('attribute_join_tests', {from: 'integer_attribute', to: 'attribute_test_id'})
     })
     store.Model('AttributeJoinTest', function(){
-      this.belongsTo('attribute_test', {foreign_key: 'integer_attribute'})
+      this.belongsTo('attribute_test', {to: 'integer_attribute'})
     })
     store.Model('AttributeHstoreTest', function(){
     })
@@ -97,7 +97,7 @@ describe('Postgres: all Attributes', function(){
   it('casts all values on a join', function(){
     return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
-      return AttributeTest.join('attribute_join_tests').limit(1).exec(function(record){
+      return AttributeTest.join('attribute_join_tests').limit(1).exec(function(record){        
         record.char_attribute.should.be.equal('abcd')
         record.float_attribute.should.be.equal(2.3345)
         record.integer_attribute.should.be.equal(3243)

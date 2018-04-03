@@ -1,7 +1,7 @@
 var Store = require('../../../../lib/store')
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe.only(title + ': Update (' + storeConf.url + ')', function(){
+  describe(title + ': Update (' + storeConf.url + ')', function(){
     var store, targetOu
 
     before(beforeFn)
@@ -37,7 +37,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return Ou.find('ou=move_me_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
             ou.parent_dn = targetOu
 
-            return ou.save(function(){
+            return ou.save()
+            .then(function(){
               return Ou.find(ou.dn).exec(function(ou){
                 ou.name.should.be.equal('move_me_ou')
                 ou.parent_dn.should.be.equal(targetOu)
@@ -55,7 +56,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             ou.name = 'move_me_ou_renamed'
             ou.parent_dn = targetOu
 
-            return ou.save(function(){
+            return ou.save()
+            .then(function(){
               return Ou.find(ou.dn).exec(function(ou){
                 ou.name.should.be.equal('move_me_ou_renamed')
                 ou.parent_dn.should.be.equal(targetOu)
@@ -75,7 +77,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
               parent_dn: targetOu
             })
 
-            return ou.save(function(){
+            return ou.save()
+            .then(function(){
               return Ou.find(ou.dn).exec(function(ou){
                 ou.name.should.be.equal('MOVE_AND_RENAME_ME2_OU')
                 ou.parent_dn.should.be.equal(targetOu)
@@ -92,7 +95,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return Ou.find('ou=rename_me_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
             ou.name = 'new_name'
 
-            return ou.save(function(){
+            return ou.save()
+            .then(function(){
               return Ou.find(ou.dn).exec(function(ou){
                 ou.name.should.be.equal('new_name')
                 ou.parent_dn.should.be.equal('ou=update_test,ou=openrecord,' + LDAP_BASE.toLowerCase())
@@ -122,7 +126,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return Ou.find('ou=change_me_ou,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(ou){
             ou.description = 'very important'
 
-            return ou.save(function(){
+            return ou.save()
+            .then(function(){
               return Ou.find(ou.dn).exec(function(ou){
                 ou.description.should.be.equal('very important')
               })
@@ -156,7 +161,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return Group.find('cn=move_me_group,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(group){
             group.parent_dn = targetOu
 
-            return group.save(function(){
+            return group.save()
+            .then(function(){
               return Group.find(group.dn).exec(function(group){
                 group.name.should.be.equal('move_me_group')
                 group.parent_dn.should.be.equal(targetOu)
@@ -173,7 +179,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return Group.find('cn=rename_me_group,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(group){
             group.name = 'new_group_name'
 
-            return group.save(function(){
+            return group.save()
+            .then(function(){
               return Group.find(group.dn).exec(function(group){
                 group.name.should.be.equal('new_group_name')
                 group.parent_dn.should.be.equal('ou=update_test,ou=openrecord,' + LDAP_BASE.toLowerCase())
@@ -192,7 +199,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             group.sAMAccountName = 'ChangedGroup'
             group.groupType = {UNIVERSAL_GROUP: true}
 
-            return group.save(function(){
+            return group.save()
+            .then(function(){
               return Group.find(group.dn).exec(function(group){
                 group.description.should.be.equal('super important')
                 group.sAMAccountName.should.be.equal('ChangedGroup')
@@ -210,7 +218,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return Group.find('cn=change_me_group,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(group){
             group.member = ['cn=change_me_user,ou=update_test,ou=openrecord,' + LDAP_BASE]
 
-            return group.save(function(){
+            return group.save()
+            .then(function(){
               return Group.find(group.dn).include('members').exec(function(group){
                 group.members.length.should.be.equal(1)
                 group.members[0].name.should.be.equal('change_me_user')

@@ -60,7 +60,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('gets called', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.find(1, function(phil){
+          return User.find(1)
+          .then(function(phil){
             phil.login = 'max'
             return phil.save()
           })
@@ -167,10 +168,9 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             michl.posts.length.should.be.equal(1)
             michl.posts[0].id.should.be.equal(4)
             michl.posts[0].message.should.be.equal('michls post')
-
+                        
             michl.login = 'michael'
             michl.posts[0].message = 'michaels post'
-
             michl.posts[0].__exists.should.be.equal(true)
 
             return michl.save()
@@ -246,7 +246,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             thread.title.should.be.equal('second thread')
             thread.posts.length.should.be.equal(1)
             thread.posts[0].message.should.be.equal('third')
-
+            
             thread.set({
               title: 'second awesome thread',
               posts: [{
@@ -254,7 +254,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
                 message: 'third awesome post'
               }]
             })
-
+            
             return thread.save()
           })
           .then(function(){
@@ -312,7 +312,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
                 message: 'you got an update'
               }]
             })
-
+            
             return thread.save()
           })
           .then(function(){
@@ -331,17 +331,16 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return store.ready(function(){
           var Thread = store.Model('Thread')
           return Thread.find(4).include('user').exec(function(thread){
-            thread.user.login.should.be.equal('phil')
-
+            thread._user.login.should.be.equal('phil')
             thread.user_id = 5
-
+            
             return thread.save()
           })
           .then(function(){
             return Thread.find(4).include('user')
           })
           .then(function(thread){
-            thread.user.login.should.be.equal('new_owner')
+            thread._user.login.should.be.equal('new_owner')
           })
         })
       })

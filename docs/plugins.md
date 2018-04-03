@@ -115,8 +115,7 @@ Here is an example on how to add your own operator:
 ```js
 // the new operator is called `regexp`
 store.addOperator('regexp', function(field, value, query, condition){
-  const sqlColumnName = store.utils.getAttributeName(this, condition)
-  query.where(sqlColumnName, '~', value.toString().replace(/(^\/|\/$)/g, '')) // naiv conversion of js regexpt to postgres regexp!
+  query.where(field, '~', value.toString().replace(/(^\/|\/$)/g, '')) // naiv conversion of js regexpt to postgres regexp!
 })
 // and it will be appended to the `string` type
 store.appendOperator('string', 'regexp')
@@ -135,14 +134,12 @@ store.addOperator('length', {
   on: {
     // it will only accept values of type `number` ...
     number: function(field, value, query, condition){
-      const sqlColumnName = store.utils.getAttributeName(this, condition)
-      query.whereRaw(`char_length(${sqlColumnName}) = ?`, [value])
+      query.whereRaw(`char_length(${field}) = ?`, [value])
     },
     
     // ... and `array`.
-    array: function(attr, value, query, cond){
-      const sqlColumnName = store.utils.getAttributeName(this, condition)
-      query.whereRaw(`char_length(${sqlColumnName}) BETWEEN ? AND ?`, value.splice(0, 2)) // only take the first 2 elements of the array
+    array: function(field, value, query, cond){
+      query.whereRaw(`char_length(${field}) BETWEEN ? AND ?`, value.splice(0, 2)) // only take the first 2 elements of the array
     }
   }
 })

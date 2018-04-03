@@ -18,7 +18,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
 
       store.Model('User', function(){
-        this.belongsTo('nothing')
         this.hasMany('posts')
         this.hasMany('threads')
 

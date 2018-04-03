@@ -30,7 +30,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('converts records to normal objects with limited attributes', function(){
+    it.skip('converts records to normal objects with limited attributes', function(){
       return store.ready(function(){
         var User = store.Model('User')
         return User.include('posts').exec(function(users){
@@ -46,7 +46,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('applies allowed_attriutes on asJson()', function(){
+    it.skip('applies allowed_attriutes on asJson()', function(){
       return store.ready(function(){
         var User = store.Model('User')
         return User.include('posts').asJson(['id', 'login']).exec(function(users){
@@ -71,7 +71,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('applies typecasts and allowed_attributes on asJson()', function(){
+    it.skip('applies typecasts and allowed_attributes on asJson()', function(){
       return store.ready(function(){
         var User = store.Model('User')
         return User.include('posts').asJson(['id', 'active']).exec(function(users){

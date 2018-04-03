@@ -16,21 +16,21 @@ describe('SQL: Table Name', function(){
   it('has the right table name', function(){
     return store.ready(function(){
       var User = store.Model('User')
-      User.definition.table_name.should.be.equal('users')
+      User.definition.tableName.should.be.equal('users')
     })
   })
 
   it('has the right table name on camelcased models', function(){
     return store.ready(function(){
       var CamelCasedTableName = store.Model('CamelCasedTableName')
-      CamelCasedTableName.definition.table_name.should.be.equal('camel_cased_table_names')
+      CamelCasedTableName.definition.tableName.should.be.equal('camel_cased_table_names')
     })
   })
 
   it('returns a model by it\'s table name', function(){
     return store.ready(function(){
       var CamelCasedTableName = store.getByTableName('camel_cased_table_names')
-      CamelCasedTableName.definition.table_name.should.be.equal('camel_cased_table_names')
+      CamelCasedTableName.definition.tableName.should.be.equal('camel_cased_table_names')
     })
   })
 })

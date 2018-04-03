@@ -21,7 +21,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.hasMany('threads')
 
         this.beforeDestroy(function(){
-          this.save.should.be.a.Function()
+          this.save.should.be.a.Function()          
           if(this.login === 'max') throw new Error('stop from user before')
         })
 
@@ -50,7 +50,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('gets called', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.find(1, function(phil){
+          return User.find(1)
+          .then(function(phil){
             phil.login = 'max'
             return phil.destroy()
           })
@@ -63,7 +64,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('gets called', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.find(1, function(phil){
+          return User.find(1)
+          .then(function(phil){
             phil.login = 'maxi'
             return phil.destroy()
           })
@@ -76,15 +78,15 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('destroy a single record', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.find(1, function(phil){
+          return User.find(1)
+          .then(function(phil){
             phil.login.should.be.equal('phil')
 
             return phil.destroy()
-            .then(function(){
-              return User.find(1, function(phil){
-                should.not.exist(phil)
-              })
-            })
+          }).then(function(){
+            return User.find(1)
+          }).then(function(phil){
+            should.not.exist(phil)
           })
         })
       })
@@ -112,15 +114,15 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var Thread = store.Model('Thread')
           var Post = store.Model('Post')
 
-          return Thread.find(1, function(thread){
+          return Thread.find(1)
+          .then(function(thread){
             should.exist(thread)
 
             return thread.posts.deleteAll()
-            .then(function(){
-              return Post.where({thread_id: thread.id}).count().exec(function(result){
-                result.should.be.equal(0)
-              })
-            })
+          }).then(function(){
+            return Post.where({thread_id: 1}).count()
+          }).then(function(result){
+            result.should.be.equal(0)
           })
         })
       })

@@ -79,6 +79,7 @@ module.exports = function(store1, store2){
       authors: resolve(function(args){ return Author.limit(args.limit) }),
       author_count: resolve(function(){ return Author.count() }),
       recipe: resolve(function(args){ return Recipe.find(args.id) }),
+      // recipe: function(a, args){ return Recipe.find(args.id) }, // TODO: should work to!
       recipes: resolve(function(args){
         return {
           nodes: Recipe.limit(args.limit),

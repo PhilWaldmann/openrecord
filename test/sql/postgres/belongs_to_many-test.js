@@ -31,7 +31,7 @@ describe('Postgres: belongsToMany()', function(){
     })
 
     store.Model('Folder', function(){
-      this.hasMany('users')
+      this.hasMany('users', {to: 'folder_ids'})
     })
   })
 
@@ -43,18 +43,16 @@ describe('Postgres: belongsToMany()', function(){
   it('does have a proper relation definition', function(){
     return store.ready(function(){
       var User = store.Model('User')
-
-      User.definition.relations.folders.model.definition.model_name.should.be.equal('Folder')
-      User.definition.relations.folders.conditions.should.be.eql({id: {attribute: 'folder_ids', model: User}})
+      User.definition.relations.folders.init()
+      User.definition.relations.folders.model.definition.modelName.should.be.equal('Folder')
     })
   })
 
   it('does have a proper reverse relation definition', function(){
     return store.ready(function(){
       var Folder = store.Model('Folder')
-
-      Folder.definition.relations.users.model.definition.model_name.should.be.equal('User')
-      Folder.definition.relations.users.conditions.should.be.eql({folder_ids: {attribute: 'id', model: Folder}})
+      Folder.definition.relations.users.init()
+      Folder.definition.relations.users.model.definition.modelName.should.be.equal('User')
     })
   })
 
@@ -62,7 +60,7 @@ describe('Postgres: belongsToMany()', function(){
   it('does include a belongs_to_many relation', function(){
     return store.ready(function(){
       var User = store.Model('User')
-      return User.include('folders').order('id').exec(function(users){
+      return User.include('folders').order('id').exec(function(users){        
         users.length.should.be.equal(4)
         users[0].folders.length.should.be.equal(1)
         users[0].folders[0].name.should.be.equal('A')
@@ -120,7 +118,7 @@ describe('Postgres: belongsToMany()', function(){
   it('does join a belongs_to_many relation', function(){
     return store.ready(function(){
       var Folder = store.Model('Folder')
-      return Folder.where({id: 3}).join('users').order('users.id').exec(function(folders){
+      return Folder.where({id: 3}).join('users').order('users.id').exec(function(folders){        
         var folder = folders[0]
         folder.id.should.be.equal(3)
         folder.users.length.should.be.equal(2)

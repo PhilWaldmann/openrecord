@@ -7,6 +7,7 @@ describe('Context', function(){
   var myContext = {foo: 'bar'}
 
   store.Model('User', function(){
+    this.attribute('id', Number, {primary: true})
     this.attribute('login', String)
 
     this.hasMany('posts')
@@ -19,6 +20,8 @@ describe('Context', function(){
   })
 
   store.Model('Post', function(){
+    this.attribute('id', Number, {primary: true})
+    this.attribute('user_id', Number)
     this.attribute('message', String)
 
     this.hasMany('comments')
@@ -30,6 +33,8 @@ describe('Context', function(){
   })
 
   store.Model('Comment', function(){
+    this.attribute('id', Number, {primary: true})
+    this.attribute('post_id', Number)
     this.attribute('words', String)
 
     this.hasMany('super_nesteds')
@@ -41,6 +46,8 @@ describe('Context', function(){
   })
 
   store.Model('SuperNested', function(){
+    this.attribute('id', Number, {primary: true})
+    this.attribute('comment_id', Number)
     this.attribute('words', String)
 
     this.beforeValidation(function(){
@@ -86,8 +93,8 @@ describe('Context', function(){
       var user = User.setContext(myContext).new({login: 'phil', posts: [{message: 'test'}]})
       myContext.should.be.eql({foo: 'bar'})
 
-      user.context.should.be.eql(myContext)
-      user.posts[0].context.should.be.eql(myContext)
+      user.context.should.be.eql(myContext)      
+      user._posts[0].context.should.be.eql(myContext)
     })
 
     it('passes the context to nested relational objects', function(){
@@ -128,8 +135,8 @@ describe('Context', function(){
             ]
           }
         ]
-      })
-      var newlyNested = user.posts[0].comments[0].super_nesteds.new({words: 'nested words'})
+      })      
+      var newlyNested = user._posts[0]._comments[0].super_nesteds.new({words: 'nested words'})
 
       myContext.should.be.eql({foo: 'bar'})
 

@@ -3,7 +3,7 @@ var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe(title + ': Select', function(){
+  describe.skip(title + ': Select', function(){
     var store
 
     before(beforeFn)
@@ -47,7 +47,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       return store.ready(function(){
         var User = store.Model('User')
 
-        return User.find(1).select('id', 'login').asJson().exec(function(user){
+        return User.find(1).select('id', 'login').asJson().exec(function(user){          
           user.should.be.eql({
             id: 1,
             login: 'phil'

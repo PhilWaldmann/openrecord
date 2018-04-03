@@ -62,7 +62,7 @@ types.forEach(function(type){
       return query(`{
         author_count
       }`)
-      .then(function(result){
+      .then(function(result){        
         result.should.be.eql({ data: { author_count: 3 } })
       })
     })
@@ -76,7 +76,7 @@ types.forEach(function(type){
           email
         }
       }`)
-      .then(function(result){
+      .then(function(result){        
         result.should.be.eql({
           data: {
             author_count: 3,
@@ -113,7 +113,7 @@ types.forEach(function(type){
           total_amount
         }
       }`)
-      .then(function(result){
+      .then(function(result){        
         result.should.be.eql({ data: { ingredient: {
           name: 'butter',
           total_amount: 21

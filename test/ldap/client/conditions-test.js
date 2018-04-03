@@ -58,7 +58,7 @@ describe('LDAP Client: Conditions', function(){
   it('get all user objects with not equal array condition', function(){
     return store.ready(function(){
       var User = store.Model('User')
-      return User.where({username_not: ['michl', 'phil']}).then(function(users){
+      return User.where({username_not: ['michl', 'phil']}).then(function(users){        
         users.length.should.be.above(2)
         users[0].username.should.be.equal('susi')
         users[1].username.should.be.equal('max')

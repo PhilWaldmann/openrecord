@@ -32,7 +32,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.hasMany('poly_things', {as: 'member', dependent: 'delete'})
       })
       store.Model('PolyThing', function(){
-        this.belongsTo('member', {polymorph: true})
+        this.belongsToPolymorphic('member')
       })
     })
 
@@ -42,13 +42,13 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         var Thread = store.Model('Thread')
         var Post = store.Model('Post')
 
-        return Thread.find(1, function(thread){
+        return Thread.find(1)
+        .then(function(thread){
           return thread.destroy()
-          .then(function(){
-            return Post.find([1, 2], function(posts){
-              posts.length.should.be.equal(0)
-            })
-          })
+        }).then(function(){
+          return Post.find([1, 2])
+        }).then(function(posts){
+          posts.length.should.be.equal(0)
         })
       })
     })
@@ -59,13 +59,13 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         var Thread = store.Model('Thread')
         var Post = store.Model('Post')
 
-        return Post.find(3, function(post){
+        return Post.find(3)
+        .then(function(post){
           return post.destroy()
-          .then(function(){
-            return Thread.find(2, function(thread){
-              should.not.exist(thread)
-            })
-          })
+        }).then(function(){
+          return Thread.find(2)
+        }).then(function(thread){
+          should.not.exist(thread)
         })
       })
     })
@@ -76,13 +76,13 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         var PolyThing = store.Model('PolyThing')
         var Post = store.Model('Post')
 
-        return Post.find(4, function(post){
+        return Post.find(4)
+        .then(function(post){
           return post.destroy()
-          .then(function(){
-            return PolyThing.find(1, function(polyThing){
-              should.not.exist(polyThing)
-            })
-          })
+        }).then(function(){
+          return PolyThing.find(1)
+        }).then(function(polyThing){
+          should.not.exist(polyThing)
         })
       })
     })

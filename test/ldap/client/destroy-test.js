@@ -18,16 +18,16 @@ describe('LDAP Client: Destroy', function(){
       this.attribute('username', String)
       this.attribute('memberOf', Array)
 
-      this.belongsTo('ou', {ldap: 'parent'})
-      this.hasMany('groups', {container: 'children', foreign_key: 'member'})
+      this.hasParent('ou')
+      this.hasMany('groups', {container: 'children', to: 'member'})
     })
 
     store.Model('Group', function(){
       this.attribute('name', String)
       this.attribute('member', Array)
 
-      this.belongsTo('ou', {ldap: 'parent'})
-      this.hasMany('members', {container: 'children', polymorph: true, type_key: 'type', foreign_key: 'memberOf'})
+      this.hasParent('ou')
+      this.hasChildren('members', {to: 'memberOf'})
     })
 
     store.Model('Ou', function(){

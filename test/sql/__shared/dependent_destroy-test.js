@@ -38,7 +38,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.hasMany('poly_things', {as: 'member', dependent: 'destroy'})
       })
       store.Model('PolyThing', function(){
-        this.belongsTo('member', {polymorph: true})
+        this.belongsToPolymorphic('member')
       })
     })
 
@@ -47,7 +47,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       return store.ready(function(){
         var User = store.Model('User')
 
-        return User.find(1, function(user){
+        return User.find(1)
+        .then(function(user){
           return user.destroy()
         })
       })
@@ -57,7 +58,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       return store.ready(function(){
         var Thread = store.Model('Thread')
 
-        return Thread.find(1, function(thread){
+        return Thread.find(1)
+        .then(function(thread){
           return thread.destroy()
         })
       }).should.be.rejectedWith(Error, {message: 'stop from post'})
@@ -68,7 +70,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       return store.ready(function(){
         var Thread = store.Model('Thread')
 
-        return Thread.find(3, function(thread){
+        return Thread.find(3)
+        .then(function(thread){
           return thread.destroy()
         })
       }).should.be.rejectedWith(Error, {message: 'stop from user'})
@@ -80,10 +83,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         var Thread = store.Model('Thread')
         var Post = store.Model('Post')
 
-        return Post.find(3, function(post){
+        return Post.find(3)
+        .then(function(post){
           return post.destroy()
           .then(function(){
-            return Thread.find(2, function(thread){
+            return Thread.find(2)
+            .then(function(thread){
               should.not.exist(thread)
             })
           })
@@ -96,7 +101,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       return store.ready(function(){
         var Post = store.Model('Post')
 
-        return Post.find(5, function(post){
+        return Post.find(5)
+        .then(function(post){
           return post.destroy()
         })
       }).should.be.rejectedWith(Error, {message: 'stop from user'})
@@ -109,13 +115,13 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         var PolyThing = store.Model('PolyThing')
         var Post = store.Model('Post')
 
-        return Post.find(6, function(post){
+        return Post.find(6)
+        .then(function(post){
           return post.destroy()
-          .then(function(){
-            return PolyThing.find([1, 2], function(polyThings){
-              polyThings.length.should.be.equal(1)
-            })
-          })
+        }).then(function(){
+          return PolyThing.find([1, 2])
+        }).then(function(polyThings){
+          polyThings.length.should.be.equal(1)
         })
       })
     })

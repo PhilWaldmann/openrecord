@@ -51,9 +51,9 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     it('returns the first level and all nested children', function(){
       return store.ready(function(){
         var Folder = store.Model('Folder')
-        return Folder.rootOnly().withAllChildren().exec(function(folders){
+        return Folder.rootOnly().withAllChildren().exec(function(folders){          
           folders.length.should.be.equal(2)
-
+          
           folders[0].children.length.should.be.equal(1)
           folders[1].children.length.should.be.equal(2)
           folders[1].children[1].children.length.should.be.equal(1)

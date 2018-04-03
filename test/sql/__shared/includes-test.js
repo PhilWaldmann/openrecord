@@ -31,11 +31,11 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.hasOne('avatar')
         this.hasMany('unread_posts')
         this.hasMany('unread', {through: 'unread_posts'})
-        this.hasOne('last_post', {model: 'Post', scope: '!recent'}) // scope per record! => expensive!! (the leading `!`)
+        this.hasOne('last_post', {model: 'Post', scope: 'recent', bulkFetch: false}) // scope per record! => expensive!! (the leading `!`)
         this.hasMany('unread_threads', {through: 'unread', relation: 'thread'})
         this.hasMany('poly_things')
         this.hasMany('members', {through: 'poly_things', relation: 'member'})
-        this.belongsTo('user', {store: 'IncludeRestStore', primary_key: 'id'})
+        this.belongsTo('user', {store: 'IncludeRestStore', from: 'id'})
       })
       store.Model('Avatar', function(){
         this.belongsTo('user')
@@ -67,7 +67,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.belongsTo('unread', {model: 'Post'})
       })
       store.Model('PolyThing', function(){
-        this.belongsTo('member', {polymorph: true})
+        this.belongsToPolymorphic('member')
       })
 
 
@@ -89,6 +89,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
         this.belongsTo('user')
       })
+
+      return Promise.all([store.ready(), store2.ready()])
     })
 
 
@@ -100,14 +102,14 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return store.ready(function(){
           var User = store.Model('User')
           return User.include('unknown')
-        }).should.be.rejectedWith(store.RelationNotFoundError, {message: 'Can\'t find relation "unknown" for User'})
+        }).should.be.rejectedWith(Error, {message: 'Can\'t find relation "unknown" for User'})
       })
 
       it('throws an error on unknown nested relation', function(){
         return store.ready(function(){
           var User = store.Model('User')
           return User.include({unknown: 'posts'})
-        }).should.be.rejectedWith(store.RelationNotFoundError, {message: 'Can\'t find relation "unknown" for User'})
+        }).should.be.rejectedWith(Error, {message: 'Can\'t find relation "unknown" for User'})
       })
 
       it('include does not join tables', function(){
@@ -123,13 +125,13 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on a simple include', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.include('posts').order('users.id').exec(function(result){
+          return User.include('posts').order('users.id').exec(function(result){                      
             result[0].login.should.be.equal('phil')
-            result[0].posts.length.should.be.equal(3)
+            result[0]._posts.length.should.be.equal(3)
             result[1].login.should.be.equal('michl')
-            result[1].posts.length.should.be.equal(1)
+            result[1]._posts.length.should.be.equal(1)
             result[2].login.should.be.equal('admin')
-            result[2].posts.length.should.be.equal(0)
+            result[2]._posts.length.should.be.equal(0)
           })
         })
       })
@@ -140,7 +142,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var User = store.Model('User')
           return User.include('posts').order('users.id').exec(function(result){
             result[0].login.should.be.equal('phil')
-            result[0].posts.toJSON().should.be.eql([
+            result[0]._posts.toJSON().should.be.eql([
               {id: 3, user_id: 1, thread_id: 2, message: 'third'},
               {id: 1, user_id: 1, thread_id: 1, message: 'first message'},
               {id: 2, user_id: 1, thread_id: 1, message: 'second'}
@@ -154,14 +156,16 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return store.ready(function(){
           var User = store.Model('User')
           return User.include({posts_contains: {$args: ['sec']}}).order('users.id').exec(function(result){
+            result = result.toJSON()
+            
             result[0].login.should.be.equal('phil')
-            result[0].posts_contains.toJSON().should.be.eql([
+            result[0].posts_contains.should.be.eql([
               {id: 2, user_id: 1, thread_id: 1, message: 'second'}
             ])
             result[1].login.should.be.equal('michl')
-            result[1].posts.length.should.be.equal(0)
+            result[1].posts_contains.length.should.be.equal(0)
             result[2].login.should.be.equal('admin')
-            result[2].posts.length.should.be.equal(0)
+            result[2].posts_contains.length.should.be.equal(0)
           })
         })
       })
@@ -172,14 +176,14 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var User = store.Model('User')
           return User.include('posts', 'threads').order('users.id').exec(function(result){
             result[0].login.should.be.equal('phil')
-            result[0].posts.length.should.be.equal(3)
-            result[0].threads.length.should.be.equal(1)
+            result[0]._posts.length.should.be.equal(3)
+            result[0]._threads.length.should.be.equal(1)
             result[1].login.should.be.equal('michl')
-            result[1].posts.length.should.be.equal(1)
-            result[1].threads.length.should.be.equal(1)
+            result[1]._posts.length.should.be.equal(1)
+            result[1]._threads.length.should.be.equal(1)
             result[2].login.should.be.equal('admin')
-            result[2].posts.length.should.be.equal(0)
-            result[2].threads.length.should.be.equal(0)
+            result[2]._posts.length.should.be.equal(0)
+            result[2]._threads.length.should.be.equal(0)
           })
         })
       })
@@ -188,18 +192,18 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on multiple nested includes', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.include({threads: 'posts'}).order('users.id').exec(function(result){
+          return User.include({threads: 'posts'}).order('users.id').exec(function(result){            
             result[0].login.should.be.equal('phil')
-            result[0].posts.length.should.be.equal(0)
-            result[0].threads.length.should.be.equal(1)
-            result[0].threads[0].posts.length.should.be.equal(1)
+            should.not.exist(result[0]._posts)
+            result[0]._threads.length.should.be.equal(1)
+            result[0]._threads[0]._posts.length.should.be.equal(1)
             result[1].login.should.be.equal('michl')
-            result[1].posts.length.should.be.equal(0)
-            result[1].threads.length.should.be.equal(1)
-            result[1].threads[0].posts.length.should.be.equal(3)
+            should.not.exist(result[1]._posts)
+            result[1]._threads.length.should.be.equal(1)
+            result[1]._threads[0]._posts.length.should.be.equal(3)
             result[2].login.should.be.equal('admin')
-            result[2].posts.length.should.be.equal(0)
-            result[2].threads.length.should.be.equal(0)
+            should.not.exist(result[2]._posts)
+            result[2]._threads.length.should.be.equal(0)
           })
         })
       })
@@ -208,19 +212,19 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on deep nested includes', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.include({threads: {posts: 'user'}}).order('users.id').exec(function(result){
+          return User.include({threads: {posts: 'user'}}).order('users.id').exec(function(result){           
             result[0].login.should.be.equal('phil')
-            result[0].posts.length.should.be.equal(0)
-            result[0].threads.length.should.be.equal(1)
-            result[0].threads[0].posts.length.should.be.equal(1)
-            result[0].threads[0].posts[0].user.login.should.be.equal('phil')
+            should.not.exist(result[0]._posts)
+            result[0]._threads.length.should.be.equal(1)
+            result[0]._threads[0]._posts.length.should.be.equal(1)
+            result[0]._threads[0]._posts[0]._user.login.should.be.equal('phil')
             result[1].login.should.be.equal('michl')
-            result[1].posts.length.should.be.equal(0)
-            result[1].threads.length.should.be.equal(1)
-            result[1].threads[0].posts.length.should.be.equal(3)
+            should.not.exist(result[1]._posts)
+            result[1]._threads.length.should.be.equal(1)
+            result[1]._threads[0]._posts.length.should.be.equal(3)
             result[2].login.should.be.equal('admin')
-            result[2].posts.length.should.be.equal(0)
-            result[2].threads.length.should.be.equal(0)
+            should.not.exist(result[2]._posts)
+            result[2]._threads.length.should.be.equal(0)
           })
         })
       })
@@ -230,15 +234,13 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return store.ready(function(){
           var User = store.Model('User')
           // joins the threads table....
-          return User.include({threads: 'posts'}).where({threads: {title_like: 'first'}}).order('users.id').exec(function(result){
+          return User.include({threads: 'posts'}).where({threads: {title_like: 'first'}}).order('users.id').exec(function(result){            
             result[0].login.should.be.equal('phil')
-            result[0].posts.length.should.be.equal(0)
-            result[0].threads.length.should.be.equal(0)
+            result[0]._threads.length.should.be.equal(0)
 
             result[1].login.should.be.equal('michl')
-            result[1].posts.length.should.be.equal(0)
-            result[1].threads.length.should.be.equal(1)
-            result[1].threads[0].posts.length.should.be.equal(3)
+            result[1]._threads.length.should.be.equal(1)
+            result[1]._threads[0]._posts.length.should.be.equal(3)
           })
         })
       })
@@ -248,14 +250,11 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         return store.ready(function(){
           var User = store.Model('User')
           // joins the threads table....
-          return User.include({threads: 'posts'}).where({threads: {id: {attribute: 'user_id'}}}).order('users.id').exec(function(result){
+          return User.include({threads: 'posts'}).where({threads: {id: {$attribute: 'user_id'}}}).order('users.id').exec(function(result){           
             result.length.should.be.equal(3)
-            result[0].posts.length.should.be.equal(0)
-            result[0].threads.length.should.be.equal(0)
-            result[1].posts.length.should.be.equal(0)
-            result[1].threads.length.should.be.equal(0)
-            result[2].posts.length.should.be.equal(0)
-            result[2].threads.length.should.be.equal(0)
+            result[0]._threads.length.should.be.equal(0)
+            result[1]._threads.length.should.be.equal(0)
+            result[2]._threads.length.should.be.equal(0)
           })
         })
       })
@@ -267,9 +266,9 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           // joins the threads table....
           return User.include('posts').where({posts: {message_like: 'unknown'}}).order('users.id').exec(function(result){
             result.length.should.be.equal(3)
-            result[0].posts.length.should.be.equal(0)
-            result[1].posts.length.should.be.equal(0)
-            result[2].posts.length.should.be.equal(0)
+            result[0]._posts.length.should.be.equal(0)
+            result[1]._posts.length.should.be.equal(0)
+            result[2]._posts.length.should.be.equal(0)
           })
         })
       })
@@ -281,11 +280,11 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           // joins the threads table....
           return User.include({threads: 'posts'}).where({threads: {posts: {message_like: 'unknown'}}}).order('users.id').exec(function(result){
             result.length.should.be.equal(3)
-            result[0].threads.length.should.be.equal(1)
-            result[0].threads[0].posts.length.should.be.equal(0)
-            result[1].threads.length.should.be.equal(1)
-            result[1].threads[0].posts.length.should.be.equal(0)
-            result[2].threads.length.should.be.equal(0)
+            result[0]._threads.length.should.be.equal(1)
+            result[0]._threads[0]._posts.length.should.be.equal(0)
+            result[1]._threads.length.should.be.equal(1)
+            result[1]._threads[0]._posts.length.should.be.equal(0)
+            result[2]._threads.length.should.be.equal(0)
           })
         })
       })
@@ -294,11 +293,11 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on hasOne relations', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.include('avatar').exec(function(result){
+          return User.include('avatar').exec(function(result){            
             result.length.should.be.equal(3)
-            result[0].avatar.url.should.be.equal('http://awesome-avatar.com/avatar.png')
-            should.not.exist(result[1].avatar)
-            should.not.exist(result[2].avatar)
+            result[0]._avatar.url.should.be.equal('http://awesome-avatar.com/avatar.png')
+            should.not.exist(result[1]._avatar)
+            should.not.exist(result[2]._avatar)
           })
         })
       })
@@ -307,11 +306,11 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on hasMany through', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.include('unread').order('users.id').exec(function(result){
+          return User.include('unread').order('users.id').exec(function(result){            
             result.length.should.be.equal(3)
-            result[0].unread.length.should.be.equal(1)
-            result[1].unread.length.should.be.equal(0)
-            result[2].unread.length.should.be.equal(0)
+            result[0]._unread.length.should.be.equal(1)
+            result[1]._unread.length.should.be.equal(0)
+            result[2]._unread.length.should.be.equal(0)
           })
         })
       })
@@ -320,12 +319,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on nested hasMany through', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.include('unread_threads').order('users.id').exec(function(result){
+          return User.include('unread_threads').order('users.id').exec(function(result){           
             result.length.should.be.equal(3)
-            result[0].unread_threads.length.should.be.equal(1)
-            result[0].unread_threads[0].title.should.be.equal('second thread')
-            result[1].unread_threads.length.should.be.equal(0)
-            result[2].unread_threads.length.should.be.equal(0)
+            result[0]._unread_threads.length.should.be.equal(1)
+            result[0]._unread_threads[0].title.should.be.equal('second thread')
+            result[1]._unread_threads.length.should.be.equal(0)
+            result[2]._unread_threads.length.should.be.equal(0)
           })
         })
       })
@@ -333,12 +332,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on belongsTo through', function(){
         return store.ready(function(){
           var Post = store.Model('Post')
-          return Post.include('thread_autor').order('posts.id').exec(function(result){
+          return Post.include('thread_autor').order('posts.id').exec(function(result){           
             result.length.should.be.equal(4)
-            result[0].thread_autor.login.should.be.equal('michl')
-            result[1].thread_autor.login.should.be.equal('michl')
-            result[2].thread_autor.login.should.be.equal('phil')
-            result[3].thread_autor.login.should.be.equal('michl')
+            result[0]._thread_autor.login.should.be.equal('michl')
+            result[1]._thread_autor.login.should.be.equal('michl')
+            result[2]._thread_autor.login.should.be.equal('phil')
+            result[3]._thread_autor.login.should.be.equal('michl')
           })
         })
       })
@@ -347,18 +346,14 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on sub nested hasMany through', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.include({threads: {user: 'unread_threads'}}).order('users.id').exec(function(result){
+          return User.include({threads: {user: 'unread_threads'}}).order('users.id').exec(function(result){            
             result.length.should.be.equal(3)
-            result[0].unread_threads.length.should.be.equal(0)
-            result[1].unread_threads.length.should.be.equal(0)
-            result[2].unread_threads.length.should.be.equal(0)
+            result[0]._threads.length.should.be.equal(1)
+            result[1]._threads.length.should.be.equal(1)
+            result[2]._threads.length.should.be.equal(0)
 
-            result[0].threads.length.should.be.equal(1)
-            result[1].threads.length.should.be.equal(1)
-            result[2].threads.length.should.be.equal(0)
-
-            result[0].threads[0].user.unread_threads.length.should.be.equal(1)
-            result[1].threads[0].user.unread_threads.length.should.be.equal(0)
+            result[0]._threads[0]._user._unread_threads.length.should.be.equal(1)
+            result[1]._threads[0]._user._unread_threads.length.should.be.equal(0)
           })
         })
       })
@@ -369,16 +364,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var User = store.Model('User')
           return User.include({threads: {user: 'unread_threads'}}).where({threads: {user: {unread_threads: {title_like: 'unknown'}}}}).order('users.id').exec(function(result){
             result.length.should.be.equal(3)
-            result[0].unread_threads.length.should.be.equal(0)
-            result[1].unread_threads.length.should.be.equal(0)
-            result[2].unread_threads.length.should.be.equal(0)
+            result[0]._threads.length.should.be.equal(1)
+            result[1]._threads.length.should.be.equal(1)
+            result[2]._threads.length.should.be.equal(0)
 
-            result[0].threads.length.should.be.equal(1)
-            result[1].threads.length.should.be.equal(1)
-            result[2].threads.length.should.be.equal(0)
-
-            result[0].threads[0].user.unread_threads.length.should.be.equal(0)
-            result[1].threads[0].user.unread_threads.length.should.be.equal(0)
+            result[0]._threads[0]._user._unread_threads.length.should.be.equal(0)
+            result[1]._threads[0]._user._unread_threads.length.should.be.equal(0)
           })
         })
       })
@@ -388,16 +379,13 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var User = store.Model('User')
           return User.include({threads: {user: 'unread_threads'}}).where({threads: {user: {unread_threads: ['title like ?', 'second%']}}}).order('users.id').exec(function(result){
             result.length.should.be.equal(3)
-            result[0].unread_threads.length.should.be.equal(0)
-            result[1].unread_threads.length.should.be.equal(0)
-            result[2].unread_threads.length.should.be.equal(0)
 
-            result[0].threads.length.should.be.equal(1)
-            result[1].threads.length.should.be.equal(1)
-            result[2].threads.length.should.be.equal(0)
+            result[0]._threads.length.should.be.equal(1)
+            result[1]._threads.length.should.be.equal(1)
+            result[2]._threads.length.should.be.equal(0)
 
-            result[0].threads[0].user.unread_threads.length.should.be.equal(1)
-            result[1].threads[0].user.unread_threads.length.should.be.equal(0)
+            result[0]._threads[0]._user._unread_threads.length.should.be.equal(1)
+            result[1]._threads[0]._user._unread_threads.length.should.be.equal(0)
           })
         })
       })
@@ -409,12 +397,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var Post = store.Model('Post')
           var Thread = store.Model('Thread')
           var Avatar = store.Model('Avatar')
-          return PolyThing.include('member').order('poly_things.id').exec(function(result){
+          return PolyThing.include('member').order('poly_things.id').exec(function(result){                    
             result.length.should.be.equal(4)
-            result[0].member.should.be.an.instanceOf(Post)
-            result[1].member.should.be.an.instanceOf(Thread)
-            result[2].member.should.be.an.instanceOf(Thread)
-            result[3].member.should.be.an.instanceOf(Avatar)
+            result[0]._member.should.be.an.instanceOf(Post)
+            result[1]._member.should.be.an.instanceOf(Thread)
+            result[2]._member.should.be.an.instanceOf(Thread)
+            result[3]._member.should.be.an.instanceOf(Avatar)
           })
         })
       })
@@ -428,13 +416,13 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var Avatar = store.Model('Avatar')
           return User.include({poly_things: 'member'}).order('users.id').exec(function(result){
             result.length.should.be.equal(3)
-            result[0].poly_things.length.should.be.equal(2)
-            result[1].poly_things.length.should.be.equal(2)
-            result[0].poly_things[0].member.should.be.an.instanceOf(Post)
-            result[0].poly_things[1].member.should.be.an.instanceOf(Thread)
-            result[1].poly_things[0].member.should.be.an.instanceOf(Thread)
-            result[1].poly_things[1].member.should.be.an.instanceOf(Avatar)
-            result[2].poly_things.length.should.be.equal(0)
+            result[0]._poly_things.length.should.be.equal(2)
+            result[1]._poly_things.length.should.be.equal(2)
+            result[0]._poly_things[0]._member.should.be.an.instanceOf(Post)
+            result[0]._poly_things[1]._member.should.be.an.instanceOf(Thread)
+            result[1]._poly_things[0]._member.should.be.an.instanceOf(Thread)
+            result[1]._poly_things[1]._member.should.be.an.instanceOf(Avatar)
+            result[2]._poly_things.length.should.be.equal(0)
           })
         })
       })
@@ -446,15 +434,15 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var Post = store.Model('Post')
           var Thread = store.Model('Thread')
           var Avatar = store.Model('Avatar')
-          return User.include('members').order('users.id').exec(function(result){
+          return User.include('members').order('users.id').exec(function(result){            
             result.length.should.be.equal(3)
-            result[0].members.length.should.be.equal(2)
-            result[1].members.length.should.be.equal(2)
-            result[0].members[0].should.be.an.instanceOf(Post)
-            result[0].members[1].should.be.an.instanceOf(Thread)
-            result[1].members[0].should.be.an.instanceOf(Thread)
-            result[1].members[1].should.be.an.instanceOf(Avatar)
-            result[2].members.length.should.be.equal(0)
+            result[0]._members.length.should.be.equal(2)
+            result[1]._members.length.should.be.equal(2)
+            result[0]._members[0].should.be.an.instanceOf(Post)
+            result[0]._members[1].should.be.an.instanceOf(Thread)
+            result[1]._members[0].should.be.an.instanceOf(Thread)
+            result[1]._members[1].should.be.an.instanceOf(Avatar)
+            result[2]._members.length.should.be.equal(0)
           })
         })
       })
@@ -465,13 +453,13 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var User = store.Model('User')
           return User.include({members: ['user']}).order('users.id').exec(function(result){
             result.length.should.be.equal(3)
-            result[0].members.length.should.be.equal(2)
-            result[1].members.length.should.be.equal(2)
-            result[0].members[0].user.login.should.be.equal('phil')
-            result[0].members[1].user.login.should.be.equal('michl')
-            result[1].members[0].user.login.should.be.equal('phil')
-            result[1].members[1].user.login.should.be.equal('phil')
-            result[2].members.length.should.be.equal(0)
+            result[0]._members.length.should.be.equal(2)
+            result[1]._members.length.should.be.equal(2)
+            result[0]._members[0]._user.login.should.be.equal('phil')
+            result[0]._members[1]._user.login.should.be.equal('michl')
+            result[1]._members[0]._user.login.should.be.equal('phil')
+            result[1]._members[1]._user.login.should.be.equal('phil')
+            result[2]._members.length.should.be.equal(0)
           })
         })
       })
@@ -481,43 +469,9 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var Avatar = store.Model('Avatar')
           return Avatar.find(1).include('poly_things').exec(function(result){
             result.id.should.be.equal(1)
-            result.poly_things.length.should.be.equal(1)
-            result.poly_things[0].member_type.should.be.equal('Avatar')
-            result.poly_things[0].member_id.should.be.equal(result.id)
-          })
-        })
-      })
-
-
-
-      it('returns the result + the totalCount', function(){
-        return store.ready(function(){
-          var User = store.Model('User')
-          return User.limit(2).include(':totalCount').exec(function(result){
-            result.length.should.be.equal(2)
-            result.$totalCount.should.be.equal(3)
-          })
-        })
-      })
-
-
-      it.skip('returns the result + the totalCount with a join', function(){
-        return store.ready(function(){
-          var User = store.Model('User')
-          return User.join('posts').where({posts: {message_like: 'first'}}).include(':totalCount').exec(function(result){
-            result.length.should.be.equal(1)
-            result.$totalCount.should.be.equal(1)
-          })
-        })
-      })
-
-
-      it('returns the result + the totalCount of posts', function(){
-        return store.ready(function(){
-          var User = store.Model('User')
-          return User.include('posts:totalCount').exec(function(result){
-            result.length.should.be.equal(3)
-            result.posts$totalCount.should.be.equal(4)
+            result._poly_things.length.should.be.equal(1)
+            result._poly_things[0].member_type.should.be.equal('Avatar')
+            result._poly_things[0].member_id.should.be.equal(result.id)
           })
         })
       })
@@ -528,9 +482,9 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var Avatar = store.Model('Avatar')
           return Avatar.find(1).include('poly_things').include('poly_things').exec(function(result){
             result.id.should.be.equal(1)
-            result.poly_things.length.should.be.equal(1)
-            result.poly_things[0].member_type.should.be.equal('Avatar')
-            result.poly_things[0].member_id.should.be.equal(result.id)
+            result._poly_things.length.should.be.equal(1)
+            result._poly_things[0].member_type.should.be.equal('Avatar')
+            result._poly_things[0].member_id.should.be.equal(result.id)
           })
         })
       })
@@ -543,8 +497,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return User.include('user').exec(function(result){
             result.length.should.be.equal(3)
 
-            result[0].id.should.be.equal(result[0].user.id)
-            result[0].email.should.not.be.equal(result[0].user.email)
+            result[0].id.should.be.equal(result[0]._user.id)
+            result[0].email.should.not.be.equal(result[0]._user.email)
           })
         })
       })
@@ -556,8 +510,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return User.include({user: 'posts'}).exec(function(result){
             result.length.should.be.equal(3)
 
-            result[0].user.posts.length.should.be.equal(3)
-            result[1].user.posts.length.should.be.equal(1)
+            result[0]._user._posts.length.should.be.equal(3)
+            result[1]._user._posts.length.should.be.equal(1)
           })
         })
       })
@@ -566,10 +520,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('include a relation with scope per record', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.include('last_post').exec(function(result){
-            result.length.should.be.equal(3)
-            result[0].last_post.id.should.be.equal(3)
-            result[1].last_post.id.should.be.equal(4)
+          return User.include('last_post').exec(function(result){                   
+            result.length.should.be.equal(3)            
+            result[0]._last_post.id.should.be.equal(3)
+            result[1]._last_post.id.should.be.equal(4)
           })
         })
       })
@@ -580,11 +534,11 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var User = store.Model('User')
           return User.find(1).exec(function(user){
             return user.include('posts').exec()
-            .then(result => {
+            .then(function(result){
               result.id.should.be.equal(1)
-              result.posts.length.should.be.equal(3)
+              result._posts.length.should.be.equal(3)
               true.should.be.equal(result === user)
-              user.posts.length.should.be.equal(3)
+              user._posts.length.should.be.equal(3)
             })
           })
         })

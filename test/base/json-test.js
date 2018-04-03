@@ -54,6 +54,7 @@ describe('JSON', function(){
 
     it('returns a new object with relations', function(){
       var json = michl.toJson()
+      
       json.should.not.be.eql(michl)
       json.login.should.be.equal('michl')
       should.not.exist(json.foo)

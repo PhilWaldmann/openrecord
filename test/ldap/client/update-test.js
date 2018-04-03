@@ -19,7 +19,7 @@ describe('LDAP Client: Update', function(){
       this.attribute('memberOf', Array)
 
       this.belongsTo('ou', {ldap: 'parent'})
-      this.hasMany('groups', {container: 'children', foreign_key: 'member'})
+      this.hasMany('groups', {container: 'children', to: 'member'})
     })
 
     store.Model('Group', function(){
@@ -27,7 +27,7 @@ describe('LDAP Client: Update', function(){
       this.attribute('member', Array)
 
       this.belongsTo('ou', {ldap: 'parent'})
-      this.hasMany('members', {container: 'children', polymorph: true, type_key: 'type', foreign_key: 'memberOf'})
+      this.hasMany('members', {container: 'children', polymorph: true, type_key: 'type', to: 'memberOf'})
     })
 
     store.Model('Ou', function(){

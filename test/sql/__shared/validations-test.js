@@ -49,7 +49,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('gets called on update', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.find(1, function(phil){
+          return User.find(1)
+          .then(function(phil){
             phil.login = 'max'
             return phil.save()
           })

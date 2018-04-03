@@ -43,7 +43,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.belongsTo('unread', {model: 'Post'})
       })
       store.Model('PolyThing', function(){
-        this.belongsTo('member', {polymorph: true})
+        this.belongsToPolymorphic('member')
       })
     })
 
@@ -192,18 +192,18 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
 
 
-      it('returns the right results on nested joins aaa', function(){
+      it('returns the right results on nested joins ', function(){
         return store.ready(function(){
           var Thread = store.Model('Thread')
-          return Thread.join({posts: 'user'}).order('title').exec(function(result){
+          return Thread.join({posts: 'user'}).order('title').exec(function(result){                                          
             result[0].title.should.be.equal('first thread')
-            result[0].posts.length.should.be.equal(3)
-            result[0].posts[0].user.login.should.be.equal('phil')
-            result[0].posts[1].user.login.should.be.equal('phil')
-            result[0].posts[2].user.login.should.be.equal('michl')
+            result[0]._posts.length.should.be.equal(3)
+            result[0]._posts[0]._user.login.should.be.equal('phil')
+            result[0]._posts[1]._user.login.should.be.equal('phil')
+            result[0]._posts[2]._user.login.should.be.equal('michl')
             result[1].title.should.be.equal('second thread')
-            result[1].posts.length.should.be.equal(1)
-            result[1].posts[0].user.login.should.be.equal('phil')
+            result[1]._posts.length.should.be.equal(1)
+            result[1]._posts[0]._user.login.should.be.equal('phil')
           })
         })
       })
@@ -214,15 +214,15 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var Thread = store.Model('Thread')
           return Thread.join({posts: 'user'}, 'user').order('title', 'user.id').exec(function(result){
             result[0].title.should.be.equal('first thread')
-            result[0].posts.length.should.be.equal(3)
-            result[0].posts[0].user.login.should.be.equal('phil')
-            result[0].posts[1].user.login.should.be.equal('phil')
-            result[0].posts[2].user.login.should.be.equal('michl')
-            result[0].user.login.should.be.equal('michl')
+            result[0]._posts.length.should.be.equal(3)
+            result[0]._posts[0]._user.login.should.be.equal('phil')
+            result[0]._posts[1]._user.login.should.be.equal('phil')
+            result[0]._posts[2]._user.login.should.be.equal('michl')
+            result[0]._user.login.should.be.equal('michl')
             result[1].title.should.be.equal('second thread')
-            result[1].posts.length.should.be.equal(1)
-            result[1].posts[0].user.login.should.be.equal('phil')
-            result[1].user.login.should.be.equal('phil')
+            result[1]._posts.length.should.be.equal(1)
+            result[1]._posts[0]._user.login.should.be.equal('phil')
+            result[1]._user.login.should.be.equal('phil')
           })
         })
       })
@@ -233,10 +233,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var Thread = store.Model('Thread')
           return Thread.join({posts: 'user'}, 'user').where({posts: {user: {login_like: 'phi'}}}, {title_like: 'first'}).order('title', 'user.id').exec(function(result){
             result[0].title.should.be.equal('first thread')
-            result[0].posts.length.should.be.equal(2)
-            result[0].posts[0].user.login.should.be.equal('phil')
-            result[0].posts[1].user.login.should.be.equal('phil')
-            result[0].user.login.should.be.equal('michl')
+            result[0]._posts.length.should.be.equal(2)
+            result[0]._posts[0]._user.login.should.be.equal('phil')
+            result[0]._posts[1]._user.login.should.be.equal('phil')
+            result[0]._user.login.should.be.equal('michl')
             should.not.exist(result[1])
           })
         })
@@ -246,9 +246,9 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on multiple nested joins and nested conditions (attribute = attribute)', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.join({threads: 'posts'}).where({threads: {posts: {id: {attribute: 'user_id'}}}}).order('users.id').exec(function(result){
+          return User.join({threads: 'posts'}).where({threads: {posts: {id: {$attribute: 'user_id'}}}}).order('users.id').exec(function(result){
             result.length.should.be.equal(1)
-            result[0].threads[0].posts[0].id.should.be.equal(result[0].threads[0].posts[0].user_id)
+            result[0]._threads[0]._posts[0].id.should.be.equal(result[0].threads[0].posts[0].user_id)
           })
         })
       })
@@ -257,9 +257,9 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on multiple nested joins and nested conditions (attribute = other_table.attribute)', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.join({threads: 'posts'}).where({threads: {posts: {id: {attribute: 'id', relation: 'threads'}}}}).order('users.id').exec(function(result){
+          return User.join({threads: 'posts'}).where({threads: {posts: {id: {$attribute: 'id', $parents: ['threads']}}}}).order('users.id').exec(function(result){
             result.length.should.be.equal(1)
-            result[0].threads[0].posts[0].id.should.be.equal(result[0].threads[0].posts[0].user_id)
+            result[0]._threads[0]._posts[0].id.should.be.equal(result[0].threads[0].posts[0].user_id)
           })
         })
       })
@@ -270,11 +270,11 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var Thread = store.Model('Thread')
           return Thread.join({posts: {user: 'posts'}}, 'user').where({posts: {user: {login_like: 'phi'}}}, {title_like: 'first'}).order('title', 'user.id').exec(function(result){
             result[0].title.should.be.equal('first thread')
-            result[0].posts.length.should.be.equal(2)
-            result[0].posts[0].user.login.should.be.equal('phil')
-            result[0].posts[1].user.login.should.be.equal('phil')
-            result[0].posts[0].user.posts.length.should.be.equal(3)
-            result[0].user.login.should.be.equal('michl')
+            result[0]._posts.length.should.be.equal(2)
+            result[0]._posts[0]._user.login.should.be.equal('phil')
+            result[0]._posts[1]._user.login.should.be.equal('phil')
+            result[0]._posts[0]._user._posts.length.should.be.equal(3)
+            result[0]._user.login.should.be.equal('michl')
             should.not.exist(result[1])
           })
         })
@@ -283,9 +283,9 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on deep nested joins with nested conditions (attribute = other_table.attribute)', function(){
         return store.ready(function(){
           var Thread = store.Model('Thread')
-          return Thread.join({posts: {user: 'posts'}}, 'user').where({posts: {user: {posts: {user_id: {attribute: 'user_id', relation: 'posts'}}}}}).order('title', 'user.id').exec(function(result){
+          return Thread.join({posts: {user: 'posts'}}, 'user').where({posts: {user: {posts: {user_id: {$attribute: 'user_id', relation: 'posts'}}}}}).order('title', 'user.id').exec(function(result){
             result.length.should.be.equal(2)
-            result[0].posts[0].user_id.should.be.equal(result[0].posts[0].user.posts[0].user_id)
+            result[0]._posts[0].user_id.should.be.equal(result[0]._posts[0]._user._posts[0].user_id)
           })
         })
       })
@@ -294,12 +294,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on hasOne relations', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.join('avatar', 'left').exec(function(result){
+          return User.join('avatar', 'left').exec(function(result){            
             result.length.should.be.equal(4)
-            result[0].avatar.url.should.be.equal('http://awesome-avatar.com/avatar.png')
-            should.not.exist(result[1].avatar)
-            should.not.exist(result[2].avatar)
-            should.not.exist(result[3].avatar)
+            result[0]._avatar.url.should.be.equal('http://awesome-avatar.com/avatar.png')
+            should.not.exist(result[1]._avatar)
+            should.not.exist(result[2]._avatar)
+            should.not.exist(result[3]._avatar)
           })
         })
       })
@@ -307,12 +307,12 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on hasMany through', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.leftJoin('unread').order('users.id').exec(function(result){
+          return User.leftJoin('unread').order('users.id').exec(function(result){            
             result.length.should.be.equal(4)
-            result[0].unread.length.should.be.equal(1)
-            result[1].unread.length.should.be.equal(0)
-            result[2].unread.length.should.be.equal(0)
-            result[3].unread.length.should.be.equal(0)
+            result[0]._unread.length.should.be.equal(1)
+            result[1]._unread.length.should.be.equal(0)
+            result[2]._unread.length.should.be.equal(0)
+            result[3]._unread.length.should.be.equal(0)
           })
         })
       })
@@ -323,11 +323,11 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var User = store.Model('User')
           return User.leftJoin('unread_threads').order('users.id').exec(function(result){
             result.length.should.be.equal(4)
-            result[0].unread_threads.length.should.be.equal(1)
-            result[0].unread_threads[0].title.should.be.equal('second thread')
-            result[1].unread_threads.length.should.be.equal(0)
-            result[2].unread_threads.length.should.be.equal(0)
-            result[3].unread_threads.length.should.be.equal(0)
+            result[0]._unread_threads.length.should.be.equal(1)
+            result[0]._unread_threads[0].title.should.be.equal('second thread')
+            result[1]._unread_threads.length.should.be.equal(0)
+            result[2]._unread_threads.length.should.be.equal(0)
+            result[3]._unread_threads.length.should.be.equal(0)
           })
         })
       })
@@ -337,10 +337,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var Post = store.Model('Post')
           return Post.join('thread_autor').order('posts.id').exec(function(result){
             result.length.should.be.equal(4)
-            result[0].thread_autor.login.should.be.equal('michl')
-            result[1].thread_autor.login.should.be.equal('michl')
-            result[2].thread_autor.login.should.be.equal('phil')
-            result[3].thread_autor.login.should.be.equal('michl')
+            result[0]._thread_autor.login.should.be.equal('michl')
+            result[1]._thread_autor.login.should.be.equal('michl')
+            result[2]._thread_autor.login.should.be.equal('phil')
+            result[3]._thread_autor.login.should.be.equal('michl')
           })
         })
       })
@@ -349,11 +349,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on sub nested hasMany through', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.join({threads: {user: 'unread_threads'}}).order('users.id').exec(function(result){
-            result.length.should.be.equal(1)
-            result[0].unread_threads.length.should.be.equal(0)            
-            result[0].threads.length.should.be.equal(1)            
-            result[0].threads[0].user.unread_threads.length.should.be.equal(1)
+          return User.join({threads: {user: 'unread_threads'}}).order('users.id').exec(function(result){            
+            result.length.should.be.equal(1)       
+            result[0]._threads.length.should.be.equal(1)            
+            result[0]._threads[0]._user._unread_threads.length.should.be.equal(1)
           })
         })
       })
@@ -362,13 +361,13 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on sub nested hasMany through with conditions', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.join({threads: {user: 'unread_threads'}}).where({threads: {user: {unread_threads: {title_like: 'second'}}}}).order('users.id').exec(function(result){
+          return User.join({threads: {user: 'unread_threads'}}).where({threads: {user: {unread_threads: {title_like: 'second'}}}}).order('users.id').exec(function(result){            
             result.length.should.be.equal(1)
-            result[0].unread_threads.length.should.be.equal(0)
+            result[0]._unread_threads.length.should.be.equal(0)
 
-            result[0].threads.length.should.be.equal(1)
+            result[0]._threads.length.should.be.equal(1)
 
-            result[0].threads[0].user.unread_threads.length.should.be.equal(1)
+            result[0]._threads[0]._user._unread_threads.length.should.be.equal(1)
           })
         })
       })
@@ -397,11 +396,11 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('does only one join, even join(table) was called twice', function(){
         return store.ready(function(){
           var Avatar = store.Model('Avatar')
-          return Avatar.find(1).join('poly_things').join('poly_things').exec(function(result){
+          return Avatar.find(1).join('poly_things').join('poly_things').exec(function(result){            
             result.id.should.be.equal(1)
-            result.poly_things.length.should.be.equal(1)
-            result.poly_things[0].member_type.should.be.equal('Avatar')
-            result.poly_things[0].member_id.should.be.equal(result.id)
+            result._poly_things.length.should.be.equal(1)
+            result._poly_things[0].member_type.should.be.equal('Avatar')
+            result._poly_things[0].member_id.should.be.equal(result.id)
           })
         })
       })

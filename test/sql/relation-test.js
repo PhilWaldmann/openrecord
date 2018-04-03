@@ -57,70 +57,79 @@ describe('SQL: Relations', function(){
   it('hasMany() has the right foreign key', function(){
     return store.ready(function(){
       var User = store.Model('User')
-      User.definition.relations.posts.foreign_key.should.be.equal('user_id')
+      User.definition.relations.posts.init()
+      User.definition.relations.posts.to.should.be.eql(['user_id'])
     })
   })
 
   it('hasMany() has the right primary key', function(){
     return store.ready(function(){
       var User = store.Model('User')
-      User.definition.relations.posts.primary_key.should.be.equal('id')
+      User.definition.relations.posts.from.should.be.eql(['id'])
     })
   })
 
   it('hasMany() with custom model has the right foreign key', function(){
     return store.ready(function(){
       var User = store.Model('User')
-      User.definition.relations.bar.foreign_key.should.be.equal('user_id')
+      User.definition.relations.bar.init()
+      User.definition.relations.bar.to.should.be.eql(['user_id'])
     })
   })
 
   it('hasMany() with custom model has the right primary key', function(){
     return store.ready(function(){
       var User = store.Model('User')
-      User.definition.relations.bar.primary_key.should.be.equal('id')
+      User.definition.relations.bar.init()
+      User.definition.relations.bar.from.should.be.eql(['id'])
     })
   })
 
   it('belongsTo() has the right foreign key', function(){
     return store.ready(function(){
       var Post = store.Model('Post')
-      Post.definition.relations.user.foreign_key.should.be.equal('id')
+      Post.definition.relations.user.init()
+      Post.definition.relations.user.to.should.be.eql(['id'])
     })
   })
 
   it('belongsTo() has the right primary key', function(){
     return store.ready(function(){
       var Post = store.Model('Post')
-      Post.definition.relations.user.primary_key.should.be.equal('user_id')
+      Post.definition.relations.user.init()
+      Post.definition.relations.user.from.should.be.eql(['user_id'])
     })
   })
 
   it('belongsTo() with custom model has the right foreign key', function(){
     return store.ready(function(){
       var Post = store.Model('Post')
-      Post.definition.relations.bar.foreign_key.should.be.equal('id')
+      Post.definition.relations.bar.init()
+      Post.definition.relations.bar.to.should.be.eql(['id'])
     })
   })
 
   it('belongsTo() with custom model has the right primary key', function(){
     return store.ready(function(){
       var Post = store.Model('Post')
-      Post.definition.relations.bar.primary_key.should.be.equal('foo_id')
+      Post.definition.relations.bar.init()
+      Post.definition.relations.bar.from.should.be.eql(['foo_id'])
     })
   })
 
   it('belongsTo() with custom model and same field name has the right foreign key', function(){
     return store.ready(function(){
       var Post = store.Model('Post')
-      Post.definition.relations.bazinga.foreign_key.should.be.equal('id')
+      Post.definition.relations.bazinga.init()
+      Post.definition.relations.bazinga.to.should.be.eql(['id'])
     })
   })
 
   it('belongsTo() with custom model and same field name has the right primary key', function(){
     return store.ready(function(){
       var Post = store.Model('Post')
-      Post.definition.relations.bazinga.primary_key.should.be.equal('bazinga_id')
+      Post.definition.relations.bazinga.init()
+      Post.definition.relations.bazinga.from.should.be.eql(['bazinga_id'])
     })
   })
 
@@ -130,8 +139,12 @@ describe('SQL: Relations', function(){
       store2.ready()
     ]).then(function(){
       var User = store.Model('User')
-      var User2 = store2.Model('User');
-      (User2.definition.relations.user.model === User).should.be.equal(true)
+      var User2 = store2.Model('User')
+      
+      User2.definition.relations.user.init()
+      const equal = User2.definition.relations.user.model === User
+      
+      equal.should.be.equal(true)
     })
   })
 
@@ -141,8 +154,11 @@ describe('SQL: Relations', function(){
       store2.ready()
     ]).then(function(){
       var User = store.Model('User')
-      var User2 = store2.Model('User');
-      (User.definition.relations.user.model === User2).should.be.equal(true)
+      var User2 = store2.Model('User')
+      User.definition.relations.user.init()
+      const equal = User.definition.relations.user.model === User2
+
+      equal.should.be.equal(true)
     })
   })
 
@@ -158,8 +174,8 @@ describe('SQL: Relations', function(){
 
     return tmp.ready(function(){
       var Foo = tmp.Model('Foo')
-      should.not.exists(Foo.definition.relations.bar)
-    })
+      Foo.definition.relations.bar.init()
+    }).should.be.rejectedWith(Error, {message: "Unknown store 'UNKNOWN' on relation 'bar'"})
   })
 
 

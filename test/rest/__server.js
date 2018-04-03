@@ -19,7 +19,7 @@ before(function(next){
 })
 
 
-before(function(ready){
+before(function(){
   store = new Store({
     type: 'sqlite3',
     file: database
@@ -39,7 +39,7 @@ before(function(ready){
     this.hasMany('posts')
   })
 
-  store.ready(ready)
+  return store.ready()
 })
 
 

@@ -7,11 +7,14 @@ describe('Relations', function(){
     var store = new Store()
 
     store.Model('User', function(){
+      this.attribute('id', Number, {primary: true})
       this.attribute('login', String)
       this.hasMany('posts')
     })
 
     store.Model('Post', function(){
+      this.attribute('id', Number, {primary: true})
+      this.attribute('user_id', Number)
       this.attribute('title', String)
     })
 
@@ -21,11 +24,12 @@ describe('Relations', function(){
       return store.ready(function(){
         User = store.Model('User')
         Post = store.Model('Post')
-        phil = new User({login: 'phil',
-          posts: [{
-            title: 'Title A'},
-          {title: 'Title B', invalid_attribute: 'test'}
-          ]})
+        phil = new User({id: 10, login: 'phil',
+          posts: [
+            { title: 'Title A' },
+            { title: 'Title B', invalid_attribute: 'test' }
+          ]
+        })
       })
     })
 
@@ -34,8 +38,11 @@ describe('Relations', function(){
       should.exist(phil.posts)
     })
 
-    it('posts is an Array', function(){
+    it('posts is a Collection and a Promise', function(){      
       phil.posts.should.be.an.instanceof(Array)
+      return phil.posts.then(function(posts){
+        posts.should.be.an.instanceof(Array)
+      })
     })
 
     it('posts has Model methods', function(){
@@ -54,6 +61,13 @@ describe('Relations', function(){
       phil.posts[1].title.should.be.equal('Title B')
       should.not.exist(phil.posts[1].invalid_attribute)
     })
+
+    it('adding a new post will automatically add the user_id', function(){
+      phil.posts.add({title: 'new'})
+
+      phil.posts[2].title.should.be.equal('new')
+      phil.posts[2].user_id.should.be.equal(10)
+    })
   })
 
 
@@ -66,14 +80,19 @@ describe('Relations', function(){
 
     store.Model('User', function(){
       this.hasMany('websites')
+      this.attribute('guid', Number, {primary: true})
       this.attribute('login', String)
     })
 
     store.Model('Website', function(){
+      this.attribute('id', Number, {primary: true})
       this.attribute('url', String)
+      this.attribute('user_guid', Number)
     })
 
     store.Model('Post', function(){
+      this.attribute('id', Number, {primary: true})
+      this.attribute('user_guid', Number)
       this.attribute('title', String)
       this.belongsTo('user')
     })
@@ -109,33 +128,52 @@ describe('Relations', function(){
     })
 
     it('user is a Record', function(){
-      post.user.should.be.an.instanceof(User)
+      return post.user.then(function(user){
+        user.should.be.an.instanceof(User)
+      })
     })
 
-    it('user has Record methods', function(){
-      post.user.isValid.should.be.a.Function()
-      post.user.validate.should.be.a.Function()
+    it('user has Record methods (via promise)', function(){     
+      return post.user.then(function(user){
+        user.isValid.should.be.a.Function()
+        user.validate.should.be.a.Function()
+      })
+    })
+
+
+    it('user has Record methods (via promise free access)', function(){      
+      post._user.isValid.should.be.a.Function()
+      post._user.validate.should.be.a.Function()
     })
 
 
     it('user has the right attributes', function(){
-      post.user.should.have.property('login')
-      post.user.login.should.be.equal('phil')
+      post._user.should.have.property('login')
+      post._user.login.should.be.equal('phil')
     })
 
 
     it('assignment of a hash creates a new model', function(){
-      post.user = {login: 'admin', unknown_attr: 'test'}
+      post.user = {login: 'admin', unknown_attr: 'test', guid: 99}
 
-      post.user.login.should.be.equal('admin')
-      should.not.exist(post.user.unknown_attr)
+      post._user.login.should.be.equal('admin')
+      should.not.exist(post._user.unknown_attr)
     })
 
 
-    it('assignment of null does not creates a new model', function(){
+    it('the user_id was automatically set', function(){      
+      post.user_guid.should.be.equal(99)
+    })
+
+
+    it('assignment of null removes the related record', function(){
       post.user = null
 
-      should.not.exist(post.user)
+      should.not.exist(post._user)
+
+      return post.user.then(function(user){
+        should.not.exist(user)
+      })
     })
 
 
@@ -144,13 +182,13 @@ describe('Relations', function(){
 
       post.user = user
 
-      post.user.login.should.be.equal('admin')
-      post.user.should.be.equal(user)
+      post._user.login.should.be.equal('admin')
+      post._user.should.be.equal(user)
     })
 
     it('assignment of nested records works', function(){
-      nestedPost.user.login.should.be.equal('phil')
-      nestedPost.user.websites.length.should.be.equal(2)
+      nestedPost._user.login.should.be.equal('phil')
+      nestedPost._user.websites.length.should.be.equal(2)
     })
   })
 
@@ -160,11 +198,14 @@ describe('Relations', function(){
     var store = new Store()
 
     store.Model('User', function(){
+      this.attribute('id', Number, {primary: true})
+      this.attribute('post_guids', Array)
       this.attribute('login', String)
       this.belongsToMany('posts')
     })
 
     store.Model('Post', function(){
+      this.attribute('guid', Number, {primary: true})
       this.attribute('title', String)
     })
 
@@ -174,11 +215,13 @@ describe('Relations', function(){
       return store.ready(function(){
         User = store.Model('User')
         Post = store.Model('Post')
-        phil = new User({login: 'phil',
-          posts: [{
-            title: 'Title A'},
-          {title: 'Title B', invalid_attribute: 'test'}
-          ]})
+        phil = new User({
+          login: 'phil',
+          posts: [
+            { guid: 2, title: 'Title A' },
+            { guid: 3, title: 'Title B', invalid_attribute: 'test' }
+          ]}
+        )
       })
     })
 
@@ -206,6 +249,12 @@ describe('Relations', function(){
       phil.posts[0].should.have.property('title')
       phil.posts[1].title.should.be.equal('Title B')
       should.not.exist(phil.posts[1].invalid_attribute)
+    })
+
+
+    it('adding a new record will add the corresponding id to the parent', function(){
+      phil.posts.add({guid: 4, title: 'new'})      
+      phil.post_guids.should.be.eql([2, 3, 4])
     })
   })
 

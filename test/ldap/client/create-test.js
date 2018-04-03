@@ -19,16 +19,16 @@ describe('LDAP Client: Create', function(){
 
       this.validatesPresenceOf('username')
 
-      this.belongsTo('ou', {ldap: 'parent'})
-      this.hasMany('groups', {container: 'children', foreign_key: 'member'})
+      this.hasParent('ou')
+      this.hasMany('groups', {container: 'children', to: 'member'})
     })
 
     store.Model('Group', function(){
       this.attribute('name', String)
       this.attribute('member', Array)
 
-      this.belongsTo('ou', {ldap: 'parent'})
-      this.hasMany('members', {container: 'children', polymorph: true, type_key: 'type', foreign_key: 'memberOf'})
+      this.hasParent('ou')
+      this.hasChildren('members', {to: 'memberOf'})
     })
 
     store.Model('Ou', function(){
@@ -84,7 +84,7 @@ describe('LDAP Client: Create', function(){
       .then(function(result){
         result.name.should.be.equal('Sub')
 
-        return Ou.find('ou=sub, ou=create, dc=test').include('children').exec(function(ou){
+        return Ou.find('ou=sub, ou=create, dc=test').include('children').exec(function(ou){         
           ou.name.should.be.equal('Sub')
           ou.children.length.should.be.equal(1)
           ou.children[0].username.should.be.equal('hugo')
