@@ -213,18 +213,17 @@ OPENRECORD supports `belongs to`, `has many`, `has one` and `belongs to many` re
 
 A relation - except for a polymorphic relations - always needs a target model. The model name will be automatically taken from the relation name. If needed, you could always define the model name via the `model` config option.
 
-The relation will be initialized after the target model is ready - to automatically get the primary and foreign key. The default for the foreign key is `<model_name>_<primary_key>` - all lower case! You could manually set the `primary_key` and `foreign_key` if you need.
+The relation will be initialized after the target model is ready - to automatically get the primary and foreign key. The default for the foreign key is `<model_name>_<primary_key>` - all lower case! You could manually set the `from` and `to` key, if you need.
 
 The `name` of the relation is a string and could be anything you like. If you use the plural oder singular version of an existing model name, OPENRECORD will automatically detect it and will set most of the options for you.  
 The `options` parameter is optional, if it can autodetect your target model. Otherwise you need to privide an object with the following config options:
 * **model**: The target model name as a string
 * **store**: Optional store `name`. Only needed for cross store relations!
-* **primary_key**: The name of the field of the current model 
-* **foreign_key**: The name of the field of the target model
+* **from**: The name of the field of the current model 
+* **to**: The name of the field of the target model
 * **through**: The relation name of the current model you want to go through
 * **relation**: The relation name of the target model. Use only in conjunction with `through`
-* **polymorph**: Set to `true`, if this relation is polymorphic. Requires a `<polymorhic name>_id` and `<polymorhic name>_type` field on the record, where the `<polymorhic name>_type` field containes the model name of the target model
-* **as**: Set the `<polymorhic name>`
+* **as**: Set the `<polymorhic name>`. See `belongsToPolymorphic()`
 * **conditions**: Optional `conditions` object (See [Query](./query.md#with-conditions))
 * **dependent**: What should happen with the related record after a record of this model will be deleted. Valid values are: `destroy`, `delete`, `nullify` or null. (Default null)
 * **autoSave**: Automatically save loaded or new related records (See [save](./modify#save) and [setup](./setup.md))
@@ -254,6 +253,18 @@ This model contains an array of primary keys of the target model
 // models/User.js
 this.belongsToMany('roles') // User has a `role_ids` field
 ```
+
+### belongsToPolymorphic(name[, options])
+This model contains an id and the model name of the target model.  
+The `options` parameter takes additional attributes:
+* **typeField**: The field which stores the target model name. Default: `'<name>_type'`
+* **idField**: The field which stores the target model id. Default: `'<name>_id'`
+* **storeField**: Optional store `name`. Only needed for cross store relations!. Default: The current store
+```js
+// models/User.js
+this.belongsToPolymorphic('children', {typeField: 'children_class'}) // if we have a model with a `children_class` and `children_id` fields
+```
+
 
 ## Scopes
 

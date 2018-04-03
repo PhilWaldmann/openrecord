@@ -82,6 +82,7 @@ global.testOracle = function(name, queries, prefix){
     console.log('Needs Oracle database for tests.')
     return
   }
+  return
 
   var db = name.replace('/', '_') + '_test'
   require('../__shared/' + name + '-test' + (prefix || ''))(
