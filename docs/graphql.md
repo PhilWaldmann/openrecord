@@ -181,7 +181,7 @@ Will merge your `resolver` object into the `Query` resolvers.
 
 ## graphQLMutationResolver(resolvers)
 
-Simmilar to `graphQLQueryResolver()`, but will add your object to the `Mutation` resolvers.
+Similar to `graphQLQueryResolver()`, but will add your object to the `Mutation` resolvers.
 
 ## graphQLTypeResolver(resolvers)
 
@@ -226,7 +226,7 @@ You could define your schema in separate file, or include them in your model def
 * Does not automatically add your relations (Maybe you want to add filtering or pagination)
 * Adds all attributes, if not excluded explicitly
 
-!> This is not the right solution if you want to use autocompletion or simmilar features for graphql
+!> This is not the right solution if you want to use autocompletion or similar features for graphql
 
 ```js
 // ./schema.js

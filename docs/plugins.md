@@ -1,7 +1,7 @@
 
 # Plugins
 
-`plugins` are first class citizens in OPENRECORD, because everything of OPENRECORD is build that way.  
+`plugins` are first class citizens in OPENRECORD, because everything in OPENRECORD is built that way.  
 
 To use a plugin globally specify it via the `plugins` [store config](./setup.md).
 ```js
@@ -21,7 +21,7 @@ A `plugin` is just an object with one or more of the following keys:
 * **record**: Add or change functionality of your records (of all models)
 * **migration**: Add or change functionality of your [migrations](./migrations.md)
 
-Let's take a look at the build in [paranoid](#paranoid) plugin:
+Let's take a look at the built in [paranoid](#paranoid) plugin:
 
 ```js
 // ./plugins/paranoid.js
@@ -82,9 +82,9 @@ exports.definition = {
 As you can see in the above example, the `paranoid` method of the `definition scope` dynamically adds a `scope` and `hook`, as well as overwrites a record method.  
 If you want to overwrite an existin method, make sure you call `this.callParent(..args..)`. Or in case of the above example: Return the same result as the original method - a `Promise`.
 
-There is one special method, simmilar to a class constructor: `mixinCallback`
+There is one special method, similar to a class constructor: `mixinCallback`
 `mixinCallback` will be called on creation of that part. e.g. for a `definition` it will be called when the definition object will be initialized.  
-As an example the build in [totalCount](#totalcount) plugin:
+As an example the built in [totalCount](#totalcount) plugin:
 
 ```js
 exports.definition = {
@@ -148,7 +148,7 @@ store.appendOperator('string', 'length')
 
 !> The examples above are for a *postgres* database
 
-## Build in plugins
+## Built in plugins
 
 Stores of type *sqlite3*, *postgres*, *mysql* and *oracle* does have the following plugins automatically loaded:
 

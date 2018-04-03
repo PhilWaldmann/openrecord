@@ -90,7 +90,7 @@ module.exports = User
 
 ?> You could also return a `function` like in the first example. The function name (e.g. `function User(){...}`) will be used as the model name!
 
-As you can see in the above examples, the difference between `class` and `function` style is the way how you define your custom methods.  
+As you can see in the above examples, the difference between `class` and `function` style is the way you define your custom methods.  
 Internally OPENRECORD will work the same!
 
 The scope of the `class` style `definition` method and the `function` style method are the same. That's the `definition scope`.  
@@ -102,9 +102,9 @@ The following methods are available in the `definition scope`:
 
 ## Validations
 
-In order to validated your records on `save()` (See [Modify](./modify.md)), you have to first define your validation rules.  
+In order to validate your records on `save()` (See [Modify](./modify.md)), you have to first define your validation rules.  
 
-The most powerfull is a custom validation via `validates()`, which could return a `Promise`, nothing or throw an `Error`.  
+The most powerful is custom validation via `validates()`, which could return a `Promise`, nothing or throw an `Error`.  
 
 ### validates(fn)
 Add a custom validator function to your records
@@ -128,7 +128,7 @@ Of cours you could throw your own `Error` as well! But be aware, that throwing a
 ?> The value of a fulfilled `Promise` will be ignored.
 
 
-OPENRECORD has a lot of build in validation methods and could be [extended easily](#plugins).  
+OPENRECORD has a lot of built in validation methods and could be [extended easily](#plugins).  
 Stores that automatically load and define your attributes (*sqlite3*, *postgres*, *mysql* and *oracle*) also automatically apply certain validations based on e.g. `NOT NULL` or `varchar(255)`.
 
 The following validation methods are available for every store type:
@@ -276,8 +276,8 @@ const user = await User.active().limit(10)
 ### scope(name[, fn, lazy])
 
 A `scope` is basically a static model method, which supports [chaining](./query.md#chaining).
-But a `scope` function could also be *lazy*, which means it wont be executed immediately. That allows it to be asynchronous, if needed (just return a `Promise`).  
-It takes arguments like any other method, but the return value (except it's a `Promise`) will be ignored.
+But a `scope` function could also be *lazy*, which means it won't be executed immediately. That allows it to be asynchronous, if needed (just return a `Promise`).  
+It takes arguments like any other method, but the return value (unless it's a `Promise`) will be ignored.
 
 If your models are defined as a `class`, you could to the following to convert your normal method to a `scope` method.  
 The original method will be overwritten!
@@ -304,7 +304,7 @@ If you want a scope to be used automatically, set it as a default via `this.defa
 
 ## Attributes
 
-Until this point talked about field or attributes, but not how to define them.
+Until this point we've talked about fields or attributes, but not how to define them.
 For *sqlite3*, *postgres*, *mysql* and *oracle* stores you dont need to, because they are loaded automatically from your store. But this does not work for *ldap* or *rest* stores.
 
 ?> even if you are using a store with automatic field detection, you could always add a new ones!
@@ -324,9 +324,9 @@ this.attribute('my_attribute', String)
 
 !> Be aware, that this will **not** change your database schema!
 
-The above attribute `my_attribute` will be availbale for setting and getting a value from. It will autmatically convert the input to a `String`. But it won't save it to a SQL store!
+The above attribute `my_attribute` will be available for setting and getting a value. It will automatically convert the input to a `String`. But it won't save it to a SQL store!
 
-The `attribute` methods taks a third `options` argument object with the following values:
+The `attribute` methods takes a third `options` argument object with the following values:
 * **writable**: Make the attribute writable (e.g. `record.my_attribute = 'foo'`). Default true
 * **readable**: Make the attribute readable (e.g. `record.my_attribute`). Default true
 * **default**: Add a default value
@@ -354,12 +354,12 @@ this.setter('full_name', function(){
 Sometimes you need to convert your field from the internal structure of you datastore to another format.  
 OPENRECORD has 4 types of conversions: `read`, `write`, `input` and `ouput`.
 
-The `read` converter will be used to convert the raw ouput of your datastore to the internal value of your record. Cice versa `write` will convert the internal value to the value of your data store.  
-E.g. a date your be stored as a timestamp in your datastore and provided by the record as a native `Date` object.  
+The `read` converter will be used to convert the raw ouput of your datastore to the internal value of your record. Vice versa `write` will convert the internal value to the value of your data store.  
+E.g. a date could be stored as a timestamp in your datastore and provided by the record as a native `Date` object.  
 
-The `input` converter will be used every time you set a new value to a records field (e.g. `this.my_attribute = 'foo'`) and the `ouput` converter will be used every time you get a value or `JSON.stringify` your records.
+The `input` converter will be used every time you set a new value to a records field (e.g. `this.my_attribute = 'foo'`) and the `output` converter will be used every time you get a value or `JSON.stringify` your records.
 
-?> Every [attribute type](#attributes) has it's own conversion methods predefined (e.g. `'datetime'`).
+?> Every [attribute type](#attributes) has its own conversion methods predefined (e.g. `'datetime'`).
 
 If you want to overwrite it, there are 4 methods to do so: `convertWrite`, `convertRead`, `convertInput`, `convertOutput`.  
 Here is an example:
@@ -376,33 +376,33 @@ The above example will output either `SMALL` or `BIG` if you do a `console.log(r
 
 Will be used every time the value of your `field` will written to your datastore.
 
-`fn` must be a function which receives the internal `value` as it's first argument. The functions return value will be used.  
+`fn` must be a function which receives the internal `value` as its first argument. The functions return value will be used.  
 `this` is the record  
-If `forceType` is set to `false`, the returned value wont be converted to the original type (see example above).
+If `forceType` is set to `false`, the returned value won't be converted to the original type (see example above).
 
 ### convertRead(field, fn[, forceType])
 
-Will be used every time we got a value from your datastore.
+Will be used every time we get a value from your datastore.
 
-`fn` must be a function which receives the original `value` as it's first argument. The functions return value will be used.  
+`fn` must be a function which receives the original `value` as its first argument. The functions return value will be used.  
 `this` is the record  
-If `forceType` is set to `false`, the returned value wont be converted to the original type (see example above).
+If `forceType` is set to `false`, the returned value won't be converted to the original type (see example above).
 
 ### convertInput(field, fn[, forceType])
 
 Will be used every time your `field` will be changed. e.g. via `record.my_attribute = 'foo'` or `record.set({my_attribute: 'foo'})`
 
-`fn` must be a function which receives the new `value` as it's first argument. The functions return value will be used.  
+`fn` must be a function which receives the new `value` as its first argument. The functions return value will be used.  
 `this` is the record  
-If `forceType` is set to `false`, the returned value wont be converted to the original type (see example above).
+If `forceType` is set to `false`, the returned value won't be converted to the original type (see example above).
 
 ### convertOutput(field, fn[, forceType])
 
 Will be used every time your `field` will be accessed. e.g. via `record.my_attribute` or `JSON.stringify(record)`
 
-`fn` must be a function which receives the internal `value` as it's first argument. The functions return value will be used.  
+`fn` must be a function which receives the internal `value` as its first argument. The functions return value will be used.  
 `this` is the record  
-If `forceType` is set to `false`, the returned value wont be converted to the original type (see example above).
+If `forceType` is set to `false`, the returned value won't be converted to the original type (see example above).
 
 
 ## Hooks
