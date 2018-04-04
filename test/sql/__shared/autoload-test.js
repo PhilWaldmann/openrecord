@@ -24,7 +24,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('Models are loaded', function(){
+    it('Models are loaded', function(){      
       return store.ready(function(){
         store.models.should.have.keys('user', 'post', 'thread', 'avatar', 'unreadpost', 'polything')
       })

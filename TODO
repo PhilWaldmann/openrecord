@@ -24,6 +24,7 @@
 [ ] "updates a relation id with original relation loaded" for belongsToMany
 [ ] ActiveDirectory tests!
 [ ] Oracle tests!
+[ ] Use `debug` module
 
 BREAKING CHANGES:
 `plugins` and `models` store config does not autoload via `glob`

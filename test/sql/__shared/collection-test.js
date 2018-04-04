@@ -110,7 +110,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('create multiple relational records with relation = record', function(){
+    it('create a relational record with relation = record', function(){
       return store.ready(function(){
         var User = store.Model('User')
         var Post = store.Model('Post')
@@ -129,14 +129,17 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-    it('create multiple relational records with relation = record', function(){
+    it('create multiple relational records with relation = [records]', function(){
       return store.ready(function(){
         var User = store.Model('User')
         var Post = store.Model('Post')
         return User.find(5).include('posts').exec(function(user){
           user.posts.length.should.be.equal(0)
 
-          user.posts = [Post.new({thread_id: 1, message: 'with = [] 1'}), Post.new({thread_id: 1, message: 'with = [] 2'})]
+          user.posts = [
+            Post.new({thread_id: 1, message: 'with = [] 1'}),
+            Post.new({thread_id: 1, message: 'with = [] 2'})
+          ]
 
           return user.save()
           .then(function(){

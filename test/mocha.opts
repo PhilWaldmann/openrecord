@@ -1,5 +1,5 @@
 --reporter spec
 --recursive
 --full-trace
---timeout 7000
+--timeout 10000
 --exit

@@ -18,13 +18,14 @@ if(PORT) CONN += ':' + PORT
   4. $ mkdir ~/lib
   5. $ ln -s ~/Desktop/instantclient_12_1/libclntsh.dylib.12.1 ~/lib/
   3. $ docker run -d -p 49160:22 -p 49161:1521 -p 46162:8080 -e ORACLE_ALLOW_REMOTE=true wnameless/oracle-xe-11g 
-  4. $ export PATH=~/Desktop/instantclient_12_1:$PATH
-  5. $ ORACLE_SID=XE sqlplus -L -S 'system/oracle'@localhost:49161  <<SQL
+  4. WAIT...
+  5. $ export PATH=~/Desktop/instantclient_12_1:$PATH
+  6. $ ORACLE_SID=XE sqlplus -L -S 'system/oracle'@localhost:49161  <<SQL
 CREATE USER travis IDENTIFIED BY travis;
 GRANT CONNECT, RESOURCE TO travis;
 GRANT EXECUTE ON SYS.DBMS_LOCK TO travis;
 SQL
-  5. ORACLE_VIA_DOCKER=1 ORACLE_HOME=1 npm run mocha
+  7. ORACLE_VIA_DOCKER=1 ORACLE_HOME=1 npm run mocha
 */
 
 global.beforeOracle = function(db, sql, next){
@@ -50,11 +51,12 @@ global.beforeOracle = function(db, sql, next){
 
     return line.replace(/TEXT/g, 'VARCHAR2(500)').replace(/INTEGER/g, 'NUMBER(10)').replace(/BOOLEAN/g, 'CHAR')
   })
-
+  
   exec('cat ' + __dirname + '/clear.sql | sqlplus -L -S ' + CONN, function(err, result){ // eslint-disable-line
     if(err) console.log('ORACLE', err)
     // console.log(sql.join(';\n'))
-    exec('sqlplus -L -S ' + CONN + ' <<SQL\n' + sql.join(';\n') + ';\nSQL', function(err, result){
+    
+    exec('sqlplus -L -S ' + CONN + ' <<SQL\n' + sql.join(';\n') + ';\nSQL', function(err, result){      
       if(err) throw new Error(err)
       next()
     })
@@ -82,7 +84,6 @@ global.testOracle = function(name, queries, prefix){
     console.log('Needs Oracle database for tests.')
     return
   }
-  return
 
   var db = name.replace('/', '_') + '_test'
   require('../__shared/' + name + '-test' + (prefix || ''))(

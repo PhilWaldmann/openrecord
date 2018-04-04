@@ -88,6 +88,9 @@ OPENRECORD will query your datastore only two times:
 1. To get all sticky threads
 2. To get all posts that belongs to the previously loaded threads
 
+!> Accessing a relation via it's name (e.g. `threads[0].posts`) will always return a promise. If you use `include()` this promise will resolve instantly!  
+If you need, you can access the preloaded results directly by adding a underscore: `threads[0]._posts`
+
 
 Imaging we have a model `Thread` which has many `posts` and an `author`. The `Post` model also has an `author` and the `Author` model has a relation to the `last_post`.   
 We could use `include()` to preload these relations the following way:
