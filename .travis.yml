@@ -30,7 +30,6 @@ before_install:
   - yarn add oracledb --ignore-engines
 
 node_js:
-  - "4"
   - "6"
   - "8"
 
