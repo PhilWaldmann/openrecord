@@ -25,6 +25,7 @@ describe('Webpack: Load (sqlite3)', function(){
 
   it('successfully runs webpack with a sqlite3 store', function(next){
     webpack({
+      mode: 'production',
       entry: storePath,
       output: {
         path: __dirname,
@@ -35,10 +36,7 @@ describe('Webpack: Load (sqlite3)', function(){
       node: {
         __dirname: true
       },
-      externals: [nodeExternals()],
-      plugins: [
-        new webpack.optimize.UglifyJsPlugin({minimize: true, compress: { warnings: false }})
-      ]
+      externals: [nodeExternals()]
     }, function(err, stats) {
       stats.compilation.errors.should.be.eql([])
       next(err)
@@ -93,6 +91,7 @@ describe('Webpack: Load (postgres)', function(){
 
   it('successfully runs webpack with a sqlite3 store', function(next){
     webpack({
+      mode: 'production',
       entry: storePath,
       output: {
         path: __dirname,
@@ -103,10 +102,7 @@ describe('Webpack: Load (postgres)', function(){
       node: {
         __dirname: true
       },
-      externals: [nodeExternals()],
-      plugins: [
-        new webpack.optimize.UglifyJsPlugin({minimize: true, compress: { warnings: false }})
-      ]
+      externals: [nodeExternals()]
     }, function(err, stats) {
       stats.compilation.errors.should.be.eql([])
       next(err)

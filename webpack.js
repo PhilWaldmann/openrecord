@@ -24,6 +24,14 @@ class OpenRecordCacheInfusionDependency {
     return null
   }
 
+  getResourceIdentifier(){
+    return null;
+  }
+
+  getReference() {
+		return null
+	}
+
   disconnect(){}
 }
 
@@ -48,7 +56,7 @@ OpenRecordCacheInfusionDependency.Template = class OpenRecordCacheInfusionDepend
       return new __webpack_require(1)(config)
     }
     */
-
+    
     source.replace(before[0], before[1], beforeCode)
     source.replace(after[0], after[1], afterCode)
   }
@@ -59,14 +67,13 @@ OpenRecordCacheInfusionDependency.Template = class OpenRecordCacheInfusionDepend
 
 OpenRecordCachePlugin.prototype.apply = function(compiler) {
   var store = this.store
-
-  compiler.plugin('compilation', function(compilation, params) {
+  
+  function compilation(compilation, params) {
     compilation.dependencyFactories.set(OpenRecordCacheInfusionDependency, params.normalModuleFactory)
     compilation.dependencyTemplates.set(OpenRecordCacheInfusionDependency, new OpenRecordCacheInfusionDependency.Template())
 
-    params.normalModuleFactory.plugin('parser', function(parser){
-      // currently we search only for require calls
-      parser.plugin('call require', function(node){
+    function parser(parser){
+      function callRequire(node){       
         // and check if 'openrecord' or 'openrecord/store/...' was required
         if(node.arguments[0] && node.arguments[0].value && node.arguments[0].value.match(/^openrecord($|\/store\/)/)){
           // now we do the fancy webpack dance
@@ -75,18 +82,46 @@ OpenRecordCachePlugin.prototype.apply = function(compiler) {
           dep.request = node.arguments[0].value // actually I don't know where request comes, but it's the file name/relative path of the required file in webpack code
           parser.state.current.addDependency(dep)
         }
-      })
-    })
-  })
+      }
 
-  compiler.plugin('run', function(compiler, callback) {
+      // currently we search only for require calls
+      if(parser.hooks){
+        parser.hooks.call.for('require').tap('require', callRequire)
+      }else{
+        parser.plugin('call require', callRequire)
+      } 
+    }
+
+    if(params.normalModuleFactory.hooks){
+      // from https://github.com/webpack/webpack/blob/master/lib/DefinePlugin.js
+      params.normalModuleFactory.hooks.parser.for("javascript/auto").tap('parser', parser)
+      params.normalModuleFactory.hooks.parser.for("javascript/dynamic").tap('parser', parser)
+      params.normalModuleFactory.hooks.parser.for("javascript/esm").tap('parser', parser)
+    }else{
+      params.normalModuleFactory.plugin('parser', parser)
+    }
+    
+  }
+
+  function run(compiler, callback) {
     store.ready(callback)
-  })
+  }
 
-  compiler.plugin('emit', function(compiler, callback) {
+  function emit(compiler, callback) {
     if(store.close) store.close()
     callback()
-  })
+  }
+
+  if(compiler.hooks){
+    compiler.hooks.compilation.tap('openrecord', compilation)    
+    compiler.hooks.run.tapAsync('openrecord', run)
+    compiler.hooks.emit.tapAsync('openrecord', emit)
+  }else{
+    compiler.plugin('compilation', compilation)
+    compiler.plugin('run', run)
+    compiler.plugin('emit', emit)
+  }
+  
 }
 
 module.exports = OpenRecordCachePlugin

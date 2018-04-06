@@ -30,6 +30,7 @@ describe('Webpack: With cache plugin (sqlite3)', function(){
 
   it('successfully runs webpack with a sqlite3 store', function(next){
     webpack({
+      mode: 'production',
       entry: storePath,
       output: {
         path: __dirname,
@@ -42,8 +43,7 @@ describe('Webpack: With cache plugin (sqlite3)', function(){
       },
       externals: [nodeExternals()],
       plugins: [
-        new OpenRecordCache(require(storePath)(database)),
-        new webpack.optimize.UglifyJsPlugin({minimize: true, compress: { warnings: false }})
+        new OpenRecordCache(require(storePath)(database))
       ]
     }, function(err, stats) {
       if(err) throw err
@@ -114,6 +114,7 @@ describe('Webpack: With cache plugin (postgres)', function(){
 
   it('successfully runs webpack with a postgres store', function(next){
     webpack({
+      mode: 'production',
       entry: storePath,
       output: {
         path: __dirname,
@@ -126,8 +127,7 @@ describe('Webpack: With cache plugin (postgres)', function(){
       },
       externals: [nodeExternals()],
       plugins: [
-        new OpenRecordCache(require(storePath)(database)),
-        new webpack.optimize.UglifyJsPlugin({minimize: true, compress: { warnings: false }})
+        new OpenRecordCache(require(storePath)(database))
       ]
     }, function(err, stats) {
       if(err) throw err
