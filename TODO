@@ -17,10 +17,8 @@
 [ ] cache relations and use them in nested includes... one base cache for the first exec
 [ ] belongsToPolymorphic setter
 [ ] hasManyThrough setter
-[ ] jobs with same priority -> parallel
 [ ] remove attribute events -> remove all events...
 [ ] "updates a relation id with original relation loaded" for belongsToMany
-[ ] Oracle tests!
 [ ] Use `debug` module
 [ ] select + transformations => https://github.com/jsonata-js/jsonata
 
