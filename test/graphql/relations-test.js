@@ -174,7 +174,6 @@ types.forEach(function(type){
           }
         }`)
       .then(function(result){
-        console.log(result);
         result.should.be.eql({
           data: {
             recipe: {

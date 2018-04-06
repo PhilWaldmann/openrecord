@@ -121,7 +121,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
           return user.save()
           .then(function(){
-            return Post.where({user_id: user.id}).count().exec(function(result){
+            return Post.where({user_id: user.id}).count().exec(function(result){              
               result.should.be.equal(1)
             })
           })

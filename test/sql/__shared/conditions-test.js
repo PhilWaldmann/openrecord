@@ -23,21 +23,17 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
 
       store.addOperator('length', {
         on: {
-          number: function(attr, value, query, cond){
-            // var columnName = store.utils.getAttributeName(this, cond)
+          number: function(attr, value, query, cond){            
             var fn = 'char_length'
             if(store.type === 'sqlite3' || store.type === 'oracle') fn = 'length'
-            // if(store.type === 'oracle') columnName = '"' + attr + '"'
-            query.whereRaw(fn + '(' + attr + ') = ?', [value])
+            query.whereRaw(fn + '(' + this.escapeAttribute(attr) + ') = ?', [value])
           },
           array: function(attr, value, query, cond){
-            // var columnName = store.utils.getAttributeName(this, cond)
             var min = value[0]
             var max = value[1]
             var fn = 'char_length'
             if(store.type === 'sqlite3' || store.type === 'oracle') fn = 'length'
-            // if(store.type === 'oracle') columnName = '"' + attr + '"'
-            query.whereRaw(fn + '(' + attr + ') BETWEEN ? AND ?', [min, max])
+            query.whereRaw(fn + '(' + this.escapeAttribute(attr) + ') BETWEEN ? AND ?', [min, max])
           }
         }
       })
