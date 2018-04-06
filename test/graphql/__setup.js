@@ -119,7 +119,7 @@ global.beforeGraphQL = function(database, type, done){
       store1.Model('Recipe', function(){
         this.belongsTo('author', {autoSave: true})
         this.hasMany('recipe_ingredients', {autoSave: true})
-        this.hasMany('ingredients', {through: 'recipe_ingredients', relation: 'ingredient'})
+        this.hasMany('ingredients', {through: 'recipe_ingredients', relation: 'ingredient', scope: 'pagination'})
         this.hasMany('images', {model: 'RecipeImage', autoSave: true})
 
 
@@ -127,7 +127,7 @@ global.beforeGraphQL = function(database, type, done){
         if(type === 'auto'){
           this
           .graphQLField('author: Author')
-          .graphQLField('ingredients: [Ingredient]')
+          .graphQLField('ingredients(limit: Int): [Ingredient]')
 
           .graphQLQuery('recipe(id: Int!): Recipe')
           .graphQLQuery('recipes(limit: Int = 10): RecipeConnection!')
@@ -212,6 +212,11 @@ global.beforeGraphQL = function(database, type, done){
 
         this.method('total_amount', function(){          
           return this.recipe_ingredients.sum('amount').exec()
+        })
+
+        this.scope('pagination', function(args){
+          args = args || {}
+          if(args.limit) this.limit(args.limit)
         })
       })
 

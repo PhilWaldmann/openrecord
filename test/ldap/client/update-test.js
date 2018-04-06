@@ -16,18 +16,18 @@ describe('LDAP Client: Update', function(){
 
     store.Model('User', function(){
       this.attribute('username', String)
-      this.attribute('memberOf', Array)
+      this.attribute('memberOf', 'dn_array')
 
-      this.belongsTo('ou', {ldap: 'parent'})
-      this.hasMany('groups', {container: 'children', to: 'member'})
+      this.hasParent('ou')
+      this.hasMany('groups', {from: 'dn', to: 'member'})
     })
 
     store.Model('Group', function(){
       this.attribute('name', String)
-      this.attribute('member', Array)
+      this.attribute('member', 'dn_array')
 
-      this.belongsTo('ou', {ldap: 'parent'})
-      this.hasMany('members', {container: 'children', polymorph: true, type_key: 'type', to: 'memberOf'})
+      this.hasParent('ou')
+      this.belongsToMany('members', {from: 'member'})
     })
 
     store.Model('Ou', function(){

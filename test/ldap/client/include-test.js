@@ -15,18 +15,18 @@ describe('LDAP Client: Includes', function(){
 
     store.Model('User', function(){
       this.attribute('username', String)
-      this.attribute('memberOf', Array)
+      this.attribute('memberOf', 'dn_array')
 
       this.hasParent('ou')
-      this.hasChildren('groups', {from: 'memberOf', recursive: true})
+      this.hasMany('groups', {from: 'dn', to: 'member'})
     })
 
     store.Model('Group', function(){
       this.attribute('name', String)
-      this.attribute('member', Array)
+      this.attribute('member', 'dn_array')
 
       this.hasParent('ou')
-      this.hasChildren('members', {from: 'member', recursive: true})
+      this.belongsToMany('members', {from: 'member'})
     })
 
     store.Model('Ou', function(){
@@ -110,7 +110,7 @@ describe('LDAP Client: Includes', function(){
   it('includes group members', function(){
     return store.ready(function(){
       var Group = store.Model('Group')
-      return Group.include('members').exec(function(groups){
+      return Group.include('members').exec(function(groups){        
         groups.length.should.be.equal(1)
         groups[0].members.length.should.be.equal(2)
         groups[0].members[0].username.should.be.equal('christian')
@@ -133,7 +133,7 @@ describe('LDAP Client: Includes', function(){
   it('includes all members of ou groups', function(){
     return store.ready(function(){
       var Ou = store.Model('Ou')
-      return Ou.include('group_members').exec(function(ous){        
+      return Ou.include('group_members').exec(function(ous){               
         ous.length.should.be.above(2)
         ous[2]._group_members.length.should.be.equal(2)
       })

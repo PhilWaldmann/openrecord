@@ -23,14 +23,26 @@ describe('Inspect', function(){
 
       phil = User.new({login: 'phil', foo: 'bar'})
       michl = User.new({login: 'michl', foo: 'bar', posts: posts})
-
-      User.chain().add(phil).add(michl)
     })
   })
 
   describe('inspect()', function(){
     it('method exists', function(){
       phil.inspect.should.be.a.Function()
+    })
+
+    it('returns a string representing a unloaded collection', function(){
+      var str = User.chain().inspect()
+      str.should.be.a.String()
+      str.should.be.equal('<User [not loaded]>')
+    })
+
+    it('returns a string representing a empty collection', function(){
+      var chain = User.chain()
+      chain.setInternal('resolved', true)
+      var str = chain.inspect()
+      str.should.be.a.String()
+      str.should.be.equal('<User [empty result]>')
     })
 
     it('returns a string representing a record', function(){

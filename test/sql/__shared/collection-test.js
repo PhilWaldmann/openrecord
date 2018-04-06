@@ -160,8 +160,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           thread.user = User.new({login: 'new_user', email: 'new_user@mail.com'})
 
           return thread.save()
-          .then(function(){
-            return User.where({login: 'new_user'}).include('threads').limit(1).exec(function(user){
+          .then(function(){            
+            return User.where({login: 'new_user'}).include('threads').first().exec(function(user){              
               user.email.should.be.equal('new_user@mail.com')
               user.threads.length.should.be.equal(1)
             })
@@ -179,7 +179,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           user.avatar = Avatar.new({url: 'http://better-avatar.com/strong.png'})
           return user.save()
           .then(function(){
-            return Avatar.where({url_like: 'better'}).include('user').limit(1).exec(function(avatar){
+            return Avatar.where({url_like: 'better'}).include('user').first().exec(function(avatar){
               avatar.url.should.be.equal('http://better-avatar.com/strong.png')
               avatar._user.id.should.be.equal(user.id)
             })
@@ -252,7 +252,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           unread_ids: [2, 3, 4]
         })
         .then(function(result){
-          return User.where({login: 'A'}).include('unread').limit(1).exec(function(result){
+          return User.where({login: 'A'}).include('unread').first().exec(function(result){
             result.login.should.be.equal('A')
             result.unread.length.should.be.equal(3)
           })

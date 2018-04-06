@@ -124,7 +124,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             return admin.save()
           })
           .then(function(){
-            return User.where({login: 'philipp'}).limit(1)
+            return User.where({login: 'philipp'}).first()
           })
           .then(function(philipp){
             philipp.login.should.be.equal('philipp')
@@ -148,7 +148,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             return admin.save()
           })
           .then(function(){
-            return User.where({login: 'sysadmin'}).limit(1)
+            return User.where({login: 'sysadmin'}).first()
           })
           .then(function(administrator){
             administrator.login.should.be.equal('sysadmin')
@@ -176,7 +176,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             return michl.save()
           })
           .then(function(){
-            return User.where({login: 'michael'}).include('posts').limit(1)
+            return User.where({login: 'michael'}).include('posts').first()
           })
           .then(function(michael){
             michael.login.should.be.equal('michael')

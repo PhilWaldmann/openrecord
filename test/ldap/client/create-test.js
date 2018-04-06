@@ -15,7 +15,7 @@ describe('LDAP Client: Create', function(){
 
     store.Model('User', function(){
       this.attribute('username', String)
-      this.attribute('memberOf', Array)
+      this.attribute('memberOf', 'dn_array')
 
       this.validatesPresenceOf('username')
 
@@ -25,10 +25,10 @@ describe('LDAP Client: Create', function(){
 
     store.Model('Group', function(){
       this.attribute('name', String)
-      this.attribute('member', Array)
+      this.attribute('member', 'dn_array')
 
       this.hasParent('ou')
-      this.hasChildren('members', {to: 'memberOf'})
+      this.belongsToMany('members', {from: 'member'})
     })
 
     store.Model('Ou', function(){
@@ -46,7 +46,7 @@ describe('LDAP Client: Create', function(){
       return User.create({dn: 'cn=fifi, ou=create, dc=test', username: 'fifi', age: 35})
       .then(function(user){
         user.username.should.be.equal('fifi')
-        return User.find('cn=fifi, ou=create, dc=test').exec(function(user){
+        return User.find('cn=fifi, ou=create, dc=test').exec(function(user){          
           user.username.should.be.equal('fifi')
         })
       })
@@ -76,6 +76,7 @@ describe('LDAP Client: Create', function(){
       var ou = Ou.new({name: 'Sub', dn: 'ou=sub, ou=create, dc=test'})
 
       ou.children.add(User.new({
+        cn: 'hugo',
         username: 'hugo',
         age: 44
       }))
@@ -84,7 +85,7 @@ describe('LDAP Client: Create', function(){
       .then(function(result){
         result.name.should.be.equal('Sub')
 
-        return Ou.find('ou=sub, ou=create, dc=test').include('children').exec(function(ou){         
+        return Ou.find('ou=sub, ou=create, dc=test').include('children').exec(function(ou){              
           ou.name.should.be.equal('Sub')
           ou.children.length.should.be.equal(1)
           ou.children[0].username.should.be.equal('hugo')

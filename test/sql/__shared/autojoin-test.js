@@ -39,7 +39,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on nested joins with nested conditions', function(){
         return store.ready(function(){
           var Thread = store.Model('Thread')
-          return Thread.where({posts: {user: {login_like: 'phi'}}}, {title_like: 'first'}).order('title', 'posts_user.id').exec(function(result){
+          return Thread.where({posts: {user: {login_like: 'phi'}}}, {title_like: 'first'}).order('title', 'posts_user.id').exec(function(result){            
             result[0].title.should.be.equal('first thread')
             result[0]._posts.length.should.be.equal(2)
             result[0]._posts[0]._user.login.should.be.equal('phil')

@@ -164,7 +164,7 @@ types.forEach(function(type){
     })
 
 
-    it.skip('returns a record with deeply nested relational via scope', function(){
+    it('returns a record with deeply nested relational via scope', function(){
       return query(`{
           recipe(id: 1){
             title,
@@ -174,7 +174,7 @@ types.forEach(function(type){
           }
         }`)
       .then(function(result){
-        // true.should.be.equal(false)
+        console.log(result);
         result.should.be.eql({
           data: {
             recipe: {

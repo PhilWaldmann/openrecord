@@ -106,29 +106,4 @@ describe('Error', function(){
       phil.errors.toString().should.be.equal('attribute_name: not valid\ncan not be deleted\na: Error a\nb: Error b')
     })
   })
-
-
-  describe('relation errors', function(){
-    before(function(){
-      michl.posts[0].errors.add('title', 'some title error')
-      michl._avatar.errors.add('url', 'some url error')
-    })
-
-
-    it.skip('has the posts error object on its error obj.', function(){
-      michl.errors.toJSON().should.have.property('posts')
-    })
-
-    it.skip('has the avatar error object on its error obj.', function(){
-      michl.errors.toJSON().should.have.property('avatar')
-    })
-
-    it.skip('errors is an array for hasMany', function(){
-      michl.errors.toJSON().posts.should.be.instanceOf(Array)
-    })
-
-    it.skip('errors is an object for belongsTo', function(){
-      michl.errors.toJSON().avatar.should.not.be.instanceOf(Array)
-    })
-  })
 })

@@ -62,7 +62,7 @@ types.forEach(function(type){
       return query(`{
         author_count
       }`)
-      .then(function(result){        
+      .then(function(result){              
         result.should.be.eql({ data: { author_count: 3 } })
       })
     })

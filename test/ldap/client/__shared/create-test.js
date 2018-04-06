@@ -24,7 +24,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             parent_dn: 'ou=create_test,ou=openrecord,' + LDAP_BASE
           })
 
-          return ou.save(function(){
+          return ou.save()
+          .then(function(){
             return Ou.find(ou.dn).exec(function(newOu){
               newOu.name.should.be.equal('newOu')
               newOu.ou.should.be.equal('newOu')
@@ -45,7 +46,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             parent_dn: 'ou=create_test,ou=openrecord,' + LDAP_BASE
           })
 
-          return ou.save(function(){
+          return ou.save()
+          .then(function(){
             return Ou.find(ou.dn).exec(function(newOu){
               newOu.name.should.be.equal('AwEsOmE_Ou')
               newOu.ou.should.be.equal('AwEsOmE_Ou')
@@ -67,7 +69,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             parent_dn: 'ou=create_test,ou=openrecord,' + LDAP_BASE
           })
 
-          return ou.save(function(){
+          return ou.save()
+          .then(function(){
             return Ou.find(ou.dn).exec(function(newOu){
               newOu.name.should.be.equal('all_attribute_ou')
               newOu.description.should.be.equal('Description with utf-8 chars öäü')
@@ -95,7 +98,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             children: [childOu]
           })
 
-          return ou.save(function(){
+          return ou.save()
+          .then(function(){
             return Ou.find(ou.dn).include('children').exec(function(newOu){
               newOu.name.should.be.equal('nested_ou')
               newOu.children[0].name.should.be.equal('sub_nested_ou')
@@ -128,8 +132,9 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             }
           })
 
-          return ou.save(function(){
-            return Ou.find('ou=level1_ou,ou=create_test,ou=openrecord,' + LDAP_BASE).include('all_children').exec(function(newOu){
+          return ou.save()
+          .then(function(){
+            return Ou.find('ou=level1_ou,ou=create_test,ou=openrecord,' + LDAP_BASE).include('all_children').exec(function(newOu){              
               newOu.name.should.be.equal('level1_ou')
               newOu.all_children.length.should.be.equal(4)
 
@@ -197,7 +202,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             parent_dn: 'ou=create_test,ou=openrecord,' + LDAP_BASE
           })
 
-          return group.save(function(){
+          return group.save()
+          .then(function(){
             return Group.find(group.dn).exec(function(newGroup){
               newGroup.name.should.be.equal('newGroup')
               newGroup.cn.should.be.equal('newGroup')
@@ -221,7 +227,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             description: 'fooöäüß'
           })
 
-          return group.save(function(){
+          return group.save()
+          .then(function(){
             return Group.find(group.dn).exec(function(newGroup){
               newGroup.name.should.be.equal('all_attribute_group')
               newGroup.sAMAccountName.should.be.equal('group_samaccountname')
@@ -250,7 +257,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             groupType: {SECURITY_ENABLED: false, UNIVERSAL_GROUP: true}
           })
 
-          return group.save(function(){
+          return group.save()
+          .then(function(){
             return Group.find(group.dn).exec(function(newGroup){
               newGroup.groupType.should.be.eql({
                 BUILTIN_LOCAL_GROUP: false,
@@ -276,14 +284,15 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             parent_dn: 'ou=create_test,ou=openrecord,' + LDAP_BASE,
             name: 'group_member'
           })
-
+          
           var group = Group.new({
             parent_dn: 'ou=create_test,ou=openrecord,' + LDAP_BASE,
             name: 'membergroup',
             members: [user]
           })
-
-          return group.save(function(){
+          
+          return group.save()
+          .then(function(){            
             return Group.find(group.dn).include('members').exec(function(newGroup){
               newGroup.name.should.be.equal('membergroup')
               newGroup.members.length.should.be.equal(1)
@@ -340,7 +349,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             name: 'newComputer'
           })
 
-          return computer.save(function(){
+          return computer.save()
+          .then(function(){
             return Computer.find(computer.dn).exec(function(newComputer){
               newComputer.name.should.be.equal('newComputer')
               newComputer.cn.should.be.equal('newComputer')
@@ -365,7 +375,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             description: 'öäüß!'
           })
 
-          return computer.save(function(){
+          return computer.save()
+          .then(function(){
             return Computer.find(computer.dn).exec(function(newComputer){
               newComputer.name.should.be.equal('all_attribute_computer')
               newComputer.cn.should.be.equal('all_attribute_computer')
@@ -430,7 +441,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             name: 'newUser'
           })
 
-          return user.save(function(){
+          return user.save()
+          .then(function(){
             return User.find(user.dn).exec(function(newUser){
               newUser.name.should.be.equal('newUser')
               newUser.cn.should.be.equal('newUser')
@@ -455,7 +467,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             description: 'öäüß!'
           })
 
-          return user.save(function(){
+          return user.save()
+          .then(function(){
             return User.find(user.dn).exec(function(newUser){
               newUser.name.should.be.equal('all_attribute_user')
               newUser.cn.should.be.equal('all_attribute_user')
@@ -481,7 +494,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             unicodePwd: 'my!Sup0rSe(ret'
           })
 
-          return user.save(function(){
+          return user.save()
+          .then(function(){
             return User.find(user.dn).exec(function(newUser){
               newUser.name.should.be.equal('active_user')
               newUser.userAccountControl.should.be.eql({SCRIPT: false, ACCOUNTDISABLED: false, HOMEDIR_REQUIRED: false, LOCKOUT: false, PASSWD_NOTREQUIRED: false, PASSWD_CANT_CHANGE: false, ENCRYPTED_TEXT_PWD_ALLOWED: false, TEMP_DUPLICATE_ACCOUNT: false, NORMAL_ACCOUNT: true, INTERDOMAIN_TRUST_ACCOUNT: false, WORKSTATION_TRUST_ACCOUNT: false, SERVER_TRUST_ACCOUNT: false, DONT_EXPIRE_PASSWORD: false, MNS_LOGON_ACCOUNT: false, SMARTCARD_REQUIRED: false, TRUSTED_FOR_DELEGATION: false, NOT_DELEGATED: false, USE_DES_KEY_ONLY: false, DONT_REQ_PREAUTH: false, PASSWORD_EXPIRED: false, TRUSTED_TO_AUTH_FOR_DELEGATION: false, PARTIAL_SECRETS_ACCOUNT: false})
@@ -506,7 +520,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             name: 'usergroup'
           })
 
-          return user.save(function(){
+          return user.save()
+          .then(function(){
             return User.find(user.dn).include('groups').exec(function(newUser){
               newUser.name.should.be.equal('group_user')
               newUser.groups.length.should.be.equal(1)

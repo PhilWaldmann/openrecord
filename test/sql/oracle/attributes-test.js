@@ -1,7 +1,7 @@
 var Store = require('../../../store/oracle')
 
 if(process.env['ORACLE_HOME']){
-  describe.only('Oracle: all Attributes', function(){
+  describe('Oracle: all Attributes', function(){
     var store
     var database = 'all_attributes_test'
 
@@ -47,7 +47,7 @@ if(process.env['ORACLE_HOME']){
     it('casts all values', function(){
       return store.ready(function(){
         var AttributeTest = store.Model('AttributeTest')
-        AttributeTest.limit(1).exec(function(record){
+        AttributeTest.first().exec(function(record){
           record.char_attribute.should.be.equal('abcd')
           record.float_attribute.should.be.equal(2.33)
           record.integer_attribute.should.be.equal(3243)

@@ -16,7 +16,7 @@ describe('LDAP Client: Destroy', function(){
 
     store.Model('User', function(){
       this.attribute('username', String)
-      this.attribute('memberOf', Array)
+      this.attribute('memberOf', 'dn_array')
 
       this.hasParent('ou')
       this.hasMany('groups', {container: 'children', to: 'member'})
@@ -24,10 +24,10 @@ describe('LDAP Client: Destroy', function(){
 
     store.Model('Group', function(){
       this.attribute('name', String)
-      this.attribute('member', Array)
+      this.attribute('member', 'dn_array')
 
       this.hasParent('ou')
-      this.hasChildren('members', {to: 'memberOf'})
+      this.belongsToMany('members', {from: 'member'})
     })
 
     store.Model('Ou', function(){

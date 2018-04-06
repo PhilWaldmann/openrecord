@@ -3,7 +3,7 @@ var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe.skip(title + ': Select', function(){
+  describe(title + ': Select', function(){
     var store
 
     before(beforeFn)
@@ -36,35 +36,22 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       return store.ready(function(){
         var User = store.Model('User')
 
-        return User.find(1).select('id', 'login').exec(function(user){
+        return User.find(1).select('id', 'login').exec(function(user){          
           user.login.should.be.equal('phil')
           should.not.exist(user.email)
         })
       })
     })
 
-    it('returns only selected fields (asJson())', function(){
-      return store.ready(function(){
-        var User = store.Model('User')
-
-        return User.find(1).select('id', 'login').asJson().exec(function(user){          
-          user.should.be.eql({
-            id: 1,
-            login: 'phil'
-          })
-        })
-      })
-    })
 
     it('works with joins (automatic asJson())', function(){
       return store.ready(function(){
         var User = store.Model('User')
 
         return User.find(1).select('users.id', 'login', 'message').join('posts').exec(function(user){
-          // TODO: should this be an array? we use a find() which returns an objects, if only one record was found...
-          user[0].id.should.be.equal(1)
-          user[0].login.should.be.equal('phil')
-          user[0].message.should.be.equal('first message')
+          user.id.should.be.equal(1)
+          user.login.should.be.equal('phil')
+          user.message.should.be.equal('first message')
         })
       })
     })
@@ -94,8 +81,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       return store.ready(function(){
         var User = store.Model('User')
 
-        return User.find(1).select('id as bar').asRaw().exec(function(user){
-          user[0].bar.should.be.equal(1)
+        return User.find(1).select('id as bar').asRaw().exec(function(user){         
+          user.bar.should.be.equal(1)
         })
       })
     })

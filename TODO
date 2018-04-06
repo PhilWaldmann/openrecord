@@ -1,7 +1,6 @@
 [ ] test all exceptions
 [ ] postgres composite type query
 
-[ ] limit(1) should return an array as well
 [ ] faster class initialisation !!! Model initialisation braucht zu lange!
 
 [ ] custom relations
@@ -14,7 +13,6 @@
   this.hasMany('parents', { through: 'category_parents', relation: 'parents' })
   .include('parents') empty result is [<empty collection>]
 
-[ ] Inspect -> difference between empty collection and not loaded collection
 [ ] rewrite operators
 [ ] cache relations and use them in nested includes... one base cache for the first exec
 [ ] belongsToPolymorphic setter
@@ -22,9 +20,9 @@
 [ ] jobs with same priority -> parallel
 [ ] remove attribute events -> remove all events...
 [ ] "updates a relation id with original relation loaded" for belongsToMany
-[ ] ActiveDirectory tests!
 [ ] Oracle tests!
 [ ] Use `debug` module
+[ ] select + transformations => https://github.com/jsonata-js/jsonata
 
 BREAKING CHANGES:
 `plugins` and `models` store config does not autoload via `glob`
@@ -36,3 +34,4 @@ hooks must return a promise. The `done` callback was removed
 `create`, `save`, `destroy`, ... won't take callbacks any more. use `.then(callback)`
 relations wont be saved anymore. except you set autoSave to `true` (store or per relation)
 related records are Promises. Access loaded data directly via `record._relationname`
+`limit(1)` does not return a single record anymore. Use `first()` or `singleRecord()` instead

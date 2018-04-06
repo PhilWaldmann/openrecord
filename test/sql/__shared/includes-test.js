@@ -47,7 +47,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.belongsTo('thread_autor', {through: 'thread', relation: 'user'})
 
         this.scope('recent', function(){
-          this.order('id', true).limit(1)
+          this.order('id', true).first()
         })
 
         this.scope('sorted', function(){
@@ -534,7 +534,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           var User = store.Model('User')
           return User.find(1).exec(function(user){
             return user.include('posts').exec()
-            .then(function(result){
+            .then(function(result){              
               result.id.should.be.equal(1)
               result._posts.length.should.be.equal(3)
               true.should.be.equal(result === user)

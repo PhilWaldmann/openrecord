@@ -203,7 +203,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             email: 'philipp@mail.com'
           })
           .then(function(){
-            return User.where({login: 'philipp'}).limit(1).exec(function(result){
+            return User.where({login: 'philipp'}).first().exec(function(result){
               result.id.should.not.be.equal(99)
             })
           })
@@ -224,7 +224,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             }]
           })
           .then(function(){
-            return User.where({login: 'michl'}).include('threads').limit(1).exec(function(result){
+            return User.where({login: 'michl'}).include('threads').first().exec(function(result){
               result.login.should.be.equal('michl')
               result.threads.length.should.be.equal(2)
             })
@@ -251,7 +251,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             }]
           })
           .then(function(){
-            return User.where({login: 'admin'}).include({threads: 'posts'}).limit(1).exec(function(result){
+            return User.where({login: 'admin'}).include({threads: 'posts'}).first().exec(function(result){
               result.login.should.be.equal('admin')
               result.threads.length.should.be.equal(2)
               result.threads[0].posts.length.should.be.equal(2)
@@ -285,7 +285,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('rolls back the transaction', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.where({login: 'max'}).include({threads: 'posts'}).limit(1).exec(function(result){
+          return User.where({login: 'max'}).include({threads: 'posts'}).first().exec(function(result){
             should.not.exist(result)
           })
         })

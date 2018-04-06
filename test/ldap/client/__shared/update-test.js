@@ -249,7 +249,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             group.member.length.should.be.equal(1)
             group.member = []
 
-            return group.save(function(){
+            return group.save()
+            .then(function(){
               return Group.find(group.dn).include('members').exec(function(group){
                 group.members.length.should.be.equal(0)
               })
@@ -281,7 +282,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
               'cn=change_me_computer,ou=update_test,ou=openrecord,' + LDAP_BASE
             )
 
-            return group.save(function(){
+            return group.save()
+            .then(function(){
               return Group.find(group.dn).include('members').exec(function(group){
                 group.members.length.should.be.equal(2)
               })
@@ -298,7 +300,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return Group.find('cn=change_me_group,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(group){
             group.member.splice(0, 1, 'cn=disable_me_user,ou=update_test,ou=openrecord,' + LDAP_BASE)
 
-            return group.save(function(){
+            return group.save()
+            .then(function(){
               return Group.find(group.dn).include('members').exec(function(group){
                 group.members.length.should.be.equal(2)
                 group.members[0].name.should.be.equal('disable_me_user')
@@ -335,7 +338,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return Computer.find('cn=move_me_computer,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(computer){
             computer.parent_dn = targetOu
 
-            return computer.save(function(){
+            return computer.save()
+            .then(function(){
               return Computer.find(computer.dn).exec(function(computer){
                 computer.name.should.be.equal('move_me_computer')
                 computer.parent_dn.should.be.equal(targetOu)
@@ -352,7 +356,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return Computer.find('cn=rename_me_computer,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(computer){
             computer.name = 'new_computer_name'
 
-            return computer.save(function(){
+            return computer.save()
+            .then(function(){
               return Computer.find(computer.dn).exec(function(computer){
                 computer.name.should.be.equal('new_computer_name')
                 computer.parent_dn.should.be.equal('ou=update_test,ou=openrecord,' + LDAP_BASE.toLowerCase())
@@ -370,7 +375,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             computer.sAMAccountName = 'supercomputer'
             computer.description = 'super very important'
 
-            return computer.save(function(){
+            return computer.save()
+            .then(function(){
               return Computer.find(computer.dn).exec(function(computer){
                 computer.description.should.be.equal('super very important')
                 computer.sAMAccountName.should.be.equal('supercomputer$')
@@ -388,12 +394,14 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             computer.userAccountControl.ACCOUNTDISABLED.should.be.equal(true)
             computer.userAccountControl = {ACCOUNTDISABLED: false, PASSWD_NOTREQUIRED: true, WORKSTATION_TRUST_ACCOUNT: true}
 
-            return computer.save(function(){
+            return computer.save()
+            .then(function(){
               return Computer.find(computer.dn).exec(function(computer){
                 computer.userAccountControl.ACCOUNTDISABLED.should.be.equal(false)
                 computer.userAccountControl.ACCOUNTDISABLED = true
 
-                return computer.save(function(){
+                return computer.save()
+                .then(function(){
                   return Computer.find(computer.dn).exec(function(computer){
                     computer.userAccountControl.ACCOUNTDISABLED.should.be.equal(true)
                   })
@@ -432,7 +440,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return User.find('cn=move_me_user,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(user){
             user.parent_dn = targetOu
 
-            return user.save(function(){
+            return user.save()
+            .then(function(){
               return User.find(user.dn).exec(function(user){
                 user.name.should.be.equal('move_me_user')
                 user.parent_dn.should.be.equal(targetOu)
@@ -449,7 +458,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return User.find('cn=rename_me_user,ou=update_test,ou=openrecord,' + LDAP_BASE).exec(function(user){
             user.name = 'new_user_name'
 
-            return user.save(function(){
+            return user.save()
+            .then(function(){
               return User.find(user.dn).exec(function(user){
                 user.name.should.be.equal('new_user_name')
                 user.parent_dn.should.be.equal('ou=update_test,ou=openrecord,' + LDAP_BASE.toLowerCase())
@@ -472,7 +482,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             user.userPrincipalName = 'phils_account_long'
             user.mail = 'phil@mail.com'
 
-            return user.save(function(){
+            return user.save()
+            .then(function(){
               return User.find(user.dn).exec(function(user){
                 user.description.should.be.equal('uber important')
                 user.sAMAccountName.should.be.equal('phils_account')
@@ -494,7 +505,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             user.unicodePwd = 'super5e(reT!'
             user.userAccountControl = {NORMAL_ACCOUNT: true} // by default all dummy users are disabled
 
-            return user.save(function(){
+            return user.save()
+            .then(function(){
               return user.checkPassword('super5e(reT!')
             })
           })
@@ -509,12 +521,14 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             user.unicodePwd = 'super5e(reT2!'
             user.userAccountControl = {NORMAL_ACCOUNT: true} // by default all dummy users are disabled
 
-            return user.save(function(){
+            return user.save()
+            .then(function(){
               user.unicodePwd = 'super5e(reT3!'
               user.userAccountControl.PASSWORD_EXPIRED = true
               user.pwdLastSet = 0
 
-              return user.save(function(){
+              return user.save()
+              .then(function(){
                 return user.checkPassword('super5e(reT3!')
               })
             })
@@ -531,7 +545,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
             user.unicodePwd = 'super5e(reT5!'
             user.userAccountControl = {NORMAL_ACCOUNT: true, ACCOUNTDISABLED: true} // by default all dummy users are disabled
 
-            return user.save(function(){
+            return user.save()
+            .then(function(){
               return user.checkPassword('super5e(reT5!')
             })
           })

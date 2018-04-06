@@ -19,7 +19,7 @@ module.exports = function(store1, store2){
 
     extend type Recipe {
       author: Author
-      ingredients: [Ingredient]
+      ingredients(limit: Int): [Ingredient]
     }
 
     # we ignore the openrecord generated type and write it our own

@@ -69,7 +69,7 @@ describe('Postgres: all Attributes', function(){
   it('casts all values', function(){
     return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
-      return AttributeTest.limit(1).exec(function(record){
+      return AttributeTest.first().exec(function(record){
         record.char_attribute.should.be.equal('abcd')
         record.float_attribute.should.be.equal(2.3345)
         record.integer_attribute.should.be.equal(3243)
@@ -97,7 +97,7 @@ describe('Postgres: all Attributes', function(){
   it('casts all values on a join', function(){
     return store.ready(function(){
       var AttributeTest = store.Model('AttributeTest')
-      return AttributeTest.join('attribute_join_tests').limit(1).exec(function(record){        
+      return AttributeTest.join('attribute_join_tests').first().exec(function(record){        
         record.char_attribute.should.be.equal('abcd')
         record.float_attribute.should.be.equal(2.3345)
         record.integer_attribute.should.be.equal(3243)
@@ -215,7 +215,7 @@ describe('Postgres: all Attributes', function(){
 
 
 
-  it.skip('sort by hstore attribute', function(){
+  it('sort by hstore attribute', function(){
     // TODO: set a specific COLLATE to avoid test problems
     return store.ready(function(){
       var AttributeHstoreTest = store.Model('AttributeHstoreTest')
