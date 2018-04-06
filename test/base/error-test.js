@@ -16,21 +16,12 @@ describe('Error', function(){
     this.attribute('url')
   })
 
-  var User, phil, michl
+  var User, phil
 
   before(function(){
     return store.ready(function(){
       User = store.Model('User')
       phil = new User()
-      michl = new User({
-        posts: [{
-          title: 'foo'
-        }],
-
-        avatar: {
-          url: 'http://foo.com/img.png'
-        }
-      })
     })
   })
 
