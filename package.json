@@ -30,7 +30,7 @@
     "url": "git://github.com/PhilWaldmann/openrecord.git"
   },
   "scripts": {
-    "test": "npm run lint && npm run mocha",
+    "test": "npm run lint && npm run mocha -- --bail",
     "mocha": "NODE_ENV=test TZ='UTC' mocha",
     "lint": "eslint --ext .js lib test",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- --reporter dot",
