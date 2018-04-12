@@ -161,7 +161,7 @@ describe('SQL: Helper', function(){
         var result = store.utils.toIncludesList({members: {$args: 'foo'}})
         result.length.should.be.equal(1)
         result[0].relation.should.be.eql('members')
-        result[0].args.should.be.eql('foo')
+        result[0].args.should.be.eql(['foo'])
       })
     })
   })
