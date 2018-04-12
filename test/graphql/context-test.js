@@ -28,7 +28,7 @@ types.forEach(function(type){
           email
         }
       }`, {id: 1})
-      .then(function(result){
+      .then(function(result){        
         result.should.be.eql({
           data: {
             me: { name: 'phil', email: 'phil@mail.com' }

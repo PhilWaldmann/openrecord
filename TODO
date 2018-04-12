@@ -1,14 +1,11 @@
 [ ] test all exceptions
 [ ] postgres composite type query
 
-[ ] faster class initialisation !!! Model initialisation braucht zu lange!
-
 [ ] custom relations
   [ ] graphql pagination -> mit cursor?! + pageInfo
   [ ] graphql relation pagination
-  [ ] `this.belongsTo('alternative', {model: 'Food', foreign_key: 'food_id'})` sollte kein foreign_key brauchen!
 
-[ ] Bug:
+[ ] Bug!?
   this.hasMany('category_parents', { foreign_key: 'id' })
   this.hasMany('parents', { through: 'category_parents', relation: 'parents' })
   .include('parents') empty result is [<empty collection>]
@@ -17,9 +14,7 @@
 [ ] cache relations and use them in nested includes... one base cache for the first exec
 [ ] belongsToPolymorphic setter
 [ ] hasManyThrough setter
-[ ] remove attribute events -> remove all events...
 [ ] "updates a relation id with original relation loaded" for belongsToMany
-[ ] Use `debug` module
 [ ] select + transformations => https://github.com/jsonata-js/jsonata
 
 BREAKING CHANGES:
@@ -33,3 +28,4 @@ hooks must return a promise. The `done` callback was removed
 relations wont be saved anymore. except you set autoSave to `true` (store or per relation)
 related records are Promises. Access loaded data directly via `record._relationname`
 `limit(1)` does not return a single record anymore. Use `first()` or `singleRecord()` instead
+`logger` options on store is no longer available. openrecord now uses the `debug` module

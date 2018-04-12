@@ -39,5 +39,5 @@ Take a look at the [docs](https://openrecord.js.org) to get started!
 
 ## Contributing
 
-If you've found a bug please report it via the [issues](https://github.com/PhilWaldmann/openrecord/issues) page.
-Before submit pull request make sure all tests still pass.
+If you've found a bug please report it via the [issues](https://github.com/PhilWaldmann/openrecord/issues) page.  
+Before you submit a pull request, please make sure all tests still pass.

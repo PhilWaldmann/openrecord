@@ -291,6 +291,20 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
+    it('load all related records via then()', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.find(3)
+        .then(function(user){
+          return user.threads
+        })
+        .then(function(threads){          
+          threads.length.should.be.equal(1)
+        })
+      })
+    })
+
+
 
 
     it('adds a polymorphic record', function(){

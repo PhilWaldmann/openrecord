@@ -1,7 +1,6 @@
 const Store = require('../lib/store')
 
 Store.registeredTypes.sql = require('../lib/base').concat(
-  require('../lib/persistence'),
   require('../lib/stores/sql')
 )
 

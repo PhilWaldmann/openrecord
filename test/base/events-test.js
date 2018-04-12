@@ -10,22 +10,6 @@ describe('Events', function(){
   })
 
 
-  describe('Store', function(){
-    describe('emit()', function(){
-      it('methods exists', function(){
-        store.emit.should.be.a.Function()
-        store.on.should.be.a.Function()
-      })
-
-      it('emit events', function(){
-        store.on('store_test_event', function(value){
-          value.should.be.equal('awesome')
-        })
-        store.emit('store_test_event', 'awesome')
-      })
-    })
-  })
-
 
   store.Model('User', function(){
     var self = this

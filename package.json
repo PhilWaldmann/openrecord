@@ -1,6 +1,6 @@
 {
   "name": "openrecord",
-  "version": "2.0.0-rc11",
+  "version": "2.0.0-rc13",
   "description": "Active record like ORM for nodejs",
   "license": "MIT",
   "keywords": [
@@ -40,6 +40,7 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "date-fns": "^1.29.0",
+    "debug": "^3.1.0",
     "inflection": "~ 1.12.x",
     "knex": "^0.14.3",
     "validator": "^9.4.1"
