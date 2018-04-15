@@ -40,7 +40,7 @@ console.log(user.id)
 After you've [loaded an existing record](./query.md) you can modify it.
 
 ```js
-const user = User.find(2)
+const user = await User.find(2)
 user.last_name = 'Waldmann'
 await user.save()
 ```
@@ -68,7 +68,7 @@ To save a record back to your datastore, just call `save()`.
 OPENRECORD will automatically [validate](#validate) your record and checks for [changes](#haschanges). It will only update your datastore if something has changed.  
 
 ```js
-const user = User.find(2)
+const user = await User.find(2)
 user.last_name = 'Waldmann'
 await user.save()
 await user.save() // will be ignored!
@@ -77,7 +77,7 @@ await user.save() // will be ignored!
 If you call `save()` it will also automatically check all loaded or new relations and save them as well, if you have activated `autoSave` in your [relation defintion](./definition#relations)!
 
 ```js
-const user = User.find(2)
+const user = await User.find(2)
 user.posts.new({title: 'Awesome'})
 await user.save() // will only create the new post, because user has not changed!
 ```
@@ -100,7 +100,7 @@ You can use almost any [query](./query.md) method to filter your records.
 To manually check if a record has changes
 
 ```js
-const user = User.find(2)
+const user = await User.find(2)
 user.last_name = 'Waldmann'
 console.log(user.hasChanges()) // outputs `true`
 ```
@@ -110,7 +110,7 @@ console.log(user.hasChanges()) // outputs `true`
 To get all changes
 
 ```js
-const user = User.find(2)
+const user = await User.find(2)
 user.last_name = 'Waldmann'
 console.log(user.getChanges()) // outputs `{last_name: ['Old Value', 'Waldmann']}`
 ```
@@ -120,7 +120,7 @@ console.log(user.getChanges()) // outputs `{last_name: ['Old Value', 'Waldmann']
 Undo all unsaved changes.
 
 ```js
-const user = User.find(2)
+const user = await User.find(2)
 user.last_name = 'Waldmann'
 user.resetChanges()
 console.log(user.hasChanges()) // outputs `false`
@@ -131,7 +131,7 @@ console.log(user.hasChanges()) // outputs `false`
 To manually validate a record
 
 ```js
-const user = User.find(2)
+const user = await User.find(2)
 user.last_name = 'Waldmann'
 const valid = await user.isValid()
 console.log(valid) // outputs `true`
@@ -144,7 +144,7 @@ console.log(valid) // outputs `true`
 To remove a record from your datastore use `destroy()`
 
 ```js
-const user = User.find(2)
+const user = await User.find(2)
 await user.destroy()
 ```
 

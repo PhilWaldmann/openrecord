@@ -215,7 +215,7 @@ A relation - except for a polymorphic relations - always needs a target model. T
 
 The relation will be initialized after the target model is ready - to automatically get the primary and foreign key. The default for the foreign key is `<model_name>_<primary_key>` - all lower case! You could manually set the `from` and `to` key, if you need.
 
-The `name` of the relation is a string and could be anything you like. If you use the plural oder singular version of an existing model name, OPENRECORD will automatically detect it and will set most of the options for you.  
+The `name` of the relation is a string and could be anything you like. If you use the plural or singular version of an existing model name, OPENRECORD will automatically detect it and will set most of the options for you.  
 The `options` parameter is optional, if it can autodetect your target model. Otherwise you need to privide an object with the following config options:
 * **model**: The target model name as a string
 * **store**: Optional store `name`. Only needed for cross store relations!
@@ -227,12 +227,13 @@ The `options` parameter is optional, if it can autodetect your target model. Oth
 * **conditions**: Optional `conditions` object (See [Query](./query.md#with-conditions))
 * **dependent**: What should happen with the related record after a record of this model will be deleted. Valid values are: `destroy`, `delete`, `nullify` or null. (Default null)
 * **autoSave**: Automatically save loaded or new related records (See [save](./modify#save) and [setup](./setup.md))
+
 ### hasMany(name[, options])
 The target model contains the primary key of this model
 
 ```js
 // models/User.js
-this.hasMany('posts', {foreign_key: 'author_id', autoSave: true})
+this.hasMany('posts', {to: 'author_id', autoSave: true})
 ```
 
 ### hasOne(name[, options])
