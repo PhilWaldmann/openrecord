@@ -25,6 +25,14 @@ const users = await User.create([
 console.log(users[0].id)
 ```
 
+This will also work on relations!
+
+```js
+const User = await User.find(2)
+await const post = user.posts.create({title: 'Awesome'})
+console.log(posts) // e.g. {id: 1, user_id: 2, title: 'Awesome'}
+```
+
 ## new([data])
 with `new()` you can create a new record, but without immediately saving it to your datastore.
 ```js
@@ -34,6 +42,49 @@ user.email = 'philipp@mail.com'
 await user.save()
 console.log(user.id)
 ```
+
+`new` will be called for relations internally if you do the following
+
+```js
+const user = User.new({login: 'philipp', posts: [{title: 'More Awesome'}]})
+console.log(user.posts)
+```
+
+is equvalent to
+
+```js
+const user = User.new({login: 'philipp'})
+user.posts.new({title: 'More Awesome'})
+console.log(user.posts)
+```
+
+or
+
+```js
+const user = User.new({login: 'philipp'})
+user.posts = Post.new({title: 'More Awesome'})
+console.log(user.posts)
+```
+
+or
+
+```js
+const user = User.new({login: 'philipp'})
+user.posts.add({title: 'More Awesome'})
+console.log(user.posts)
+```
+
+or
+
+```js
+const user = User.new({login: 'philipp'})
+user.posts = [{title: 'More Awesome'})]
+console.log(user.posts)
+```
+
+
+?> With `autoSave` (see [relation defintion](./definition#relations)) `user.save()` will also save the `post`
+
 
 # Change existing records
 
