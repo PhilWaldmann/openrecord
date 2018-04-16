@@ -16,7 +16,14 @@ To get a single record (by primary key) you have two methods: `find(id)` and `ge
 const user = await User.find(1)
 ```
 
-If you have multiple primary keys per model you can do `find(<key1>, <key2>)`.
+If you have multiple primary keys per model you can do `find(<key1>, <key2>)`.  
+To get a single record by non primary key use `where()` together with `first()`
+
+```js
+const user = await User.where({email: 'phil@mail.com'}).first()
+```
+
+`first` is an alias for `singleResult`
 
 ## Get multiple records
 
