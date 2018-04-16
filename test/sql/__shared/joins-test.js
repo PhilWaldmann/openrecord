@@ -361,12 +361,9 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('returns the right results on sub nested hasMany through with conditions', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          return User.join({threads: {user: 'unread_threads'}}).where({threads: {user: {unread_threads: {title_like: 'second'}}}}).order('users.id').exec(function(result){            
+          return User.join({threads: {user: 'unread_threads'}}).where({threads: {user: {unread_threads: {title_like: 'second'}}}}).order('users.id').exec(function(result){                
             result.length.should.be.equal(1)
-            result[0]._unread_threads.length.should.be.equal(0)
-
             result[0]._threads.length.should.be.equal(1)
-
             result[0]._threads[0]._user._unread_threads.length.should.be.equal(1)
           })
         })

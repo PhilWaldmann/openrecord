@@ -1,21 +1,7 @@
 [ ] test all exceptions
-[ ] postgres composite type query
 
-[ ] custom relations
-  [ ] graphql pagination -> mit cursor?! + pageInfo
-  [ ] graphql relation pagination
-
-[ ] Bug!?
-  this.hasMany('category_parents', { foreign_key: 'id' })
-  this.hasMany('parents', { through: 'category_parents', relation: 'parents' })
-  .include('parents') empty result is [<empty collection>]
-
-[ ] rewrite operators
-[ ] cache relations and use them in nested includes... one base cache for the first exec
-[ ] belongsToPolymorphic setter
-[ ] hasManyThrough setter
 [ ] "updates a relation id with original relation loaded" for belongsToMany
-[ ] select + transformations => https://github.com/jsonata-js/jsonata
+[ ] remove bluebird
 
 BREAKING CHANGES:
 `plugins` and `models` store config does not autoload via `glob`
@@ -29,3 +15,13 @@ relations wont be saved anymore. except you set autoSave to `true` (store or per
 related records are Promises. Access loaded data directly via `record._relationname`
 `limit(1)` does not return a single record anymore. Use `first()` or `singleRecord()` instead
 `logger` options on store is no longer available. openrecord now uses the `debug` module
+
+Next version
+[ ] cache relations and use them in nested includes... one base cache for the first exec
+[ ] postgres composite type query
+[ ] rewrite operators
+[ ] select + transformations => https://github.com/jsonata-js/jsonata
+[ ] NoSQL store driver
+[ ] custom relation docs
+  [ ] graphql pagination -> mit cursor?! + pageInfo
+  [ ] graphql relation pagination

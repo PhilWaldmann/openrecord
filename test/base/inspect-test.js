@@ -39,7 +39,7 @@ describe('Inspect', function(){
 
     it('returns a string representing a empty collection', function(){
       var chain = User.chain()
-      chain.setInternal('resolved', true)
+      chain._resolved()
       var str = chain.inspect()
       str.should.be.a.String()
       str.should.be.equal('<User [empty result]>')

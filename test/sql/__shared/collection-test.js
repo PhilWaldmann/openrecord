@@ -1,4 +1,5 @@
-var Store = require('../../../store')
+const should = require('should')
+const Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
@@ -21,7 +22,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.hasMany('posts')
         this.hasMany('threads')
         this.hasOne('avatar')
-        this.hasMany('unread_posts')
+        this.hasMany('unread_posts', {dependent: 'delete'})
         this.hasMany('unread', {through: 'unread_posts'})
         this.hasMany('unread_threads', {through: 'unread', relation: 'thread'})
         this.hasMany('poly_things', {as: 'member'})
@@ -152,7 +153,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('set a belongs_to record with =', function(){
+    it('set a belongsTo record with =', function(){
       return store.ready(function(){
         var Thread = store.Model('Thread')
         var User = store.Model('User')
@@ -165,6 +166,36 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
               user.email.should.be.equal('new_user@mail.com')
               user.threads.length.should.be.equal(1)
             })
+          })
+        })
+      })
+    })
+
+    it('manually load a belongsTo relation', function(){
+      return store.ready(function(){
+        var Thread = store.Model('Thread')
+        return Thread.find(1)
+        .then(function(thread){ 
+          return thread.user
+        })
+        .then(function(user){
+          user.login.should.be.equal('new_user')
+        })
+      })
+    })
+
+    it('removes a belongsTo record with = null', function(){
+      return store.ready(function(){
+        var Thread = store.Model('Thread')
+        return Thread.find(1).exec(function(thread){
+          thread.user = null
+
+          return thread.save()
+          .then(function(){            
+            return Thread.find(1).include('user')
+          })
+          .then(function(thread){
+            should.not.exist(thread._user)
           })
         })
       })
@@ -189,6 +220,37 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
+    it('manually load a hasOne relation', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.find(1)
+        .then(function(user){ 
+          return user.avatar
+        })
+        .then(function(avatar){
+          avatar.url.should.be.equal('http://better-avatar.com/strong.png')
+        })
+      })
+    })
+
+
+    it('remove a hasOne record with = null', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.find(1).exec(function(user){
+          user.avatar = null          
+          return user.save()
+          .then(function(){
+            return User.find(1).include('avatar')
+          })
+          .then(function(user){
+            should.not.exist(user._avatar)
+          })
+        })
+      })
+    })
+
+
     it('add multiple records on a hasMany through relation via add(1, 2)', function(){
       return store.ready(function(){
         var User = store.Model('User')
@@ -196,7 +258,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           user.unread.add([1, 2])          
           return user.save()
           .then(function(){            
-            return User.find(1).include('unread').exec(function(phil){
+            return User.find(1).include('unread').exec(function(phil){              
               phil._unread.length.should.be.equal(3)
             })
           })
@@ -237,6 +299,37 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           .then(function(){
             return User.find(4).include('unread').exec(function(user){
               user.unread.length.should.be.equal(2)
+              user.unread[0].message.should.be.equal('first message')
+            })
+          })
+        })
+      })
+    })
+
+    it('manually load a hasMany through relation', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.find(4)
+        .then(function(user){
+          return user.unread
+        })
+        .then(function(unread){
+          unread.length.should.be.equal(2)
+          unread[0].message.should.be.equal('first message')
+        })
+      })
+    })
+
+    it('remove a record from a hasMany through relation via unread_ids = [2]', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.find(4).exec(function(user){
+          user.unread_ids = [2]         
+
+          return user.save()
+          .then(function(){
+            return User.find(4).include('unread').exec(function(user){
+              user.unread.length.should.be.equal(1)
             })
           })
         })
@@ -261,7 +354,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('updates a record`s has_many relation with thread_ids=[1, 2]', function(){
+    it('updates a record`s hasMany relation with thread_ids=[1, 2]', function(){
       return store.ready(function(){
         var User = store.Model('User')
         return User.find(1).include('threads').exec(function(user){ 
@@ -272,6 +365,38 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           .then(function(){
             return User.find(1).include('threads').exec(function(phil){
               phil.threads.length.should.be.equal(2)
+            })
+          })
+        })
+      })
+    })
+
+
+    it('manually load a hasMany relation', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.find(1)
+        .then(function(user){ 
+          return user.threads
+        })
+        .then(function(threads){
+          threads.length.should.be.equal(2)
+        })
+      })
+    })
+
+
+    it('removes a record`s hasMany related records', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.find(1).include('threads').exec(function(user){ 
+                 
+          user.thread_ids = [2]
+          
+          return user.save()
+          .then(function(){
+            return User.find(1).include('threads').exec(function(phil){
+              phil.threads.length.should.be.equal(1)
             })
           })
         })
@@ -321,6 +446,65 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
               phil.poly_things[0].message.should.be.eql('foo')
             })
           })
+        })
+      })
+    })
+
+
+    it('adds a record to a polymorphic relation', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        var PolyThing = store.Model('PolyThing')
+
+        return PolyThing.find(1).exec(function(poly){
+          poly.member = User.new({login: 'phil2'})
+          return poly.save()
+        })
+        .then(function(){
+          return PolyThing.find(1)
+        })
+        .then(function(poly){
+          poly.member_id.should.be.equal(8)
+          poly.member_type.should.be.equal('User')
+          return poly.member
+        })
+        .then(function(member){
+          member.id.should.be.equal(8)
+          member.login.should.be.equal('phil2')
+        })
+      })
+    })
+
+
+    it('manually load a polymorphic relation', function(){
+      return store.ready(function(){
+        var PolyThing = store.Model('PolyThing')
+
+        return PolyThing.find(1).exec(function(poly){
+          return poly.member
+        })
+        .then(function(member){
+          member.login.should.be.equal('phil2')
+        })
+      })
+    })
+
+
+    it('removes a record from a polymorphic relation', function(){
+      return store.ready(function(){
+        var PolyThing = store.Model('PolyThing')
+
+        return PolyThing.find(1).exec(function(poly){
+          poly.member = null
+          return poly.save()
+        })
+        .then(function(){
+          return PolyThing.find(1).include('member')
+        })
+        .then(function(poly){
+          should.not.exist(poly.member_id)
+          should.not.exist(poly.member_type)
+          should.not.exist(poly._member)    
         })
       })
     })
