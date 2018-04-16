@@ -77,4 +77,4 @@ The following paths are available:
 
 # Debug
 
-OPENRECORD uses the [debug](https://github.com/visionmedia/debug). Just add `DEBUG=openrecord:*` to your env variables and you'll get debug information.
+OPENRECORD uses the [debug](https://github.com/visionmedia/debug) module. Just add `DEBUG=openrecord:*` to your env variables and you'll get debug information.
