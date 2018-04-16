@@ -543,6 +543,33 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           })
         })
       })
+
+
+      it('load included relations again', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          return User.find(1).include('posts')
+          .then(function(user){
+            return user.posts.where({message: 'third'})
+          })
+          .then(function(posts){
+            posts.length.should.be.equal(1)
+          })
+        })
+      })
+
+      it('load not included relation', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          return User.find(1)
+          .then(function(user){        
+            return user.posts.where({message: 'third'})
+          })
+          .then(function(posts){
+            posts.length.should.be.equal(1)
+          })
+        })
+      })
     })
   })
 }
