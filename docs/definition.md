@@ -225,6 +225,7 @@ The `options` parameter is optional, if it can autodetect your target model. Oth
 * **relation**: The relation name of the target model. Use only in conjunction with `through`
 * **as**: Set the `<polymorhic name>`. See `belongsToPolymorphic()`
 * **conditions**: Optional `conditions` object (See [Query](./query.md#with-conditions))
+* **scope**: Optional name of a [scope](./definition#scopes) of the target model
 * **dependent**: What should happen with the related record after a record of this model will be deleted. Valid values are: `destroy`, `delete`, `nullify` or null. (Default null)
 * **autoSave**: Automatically save loaded or new related records (See [save](./modify#save) and [setup](./setup.md))
 
