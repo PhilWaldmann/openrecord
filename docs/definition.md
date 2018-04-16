@@ -356,7 +356,7 @@ this.setter('email', function(email){
 Or define just a getter
 
 ```js
-this.setter('full_name', function(){
+this.getter('full_name', function(){
   return `${this.first_name} ${this.last_name}`
 })
 ```
