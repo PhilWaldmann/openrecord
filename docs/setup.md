@@ -73,3 +73,8 @@ The following paths are available:
 * REST `openrecord/store/rest`
 * LDAP `openrecord/store/ldap`
 * LDAP (Active Directory) `openrecord/store/activedirectory`
+
+
+# Debug
+
+OPENRECORD uses the [debug](https://github.com/visionmedia/debug). Just add `DEBUG=openrecord:*` to your env variables and you'll get debug information.
