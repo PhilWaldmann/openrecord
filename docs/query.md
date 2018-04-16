@@ -120,6 +120,29 @@ Conditions and includes could be nested indefinitely!
 User.include({posts: {thread: 'rating'}}).where({posts: {thread: {rating: {stars_gte: 5}}}})
 ```
 
+# Loading Relations
+
+If you don't want to preload relations, you could always load relational records manually:
+```js
+const user = await User.find(1)
+const posts = await user.posts
+console.log(posts)
+```
+
+In case of the above example `user.posts` is an alias for `Posts.where({user_id: [1]})`. So you could add additional conditions, scopes ect.
+In addition, the loaded `posts` will also be available via `user.posts`. Because `posts === user.posts`
+
+If you have already preloaded a relation, you could always use the above code to load further filter relational records.
+
+```js
+const user = await User.find(1).include('posts')
+const originalPosts = user.posts
+const posts = await user.posts.where({title_like: 'Awesome'})
+console.log(posts)
+```
+
+Now `user.posts` is still the same as `posts` but not the same as `originalPosts`!
+
 
 ## Join other tables
 !> For **SQL** databases only!

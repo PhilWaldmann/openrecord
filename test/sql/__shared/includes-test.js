@@ -558,6 +558,23 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         })
       })
 
+
+      it('preloaded relations are now separated from the original record', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          var origPosts
+          return User.find(1).include('posts')
+          .then(function(user){
+            origPosts = user.posts
+            return user.posts.where({message: 'third'})
+          })
+          .then(function(posts){
+            posts.should.not.be.equal(origPosts)
+            origPosts.length.should.be.equal(3)
+          })
+        })
+      })
+
       it('load not included relation', function(){
         return store.ready(function(){
           var User = store.Model('User')
