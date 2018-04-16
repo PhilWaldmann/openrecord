@@ -50,7 +50,7 @@ const user = User.new({login: 'philipp', posts: [{title: 'More Awesome'}]})
 console.log(user.posts)
 ```
 
-is equvalent to
+is equivalent to
 
 ```js
 const user = User.new({login: 'philipp'})
