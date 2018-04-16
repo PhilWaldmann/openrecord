@@ -7,3 +7,5 @@ module.exports = function(config){
   config.type = 'base'
   return new Store(config)
 }
+
+module.exports.BaseModel = Store.BaseModel

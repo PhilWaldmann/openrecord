@@ -9,3 +9,5 @@ module.exports = function(config){
   config.type = 'activedirectory'
   return new Store(config)
 }
+
+module.exports.BaseModel = Store.BaseModel

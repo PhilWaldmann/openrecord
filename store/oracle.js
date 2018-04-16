@@ -9,3 +9,5 @@ module.exports = function(config){
   config.type = 'oracle'
   return new Store(config)
 }
+
+module.exports.BaseModel = Store.BaseModel
