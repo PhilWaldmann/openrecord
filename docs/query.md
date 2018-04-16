@@ -79,7 +79,7 @@ User.where(['login = :login', {login: 'phil'}])
 
 If you have [relations](./definition.md#relations) defined, here is an example how to use them:
 ```js
-const threads = Thread.where({sticky: true}).include('posts')
+const threads = await Thread.where({sticky: true}).include('posts')
 console.log(threads[0].posts)
 ```
 
@@ -98,7 +98,7 @@ We could use `include()` to preload these relations the following way:
 Thread.include(['posts', 'author'])
 Thread.include({posts: {author: 'last_post'}})
 // or both queries combined
-Thread.include([{posts: {author: 'last_post'}}, 'author])
+Thread.include([{posts: {author: 'last_post'}}, 'author'])
 ```
 
 Filtering these relations could be done with `where` as well.  
@@ -216,7 +216,7 @@ You could change that via the `select()` method.
 ### select(field ...)
 Will only select the given fields.  
 ```js
-const user = User.find(1).select('login')
+const user = await User.find(1).select('login')
 // only user.login will be populated. all the other field will be null
 ```
 
