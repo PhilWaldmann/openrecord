@@ -184,10 +184,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       const users = await User      
       const posts = await Promise.all(users.map(user => user.posts))
       
-      users.length.should.be.equal(3)
-      should.exist(users[0].id)
-      should.exist(users[1].id)
-      should.exist(users[2].id)
+      posts.length.should.be.equal(6)
     })
   })
 }
