@@ -115,7 +115,7 @@ Here is an example on how to add your own operator:
 ```js
 // the new operator is called `regexp`
 store.addOperator('regexp', function(field, value, query, condition){
-  query.where(field, '~', value.toString().replace(/(^\/|\/$)/g, '')) // naiv conversion of js regexpt to postgres regexp!
+  query.where(field, '~', value.toString().replace(/(^\/|\/$)/g, '')) // naiv conversion of js regexp to postgres regexp!
 })
 // and it will be appended to the `string` type
 store.appendOperator('string', 'regexp')
