@@ -38,7 +38,6 @@
     "dev-docs": "docsify serve docs --port 4444"
   },
   "dependencies": {
-    "bluebird": "^3.5.1",
     "date-fns": "^1.29.0",
     "debug": "^3.1.0",
     "inflection": "~ 1.12.x",

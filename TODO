@@ -1,7 +1,5 @@
 [ ] test all exceptions
 
-[ ] remove bluebird
-
 BREAKING CHANGES:
 `plugins` and `models` store config does not autoload via `glob`
 `paranoid` plugin scope is not `withDeleted`
