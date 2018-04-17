@@ -177,7 +177,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it.only('bulk load', async function(){
+    it('bulk load', async function(){
       await store.ready()
       const User = store.Model('User')
 
