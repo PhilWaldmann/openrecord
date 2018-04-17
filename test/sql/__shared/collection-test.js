@@ -320,6 +320,42 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
+    it('manually load the count() of a hasMany through relation', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.find(4)
+        .then(function(user){          
+          return user.unread.count()
+        })
+        .then(function(count){          
+          count.should.be.equal(2)
+        })
+      })
+    })
+
+    it('clone a hasMany through relation', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.find(4)
+        .then(function(user){          
+          return Promise.all([
+            user.unread,
+            user.unread.clone().count(),
+            user.unread.clone().limit(1)
+          ])
+        })
+        .then(function(result){          
+          result[0].length.should.be.equal(2)
+          result[0][0].message.should.be.equal('first message')
+
+          result[1].should.be.equal(2)
+
+          result[2].length.should.be.equal(1)
+          result[2][0].message.should.be.equal('first message')
+        })
+      })
+    })
+
     it('remove a record from a hasMany through relation via unread_ids = [2]', function(){
       return store.ready(function(){
         var User = store.Model('User')
@@ -381,6 +417,43 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         })
         .then(function(threads){
           threads.length.should.be.equal(2)
+        })
+      })
+    })
+
+    it('manually load the count() of a hasMany relation', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.find(1)
+        .then(function(user){ 
+          return user.threads.count()
+        })
+        .then(function(count){
+          count.should.be.equal(2)
+        })
+      })
+    })
+
+    
+    it('clone a hasMany relation', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.find(1)
+        .then(function(user){ 
+          return Promise.all([
+            user.threads.order('id', true),
+            user.threads.clone().count(),
+            user.threads.clone().limit(1).order('id')
+          ])
+        })
+        .then(function(result){          
+          result[0].length.should.be.equal(2)
+          result[0][0].title.should.be.equal('second thread')
+
+          result[1].should.be.equal(2)
+
+          result[2].length.should.be.equal(1)
+          result[2][0].title.should.be.equal('first thread')
         })
       })
     })
