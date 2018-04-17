@@ -1,6 +1,5 @@
 [ ] test all exceptions
 
-[ ] "updates a relation id with original relation loaded" for belongsToMany
 [ ] remove bluebird
 
 BREAKING CHANGES:

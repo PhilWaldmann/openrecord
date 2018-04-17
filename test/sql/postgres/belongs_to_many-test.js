@@ -81,7 +81,7 @@ describe('Postgres: belongsToMany()', function(){
   it('does join a belongs_to_many relation', function(){
     return store.ready(function(){
       var User = store.Model('User')
-      return User.leftJoin('folders').order('users.id').exec(function(users){
+      return User.leftJoin('folders').order('users.id').exec(function(users){        
         users.length.should.be.equal(4)
         users[0].folders.length.should.be.equal(1)
         users[0].folders[0].name.should.be.equal('A')
@@ -126,6 +126,29 @@ describe('Postgres: belongsToMany()', function(){
         folder.users[1].id.should.be.equal(3)
         folder.users[0].folder_ids.should.be.eql([1, 3])
         folder.users[1].folder_ids.should.be.eql([1, 2, 3])
+      })
+    })
+  })
+
+
+
+
+
+  it('updates a relation id with original relation loaded (belongsToMany)', function(){
+    return store.ready(function(){
+      var User = store.Model('User')
+      return User.find(2).include('folders').exec(function(user){
+        user._folders.length.should.be.equal(2)        
+        user.folder_ids = [3]
+        user._folders.length.should.be.equal(1)
+        
+        return user.save()
+      })
+      .then(function(){
+        return User.find(2).include('folders')
+      })
+      .then(function(user){
+        user._folders.length.should.be.equal(1)
       })
     })
   })

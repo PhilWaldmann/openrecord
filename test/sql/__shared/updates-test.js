@@ -327,12 +327,14 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
 
 
-      it('updates a relation id with original relation loaded', function(){
+      it('updates a relation id with original relation loaded (belongsTo)', function(){
         return store.ready(function(){
           var Thread = store.Model('Thread')
           return Thread.find(4).include('user').exec(function(thread){
             thread._user.login.should.be.equal('phil')
+            
             thread.user_id = 5
+            should.not.exist(thread._user)
             
             return thread.save()
           })
