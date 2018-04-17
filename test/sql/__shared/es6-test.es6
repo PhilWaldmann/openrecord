@@ -175,5 +175,19 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       should.exist(users[1].id)
       should.exist(users[2].id)
     })
+
+
+    it.only('bulk load', async function(){
+      await store.ready()
+      const User = store.Model('User')
+
+      const users = await User      
+      const posts = await Promise.all(users.map(user => user.posts))
+      
+      users.length.should.be.equal(3)
+      should.exist(users[0].id)
+      should.exist(users[1].id)
+      should.exist(users[2].id)
+    })
   })
 }
