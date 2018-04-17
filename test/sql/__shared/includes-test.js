@@ -593,7 +593,6 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       it('use bulk loading', function(){
         return store.ready(function(){
           var User = store.Model('User')
-          var origPosts
           return User
           .then(function(users){
             return Promise.all(
