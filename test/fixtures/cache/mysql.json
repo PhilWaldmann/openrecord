@@ -4,7 +4,7 @@
       "name": "id",
       "type": "integer",
       "options": {
-        "description": null,
+        "description": "",
         "persistent": true,
         "primary": true,
         "notnull": true,
@@ -16,7 +16,7 @@
       "name": "login_changed",
       "type": "string",
       "options": {
-        "description": null,
+        "description": "",
         "persistent": true,
         "primary": false,
         "notnull": false,
@@ -28,7 +28,7 @@
       "name": "email",
       "type": "string",
       "options": {
-        "description": null,
+        "description": "",
         "persistent": true,
         "primary": false,
         "notnull": false,
@@ -43,7 +43,7 @@
       "name": "id_changed",
       "type": "integer",
       "options": {
-        "description": null,
+        "description": "",
         "persistent": true,
         "primary": true,
         "notnull": true,
@@ -55,7 +55,7 @@
       "name": "user_id",
       "type": "integer",
       "options": {
-        "description": null,
+        "description": "",
         "persistent": true,
         "primary": false,
         "notnull": false,
@@ -67,7 +67,7 @@
       "name": "thread_id",
       "type": "integer",
       "options": {
-        "description": null,
+        "description": "",
         "persistent": true,
         "primary": false,
         "notnull": false,
@@ -79,7 +79,7 @@
       "name": "message",
       "type": "string",
       "options": {
-        "description": null,
+        "description": "",
         "persistent": true,
         "primary": false,
         "notnull": false,

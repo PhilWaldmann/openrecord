@@ -1,7 +1,7 @@
 var Store = require('../../../store/mysql')
 
 
-describe.only('MySQL: all Attributes', function(){
+describe('MySQL: all Attributes', function(){
   var store
   var database = 'all_attributes_test'
 
