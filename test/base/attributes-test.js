@@ -24,6 +24,7 @@ describe('Attributes', function(){
     this.attribute('my_date', Date, {})
     this.attribute('my_number', Number, {})
     this.attribute('my_bool', Boolean, {})
+    this.attribute('my_obj', Object, {track_object_changes: true})
 
     this.variant('my_str', function(value, args, record){
       return value.substr(0, args.size)
@@ -112,6 +113,20 @@ describe('Attributes', function(){
 
     it('my_bool returns the right value', function(){
       phil.my_bool.should.be.equal(true)
+    })
+
+
+    // Object
+    it('has my_obj (setter)', function(){
+      phil.my_obj = {foo: 'bar'}
+    })
+
+    it('has my_obj (getter)', function(){
+      should.exist(phil.my_obj)
+    })
+
+    it('my_obj returns the right value', function(){
+      phil.my_obj.should.be.eql({foo: 'bar'})
     })
   })
 
@@ -231,7 +246,7 @@ describe('Attributes', function(){
         my_number: 3,
         my_bool: true
       })
-      user.allowed_attributes = ['my_number', 'my_bool']
+      user.allowed_attributes = ['my_number', 'my_bool'] // TODO: remove in V3.0
     })
 
 
@@ -257,6 +272,18 @@ describe('Attributes', function(){
     it('returns a changes hash', function(){
       user.resetChanges()
       user.hasChanges().should.be.eql(false)
+    })
+
+
+    it('track object changes', function(){
+      const user = new User({
+        my_obj: {foo: 'bar'}
+      })
+      user.changes = {} // forget changes
+      
+      user.getChanges().should.be.eql({})
+      user.my_obj.foo = 'BAR!!'
+      user.getChanges().should.be.eql({my_obj: [{foo: 'bar'}, {foo: 'BAR!!'}]})
     })
   })
 
