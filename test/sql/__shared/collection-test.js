@@ -67,7 +67,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-    it('create a relational record with relation.add()', function(){
+    it('create a relational record with relation.add(Post.new())', function(){
       return store
       .ready(function(){
         var User = store.Model('User')
@@ -85,6 +85,28 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         })
         .then(function(result){
           result.should.be.equal(2)
+        })
+      })
+    })
+
+    it('create a relational record with relation.add({})', function(){
+      return store
+      .ready(function(){
+        var User = store.Model('User')
+        var Post = store.Model('Post')
+        return User.find(2).include('posts')
+        .then(function(user){
+          user.posts.length.should.be.equal(2)
+
+          user.posts.add({thread_id: 1, message: 'yet another post without new'})
+
+          return user.save()
+        })
+        .then(function(user){
+          return Post.where({user_id: user.id}).count()
+        })
+        .then(function(result){
+          result.should.be.equal(3)
         })
       })
     })
@@ -153,7 +175,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
-    it('set a belongsTo record with =', function(){
+    it('set a belongsTo record with = record', function(){
       return store.ready(function(){
         var Thread = store.Model('Thread')
         var User = store.Model('User')
@@ -166,6 +188,20 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
               user.email.should.be.equal('new_user@mail.com')
               user.threads.length.should.be.equal(1)
             })
+          })
+        })
+      })
+    })
+
+    it('set a belongsTo record with = id', function(){
+      return store.ready(function(){
+        var Thread = store.Model('Thread')
+        return Thread.find(1).exec(function(thread){
+          thread.user_id = 2
+
+          return thread.user
+          .then(function(user){            
+            user.id.should.be.equal(2)
           })
         })
       })
@@ -390,6 +426,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
     })
 
 
+
     it('updates a record`s hasMany relation with thread_ids=[1, 2]', function(){
       return store.ready(function(){
         var User = store.Model('User')
@@ -407,6 +444,40 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
+
+    it('updates a record`s hasMany relation with thread_ids=[1] if the relation is not loaded!', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.find(1).exec(function(user){ 
+                 
+          user.thread_ids = [1]
+          
+          return user.save()
+          .then(function(){
+            return User.find(1).include('threads').exec(function(phil){
+              phil.threads.length.should.be.equal(1)
+            })
+          })
+        })
+      })
+    })
+    
+    it('updates a record`s hasMany relation with thread=[1, 2]', function(){
+      return store.ready(function(){
+        var User = store.Model('User')
+        return User.find(1).exec(function(user){ 
+                 
+          user.threads = [1, 2]
+          
+          return user.save()
+          .then(function(){
+            return User.find(1).include('threads').exec(function(phil){
+              phil.threads.length.should.be.equal(2)
+            })
+          })
+        })
+      })
+    })
 
     it('manually load a hasMany relation', function(){
       return store.ready(function(){
