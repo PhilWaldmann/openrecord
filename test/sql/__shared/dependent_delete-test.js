@@ -3,7 +3,7 @@ var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe.only(title + ': Delete dependent', function(){
+  describe(title + ': Delete dependent', function(){
     var store
 
     before(beforeFn)
