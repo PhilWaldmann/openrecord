@@ -173,7 +173,18 @@ describe('Store: Base', function(){
         should.exist(store.Model('CamelCasedModel'))
       })
     })
+
+
+    it('throws an error if the plugin is not used', function(){
+      should.throws(function(){
+        var store = new Store({
+          models: path.join(__dirname, 'fixtures', 'models', '*.js')
+        })
+      })
+    })
   })
+
+  
 
 
   describe('loads models via models:"path/*" config (+ plugin) and uses the function name instead of filename', function(){
@@ -201,6 +212,7 @@ describe('Store: Base', function(){
       })
     })
   })
+
 
   describe('loads models via require (array)', function(){
     var store = new Store({
