@@ -292,4 +292,10 @@ if(process.env['ORACLE_HOME']){
     'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "config" TEXT)',
     'PRIMARY:users:id'
   ])
+
+  testOracle('plugins/total_count', [
+    'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "email" TEXT, "deleted_at" DATE)',
+    'PRIMARY:users:id',
+    "INSERT INTO \"users\"(\"login\", \"email\", \"deleted_at\") VALUES('phil', 'phil@mail.com', NULL), ('michl', 'michl@mail.com', TO_DATE('2014-01-10', 'yyyy-mm-dd')), ('admin', 'admin@mail.com', NULL), ('marlene', 'marlene@mail.com', TO_DATE('2014-01-01', 'yyyy-mm-dd')), ('hans', 'hans@mail.com', NULL)"
+  ])
 }

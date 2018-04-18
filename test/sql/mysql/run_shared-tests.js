@@ -268,3 +268,8 @@ testMYSQL('plugins/stampable', [
 testMYSQL('plugins/serialize', [
   'CREATE TABLE users(id serial primary key, login TEXT, config TEXT)'
 ])
+
+testMYSQL('plugins/total_count', [
+  'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, deleted_at datetime)',
+  "INSERT INTO users(login, email, deleted_at) VALUES('phil', 'phil@mail.com', NULL), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', NULL), ('marlene', 'marlene@mail.com', '2014-01-01'), ('hans', 'hans@mail.com', NULL)"
+])
