@@ -126,6 +126,7 @@ Now it's possible to [query](./query.md#with-conditions) your datastore in the f
 User.where({login_regexp: /p.il/})
 ```
 
+?> `query` is the raw [knex](http://knexjs.org/) query, so you can do all sorts of crazy things!
 
 Here is another example:
 
