@@ -6,8 +6,6 @@
 [![npm package version](http://badge.fury.io/js/openrecord.png)](https://npmjs.org/package/openrecord)
 [![Dependency Status](https://gemnasium.com/PhilWaldmann/openrecord.svg)](https://gemnasium.com/PhilWaldmann/openrecord)
 
-**Docs are for v2.0 - currently available with tag `next` on npm**
-
 OPENRECORD is an ActiveRecord inspired ORM for nodejs.
 
 Currently it supports the following databases/datastores: SQLite3, MySQL, Postgres, Oracle, REST and LDAP (+ ActiveDirectory)  
