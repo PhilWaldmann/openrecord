@@ -25,7 +25,8 @@ CREATE USER travis IDENTIFIED BY travis;
 GRANT CONNECT, RESOURCE TO travis;
 GRANT EXECUTE ON SYS.DBMS_LOCK TO travis;
 SQL
-  7. ORACLE_VIA_DOCKER=1 ORACLE_HOME=1 npm run mocha
+  8. $ npm install oracledb
+  7. $ ORACLE_VIA_DOCKER=1 ORACLE_HOME=1 npm run mocha
 */
 
 global.beforeOracle = function(db, sql, next){
