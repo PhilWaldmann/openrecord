@@ -83,7 +83,7 @@ console.log(user.posts)
 ```
 
 
-?> With `autoSave` (see [relation defintion](./definition#relations)) `user.save()` will also save the `post`
+?> With `autoSave` (see [relation defintion](./definition#relations)) `user.save()` will also save the `post` (all inside one transaction!)
 
 
 # Change existing records
