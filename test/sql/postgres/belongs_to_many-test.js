@@ -27,7 +27,7 @@ describe('Postgres: belongsToMany()', function(){
     })
 
     store.Model('User', function(){
-      this.belongsToMany('folders')
+      this.belongsToMany('folders', {dependent: 'delete'})
     })
 
     store.Model('Folder', function(){
@@ -131,7 +131,18 @@ describe('Postgres: belongsToMany()', function(){
   })
 
 
-
+  it('manually loading', function(){
+    return store.ready(function(){
+      var User = store.Model('User')
+      return User.find(2)
+      .then(function(user){
+        return user.folders
+      })
+      .then(function(folders){
+        folders.length.should.be.equal(2)
+      })
+    })
+  })
 
 
   it('updates a relation id with original relation loaded (belongsToMany)', function(){
@@ -140,8 +151,9 @@ describe('Postgres: belongsToMany()', function(){
       return User.find(2).include('folders').exec(function(user){
         user._folders.length.should.be.equal(2)        
         user.folder_ids = [3]
-        user._folders.length.should.be.equal(1)
         
+        user._folders.length.should.be.equal(1)
+
         return user.save()
       })
       .then(function(){
@@ -149,6 +161,25 @@ describe('Postgres: belongsToMany()', function(){
       })
       .then(function(user){
         user._folders.length.should.be.equal(1)
+        user.folder_ids.should.be.eql([3])
+      })
+    })
+  })
+
+  it('dependent delete', function(){
+    return store.ready(function(){
+      var User = store.Model('User')
+      var Folder = store.Model('Folder')
+      return User.find(2)
+      .then(function(user){
+        user.folder_ids.should.be.eql([3])
+       return user.destroy()
+      })
+      .then(function(){
+        return Folder.find(3)
+      })
+      .then(function(folder){
+        should.not.exist(folder)
       })
     })
   })
