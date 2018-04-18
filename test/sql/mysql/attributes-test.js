@@ -1,7 +1,7 @@
 var Store = require('../../../store/mysql')
 
 
-describe('MySQL: all Attributes', function(){
+describe.only('MySQL: all Attributes', function(){
   var store
   var database = 'all_attributes_test'
 
@@ -9,7 +9,7 @@ describe('MySQL: all Attributes', function(){
 
   before(function(next){
     beforeMYSQL(database, [
-      'CREATE TABLE attribute_tests(char_attribute  varchar(255), float_attribute float, integer_attribute  integer, text_attribute text, boolean_attribute boolean, binary_attribute BLOB, date_attribute date, datetime_attribute datetime, time_attribute time)',
+      'CREATE TABLE attribute_tests(char_attribute  varchar(255) COMMENT \'testcomment\', float_attribute float, integer_attribute  integer, text_attribute text, boolean_attribute boolean, binary_attribute BLOB, date_attribute date, datetime_attribute datetime, time_attribute time)',
       "INSERT INTO attribute_tests VALUES('abcd', 2.3345, 3243, 'some text', true, 'some binary data', '2014-02-18', '2014-02-18 15:45:02', '15:45:01')"
     ], next)
   })
@@ -74,6 +74,13 @@ describe('MySQL: all Attributes', function(){
 
         record.time_attribute.toString().should.be.equal('15:45:01')
       })
+    })
+  })
+
+  it('comments are loaded', function(){
+    return store.ready(function(){
+      var AttributeTest = store.Model('AttributeTest')
+      AttributeTest.definition.attributes.char_attribute.description.should.be.equal('testcomment')
     })
   })
 })
