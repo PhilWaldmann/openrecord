@@ -88,7 +88,7 @@ console.log(user.posts)
 
 # Change existing records
 
-After you've [loaded an existing record](./query.md) you can modify it.
+After you've [loaded an existing record](./query.md) you can modify it. (See [updateAll()](https://openrecord.js.org/#/modify?id=updatealldata) if you don't want to load it!)
 
 ```js
 const user = await User.find(2)
@@ -107,11 +107,63 @@ user.set({
 })
 ```
 
-It's also allowed to set a single field:
+## relations
+
+If you have for example a [belongs to](https://openrecord.js.org/#/definition?id=belongstoname-options) relation, you could change it on two ways.
 
 ```js
-user.set('first_name', 'Philipp')
+const user = await User.find(2).include('role')
+// user.role === Role {id: 5, name: 'Normal User'}
+// user.role_id === 5
+
+// to remove the related record
+user.role = null // will change: user.role_id === null
+// or
+user.role_id = null // will change: user.role === null
+
+// to use another role
+user.role = await Role.find(1) // will change: user.role_id === 1
+// or
+user.role_id = 1
+await user.role
+
+// to save all changes to your store
+await user.save()
 ```
+
+If you remove the relation (like in the above example) and have `{dependent: 'delete'}` (or `destroy`) set on this relation, it will automatically remove the related record from your store (on `user.save()`)
+
+?> Dependent `delete` or `destroy` will also work if the relation is not loaded!!
+
+
+A [has many](https://openrecord.js.org/#/definition?id=hasmanyname-options) relation behaves simmilar:
+
+```js
+const user = await User.find(2).include('posts')
+// automatic attribute: user.post_ids
+
+// to remove all related record
+user.post_ids = []
+
+// set related records via id
+user.post_ids = [1, 5]
+
+// remove second post
+user.posts.remove(1)
+
+user.posts.add(Post.new({title: 'Very awesome'}))
+// or
+user.posts.add({title: 'Very awesome'})
+// or
+user.posts.new({title: 'Very awesome'})
+
+await user.save()
+```
+
+In this case it will automatically change multiple records if needed (set/remove `user_id` on `Post` records)  
+This kind of API is available for every type of relation.
+
+!> If the `posts` relation from the above example is not loaded, it will always performa a "remove all" before adding the assigned records! So be carefull with the `depentend` option.
 
 ## save()
 
