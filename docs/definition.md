@@ -222,7 +222,7 @@ The `options` parameter is optional, if it can autodetect your target model. Oth
 * **from**: The name of the field of the current model 
 * **to**: The name of the field of the target model
 * **through**: The relation name of the current model you want to go through
-* **relation**: The relation name of the target model. Use only in conjunction with `through`
+* **relation**: The relation name of the target model. Use only in conjunction with `through`. Default is the name of your relation
 * **as**: Set the `<polymorhic name>`. See `belongsToPolymorphic()`
 * **conditions**: Optional `conditions` object (See [Query](./query.md#with-conditions))
 * **scope**: Optional name of a [scope](./definition#scopes) of the target model
@@ -270,6 +270,17 @@ The `options` parameter takes additional attributes:
 this.belongsToPolymorphic('children', {typeField: 'children_class'}) // if we have a model with a `children_class` and `children_id` fields
 ```
 
+### "hasManyThrough"
+There is no method like `hasManyThrough()`, but instead you could use `hasMany()` or `hasOne()` with the option `through`.
+
+```js
+// models/User.js
+this.hasMany('posts')
+this.hasMany('unread_posts', {through: 'posts', relation: 'unread'})
+
+// models/Post.js
+this.hasMany('unread')
+```
 
 ## Scopes
 
