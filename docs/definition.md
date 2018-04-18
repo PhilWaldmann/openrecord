@@ -263,6 +263,8 @@ The `options` parameter takes additional attributes:
 * **typeField**: The field which stores the target model name. Default: `'<name>_type'`
 * **idField**: The field which stores the target model id. Default: `'<name>_id'`
 * **storeField**: Optional store `name`. Only needed for cross store relations!. Default: The current store
+* **dependent**: Valid values are: `destroy`, `delete`, `nullify` or null or an object with the target model name as a key, and `destroy`, `delete`, `nullify` as value. e.g. if you want to delete related `ModelA` records but not `ModelB` (Default: null)
+
 ```js
 // models/User.js
 this.belongsToPolymorphic('children', {typeField: 'children_class'}) // if we have a model with a `children_class` and `children_id` fields

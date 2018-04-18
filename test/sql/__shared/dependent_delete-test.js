@@ -3,7 +3,7 @@ var Store = require('../../../store')
 
 
 module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe(title + ': Delete dependent', function(){
+  describe.only(title + ': Delete dependent', function(){
     var store
 
     before(beforeFn)
@@ -32,7 +32,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         this.hasMany('poly_things', {as: 'member', dependent: 'delete'})
       })
       store.Model('PolyThing', function(){
-        this.belongsToPolymorphic('member')
+        this.belongsToPolymorphic('member', {dependent: {Thread: 'delete'}})
       })
     })
 
@@ -83,6 +83,40 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
           return PolyThing.find(1)
         }).then(function(polyThing){
           should.not.exist(polyThing)
+        })
+      })
+    })
+
+    it('delete belongsToPolymorphic', function(){
+      return store.ready(function(){
+        var PolyThing = store.Model('PolyThing')
+        var Thread = store.Model('Thread')
+
+        return PolyThing.find(3).include('member')
+        .then(function(poly){
+          should.exist(poly._member)          
+          return poly.destroy()
+        }).then(function(){
+          return Thread.find(4)
+        }).then(function(thread){
+          should.not.exist(thread)
+        })
+      })
+    })
+
+    it('no delete belongsToPolymorphic (different target model)', function(){
+      return store.ready(function(){
+        var PolyThing = store.Model('PolyThing')
+        var Post = store.Model('Post')
+
+        return PolyThing.find(4).include('member')
+        .then(function(poly){
+          should.exist(poly._member)          
+          return poly.destroy()
+        }).then(function(){
+          return Post.find(5)
+        }).then(function(post){
+          should.exist(post)
         })
       })
     })
