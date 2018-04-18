@@ -177,7 +177,7 @@ describe('Store: Base', function(){
 
     it('throws an error if the plugin is not used', function(){
       should.throws(function(){
-        var store = new Store({
+        const store = new Store({ // eslint-disable-line no-unused-vars
           models: path.join(__dirname, 'fixtures', 'models', '*.js')
         })
       })

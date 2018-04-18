@@ -1,4 +1,3 @@
-var should = require('should')
 var Store = require('../../../../store')
 
 

@@ -1,3 +1,4 @@
+const should = require('should')
 var Store = require('../../../store/postgres')
 
 
