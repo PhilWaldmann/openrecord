@@ -232,6 +232,28 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
         })
       })
 
+      it('existing records were not modified', function(){
+        return store.ready(function(){
+          var User = store.Model('User')
+          var Thread = store.Model('Thread')
+          return User.create({
+            login: 'michl2',
+            email: 'michl2@mail.com',
+            threads: [{
+              title: 'Thread 3'
+            }, {
+              title: 'Thread 4'
+            }]
+          })
+          .then(function(){
+            return Thread.where({user_id: null}).count()
+            .then(function(count){
+              count.should.be.equal(0)
+            })
+          })
+        })
+      })
+
 
       it('writes a new record with nested subrecords', function(){
         return store.ready(function(){
