@@ -1,32 +1,28 @@
 var types = ['auto', 'custom']
 
-types.forEach(function(type){
-  describe('GraphQL: Query (' + type + ')', function(){
+types.forEach(function(type) {
+  describe('GraphQL: Query (' + type + ')', function() {
     var database = 'query' + type
     var query
 
-
-    before(function(next){
-      beforeGraphQL(database, type, function(error, _query){
+    before(function(next) {
+      beforeGraphQL(database, type, function(error, _query) {
         query = _query
         next(error)
       })
     })
 
-    after(function(next){
+    after(function(next) {
       afterGraphQL(database, next)
     })
 
-
-
-    it('returns all records', function(){
+    it('returns all records', function() {
       return query(`{
         authors{
           name
           email
         }
-      }`)
-      .then(function(result){
+      }`).then(function(result) {
         result.should.be.eql({
           data: {
             authors: [
@@ -39,16 +35,13 @@ types.forEach(function(type){
       })
     })
 
-
-
-    it('returns first 2 records', function(){
+    it('returns first 2 records', function() {
       return query(`{
         authors(limit: 2){
           name
           email
         }
-      }`)
-      .then(function(result){
+      }`).then(function(result) {
         result.should.be.eql({
           data: {
             authors: [
@@ -60,8 +53,7 @@ types.forEach(function(type){
       })
     })
 
-
-    it('returns a custom connection type with totalCount and nodes', function(){
+    it('returns a custom connection type with totalCount and nodes', function() {
       return query(`{
         recipes(limit: 2){
           nodes{
@@ -70,8 +62,7 @@ types.forEach(function(type){
           }
           totalCount
         }
-      }`)
-      .then(function(result){
+      }`).then(function(result) {
         result.should.be.eql({
           data: {
             recipes: {
@@ -86,15 +77,13 @@ types.forEach(function(type){
       })
     })
 
-
-    it('returns a single record', function(){
+    it('returns a single record', function() {
       return query(`{
         author(id: 1){
           name
           email
         }
-      }`)
-      .then(function(result){
+      }`).then(function(result) {
         result.should.be.eql({
           data: {
             author: { name: 'phil', email: 'phil@mail.com' }
@@ -103,27 +92,27 @@ types.forEach(function(type){
       })
     })
 
-    it('returns an error on missing id', function(){
+    it('returns an error on missing id', function() {
       return query(`{
         author{
           name
           email
         }
-      }`)
-      .then(function(result){
+      }`).then(function(result) {
         result.should.be.eql({
-          errors: [{
-            message: 'Field "author" argument "id" of type "Int!" is required but not provided.',
-            locations: [{ line: 2, column: 9 }],
-            path: undefined
-          }]
+          errors: [
+            {
+              message:
+                'Field "author" argument "id" of type "Int!" is required but not provided.',
+              locations: [{ line: 2, column: 9 }],
+              path: undefined
+            }
+          ]
         })
       })
     })
 
-
-
-    it('returns a single record with related data', function(){
+    it('returns a single record with related data', function() {
       return query(`{
         author(id: 1){
           name
@@ -134,8 +123,7 @@ types.forEach(function(type){
             rating
           }
         }
-      }`)
-      .then(function(result){
+      }`).then(function(result) {
         result.should.be.eql({
           data: {
             author: {
@@ -152,8 +140,7 @@ types.forEach(function(type){
       })
     })
 
-
-    it('returns a single record with custom related data', function(){
+    it('returns a single record with custom related data', function() {
       return query(`{
         author(id: 1){
           name
@@ -164,8 +151,7 @@ types.forEach(function(type){
             rating
           }
         }
-      }`)
-      .then(function(result){
+      }`).then(function(result) {
         result.should.be.eql({
           data: {
             author: {

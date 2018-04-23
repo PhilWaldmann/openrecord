@@ -1,5 +1,5 @@
-module.exports = function(){
-  this.createTable('array_tests', function(){
+module.exports = function() {
+  this.createTable('array_tests', function() {
     this.integerArray('int_arr')
     this.floatArray('float_arr')
     this.booleanArray('bool_arr')

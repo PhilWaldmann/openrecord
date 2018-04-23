@@ -1,3 +1,1 @@
-module.exports = function RightName(){
-
-}
+module.exports = function RightName() {}

@@ -1,5 +1,5 @@
-module.exports = function(){
-  this.createTable('foo', function(){
+module.exports = function() {
+  this.createTable('foo', function() {
     this.text('foo')
   })
 }

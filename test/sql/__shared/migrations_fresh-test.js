@@ -2,42 +2,43 @@ var should = require('should')
 var path = require('path')
 var Store = require('../../../store')
 
-
-module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe(title + ': Migrations Fresh', function(){
+module.exports = function(title, beforeFn, afterFn, storeConf) {
+  describe(title + ': Migrations Fresh', function() {
     var store
 
     before(beforeFn)
-    after(function(next){
+    after(function(next) {
       afterFn(next, store)
     })
 
-    before(function(){
-      storeConf.migrations = path.join(__dirname, '..', '..', 'fixtures', 'migrations', '*')
+    before(function() {
+      storeConf.migrations = path.join(
+        __dirname,
+        '..',
+        '..',
+        'fixtures',
+        'migrations',
+        '*'
+      )
       storeConf.plugins = require('../../../lib/base/dynamic_loading')
 
       store = new Store(storeConf)
 
-
-      store.Model('User', function(){})
-      store.Model('Post', function(){})
-      store.Model('Test', function(){})
-      store.Model('AttributeTest', function(){})
+      store.Model('User', function() {})
+      store.Model('Post', function() {})
+      store.Model('Test', function() {})
+      store.Model('AttributeTest', function() {})
     })
 
-
-
-
-    it('are finished before ready() gets called', function(){
-      return store.ready(function(){
+    it('are finished before ready() gets called', function() {
+      return store.ready(function() {
         var User = store.Model('User')
         should.exist(User)
       })
     })
 
-
-    it('has all attributes loaded', function(){
-      return store.ready(function(){
+    it('has all attributes loaded', function() {
+      return store.ready(function() {
         var User = store.Model('User')
         User.definition.attributes.should.have.property('id')
         User.definition.attributes.should.have.property('login')
@@ -46,18 +47,16 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-
-    it('has a primary key', function(){
-      return store.ready(function(){
+    it('has a primary key', function() {
+      return store.ready(function() {
         var User = store.Model('User')
         User.definition.primaryKeys.length.should.be.equal(1)
         User.definition.primaryKeys.should.be.eql(['id'])
       })
     })
 
-
-    it('has not_null definition', function(){
-      return store.ready(function(){
+    it('has not_null definition', function() {
+      return store.ready(function() {
         var User = store.Model('User')
 
         User.definition.attributes.id.notnull.should.be.equal(true)
@@ -66,9 +65,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-
-    it('second migrations was executed as well', function(){
-      return store.ready(function(){
+    it('second migrations was executed as well', function() {
+      return store.ready(function() {
         var Post = store.Model('Post')
 
         Post.definition.attributes.should.have.property('id')
@@ -76,34 +74,52 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-
-
-    it('has the right data type', function(){
-      return store.ready(function(){
+    it('has the right data type', function() {
+      return store.ready(function() {
         var AttributeTest = store.Model('AttributeTest')
 
-        AttributeTest.definition.attributes.string_attr.type.name.should.be.equal('string')
-        AttributeTest.definition.attributes.text_attr.type.name.should.be.equal('string')
-        AttributeTest.definition.attributes.integer_attr.type.name.should.be.equal('integer')
-        AttributeTest.definition.attributes.float_attr.type.name.should.be.equal('float')
-        AttributeTest.definition.attributes.boolean_attr.type.name.should.be.equal('boolean')
-        AttributeTest.definition.attributes.date_attr.type.name.should.be.equal('date')
-        AttributeTest.definition.attributes.datetime_attr.type.name.should.be.equal('datetime')
+        AttributeTest.definition.attributes.string_attr.type.name.should.be.equal(
+          'string'
+        )
+        AttributeTest.definition.attributes.text_attr.type.name.should.be.equal(
+          'string'
+        )
+        AttributeTest.definition.attributes.integer_attr.type.name.should.be.equal(
+          'integer'
+        )
+        AttributeTest.definition.attributes.float_attr.type.name.should.be.equal(
+          'float'
+        )
+        AttributeTest.definition.attributes.boolean_attr.type.name.should.be.equal(
+          'boolean'
+        )
+        AttributeTest.definition.attributes.date_attr.type.name.should.be.equal(
+          'date'
+        )
+        AttributeTest.definition.attributes.datetime_attr.type.name.should.be.equal(
+          'datetime'
+        )
 
-        if(store.type === 'postgres' || store.type === 'mysql'){
-          AttributeTest.definition.attributes.binary_attr.type.name.should.be.equal('binary')
-          AttributeTest.definition.attributes.time_attr.type.name.should.be.equal('time')
-        }else{
-          AttributeTest.definition.attributes.binary_attr.type.name.should.be.equal('string') // TODO: SHOULD BE binary
-          AttributeTest.definition.attributes.time_attr.type.name.should.be.equal('string') // TODO: SHOULD BE time
+        if (store.type === 'postgres' || store.type === 'mysql') {
+          AttributeTest.definition.attributes.binary_attr.type.name.should.be.equal(
+            'binary'
+          )
+          AttributeTest.definition.attributes.time_attr.type.name.should.be.equal(
+            'time'
+          )
+        } else {
+          AttributeTest.definition.attributes.binary_attr.type.name.should.be.equal(
+            'string'
+          ) // TODO: SHOULD BE binary
+          AttributeTest.definition.attributes.time_attr.type.name.should.be.equal(
+            'string'
+          ) // TODO: SHOULD BE time
         }
       })
     })
 
-
-
-    it('has all stampable() attributes', function(){
-      return store.ready(function(){
+    it('has all stampable() attributes', function() {
+      return store.ready(function() {
         var Post = store.Model('Post')
         Post.definition.attributes.should.have.property('updated_at')
         Post.definition.attributes.should.have.property('created_at')
@@ -112,18 +128,16 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-
-    it('has all polymorph() attributes', function(){
-      return store.ready(function(){
+    it('has all polymorph() attributes', function() {
+      return store.ready(function() {
         var Post = store.Model('Post')
         Post.definition.attributes.should.have.property('foo_id')
         Post.definition.attributes.should.have.property('foo_type')
       })
     })
 
-
-    it('has all nestedSet() attributes', function(){
-      return store.ready(function(){
+    it('has all nestedSet() attributes', function() {
+      return store.ready(function() {
         var Post = store.Model('Post')
         Post.definition.attributes.should.have.property('lft')
         Post.definition.attributes.should.have.property('rgt')
@@ -132,69 +146,63 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-
-    it('has all paranoid() attributes', function(){
-      return store.ready(function(){
+    it('has all paranoid() attributes', function() {
+      return store.ready(function() {
         var Post = store.Model('Post')
         Post.definition.attributes.should.have.property('deleted_at')
         Post.definition.attributes.should.have.property('deleter_id')
       })
     })
 
-
-    it('has created a view', function(){
-      return store.ready(function(){
+    it('has created a view', function() {
+      return store.ready(function() {
         var Test = store.Model('Test')
-        return Test.find(1).exec(function(user){
+        return Test.find(1).exec(function(user) {
           user.login.should.be.equal('phil')
         })
       })
     })
 
-
-    it('has seeded some records', function(){
-      return store.ready(function(){
+    it('has seeded some records', function() {
+      return store.ready(function() {
         var User = store.Model('User')
 
-        return User.find(1).exec(function(user){
+        return User.find(1).exec(function(user) {
           user.login.should.be.equal('phil')
         })
       })
     })
 
-
-    it('has default text value', function(){
-      return store.ready(function(){
+    it('has default text value', function() {
+      return store.ready(function() {
         var AttributeTest = store.Model('AttributeTest')
 
-        return AttributeTest.create().then(function(){
-          return AttributeTest.find(this.id).exec(function(record){
+        return AttributeTest.create().then(function() {
+          return AttributeTest.find(this.id).exec(function(record) {
             record.with_default_text.should.be.equal('foo')
           })
         })
       })
     })
 
-
-    it('has default integer value', function(){
-      return store.ready(function(){
+    it('has default integer value', function() {
+      return store.ready(function() {
         var AttributeTest = store.Model('AttributeTest')
 
-        return AttributeTest.create().then(function(){
-          return AttributeTest.find(this.id).exec(function(record){
+        return AttributeTest.create().then(function() {
+          return AttributeTest.find(this.id).exec(function(record) {
             record.with_default_integer.should.be.equal(55)
           })
         })
       })
     })
 
-
-    it('has default boolean value', function(){
-      return store.ready(function(){
+    it('has default boolean value', function() {
+      return store.ready(function() {
         var AttributeTest = store.Model('AttributeTest')
 
-        return AttributeTest.create().then(function(){
-          return AttributeTest.find(this.id).exec(function(record){
+        return AttributeTest.create().then(function() {
+          return AttributeTest.find(this.id).exec(function(record) {
             record.with_default_boolean.should.be.equal(true)
           })
         })

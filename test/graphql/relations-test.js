@@ -1,27 +1,23 @@
 // var should = require('should')
 var types = ['auto', 'custom']
 
-types.forEach(function(type){
-  describe('GraphQL: Relations (' + type + ')', function(){
+types.forEach(function(type) {
+  describe('GraphQL: Relations (' + type + ')', function() {
     var database = 'relations' + type
     var query
 
-
-    before(function(next){
-      beforeGraphQL(database, type, function(error, _query){
+    before(function(next) {
+      beforeGraphQL(database, type, function(error, _query) {
         query = _query
         next(error)
       })
     })
 
-    after(function(next){
+    after(function(next) {
       afterGraphQL(database, next)
     })
 
-
-
-
-    it('returns a record with relational data', function(){
+    it('returns a record with relational data', function() {
       return query(`{
           authors{
             name
@@ -30,8 +26,7 @@ types.forEach(function(type){
               title
             }
           }
-        }`)
-      .then(function(result){
+        }`).then(function(result) {
         result.should.be.eql({
           data: {
             authors: [
@@ -45,9 +40,7 @@ types.forEach(function(type){
               },
               {
                 name: 'michl',
-                recipes: [
-                  { id: 4, title: 'Spinach Enchiladas' }
-                ]
+                recipes: [{ id: 4, title: 'Spinach Enchiladas' }]
               },
               {
                 name: 'admin',
@@ -59,8 +52,7 @@ types.forEach(function(type){
       })
     })
 
-
-    it('returns a record with deeply nested relational data', function(){
+    it('returns a record with deeply nested relational data', function() {
       return query(`{
           authors{
             name
@@ -72,37 +64,45 @@ types.forEach(function(type){
               }
             }
           }
-        }`)
-      .then(function(result){
+        }`).then(function(result) {
         result.should.be.eql({
           data: {
             authors: [
               {
                 name: 'phil',
                 recipes: [
-                  { id: 1,
+                  {
+                    id: 1,
                     title: 'Toast Hawaii',
                     ingredients: [
                       { name: 'toast' },
                       { name: 'pinapple' },
                       { name: 'cheese' },
                       { name: 'butter' }
-                    ] },
-                  { id: 2,
+                    ]
+                  },
+                  {
+                    id: 2,
                     title: 'scrambled eggs',
                     ingredients: [
                       { name: 'eggs' },
                       { name: 'salt' },
                       { name: 'pepper' },
                       { name: 'butter' }
-                    ] },
-                  { id: 3, title: 'Steak', ingredients: [ { name: 'ribeye steak' } ] }
+                    ]
+                  },
+                  {
+                    id: 3,
+                    title: 'Steak',
+                    ingredients: [{ name: 'ribeye steak' }]
+                  }
                 ]
               },
               {
                 name: 'michl',
                 recipes: [
-                  { id: 4,
+                  {
+                    id: 4,
                     title: 'Spinach Enchiladas',
                     ingredients: [
                       { name: 'butter' },
@@ -113,7 +113,8 @@ types.forEach(function(type){
                       { name: 'sour creme' },
                       { name: 'corn tortillas' },
                       { name: 'enchilada sauce' }
-                    ] }
+                    ]
+                  }
                 ]
               },
               {
@@ -126,9 +127,7 @@ types.forEach(function(type){
       })
     })
 
-
-
-    it('returns a record with deeply nested relational data (cross store)', function(){
+    it('returns a record with deeply nested relational data (cross store)', function() {
       return query(`{
           recipe(id: 1){
             title,
@@ -142,8 +141,7 @@ types.forEach(function(type){
               }
             }
           }
-        }`)
-      .then(function(result){
+        }`).then(function(result) {
         result.should.be.eql({
           data: {
             recipe: {
@@ -151,7 +149,10 @@ types.forEach(function(type){
               ingredients: [
                 {
                   name: 'toast',
-                  food: { energy: 120, alternatives: [ { name: 'whole wheat toast' } ] }
+                  food: {
+                    energy: 120,
+                    alternatives: [{ name: 'whole wheat toast' }]
+                  }
                 },
                 { name: 'pinapple', food: { energy: 80, alternatives: [] } },
                 { name: 'cheese', food: { energy: 150, alternatives: [] } },
@@ -163,8 +164,7 @@ types.forEach(function(type){
       })
     })
 
-
-    it('returns a record with deeply nested relational via scope', function(){
+    it('returns a record with deeply nested relational via scope', function() {
       return query(`{
           recipe(id: 1){
             title,
@@ -172,16 +172,12 @@ types.forEach(function(type){
               name
             }
           }
-        }`)
-      .then(function(result){
+        }`).then(function(result) {
         result.should.be.eql({
           data: {
             recipe: {
               title: 'Toast Hawaii',
-              ingredients: [
-                { name: 'toast' },
-                { name: 'pinapple' }
-              ]
+              ingredients: [{ name: 'toast' }, { name: 'pinapple' }]
             }
           }
         })

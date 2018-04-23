@@ -1,10 +1,8 @@
 exports.store = {
-  myStoreFunction: function(){
+  myStoreFunction: function() {},
 
-  },
-
-  Model: function(a, b, callback){
-    if(typeof b === 'function'){
+  Model: function(a, b, callback) {
+    if (typeof b === 'function') {
       callback = b
       b = ''
     }
@@ -13,7 +11,5 @@ exports.store = {
 }
 
 exports.definition = {
-  myDefinitionFunction: function(){
-
-  }
+  myDefinitionFunction: function() {}
 }

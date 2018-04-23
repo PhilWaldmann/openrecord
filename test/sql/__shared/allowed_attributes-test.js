@@ -1,39 +1,35 @@
 var Store = require('../../../store')
 
-
-module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe(title + ': Allowed Attributes', function(){
+module.exports = function(title, beforeFn, afterFn, storeConf) {
+  describe(title + ': Allowed Attributes', function() {
     var store
 
     before(beforeFn)
-    after(function(next){
+    after(function(next) {
       afterFn(next, store)
     })
 
-
-    before(function(){
+    before(function() {
       store = new Store(storeConf)
 
-
-      store.Model('User', function(){
+      store.Model('User', function() {
         this.hasMany('posts')
         this.hasMany('threads')
       })
-      store.Model('Post', function(){
+      store.Model('Post', function() {
         this.belongsTo('user')
-        this.belongsTo('thread', {dependent: 'delete'})
+        this.belongsTo('thread', { dependent: 'delete' })
       })
-      store.Model('Thread', function(){
+      store.Model('Thread', function() {
         this.belongsTo('user')
-        this.hasMany('posts', {dependent: 'delete'})
+        this.hasMany('posts', { dependent: 'delete' })
       })
     })
 
-
-    it.skip('converts records to normal objects with limited attributes', function(){
-      return store.ready(function(){
+    it.skip('converts records to normal objects with limited attributes', function() {
+      return store.ready(function() {
         var User = store.Model('User')
-        return User.include('posts').exec(function(users){
+        return User.include('posts').exec(function(users) {
           var res = users.toJson(['id', 'login'])
 
           res.should.be.eql([
@@ -45,42 +41,46 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-
-    it.skip('applies allowed_attriutes on asJson()', function(){
-      return store.ready(function(){
+    it.skip('applies allowed_attriutes on asJson()', function() {
+      return store.ready(function() {
         var User = store.Model('User')
-        return User.include('posts').asJson(['id', 'login']).exec(function(users){
-          users.should.be.eql([
-            { id: 1, login: 'phil' },
-            { id: 2, login: 'michl' },
-            { id: 3, login: 'admin' }
-          ])
-        })
+        return User.include('posts')
+          .asJson(['id', 'login'])
+          .exec(function(users) {
+            users.should.be.eql([
+              { id: 1, login: 'phil' },
+              { id: 2, login: 'michl' },
+              { id: 3, login: 'admin' }
+            ])
+          })
       })
     })
 
-    it('applies typecasts on asJson()', function(){
-      return store.ready(function(){
+    it('applies typecasts on asJson()', function() {
+      return store.ready(function() {
         var User = store.Model('User')
-        return User.include('posts').asJson().exec(function(users){
-          users[0].active.should.be.equal(true)
-          users[1].active.should.be.equal(false)
-          users[2].active.should.be.equal(true)
-        })
+        return User.include('posts')
+          .asJson()
+          .exec(function(users) {
+            users[0].active.should.be.equal(true)
+            users[1].active.should.be.equal(false)
+            users[2].active.should.be.equal(true)
+          })
       })
     })
 
-
-    it.skip('applies typecasts and allowed_attributes on asJson()', function(){
-      return store.ready(function(){
+    it.skip('applies typecasts and allowed_attributes on asJson()', function() {
+      return store.ready(function() {
         var User = store.Model('User')
-        return User.include('posts').asJson(['id', 'active']).exec(function(users){
-          users.should.be.eql([
-            { id: 1, active: true },
-            { id: 2, active: false },
-            { id: 3, active: true }
-          ])
-        })
+        return User.include('posts')
+          .asJson(['id', 'active'])
+          .exec(function(users) {
+            users.should.be.eql([
+              { id: 1, active: true },
+              { id: 2, active: false },
+              { id: 3, active: true }
+            ])
+          })
       })
     })
   })

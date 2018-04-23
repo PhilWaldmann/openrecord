@@ -1,49 +1,44 @@
 var Store = require('../../../store/base')
 
-
-
-describe('validatesFormatOf()', function(){
+describe('validatesFormatOf()', function() {
   var store = new Store()
 
-  store.Model('User', function(){
+  store.Model('User', function() {
     this.attribute('mail', String)
     this.validatesFormatOf('mail', 'email')
   })
 
   var User, valid, invalid
-  before(function(){
-    return store.ready(function(){
+  before(function() {
+    return store.ready(function() {
       User = store.Model('User')
-      valid = new User({mail: 'philipp@email.com'})
-      invalid = new User({mail: 'not.a.valid@email!'})
+      valid = new User({ mail: 'philipp@email.com' })
+      invalid = new User({ mail: 'not.a.valid@email!' })
     })
   })
 
-
-
-  it('returns true on valid records', function(){
-    return valid.isValid(function(valid){
+  it('returns true on valid records', function() {
+    return valid.isValid(function(valid) {
       valid.should.be.equal(true)
     })
   })
 
-  it('returns false on invalid records', function(){
-    return invalid.isValid(function(valid){
+  it('returns false on invalid records', function() {
+    return invalid.isValid(function(valid) {
       valid.should.be.equal(false)
     })
   })
 
-  it('returns the right error message', function(){
-    return invalid.isValid(function(valid){
+  it('returns the right error message', function() {
+    return invalid.isValid(function(valid) {
       invalid.errors.toJSON().should.have.property('mail')
     })
   })
 
-
-  describe('with multiple params', function(){
+  describe('with multiple params', function() {
     var store = new Store()
 
-    store.Model('User', function(){
+    store.Model('User', function() {
       this.attribute('email', String)
       this.attribute('login', String)
       this.attribute('user_url', String)
@@ -63,8 +58,8 @@ describe('validatesFormatOf()', function(){
     })
 
     var User, valid, invalid, invalid2
-    before(function(){
-      return store.ready(function(){
+    before(function() {
+      return store.ready(function() {
         User = store.Model('User')
         valid = new User({
           email: 'philipp@email.com',
@@ -93,28 +88,26 @@ describe('validatesFormatOf()', function(){
       })
     })
 
-
-
-    it('returns true on valid records', function(){
-      return valid.isValid(function(_valid){
+    it('returns true on valid records', function() {
+      return valid.isValid(function(_valid) {
         _valid.should.be.equal(true)
       })
     })
 
-    it('returns false on invalid records', function(){
-      return invalid.isValid(function(valid){
+    it('returns false on invalid records', function() {
+      return invalid.isValid(function(valid) {
         valid.should.be.equal(false)
       })
     })
 
-    it('returns false on invalid records (second field)', function(){
-      return invalid2.isValid(function(valid){
+    it('returns false on invalid records (second field)', function() {
+      return invalid2.isValid(function(valid) {
         valid.should.be.equal(false)
       })
     })
 
-    it('returns the right error message', function(){
-      return invalid.isValid(function(valid){
+    it('returns the right error message', function() {
+      return invalid.isValid(function(valid) {
         const errors = invalid.errors.toJSON()
         errors.should.have.property('email')
         errors.should.have.property('user_url')

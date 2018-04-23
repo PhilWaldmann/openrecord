@@ -15,12 +15,10 @@ var Store = require('../../lib/store')
     food -< alternatives
  */
 
-
-global.beforeGraphQL = function(database, type, done){
+global.beforeGraphQL = function(database, type, done) {
   database = 'graphql_' + database
   var file1 = path.join(__dirname, database + '1.sqlite3')
   var db2 = database + '2'
-
 
   var sql1 = [
     'CREATE TABLE authors(id serial primary key NOT NULL, name TEXT, email TEXT, active boolean)',
@@ -42,97 +40,120 @@ global.beforeGraphQL = function(database, type, done){
     'INSERT INTO alternatives(food_id, alternative_id) VALUES(1, 16)'
   ]
 
-  beforeSQLite(file1, sql1, function(){
-    beforePG(db2, sql2, function(){
+  beforeSQLite(file1, sql1, function() {
+    beforePG(db2, sql2, function() {
       var store1 = new Store({
         type: 'sqlite3',
         file: file1,
-        plugins: [
-          require('../../lib/graphql')
-        ]
+        plugins: [require('../../lib/graphql')]
       })
 
-      store1.Model('Author', function(){
-        this.hasMany('recipes', {autoSave: true})
-        this.hasMany('topRatedRecipes', {model: 'Recipe', scope: 'topRated', autoSave: true})
-
+      store1.Model('Author', function() {
+        this.hasMany('recipes', { autoSave: true })
+        this.hasMany('topRatedRecipes', {
+          model: 'Recipe',
+          scope: 'topRated',
+          autoSave: true
+        })
 
         // for auto gen. only!!!
-        if(type === 'auto'){
-          this
-          .graphQLField('name(upper: Boolean): String')
-          .graphQLField('info: String')
-          .graphQLField('recipes: [Recipe]')
-          .graphQLField('topRatedRecipes: [Recipe]')
+        if (type === 'auto') {
+          this.graphQLField('name(upper: Boolean): String')
+            .graphQLField('info: String')
+            .graphQLField('recipes: [Recipe]')
+            .graphQLField('topRatedRecipes: [Recipe]')
 
-          .graphQLQuery('author(id: Int!): Author')
-          .graphQLQuery('authors(limit: Int): [Author]')
-          .graphQLQuery('author_count: Int!')
-          .graphQLQuery('me: Author')
+            .graphQLQuery('author(id: Int!): Author')
+            .graphQLQuery('authors(limit: Int): [Author]')
+            .graphQLQuery('author_count: Int!')
+            .graphQLQuery('me: Author')
 
-          .graphQL(`
+            .graphQL(
+              `
             input AuthorInput {
               name: String
               email: String
             }
-          `)
-          .graphQLMutation('createAuthor(input: AuthorInput!): Author')
+          `
+            )
+            .graphQLMutation('createAuthor(input: AuthorInput!): Author')
 
-          .graphQLTypeResolver({
-            name: function(record, args){ return record.name$(args) }
-          })
-          .graphQLQueryResolver({
-            author: function(args){ return this.find(args.id).where({active: true}) },
-            authors: function(args){ return this.limit(args.limit) },
-            author_count: function(){ return this.count() },
-            me: function(){ return this.me() }
-          })
-          .graphQLMutationResolver({
-            createAuthor: function(args){ return this.createActive(args.input) }
-          })
+            .graphQLTypeResolver({
+              name: function(record, args) {
+                return record.name$(args)
+              }
+            })
+            .graphQLQueryResolver({
+              author: function(args) {
+                return this.find(args.id).where({ active: true })
+              },
+              authors: function(args) {
+                return this.limit(args.limit)
+              },
+              author_count: function() {
+                return this.count()
+              },
+              me: function() {
+                return this.me()
+              }
+            })
+            .graphQLMutationResolver({
+              createAuthor: function(args) {
+                return this.createActive(args.input)
+              }
+            })
         }
 
-        this.variant('name', function(value, args){
-          if(args.upper) return value.toUpperCase()
+        this.variant('name', function(value, args) {
+          if (args.upper) return value.toUpperCase()
           return value
         })
 
-        this.getter('info', function(){
+        this.getter('info', function() {
           return this.name + ' <' + this.email + '>'
         })
 
-        this.scope('me', function(){
-          this.find(this.context.id)
-        }, true)
+        this.scope(
+          'me',
+          function() {
+            this.find(this.context.id)
+          },
+          true
+        )
 
-        this.staticMethod('createActive', function(input){
+        this.staticMethod('createActive', function(input) {
           input.active = true
-          input.recipes = [{
-            title: 'Example recipe',
-            description: 'Your first example recipe',
-            rating: 1
-          }]
+          input.recipes = [
+            {
+              title: 'Example recipe',
+              description: 'Your first example recipe',
+              rating: 1
+            }
+          ]
           return this.create(input)
         })
       })
 
-      store1.Model('Recipe', function(){
-        this.belongsTo('author', {autoSave: true})
-        this.hasMany('recipe_ingredients', {autoSave: true})
-        this.hasMany('ingredients', {through: 'recipe_ingredients', relation: 'ingredient', scope: 'pagination'})
-        this.hasMany('images', {model: 'RecipeImage', autoSave: true})
-
+      store1.Model('Recipe', function() {
+        this.belongsTo('author', { autoSave: true })
+        this.hasMany('recipe_ingredients', { autoSave: true })
+        this.hasMany('ingredients', {
+          through: 'recipe_ingredients',
+          relation: 'ingredient',
+          scope: 'pagination'
+        })
+        this.hasMany('images', { model: 'RecipeImage', autoSave: true })
 
         // for auto gen. only!!!
-        if(type === 'auto'){
-          this
-          .graphQLField('author: Author')
-          .graphQLField('ingredients(limit: Int): [Ingredient]')
+        if (type === 'auto') {
+          this.graphQLField('author: Author')
+            .graphQLField('ingredients(limit: Int): [Ingredient]')
 
-          .graphQLQuery('recipe(id: Int!): Recipe')
-          .graphQLQuery('recipes(limit: Int = 10): RecipeConnection!')
+            .graphQLQuery('recipe(id: Int!): Recipe')
+            .graphQLQuery('recipes(limit: Int = 10): RecipeConnection!')
 
-          .graphQL(`
+            .graphQL(
+              `
             type RecipeConnection{
               nodes: [Recipe]
               totalCount: Int!
@@ -143,85 +164,100 @@ global.beforeGraphQL = function(database, type, done){
               description: String
               author_id: Int
             }
-          `)
-          .graphQLMutation('createRecipe(input: RecipeInput!): Recipe')
-          .graphQLMutation('updateRecipe(id: Int!, input: RecipeInput!): Recipe')
-          .graphQLMutation('destroyRecipe(id: Int!): Boolean')
+          `
+            )
+            .graphQLMutation('createRecipe(input: RecipeInput!): Recipe')
+            .graphQLMutation(
+              'updateRecipe(id: Int!, input: RecipeInput!): Recipe'
+            )
+            .graphQLMutation('destroyRecipe(id: Int!): Boolean')
 
-          .graphQLQueryResolver({
-            recipe: function(args){ return this.find(args.id) },
-            recipes: function(args){
-              return {
-                nodes: this.limit(args.limit),
-                totalCount: this.count()
+            .graphQLQueryResolver({
+              recipe: function(args) {
+                return this.find(args.id)
+              },
+              recipes: function(args) {
+                return {
+                  nodes: this.limit(args.limit),
+                  totalCount: this.count()
+                }
               }
-            }
-          })
-          .graphQLMutationResolver({
-            createRecipe: function(args){ return this.create(args.input) },
-            updateRecipe: function(args){ return this.findAndUpdate(args.id, args.input) },
-            destroyRecipe: function(args){ return this.findAndDestroy(args.id) }
-          })
+            })
+            .graphQLMutationResolver({
+              createRecipe: function(args) {
+                return this.create(args.input)
+              },
+              updateRecipe: function(args) {
+                return this.findAndUpdate(args.id, args.input)
+              },
+              destroyRecipe: function(args) {
+                return this.findAndDestroy(args.id)
+              }
+            })
         }
 
-
-
-        this.scope('topRated', function(){
+        this.scope('topRated', function() {
           this.order('rating', true)
         })
 
-        this.staticMethod('findAndUpdate', function(id, data){
-          return this.find(id).exec()
-          .then(function(record){
-            record.set(data)
-            return record.save()
-          })
+        this.staticMethod('findAndUpdate', function(id, data) {
+          return this.find(id)
+            .exec()
+            .then(function(record) {
+              record.set(data)
+              return record.save()
+            })
         })
 
-        this.staticMethod('findAndDestroy', function(id){
-          return this.find(id).exec()
-          .then(function(record){
-            return record.destroy()
-          })
-          .then(function(){
-            return true
-          })
+        this.staticMethod('findAndDestroy', function(id) {
+          return this.find(id)
+            .exec()
+            .then(function(record) {
+              return record.destroy()
+            })
+            .then(function() {
+              return true
+            })
         })
       })
 
-      store1.Model('RecipeIngredient', function(){
-        this.belongsTo('recipe', {autoSave: true})
-        this.belongsTo('ingredient', {autoSave: true})
+      store1.Model('RecipeIngredient', function() {
+        this.belongsTo('recipe', { autoSave: true })
+        this.belongsTo('ingredient', { autoSave: true })
       })
 
-      store1.Model('Ingredient', function(){
-        this.hasMany('recipe_ingredients', {autoSave: true})
-        this.hasMany('recipes', {through: 'recipe_ingredients', relation: 'recipe'})
-        this.belongsTo('food', {store: 'store2', autoSave: true})
+      store1.Model('Ingredient', function() {
+        this.hasMany('recipe_ingredients', { autoSave: true })
+        this.hasMany('recipes', {
+          through: 'recipe_ingredients',
+          relation: 'recipe'
+        })
+        this.belongsTo('food', { store: 'store2', autoSave: true })
 
         // for auto gen. only!!!
-        if(type === 'auto'){
-          this
-          .graphQLField('total_amount: Float')
-          .graphQLField('food: Food')
-          .graphQLQuery('ingredient(id: Int!): Ingredient')
-          .graphQLQueryResolver({
-            ingredient: function(args){ return this.find(args.id) }
-          })
+        if (type === 'auto') {
+          this.graphQLField('total_amount: Float')
+            .graphQLField('food: Food')
+            .graphQLQuery('ingredient(id: Int!): Ingredient')
+            .graphQLQueryResolver({
+              ingredient: function(args) {
+                return this.find(args.id)
+              }
+            })
         }
 
-        this.method('total_amount', function(){          
+        this.method('total_amount', function() {
           return this.recipe_ingredients.sum('amount').exec()
         })
 
-        this.scope('pagination', function(args){
+        this.scope('pagination', function(args) {
           args = args || {}
-          if(args.limit) this.limit(args.limit)
+          if (args.limit) this.limit(args.limit)
         })
       })
 
-      store1.Model('RecipeImage', function(){
-        this.belongsTo('recipe', {autoSave: true})
+      store1.Model('RecipeImage', function() {
+        this.belongsTo('recipe', { autoSave: true })
       })
 
       var store2 = new Store({
@@ -231,39 +267,48 @@ global.beforeGraphQL = function(database, type, done){
         user: 'postgres',
         password: '',
         name: 'store2',
-        plugins: [
-          require('../../lib/graphql')
-        ]
+        plugins: [require('../../lib/graphql')]
       })
 
-      store2.Model('Food', function(){
-        this.hasMany('alternative_foods', {model: 'Alternative', autoSave: true})
-        this.hasMany('alternatives', {through: 'alternative_foods', relation: 'alternative'})
+      store2.Model('Food', function() {
+        this.hasMany('alternative_foods', {
+          model: 'Alternative',
+          autoSave: true
+        })
+        this.hasMany('alternatives', {
+          through: 'alternative_foods',
+          relation: 'alternative'
+        })
 
         // for auto gen. only!!!
-        if(type === 'auto'){
+        if (type === 'auto') {
           this.graphQLField('alternatives: [Food]')
         }
       })
 
-      store2.Model('Alternative', function(){
-        this.belongsTo('food', {autoSave: true})
-        this.belongsTo('alternative', {model: 'Food', from: 'alternative_id', autoSave: true})
-      })
-
-      store2.ready(function(){
-        return store1.ready(function(){
-          done(null, require('./__schema_' + type + '.js')(store1, store2))
+      store2.Model('Alternative', function() {
+        this.belongsTo('food', { autoSave: true })
+        this.belongsTo('alternative', {
+          model: 'Food',
+          from: 'alternative_id',
+          autoSave: true
         })
       })
-      .catch(function(error){
-        done(error)
-      })
+
+      store2
+        .ready(function() {
+          return store1.ready(function() {
+            done(null, require('./__schema_' + type + '.js')(store1, store2))
+          })
+        })
+        .catch(function(error) {
+          done(error)
+        })
     })
   })
 }
 
-global.afterGraphQL = function(database, next){
+global.afterGraphQL = function(database, next) {
   database = 'graphql_' + database
   var file1 = path.join(__dirname, database + '1.sqlite3')
   var db2 = database + '2'

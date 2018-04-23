@@ -1,34 +1,33 @@
 // var should = require('should')
 var types = ['auto', 'custom']
 
-types.forEach(function(type){
-  describe('GraphQL: Mutation (' + type + ')', function(){
+types.forEach(function(type) {
+  describe('GraphQL: Mutation (' + type + ')', function() {
     var database = 'mutation' + type
     var query
 
-
-    before(function(next){
-      beforeGraphQL(database, type, function(error, _query){
+    before(function(next) {
+      beforeGraphQL(database, type, function(error, _query) {
         query = _query
         next(error)
       })
     })
 
-    after(function(next){
+    after(function(next) {
       afterGraphQL(database, next)
     })
 
-
-
-    it('executes a mutation and returns the id', function(){
-      return query(`
+    it('executes a mutation and returns the id', function() {
+      return query(
+        `
         mutation Test{
           createRecipe(input: {title: "Mutation Test", description: "Foobar", author_id: 1}) {
             id
           }
         }
-      `, {id: 1})
-      .then(function(result){
+      `,
+        { id: 1 }
+      ).then(function(result) {
         result.should.be.eql({
           data: {
             createRecipe: {
@@ -39,10 +38,9 @@ types.forEach(function(type){
       })
     })
 
-
-
-    it('executes a mutation and returns the whole record + relational data', function(){
-      return query(`
+    it('executes a mutation and returns the whole record + relational data', function() {
+      return query(
+        `
         mutation Test{
           createRecipe(input: {title: "Mutation Test2", description: "Foobar", author_id: 1}) {
             id
@@ -53,8 +51,9 @@ types.forEach(function(type){
             }
           }
         }
-      `, {id: 1})
-      .then(function(result){
+      `,
+        { id: 1 }
+      ).then(function(result) {
         result.should.be.eql({
           data: {
             createRecipe: {
@@ -70,10 +69,9 @@ types.forEach(function(type){
       })
     })
 
-
-
-    it('executes a mutation with custom handler', function(){
-      return query(`
+    it('executes a mutation with custom handler', function() {
+      return query(
+        `
         mutation Test{
           updateRecipe(id:5, input: {title: "Updated"}) {
             id
@@ -84,8 +82,9 @@ types.forEach(function(type){
             }
           }
         }
-      `, {id: 1})
-      .then(function(result){
+      `,
+        { id: 1 }
+      ).then(function(result) {
         result.should.be.eql({
           data: {
             updateRecipe: {
@@ -101,15 +100,15 @@ types.forEach(function(type){
       })
     })
 
-
-
-    it('executes a mutation with custom return type', function(){
-      return query(`
+    it('executes a mutation with custom return type', function() {
+      return query(
+        `
         mutation Test{
           destroyRecipe(id: 5)
         }
-      `, {id: 1})
-      .then(function(result){
+      `,
+        { id: 1 }
+      ).then(function(result) {
         result.should.be.eql({
           data: {
             destroyRecipe: true
@@ -118,10 +117,9 @@ types.forEach(function(type){
       })
     })
 
-
-
-    it('executes a mutation and returns nested related data', function(){
-      return query(`
+    it('executes a mutation and returns nested related data', function() {
+      return query(
+        `
         mutation Test{
           createAuthor(input: {name: "Max", email: "max@openrecord.com"}) {
             id
@@ -137,8 +135,9 @@ types.forEach(function(type){
             }
           }
         }
-      `, {id: 1})
-      .then(function(result){
+      `,
+        { id: 1 }
+      ).then(function(result) {
         result.should.be.eql({
           data: {
             createAuthor: {

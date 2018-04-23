@@ -101,7 +101,6 @@ testSQLite('dependent_nullify', [
   'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread")'
 ])
 
-
 testSQLite('destroy', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
@@ -113,25 +112,27 @@ testSQLite('destroy', [
 
 // ASYNC/AWAIT
 const semver = require('semver')
-if(semver.gt(process.versions.node, '7.10.0')){
-  testSQLite('es6', [
-    'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
-    'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
-    'CREATE TABLE threads(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT)',
-    'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01")',
-    'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")',
-    'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread"), (3, "delete me"), (3, "delete me too"), (3, "destroy me"), (3, "do not destroy")'
-  ], '.es6')
+if (semver.gt(process.versions.node, '7.10.0')) {
+  testSQLite(
+    'es6',
+    [
+      'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
+      'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
+      'CREATE TABLE threads(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT)',
+      'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", "2014-01-05"), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", "2014-01-01")',
+      'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")',
+      'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread"), (3, "delete me"), (3, "delete me too"), (3, "destroy me"), (3, "do not destroy")'
+    ],
+    '.es6'
+  )
 }
 
 testSQLite('exec', [])
-
 
 testSQLite('group', [
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first"), (1, 1, "second"), (3, 2, "third"), (2, 2, "first")'
 ])
-
 
 testSQLite('includes', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
@@ -235,8 +236,6 @@ testSQLite('validations', [
   'INSERT INTO with_scopes(name, scope_id) VALUES("phil", 1), ("michl", 1), ("phil", 2)'
 ])
 
-
-
 // plugins
 testSQLite('plugins/nested_set', [
   'CREATE TABLE folders(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, parent_id INTEGER, lft INTEGER, rgt INTEGER, depth INTEGER)',
@@ -261,7 +260,6 @@ testSQLite('plugins/stampable', [
   'INSERT INTO users(login, email, created_at) VALUES("phil", "phil@mail.com", NULL), ("michl", "michl@mail.com", "2014-01-10"), ("admin", "admin@mail.com", NULL), ("marlene", "marlene@mail.com", "2014-01-01"), ("hans", "hans@mail.com", NULL)',
   'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post"), (5, 4, "update me")'
 ])
-
 
 testSQLite('plugins/serialize', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, config TEXT)'

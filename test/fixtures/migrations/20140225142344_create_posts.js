@@ -1,6 +1,6 @@
-module.exports = function(){
-  this.createTable('posts', function(){
-    this.string('messages', {default: 'no message'})
+module.exports = function() {
+  this.createTable('posts', function() {
+    this.string('messages', { default: 'no message' })
     this.string('foo')
 
     this.stampable()

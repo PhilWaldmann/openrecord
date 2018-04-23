@@ -33,15 +33,19 @@
     "test": "npm run lint && npm run mocha -- --bail",
     "mocha": "NODE_ENV=test TZ='UTC' mocha",
     "lint": "eslint --ext .js lib test",
+    "format": "prettier --write lib/**/* test/**/*.js",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- --reporter dot",
     "report-coverage": "NODE_ENV=test istanbul cover _mocha -- --require blanket --reporter mocha-lcov-reporter && cat ./coverage/lcov.info | coveralls",
-    "dev-docs": "docsify serve docs --port 4444"
+    "dev-docs": "docsify serve docs --port 4444",
+    "precommit": "lint-staged"
   },
   "dependencies": {
     "date-fns": "^1.29.0",
     "debug": "^3.1.0",
+    "husky": "^0.14.3",
     "inflection": "~ 1.12.x",
     "knex": "^0.14.6",
+    "lint-staged": "^7.0.4",
     "validator": "^9.4.1"
   },
   "devDependencies": {
@@ -69,6 +73,7 @@
     "mocha-lcov-reporter": ">= 0.0.x",
     "mysql": "latest",
     "pg": "^7.4.1",
+    "prettier": "^1.12.1",
     "restify": "^7.1.1",
     "semver": "^5.5.0",
     "should": "^13.2.1",
@@ -79,6 +84,9 @@
   "main": "./store",
   "directories": {
     "test": "./test"
+  },
+  "lint-staged": {
+    "*.{js}": ["prettier --write", "git add"]
   },
   "config": {
     "blanket": {

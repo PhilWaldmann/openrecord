@@ -2,39 +2,37 @@ var should = require('should')
 
 var Store = require('../lib/store')
 
-describe('Model: Base', function(){
+describe('Model: Base', function() {
   var store = new Store()
 
-  store.Model('User', function(){
-
-  })
+  store.Model('User', function() {})
 
   var User
-  before(function(){
-    return store.ready(function(){
+  before(function() {
+    return store.ready(function() {
       User = store.Model('User')
     })
   })
 
-  it('is a function', function(){
+  it('is a function', function() {
     User.should.be.a.Function()
   })
 
-  it('has new() mixin method', function(){
+  it('has new() mixin method', function() {
     should.exist(User.new)
     User.new.should.be.a.Function()
   })
 
-  it('has chain() mixin method', function(){
+  it('has chain() mixin method', function() {
     should.exist(User.chain)
     User.chain.should.be.a.Function()
   })
 
-  it('has definition', function(){
+  it('has definition', function() {
     should.exist(User.definition)
   })
 
-  it('has correct model name', function(){
+  it('has correct model name', function() {
     User.definition.modelName.should.be.equal('User')
   })
 })

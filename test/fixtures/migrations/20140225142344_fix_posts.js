@@ -1,3 +1,3 @@
-module.exports = function(){
+module.exports = function() {
   this.renameColumn('posts', 'messages', 'message')
 }

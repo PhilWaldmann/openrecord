@@ -1,25 +1,25 @@
 var Store = require('../../../lib/store')
 
-describe('REST Client: Include', function(){
+describe('REST Client: Include', function() {
   var store
 
-  before(function(){
+  before(function() {
     store = new Store({
       type: 'rest',
       url: 'http://localhost:8889',
       version: '~1.0'
     })
 
-    store.Model('User', function(){
-      this.attribute('id', Number, {primary: true})
+    store.Model('User', function() {
+      this.attribute('id', Number, { primary: true })
       this.attribute('login', String)
       this.attribute('email', String)
 
       this.hasMany('posts')
     })
 
-    store.Model('Post', function(){
-      this.attribute('id', Number, {primary: true})
+    store.Model('Post', function() {
+      this.attribute('id', Number, { primary: true })
       this.attribute('message', String)
       this.attribute('user_id', Number)
       this.attribute('thread_id', Number)
@@ -28,13 +28,11 @@ describe('REST Client: Include', function(){
     })
   })
 
-
-
-  it('includes a hasMany relation', function(){
-    return store.ready(function(){
+  it('includes a hasMany relation', function() {
+    return store.ready(function() {
       var User = store.Model('User')
 
-      return User.include('posts').exec(function(results){
+      return User.include('posts').exec(function(results) {
         results.length.should.be.above(3)
         results[0].posts.length.should.be.equal(3)
         results[1].posts.length.should.be.equal(1)
@@ -43,12 +41,11 @@ describe('REST Client: Include', function(){
     })
   })
 
-
-  it('includes a belongsTo relation', function(){
-    return store.ready(function(){
+  it('includes a belongsTo relation', function() {
+    return store.ready(function() {
       var Post = store.Model('Post')
 
-      return Post.include('user').exec(function(results){
+      return Post.include('user').exec(function(results) {
         results.length.should.be.equal(5)
         results[0]._user.id.should.be.equal(1)
         results[1]._user.id.should.be.equal(1)

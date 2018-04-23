@@ -1,11 +1,10 @@
-module.exports = function(){
-  this.createTable('attribute_tests', function(){
+module.exports = function() {
+  this.createTable('attribute_tests', function() {
     var self = this
 
-    this.run(function(){
+    this.run(function() {
       self.string('string_attr')
     })
-
 
     this.text('text_attr')
     this.integer('integer_attr')
@@ -16,9 +15,8 @@ module.exports = function(){
     this.datetime('datetime_attr')
     this.time('time_attr')
 
-
-    this.string('with_default_text', {default: 'foo'})
-    this.integer('with_default_integer', {default: 55})
-    this.boolean('with_default_boolean', {default: true})
+    this.string('with_default_text', { default: 'foo' })
+    this.integer('with_default_integer', { default: 55 })
+    this.boolean('with_default_boolean', { default: true })
   })
 }

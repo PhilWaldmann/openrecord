@@ -1,7 +1,7 @@
 const graphQLTools = require('graphql-tools')
 const graphql = require('graphql')
 
-module.exports = function(store1, store2){
+module.exports = function(store1, store2) {
   const resolve = store1.graphQLResolveHelper
   const Author = store1.Model('Author')
   const Ingredient = store1.Model('Ingredient')
@@ -75,30 +75,52 @@ module.exports = function(store1, store2){
 
   const resolvers = {
     Query: {
-      author: resolve(function(args){ return Author.find(args.id).where({active: true}) }),
-      authors: resolve(function(args){ return Author.limit(args.limit) }),
-      author_count: resolve(function(){ return Author.count() }),
-      recipe: resolve(function(args){ return Recipe.find(args.id) }),
+      author: resolve(function(args) {
+        return Author.find(args.id).where({ active: true })
+      }),
+      authors: resolve(function(args) {
+        return Author.limit(args.limit)
+      }),
+      author_count: resolve(function() {
+        return Author.count()
+      }),
+      recipe: resolve(function(args) {
+        return Recipe.find(args.id)
+      }),
       // recipe: function(a, args){ return Recipe.find(args.id) }, // TODO: should work to!
-      recipes: resolve(function(args){
+      recipes: resolve(function(args) {
         return {
           nodes: Recipe.limit(args.limit),
           totalCount: Recipe.count()
         }
       }),
-      ingredient: resolve(function(args){ return Ingredient.find(args.id) }),
-      me: resolve(function(){ return Author.me() })
+      ingredient: resolve(function(args) {
+        return Ingredient.find(args.id)
+      }),
+      me: resolve(function() {
+        return Author.me()
+      })
     },
 
     Mutation: {
-      createRecipe: resolve(function(args){ return Recipe.create(args.input) }),
-      updateRecipe: resolve(function(args){ return Recipe.findAndUpdate(args.id, args.input) }),
-      destroyRecipe: resolve(function(args){ return Recipe.findAndDestroy(args.id) }),
-      createAuthor: resolve(function(args){ return Author.createActive(args.input) })
+      createRecipe: resolve(function(args) {
+        return Recipe.create(args.input)
+      }),
+      updateRecipe: resolve(function(args) {
+        return Recipe.findAndUpdate(args.id, args.input)
+      }),
+      destroyRecipe: resolve(function(args) {
+        return Recipe.findAndDestroy(args.id)
+      }),
+      createAuthor: resolve(function(args) {
+        return Author.createActive(args.input)
+      })
     },
 
     Author: {
-      name: function(record, args){ return record.name$(args) }
+      name: function(record, args) {
+        return record.name$(args)
+      }
     }
   }
 
@@ -106,18 +128,12 @@ module.exports = function(store1, store2){
     exclude: ['name']
   })
 
-
   const schema = graphQLTools.makeExecutableSchema({
-    typeDefs: [
-      author,
-      Recipe.toGraphQLType(),
-      Food.toGraphQLType(),
-      rootQuery
-    ],
+    typeDefs: [author, Recipe.toGraphQLType(), Food.toGraphQLType(), rootQuery],
     resolvers
   })
 
-  return function query(query, context, variables, operation){
+  return function query(query, context, variables, operation) {
     return graphql.graphql(schema, query, null, context, variables, operation)
   }
 }

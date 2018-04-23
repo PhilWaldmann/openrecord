@@ -1,64 +1,62 @@
 var Store = require('../../store/sql')
 
-describe('SQL: Aggregate Functions', function(){
+describe('SQL: Aggregate Functions', function() {
   var store
   var User
 
-  before(function(){
+  before(function() {
     store = new Store({
       type: 'sql'
     })
 
-    store.Model('User', function(){
+    store.Model('User', function() {
       this.attribute('salary', Number)
     })
 
-    return store.ready(function(){
+    return store.ready(function() {
       User = store.Model('User')
     })
   })
 
-
-
-  describe('count()', function(){
-    it('has method', function(){
+  describe('count()', function() {
+    it('has method', function() {
       User.count.should.be.a.Function()
     })
 
-    it('has the right internal variables', function(){
+    it('has the right internal variables', function() {
       var Chained = User.count('salary')
       Chained.getInternal('count').should.be.equal('salary')
     })
   })
 
-  describe('sum()', function(){
-    it('has method', function(){
+  describe('sum()', function() {
+    it('has method', function() {
       User.sum.should.be.a.Function()
     })
 
-    it('has the right internal variables', function(){
+    it('has the right internal variables', function() {
       var Chained = User.sum('salary')
       Chained.getInternal('sum').should.be.equal('salary')
     })
   })
 
-  describe('max()', function(){
-    it('has method', function(){
+  describe('max()', function() {
+    it('has method', function() {
       User.max.should.be.a.Function()
     })
 
-    it('has the right internal variables', function(){
+    it('has the right internal variables', function() {
       var Chained = User.max('salary')
       Chained.getInternal('max').should.be.equal('salary')
     })
   })
 
-  describe('min()', function(){
-    it('has method', function(){
+  describe('min()', function() {
+    it('has method', function() {
       User.min.should.be.a.Function()
     })
 
-    it('has the right internal variables', function(){
+    it('has the right internal variables', function() {
       var Chained = User.min('salary')
       Chained.getInternal('min').should.be.equal('salary')
     })

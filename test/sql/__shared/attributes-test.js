@@ -1,28 +1,24 @@
 var should = require('should')
 var Store = require('../../../store')
 
-
-module.exports = function(title, beforeFn, afterFn, storeConf){
-  describe(title + ': Attributes', function(){
+module.exports = function(title, beforeFn, afterFn, storeConf) {
+  describe(title + ': Attributes', function() {
     var store
 
     before(beforeFn)
-    after(function(next){
+    after(function(next) {
       afterFn(next, store)
     })
 
-
-    before(function(){
+    before(function() {
       store = new Store(storeConf)
 
-      store.Model('User', function(){})
-      store.Model('MultipleKey', function(){})
+      store.Model('User', function() {})
+      store.Model('MultipleKey', function() {})
     })
 
-
-
-    it('has the right primary_key', function(){
-      return store.ready(function(){
+    it('has the right primary_key', function() {
+      return store.ready(function() {
         var User = store.Model('User')
 
         var primaryKeys = User.definition.primaryKeys
@@ -30,8 +26,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-    it('has multiple primaryKeys', function(){
-      return store.ready(function(){
+    it('has multiple primaryKeys', function() {
+      return store.ready(function() {
         var MultipleKey = store.Model('MultipleKey')
 
         var primaryKeys = MultipleKey.definition.primaryKeys
@@ -39,9 +35,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-
-    it('has NOT NULL attributes', function(){
-      return store.ready(function(){
+    it('has NOT NULL attributes', function() {
+      return store.ready(function() {
         var User = store.Model('User')
 
         var attributes = User.definition.attributes
@@ -49,23 +44,22 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-    it('has automatic validation', function(){
-      return store.ready(function(){
+    it('has automatic validation', function() {
+      return store.ready(function() {
         var User = store.Model('User')
         var phil = User.new()
 
-        return phil.isValid(function(valid){
+        return phil.isValid(function(valid) {
           valid.should.be.equal(false)
           phil.errors.toJSON().should.have.property('login')
         })
       })
     })
 
-
-    it('loaded record to not have any changes', function(){
-      return store.ready(function(){
+    it('loaded record to not have any changes', function() {
+      return store.ready(function() {
         var User = store.Model('User')
-        return User.find(1).exec(function(result){
+        return User.find(1).exec(function(result) {
           should.exist(result)
           result.hasChanges().should.be.equal(false)
           result.login.should.be.equal('phil')
@@ -73,19 +67,15 @@ module.exports = function(title, beforeFn, afterFn, storeConf){
       })
     })
 
-
-
-
-    it('create works', function(){
-      return store.ready(function(){
+    it('create works', function() {
+      return store.ready(function() {
         var User = store.Model('User')
         var phil = User.new({
           login: 'michl',
           not_in_the_database: 'foo'
         })
 
-        return phil.save()
-        .then(function(){
+        return phil.save().then(function() {
           phil.id.should.be.equal(2)
         })
       })

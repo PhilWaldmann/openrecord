@@ -112,15 +112,19 @@ testMYSQL('destroy', [
 
 // ASYNC/AWAIT
 const semver = require('semver')
-if(semver.gt(process.versions.node, '7.10.0')){
-  testMYSQL('es6', [
-    'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
-    'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
-    'CREATE TABLE threads(id serial primary key, user_id INTEGER, title TEXT)',
-    "INSERT INTO users(login, email, created_at) VALUES('phil', 'phil@mail.com', '2014-01-05'), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', '2014-01-01')",
-    "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post')",
-    "INSERT INTO threads(user_id, title) VALUES(2, 'first thread'), (1, 'second thread'), (3, 'delete me'), (3, 'delete me too'), (3, 'destroy me'), (3, 'do not destroy')"
-  ], '.es6')
+if (semver.gt(process.versions.node, '7.10.0')) {
+  testMYSQL(
+    'es6',
+    [
+      'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
+      'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
+      'CREATE TABLE threads(id serial primary key, user_id INTEGER, title TEXT)',
+      "INSERT INTO users(login, email, created_at) VALUES('phil', 'phil@mail.com', '2014-01-05'), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', '2014-01-01')",
+      "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post')",
+      "INSERT INTO threads(user_id, title) VALUES(2, 'first thread'), (1, 'second thread'), (3, 'delete me'), (3, 'delete me too'), (3, 'destroy me'), (3, 'do not destroy')"
+    ],
+    '.es6'
+  )
 }
 
 testMYSQL('exec', [])
@@ -145,7 +149,6 @@ testMYSQL('includes', [
   "INSERT INTO poly_things (member_id, member_type, user_id) VALUES (1, 'Post', 1), (1, 'Thread', 1), (2, 'Thread', 2), (1, 'Avatar', 2)"
 ])
 
-
 testMYSQL('autojoin', [
   'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
@@ -154,7 +157,6 @@ testMYSQL('autojoin', [
   "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post'), (4, 4, NULL)",
   "INSERT INTO threads(user_id, title) VALUES(2, 'first thread'), (1, 'second thread')"
 ])
-
 
 testMYSQL('joins', [
   'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
@@ -172,7 +174,6 @@ testMYSQL('joins', [
   "INSERT INTO poly_things (member_id, member_type, user_id) VALUES (1, 'Post', 1), (1, 'Thread', 1), (2, 'Thread', 2), (1, 'Avatar', 2)"
 ])
 
-
 testMYSQL('migrations_fresh', [])
 
 testMYSQL('migrations', [
@@ -181,14 +182,12 @@ testMYSQL('migrations', [
   "INSERT INTO openrecord_migrations VALUES('20140223120815_create_users')"
 ])
 
-
 testMYSQL('promise', [
   'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
   "INSERT INTO users(login, email, created_at) VALUES('phil', 'phil@mail.com', '2014-01-05'), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', '2014-01-01')",
   "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post'), (4, 4, NULL)"
 ])
-
 
 testMYSQL('temporary_definition', [
   'CREATE TABLE users(id serial primary key, login TEXT, email TEXT, created_at TEXT)',
@@ -237,8 +236,6 @@ testMYSQL('validations', [
   "INSERT INTO with_scopes(name, scope_id) VALUES('phil', 1), ('michl', 1), ('phil', 2)"
 ])
 
-
-
 // plugins
 testMYSQL('plugins/nested_set', [
   'CREATE TABLE folders(id serial primary key, name text, parent_id integer, lft INTEGER, rgt integer, depth integer)',
@@ -263,7 +260,6 @@ testMYSQL('plugins/stampable', [
   "INSERT INTO users(login, email, created_at) VALUES('phil', 'phil@mail.com', NULL), ('michl', 'michl@mail.com', '2014-01-10'), ('admin', 'admin@mail.com', NULL), ('marlene', 'marlene@mail.com', '2014-01-01'), ('hans', 'hans@mail.com', NULL)",
   "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first message'), (1, 1, 'second'), (1, 2, 'third'), (2, 1, 'michls post'), (5, 4, 'update me')"
 ])
-
 
 testMYSQL('plugins/serialize', [
   'CREATE TABLE users(id serial primary key, login TEXT, config TEXT)'

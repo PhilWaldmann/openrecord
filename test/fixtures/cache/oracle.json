@@ -1,92 +1,101 @@
 {
   "user": {
-    "attributes": [{
-      "name": "id",
-      "type": "integer",
-      "options": {
-        "description": null,
-        "persistent": true,
-        "primary": true,
-        "notnull": true,
-        "default": null,
-        "writable": false
+    "attributes": [
+      {
+        "name": "id",
+        "type": "integer",
+        "options": {
+          "description": null,
+          "persistent": true,
+          "primary": true,
+          "notnull": true,
+          "default": null,
+          "writable": false
+        },
+        "validations": []
       },
-      "validations": []
-    }, {
-      "name": "login_changed",
-      "type": "string",
-      "options": {
-        "description": null,
-        "persistent": true,
-        "primary": false,
-        "notnull": false,
-        "default": null,
-        "writable": true
+      {
+        "name": "login_changed",
+        "type": "string",
+        "options": {
+          "description": null,
+          "persistent": true,
+          "primary": false,
+          "notnull": false,
+          "default": null,
+          "writable": true
+        },
+        "validations": []
       },
-      "validations": []
-    }, {
-      "name": "email",
-      "type": "string",
-      "options": {
-        "description": null,
-        "persistent": true,
-        "primary": false,
-        "notnull": false,
-        "default": null,
-        "writable": true
-      },
-      "validations": []
-    }]
+      {
+        "name": "email",
+        "type": "string",
+        "options": {
+          "description": null,
+          "persistent": true,
+          "primary": false,
+          "notnull": false,
+          "default": null,
+          "writable": true
+        },
+        "validations": []
+      }
+    ]
   },
   "post": {
-    "attributes": [{
-      "name": "id_changed",
-      "type": "integer",
-      "options": {
-        "description": null,
-        "persistent": true,
-        "primary": true,
-        "notnull": true,
-        "default": null,
-        "writable": false
+    "attributes": [
+      {
+        "name": "id_changed",
+        "type": "integer",
+        "options": {
+          "description": null,
+          "persistent": true,
+          "primary": true,
+          "notnull": true,
+          "default": null,
+          "writable": false
+        },
+        "validations": []
       },
-      "validations": []
-    }, {
-      "name": "user_id",
-      "type": "integer",
-      "options": {
-        "description": null,
-        "persistent": true,
-        "primary": false,
-        "notnull": false,
-        "default": null,
-        "writable": true
+      {
+        "name": "user_id",
+        "type": "integer",
+        "options": {
+          "description": null,
+          "persistent": true,
+          "primary": false,
+          "notnull": false,
+          "default": null,
+          "writable": true
+        },
+        "validations": []
       },
-      "validations": []
-    }, {
-      "name": "thread_id",
-      "type": "integer",
-      "options": {
-        "description": null,
-        "persistent": true,
-        "primary": false,
-        "notnull": false,
-        "default": null,
-        "writable": true
+      {
+        "name": "thread_id",
+        "type": "integer",
+        "options": {
+          "description": null,
+          "persistent": true,
+          "primary": false,
+          "notnull": false,
+          "default": null,
+          "writable": true
+        },
+        "validations": []
       },
-      "validations": []
-    }, {
-      "name": "message",
-      "type": "string",
-      "options": {
-        "description": null,
-        "persistent": true,
-        "primary": false,
-        "notnull": false,
-        "default": null,
-        "writable": true
-      },
-      "validations": []
-    }]
+      {
+        "name": "message",
+        "type": "string",
+        "options": {
+          "description": null,
+          "persistent": true,
+          "primary": false,
+          "notnull": false,
+          "default": null,
+          "writable": true
+        },
+        "validations": []
+      }
+    ]
   }
 }

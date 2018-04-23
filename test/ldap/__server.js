@@ -45,14 +45,20 @@ var db = {
   'cn=archive_group,ou=archive,ou=guests,ou=others,dc=test': {
     name: 'Archive Group',
     objectclass: 'group',
-    member: ['cn=christian,ou=archive,ou=guests,ou=others,dc=test', 'cn=ulli,ou=archive,ou=guests,ou=others,dc=test']
+    member: [
+      'cn=christian,ou=archive,ou=guests,ou=others,dc=test',
+      'cn=ulli,ou=archive,ou=guests,ou=others,dc=test'
+    ]
   },
 
   'cn=christian,ou=archive,ou=guests,ou=others,dc=test': {
     username: 'christian',
     objectclass: 'user',
     age: 32,
-    memberOf: ['cn=archive_group,ou=archive,ou=guests,ou=others,dc=test', 'cn=not_existing_group,ou=others,dc=test']
+    memberOf: [
+      'cn=archive_group,ou=archive,ou=guests,ou=others,dc=test',
+      'cn=not_existing_group,ou=others,dc=test'
+    ]
   },
 
   'cn=ulli,ou=archive,ou=guests,ou=others,dc=test': {
@@ -67,13 +73,11 @@ var db = {
     objectclass: 'user'
   },
 
-
   // OU Create
   'ou=create,dc=test': {
     name: 'Create',
     objectclass: 'ou'
   },
-
 
   // OU Update
   'ou=update,dc=test': {
@@ -100,7 +104,6 @@ var db = {
     age: 99
   },
 
-
   // OU Destroy
   'ou=destroy,dc=test': {
     name: 'Destroy',
@@ -113,24 +116,28 @@ var db = {
   }
 }
 
-
-
-before(function(done){
+before(function(done) {
   /// --- Globals
-
 
   var server = ldap.createServer()
 
   server.bind('cn=root', function(req, res, next) {
-    if (req.dn.toString() !== 'cn=root' || req.credentials !== 'secret') { return next(new ldap.InvalidCredentialsError()) }
+    if (req.dn.toString() !== 'cn=root' || req.credentials !== 'secret') {
+      return next(new ldap.InvalidCredentialsError())
+    }
 
     res.end()
     return next()
   })
 
   server.add(SUFFIX, authorize, function(req, res, next) {
-    var dn = req.dn.toString().replace(/, /g, ',').toLowerCase()
-    if (db[dn]) { return next(new ldap.EntryAlreadyExistsError(dn)) }
+    var dn = req.dn
+      .toString()
+      .replace(/, /g, ',')
+      .toLowerCase()
+    if (db[dn]) {
+      return next(new ldap.EntryAlreadyExistsError(dn))
+    }
 
     db[dn] = req.toObject().attributes
 
@@ -139,22 +146,38 @@ before(function(done){
   })
 
   server.bind(SUFFIX, function(req, res, next) {
-    var dn = req.dn.toString().replace(/, /g, ',').toLowerCase()
-    if (!db[dn]) { return next(new ldap.NoSuchObjectError(dn)) }
+    var dn = req.dn
+      .toString()
+      .replace(/, /g, ',')
+      .toLowerCase()
+    if (!db[dn]) {
+      return next(new ldap.NoSuchObjectError(dn))
+    }
 
-    if (!db[dn].userpassword) { return next(new ldap.NoSuchAttributeError('userPassword')) }
+    if (!db[dn].userpassword) {
+      return next(new ldap.NoSuchAttributeError('userPassword'))
+    }
 
-    if (db[dn].userpassword.indexOf(req.credentials) === -1) { return next(new ldap.InvalidCredentialsError()) }
+    if (db[dn].userpassword.indexOf(req.credentials) === -1) {
+      return next(new ldap.InvalidCredentialsError())
+    }
 
     res.end()
     return next()
   })
 
   server.compare(SUFFIX, authorize, function(req, res, next) {
-    var dn = req.dn.toString().replace(/, /g, ',').toLowerCase()
-    if (!db[dn]) { return next(new ldap.NoSuchObjectError(dn)) }
+    var dn = req.dn
+      .toString()
+      .replace(/, /g, ',')
+      .toLowerCase()
+    if (!db[dn]) {
+      return next(new ldap.NoSuchObjectError(dn))
+    }
 
-    if (!db[dn][req.attribute]) { return next(new ldap.NoSuchAttributeError(req.attribute)) }
+    if (!db[dn][req.attribute]) {
+      return next(new ldap.NoSuchAttributeError(req.attribute))
+    }
 
     var matches = false
     var vals = db[dn][req.attribute]
@@ -170,8 +193,13 @@ before(function(done){
   })
 
   server.del(SUFFIX, authorize, function(req, res, next) {
-    var dn = req.dn.toString().replace(/, /g, ',').toLowerCase()
-    if (!db[dn]) { return next(new ldap.NoSuchObjectError(dn)) }
+    var dn = req.dn
+      .toString()
+      .replace(/, /g, ',')
+      .toLowerCase()
+    if (!db[dn]) {
+      return next(new ldap.NoSuchObjectError(dn))
+    }
 
     delete db[dn]
 
@@ -180,15 +208,18 @@ before(function(done){
   })
 
   server.modifyDN(SUFFIX, function(req, res, next) {
-    var dn = req.dn.toString().replace(/, /g, ',').toLowerCase()
+    var dn = req.dn
+      .toString()
+      .replace(/, /g, ',')
+      .toLowerCase()
     var newDn = req.newRdn.toString() + ', ' + req.dn.parent().toString()
 
-    if(!db[dn]){
+    if (!db[dn]) {
       return next(new ldap.NoSuchObjectError(req.newSuperior.toString()))
     }
 
-    if(req.newSuperior){
-      if(!db[req.newSuperior.toString().replace(/, /g, ',')]){
+    if (req.newSuperior) {
+      if (!db[req.newSuperior.toString().replace(/, /g, ',')]) {
         return next(new ldap.NoSuchObjectError(req.newSuperior.toString()))
       }
 
@@ -199,7 +230,7 @@ before(function(done){
 
     db[newDn] = db[dn]
 
-    if(req.deleteOldRdn){
+    if (req.deleteOldRdn) {
       delete db[dn]
     }
 
@@ -207,9 +238,16 @@ before(function(done){
   })
 
   server.modify(SUFFIX, authorize, function(req, res, next) {
-    var dn = req.dn.toString().replace(/, /g, ',').toLowerCase()
-    if (!req.changes.length) { return next(new ldap.ProtocolError('changes required')) }
-    if (!db[dn]) { return next(new ldap.NoSuchObjectError(dn)) }
+    var dn = req.dn
+      .toString()
+      .replace(/, /g, ',')
+      .toLowerCase()
+    if (!req.changes.length) {
+      return next(new ldap.ProtocolError('changes required'))
+    }
+    if (!db[dn]) {
+      return next(new ldap.NoSuchObjectError(dn))
+    }
 
     var entry = db[dn]
 
@@ -217,10 +255,9 @@ before(function(done){
       var mod = req.changes[i].modification
       switch (req.changes[i].operation) {
         case 'replace':
-          if (!entry[mod.type]){
+          if (!entry[mod.type]) {
             return next(new ldap.NoSuchAttributeError(mod.type))
           }
-
 
           if (!mod.vals || !mod.vals.length) {
             delete entry[mod.type]
@@ -235,14 +272,18 @@ before(function(done){
             entry[mod.type] = mod.vals
           } else {
             mod.vals.forEach(function(v) {
-              if (entry[mod.type].indexOf(v) === -1) { entry[mod.type].push(v) }
+              if (entry[mod.type].indexOf(v) === -1) {
+                entry[mod.type].push(v)
+              }
             })
           }
 
           break
 
         case 'delete':
-          if (!entry[mod.type]) { return next(new ldap.NoSuchAttributeError(mod.type)) }
+          if (!entry[mod.type]) {
+            return next(new ldap.NoSuchAttributeError(mod.type))
+          }
 
           delete entry[mod.type]
 
@@ -255,15 +296,24 @@ before(function(done){
   })
 
   server.search(SUFFIX, authorize, function(req, res, next) {
-    var dn = req.dn.toString().replace(/, /g, ',').toLowerCase()
+    var dn = req.dn
+      .toString()
+      .replace(/, /g, ',')
+      .toLowerCase()
 
-    if (!db[dn]) { return next(new ldap.NoSuchObjectError(dn)) }
+    if (!db[dn]) {
+      return next(new ldap.NoSuchObjectError(dn))
+    }
 
     var scopeCheck
 
     switch (req.scope) {
       case 'base':
-        if (db[dn] && Object.keys(db[dn]).length > 0 && req.filter.matches(db[dn])) {
+        if (
+          db[dn] &&
+          Object.keys(db[dn]).length > 0 &&
+          req.filter.matches(db[dn])
+        ) {
           res.send({
             dn: dn,
             attributes: db[dn]
@@ -275,16 +325,18 @@ before(function(done){
 
       case 'one':
         scopeCheck = function(k) {
-          if (req.dn.equals(k)) { return true }
+          if (req.dn.equals(k)) {
+            return true
+          }
 
           var parent = ldap.parseDN(k).parent()
-          return (parent ? parent.equals(req.dn) : false)
+          return parent ? parent.equals(req.dn) : false
         }
         break
 
       case 'sub':
         scopeCheck = function(k) {
-          return (req.dn.equals(k) || req.dn.parentOf(k))
+          return req.dn.equals(k) || req.dn.parentOf(k)
         }
 
         break
@@ -292,7 +344,7 @@ before(function(done){
 
     Object.keys(db).forEach(function(key) {
       if (!scopeCheck(key)) return
-      if(!db[key] || Object.keys(db[key]).length === 0) return
+      if (!db[key] || Object.keys(db[key]).length === 0) return
 
       if (req.filter.matches(db[key])) {
         res.send({
@@ -311,14 +363,14 @@ before(function(done){
   })
 })
 
-
-
 /// --- Shared handlers
 
 function authorize(req, res, next) {
   /* Any user may search after bind, only cn=root has full power */
-  var isSearch = (req instanceof ldap.SearchRequest)
-  if (!req.connection.ldap.bindDN.equals('cn=root') && !isSearch) { return next(new ldap.InsufficientAccessRightsError()) }
+  var isSearch = req instanceof ldap.SearchRequest
+  if (!req.connection.ldap.bindDN.equals('cn=root') && !isSearch) {
+    return next(new ldap.InsufficientAccessRightsError())
+  }
 
   return next()
 }

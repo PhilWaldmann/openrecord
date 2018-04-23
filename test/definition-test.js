@@ -3,34 +3,34 @@ var should = require('should')
 var Store = require('../lib/store')
 var Definition = require('../lib/definition')
 
-describe('Definition: Base', function(){
+describe('Definition: Base', function() {
   var store = new Store()
 
   var User, Post
 
-  store.Model('User', function(){
+  store.Model('User', function() {
     var self = this
 
-    it('has the correct context', function(){
+    it('has the correct context', function() {
       self.should.be.an.instanceOf(Definition)
     })
 
-    it('has validates() mixin method', function(){
+    it('has validates() mixin method', function() {
       should.exist(self.validates)
       self.validates.should.be.a.Function()
     })
 
-    it('has setter() mixin method', function(){
+    it('has setter() mixin method', function() {
       should.exist(self.setter)
       self.setter.should.be.a.Function()
     })
 
-    it('has getter() mixin method', function(){
+    it('has getter() mixin method', function() {
       should.exist(self.getter)
       self.getter.should.be.a.Function()
     })
 
-    it('has event methods', function(){
+    it('has event methods', function() {
       should.exist(self.on)
       self.on.should.be.a.Function()
 
@@ -41,23 +41,22 @@ describe('Definition: Base', function(){
     })
   })
 
-  store.Model('Post', function(){
+  store.Model('Post', function() {
     this.validatesPresenceOf('title')
   })
 
-
-  before(function(){
-    return store.ready(function(){
+  before(function() {
+    return store.ready(function() {
       User = store.Model('User')
       Post = store.Model('Post')
     })
   })
 
-  it('every model has it own definition', function(){
+  it('every model has it own definition', function() {
     User.definition.should.not.be.equal(Post.definition)
   })
 
-  it('has no shared variables between models', function(){
+  it('has no shared variables between models', function() {
     User.definition.validations.should.not.be.equal(Post.definition.validations)
   })
 })

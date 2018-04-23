@@ -1,11 +1,11 @@
 var Store
-try{
+try {
   Store = require('openrecord/store/postgres') // to simulate tests from the outside world
-}catch(e){
+} catch (e) {
   Store = require('../../../store/postgres')
 }
 
-module.exports = function(database, autoAttributes){
+module.exports = function(database, autoAttributes) {
   const store = new Store({
     host: 'localhost',
     type: 'postgres',
@@ -16,8 +16,8 @@ module.exports = function(database, autoAttributes){
     autoConnect: false
   })
 
-  store.Model('user', function(){})
-  store.Model('post', function(){})
+  store.Model('user', function() {})
+  store.Model('post', function() {})
 
   return store
 }

@@ -1,5 +1,5 @@
 exports.model = {
-  foobar(){
+  foobar() {
     return 'foo'
   }
 }
