@@ -57,7 +57,7 @@ if (process.env['ORACLE_HOME']) {
             )
           else
             record.binary_attribute.should.be.eql(
-              new Buffer('some binary data', 'utf-8')
+              Buffer.from('some binary data', 'utf-8')
             ) // eslint-disable-line node/no-deprecated-api
 
           if (new Date().getTimezoneOffset() <= -60) {

@@ -81,7 +81,7 @@ describe('Postgres: all Attributes', function() {
           )
         else
           record.binary_attribute.should.be.eql(
-            new Buffer('some binary data', 'utf-8')
+            Buffer.from('some binary data', 'utf-8')
           ) // eslint-disable-line node/no-deprecated-api
 
         record.date_attribute.toString().should.be.equal('2014-02-18')
@@ -125,7 +125,7 @@ describe('Postgres: all Attributes', function() {
             )
           else
             record.binary_attribute.should.be.eql(
-              new Buffer('some binary data', 'utf-8')
+              Buffer.from('some binary data', 'utf-8')
             ) // eslint-disable-line node/no-deprecated-api
 
           record.date_attribute.toString().should.be.equal('2014-02-18')
@@ -186,7 +186,7 @@ describe('Postgres: all Attributes', function() {
             )
           else
             record.binary_attribute.should.be.eql(
-              new Buffer('abcdefghijklmnopqrstuvwxyz', 'utf-8')
+              Buffer.from('abcdefghijklmnopqrstuvwxyz', 'utf-8')
             ) // eslint-disable-line node/no-deprecated-api
 
           record.date_attribute.toString().should.be.equal('2014-04-25')

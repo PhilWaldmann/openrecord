@@ -4,18 +4,18 @@ global.beforePG = function(db, sql, next) {
   /* exec('psql -c "SELECT pid FROM pg_stat_activity where pid <> pg_backend_pid()" -U postgres', function(err, result){
     console.log('Connected', result);
   }); */
-  exec('psql -c "DROP DATABASE ' + db + '" -U postgres', function(err, result) {
+  exec('psql -c "DROP DATABASE ' + db + '" -U postgres', function(_, result) {
     // eslint-disable-line
     exec('psql -c "create database ' + db + '" -U postgres', function(
-      err,
+      _,
       result
     ) {
       // eslint-disable-line
       exec('psql ' + db + ' -c "' + sql.join(';') + '" -U postgres', function(
-        err,
+        error,
         result
       ) {
-        if (err) throw new Error(err)
+        if (error) throw new Error(error)
         next()
       })
     })

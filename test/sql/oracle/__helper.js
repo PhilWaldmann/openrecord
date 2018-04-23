@@ -1,4 +1,5 @@
 var exec = require('child_process').exec
+const path = require('path')
 var PORT = ''
 
 if (process.env.ORACLE_VIA_DOCKER) {
@@ -76,7 +77,7 @@ global.beforeOracle = function(db, sql, next) {
       .replace(/BOOLEAN/g, 'CHAR')
   })
 
-  exec('cat ' + __dirname + '/clear.sql | sqlplus -L -S ' + CONN, function(
+  exec('cat ' + path.join(__dirname, '/clear.sql') + ' | sqlplus -L -S ' + CONN, function(
     err,
     result
   ) {

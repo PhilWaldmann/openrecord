@@ -1,9 +1,9 @@
 var exec = require('child_process').exec
 
 global.beforeMYSQL = function(db, sql, next) {
-  exec('mysql -u root -e "DROP DATABASE ' + db + '"', function(err, result) {
+  exec('mysql -u root -e "DROP DATABASE ' + db + '"', function(_, result) {
     // eslint-disable-line
-    exec('mysql -u root -e "create database ' + db + '"', function(err) {
+    exec('mysql -u root -e "create database ' + db + '"', function(_) {
       // eslint-disable-line
       exec('mysql ' + db + ' -e "' + sql.join(';') + '" -u root', function(
         err,
