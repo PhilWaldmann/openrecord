@@ -1,6 +1,6 @@
 {
   "name": "openrecord",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Active record like ORM for nodejs",
   "license": "MIT",
   "keywords": [
@@ -42,7 +42,6 @@
   "dependencies": {
     "date-fns": "^1.29.0",
     "debug": "^3.1.0",
-    "husky": "^0.14.3",
     "inflection": "~ 1.12.x",
     "knex": "^0.14.6",
     "lint-staged": "^7.0.4",
@@ -62,14 +61,15 @@
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-node": "^6.0.0",
     "eslint-plugin-promise": "^3.7.0",
-    "eslint-plugin-standard": "^3.0.1",
+    "eslint-plugin-standard": "^3.1.0",
     "glob": "^7.1.2",
     "graphql": "^0.13.2",
     "graphql-tools": "^2.24.0",
+    "husky": "^0.14.3",
     "istanbul": "^0.4.5",
     "ldapjs": "^1.0.2",
     "microtime": "^2.1.7",
-    "mocha": "^5.1.0",
+    "mocha": "^5.1.1",
     "mocha-lcov-reporter": ">= 0.0.x",
     "mysql": "latest",
     "pg": "^7.4.1",
@@ -86,7 +86,10 @@
     "test": "./test"
   },
   "lint-staged": {
-    "*.{js}": ["prettier --write", "git add"]
+    "*.{js}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "config": {
     "blanket": {
