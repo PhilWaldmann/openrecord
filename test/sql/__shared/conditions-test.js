@@ -252,7 +252,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
       it('finds phil and michl with array condition (IN (ids) login = ?)', function() {
         return store.ready(function() {
           var User = store.Model('User')
-          return User.where(['login = ? OR id IN (?)', 'phil', [1, 2]]).exec(
+          return User.where(['id IN (?) OR login = ?', [1, 2], 'phil']).exec(
             function(result) {
               result.length.should.be.equal(2)
               result[0].login.should.be.equal('phil')
