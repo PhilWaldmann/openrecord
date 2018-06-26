@@ -127,10 +127,12 @@ types.forEach(function(type) {
             email
             active
             recipes{
-              id
-              title
-              author{
+              nodes{
                 id
+                title
+                author{
+                  id
+                }
               }
             }
           }
@@ -145,15 +147,17 @@ types.forEach(function(type) {
               name: 'Max',
               email: 'max@openrecord.com',
               active: true,
-              recipes: [
-                {
-                  id: 7,
-                  title: 'Example recipe',
-                  author: {
-                    id: 4
+              recipes: {
+                nodes: [
+                  {
+                    id: 7,
+                    title: 'Example recipe',
+                    author: {
+                      id: 4
+                    }
                   }
-                }
-              ]
+                ]
+              }
             }
           }
         })

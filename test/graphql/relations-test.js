@@ -22,8 +22,7 @@ types.forEach(function(type) {
           authors{
             name
             recipes{
-              id
-              title
+              totalCount
             }
           }
         }`).then(function(result) {
@@ -32,19 +31,21 @@ types.forEach(function(type) {
             authors: [
               {
                 name: 'phil',
-                recipes: [
-                  { id: 1, title: 'Toast Hawaii' },
-                  { id: 2, title: 'scrambled eggs' },
-                  { id: 3, title: 'Steak' }
-                ]
+                recipes: {
+                  totalCount: 3
+                }
               },
               {
                 name: 'michl',
-                recipes: [{ id: 4, title: 'Spinach Enchiladas' }]
+                recipes: {
+                  totalCount: 1
+                }
               },
               {
                 name: 'admin',
-                recipes: []
+                recipes: {
+                  totalCount: 0
+                }
               }
             ]
           }
@@ -57,10 +58,15 @@ types.forEach(function(type) {
           authors{
             name
             recipes{
-              id
-              title
-              ingredients{
-                name
+              nodes{
+                id
+                title
+                ingredients{
+                  nodes{
+                    name
+                  }
+                  totalCount
+                }
               }
             }
           }
@@ -70,56 +76,74 @@ types.forEach(function(type) {
             authors: [
               {
                 name: 'phil',
-                recipes: [
-                  {
-                    id: 1,
-                    title: 'Toast Hawaii',
-                    ingredients: [
-                      { name: 'toast' },
-                      { name: 'pinapple' },
-                      { name: 'cheese' },
-                      { name: 'butter' }
-                    ]
-                  },
-                  {
-                    id: 2,
-                    title: 'scrambled eggs',
-                    ingredients: [
-                      { name: 'eggs' },
-                      { name: 'salt' },
-                      { name: 'pepper' },
-                      { name: 'butter' }
-                    ]
-                  },
-                  {
-                    id: 3,
-                    title: 'Steak',
-                    ingredients: [{ name: 'ribeye steak' }]
-                  }
-                ]
+                recipes: {
+                  nodes: [
+                    {
+                      id: 1,
+                      title: 'Toast Hawaii',
+                      ingredients: {
+                        nodes: [
+                          { name: 'toast' },
+                          { name: 'pinapple' },
+                          { name: 'cheese' },
+                          { name: 'butter' }
+                        ],
+                        totalCount: 4
+                      }
+                    },
+                    {
+                      id: 2,
+                      title: 'scrambled eggs',
+                      ingredients: {
+                        nodes: [
+                          { name: 'eggs' },
+                          { name: 'salt' },
+                          { name: 'pepper' },
+                          { name: 'butter' }
+                        ],
+                        totalCount: 4
+                      }
+                    },
+                    {
+                      id: 3,
+                      title: 'Steak',
+                      ingredients: {
+                        nodes: [{ name: 'ribeye steak' }],
+                        totalCount: 1
+                      }
+                    }
+                  ]
+                }
               },
               {
                 name: 'michl',
-                recipes: [
-                  {
-                    id: 4,
-                    title: 'Spinach Enchiladas',
-                    ingredients: [
-                      { name: 'butter' },
-                      { name: 'onions' },
-                      { name: 'garlic' },
-                      { name: 'spinach' },
-                      { name: 'ricotta cheese' },
-                      { name: 'sour creme' },
-                      { name: 'corn tortillas' },
-                      { name: 'enchilada sauce' }
-                    ]
-                  }
-                ]
+                recipes: {
+                  nodes: [
+                    {
+                      id: 4,
+                      title: 'Spinach Enchiladas',
+                      ingredients: {
+                        nodes: [
+                          { name: 'butter' },
+                          { name: 'onions' },
+                          { name: 'garlic' },
+                          { name: 'spinach' },
+                          { name: 'ricotta cheese' },
+                          { name: 'sour creme' },
+                          { name: 'corn tortillas' },
+                          { name: 'enchilada sauce' }
+                        ],
+                        totalCount: 8
+                      }
+                    }
+                  ]
+                }
               },
               {
                 name: 'admin',
-                recipes: []
+                recipes: {
+                  nodes: []
+                }
               }
             ]
           }
@@ -132,11 +156,13 @@ types.forEach(function(type) {
           recipe(id: 1){
             title,
             ingredients{
-              name
-              food{
-                energy
-                alternatives{
-                  name
+              nodes{
+                name
+                food{
+                  energy
+                  alternatives{
+                    name
+                  }
                 }
               }
             }
@@ -146,18 +172,20 @@ types.forEach(function(type) {
           data: {
             recipe: {
               title: 'Toast Hawaii',
-              ingredients: [
-                {
-                  name: 'toast',
-                  food: {
-                    energy: 120,
-                    alternatives: [{ name: 'whole wheat toast' }]
-                  }
-                },
-                { name: 'pinapple', food: { energy: 80, alternatives: [] } },
-                { name: 'cheese', food: { energy: 150, alternatives: [] } },
-                { name: 'butter', food: { energy: 200, alternatives: [] } }
-              ]
+              ingredients: {
+                nodes: [
+                  {
+                    name: 'toast',
+                    food: {
+                      energy: 120,
+                      alternatives: [{ name: 'whole wheat toast' }]
+                    }
+                  },
+                  { name: 'pinapple', food: { energy: 80, alternatives: [] } },
+                  { name: 'cheese', food: { energy: 150, alternatives: [] } },
+                  { name: 'butter', food: { energy: 200, alternatives: [] } }
+                ]
+              }
             }
           }
         })
@@ -169,7 +197,9 @@ types.forEach(function(type) {
           recipe(id: 1){
             title,
             ingredients(limit: 2){
-              name
+              nodes{
+                name
+              }
             }
           }
         }`).then(function(result) {
@@ -177,7 +207,9 @@ types.forEach(function(type) {
           data: {
             recipe: {
               title: 'Toast Hawaii',
-              ingredients: [{ name: 'toast' }, { name: 'pinapple' }]
+              ingredients: {
+                nodes: [{ name: 'toast' }, { name: 'pinapple' }]
+              }
             }
           }
         })

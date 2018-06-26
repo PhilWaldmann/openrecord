@@ -14,6 +14,21 @@ const store = new Store({
 })
 ```
 
+## Relations
+
+Every [relation](./definition.md#relations) will take an additional option: `graphql`. The `graphql` option should be an object like in the following example:
+
+```js
+this.hasMany('users', {
+  graphql: {
+    nodes: () => {} // return all related records
+    totalCount: () => this.totalCount() // get the number of related users
+  },
+  scope: 'paginate' // your custom `paginate` scope
+})
+```
+
+
 ## graphQLResolveHelper(fn)
 
 Your store now has a `graphQLResolveHelper(fn)` method. This method will automatically [include](./query#preloading-relations) your relations, if asked in the graphql query.  

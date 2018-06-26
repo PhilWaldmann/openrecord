@@ -104,11 +104,13 @@ OpenRecordCachePlugin.prototype.apply = function(compiler) {
   }
 
   function run(compiler, callback) {
-    store.ready(callback)
+    store.ready(function(){
+      callback()
+      if(store.close) store.close()
+    })
   }
 
   function emit(compiler, callback) {
-    if(store.close) store.close()
     callback()
   }
 

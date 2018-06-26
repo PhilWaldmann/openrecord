@@ -43,7 +43,10 @@ types.forEach(function(type) {
           name
           email
           recipes{
-            title
+            totalCount
+            nodes{
+              title
+            }
           }
         }
       }`,
@@ -54,11 +57,14 @@ types.forEach(function(type) {
             me: {
               name: 'phil',
               email: 'phil@mail.com',
-              recipes: [
-                { title: 'Toast Hawaii' },
-                { title: 'scrambled eggs' },
-                { title: 'Steak' }
-              ]
+              recipes: {
+                nodes: [
+                  { title: 'Toast Hawaii' },
+                  { title: 'scrambled eggs' },
+                  { title: 'Steak' }
+                ],
+                totalCount: 3
+              }
             }
           }
         })

@@ -13,13 +13,13 @@ module.exports = function(store1, store2) {
     extend type Author {
       name(upper: Boolean): String
       info: String
-      recipes: [Recipe]
+      recipes: RecipeConnection!
       topRatedRecipes: [Recipe]
     }
 
     extend type Recipe {
       author: Author
-      ingredients(limit: Int): [Ingredient]
+      ingredients(limit: Int): IngredientConnection!
     }
 
     # we ignore the openrecord generated type and write it our own
@@ -29,6 +29,11 @@ module.exports = function(store1, store2) {
       food_id: Int
       total_amount: Float
       food: Food
+    }
+
+    type IngredientConnection{
+      nodes: [Ingredient]
+      totalCount: Int!
     }
 
     extend type Food {

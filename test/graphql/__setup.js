@@ -49,7 +49,7 @@ global.beforeGraphQL = function(database, type, done) {
       })
 
       store1.Model('Author', function() {
-        this.hasMany('recipes', { autoSave: true })
+        this.hasMany('recipes', { autoSave: true, graphql: 'relay' })
         this.hasMany('topRatedRecipes', {
           model: 'Recipe',
           scope: 'topRated',
@@ -60,7 +60,7 @@ global.beforeGraphQL = function(database, type, done) {
         if (type === 'auto') {
           this.graphQLField('name(upper: Boolean): String')
             .graphQLField('info: String')
-            .graphQLField('recipes: [Recipe]')
+            .graphQLField('recipes: RecipeConnection!')
             .graphQLField('topRatedRecipes: [Recipe]')
 
             .graphQLQuery('author(id: Int!): Author')
@@ -140,20 +140,26 @@ global.beforeGraphQL = function(database, type, done) {
         this.hasMany('ingredients', {
           through: 'recipe_ingredients',
           relation: 'ingredient',
-          scope: 'pagination'
+          scope: 'pagination',
+          graphql: 'relay'
         })
         this.hasMany('images', { model: 'RecipeImage', autoSave: true })
 
         // for auto gen. only!!!
         if (type === 'auto') {
           this.graphQLField('author: Author')
-            .graphQLField('ingredients(limit: Int): [Ingredient]')
+            .graphQLField('ingredients(limit: Int): IngredientConnection!')
 
             .graphQLQuery('recipe(id: Int!): Recipe')
             .graphQLQuery('recipes(limit: Int = 10): RecipeConnection!')
 
             .graphQL(
               `
+            type IngredientConnection{
+              nodes: [Ingredient]
+              totalCount: Int!
+            }
+
             type RecipeConnection{
               nodes: [Recipe]
               totalCount: Int!

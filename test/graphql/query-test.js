@@ -118,9 +118,12 @@ types.forEach(function(type) {
           name
           email
           recipes{
-            id
-            title
-            rating
+            nodes{
+              id
+              title
+              rating
+            }
+            totalCount
           }
         }
       }`).then(function(result) {
@@ -129,11 +132,14 @@ types.forEach(function(type) {
             author: {
               name: 'phil',
               email: 'phil@mail.com',
-              recipes: [
-                { id: 1, title: 'Toast Hawaii', rating: 4 },
-                { id: 2, title: 'scrambled eggs', rating: 3 },
-                { id: 3, title: 'Steak', rating: 5 }
-              ]
+              recipes: {
+                nodes: [
+                  { id: 1, title: 'Toast Hawaii', rating: 4 },
+                  { id: 2, title: 'scrambled eggs', rating: 3 },
+                  { id: 3, title: 'Steak', rating: 5 }
+                ],
+                totalCount: 3
+              }
             }
           }
         })
