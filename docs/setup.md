@@ -29,7 +29,7 @@ The `Store` constructor takes the following config parameter:
 * **database**: The database name (*postgres*, *mysql* and *oracle* only)
 * **user**: Username for your database (*postgres*, *mysql*, *oracle*, *ldap/activedirectory* only)
 * **password**: Password for your database (*postgres*, *mysql*, *oracle*, *ldap/activedirectory* only)
-* **url**: URL to your backen (*ldap/activedirectory* and *rest* only)
+* **url**: URL to your backend (*ldap/activedirectory* and *rest* only)
 * **base**: The base DN of your ldap tree (*ldap/activedirectory* only)
 * **name**: The name of the store. Only needed if you use multiple stores and relations between them.
 * **global**: Set to `true` if you want your Models defined in the [global scope](https://nodejs.org/api/globals.html) (not recommended).
