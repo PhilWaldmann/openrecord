@@ -24,7 +24,7 @@ describe('Attributes', function() {
     this.attribute('my_bool', Boolean, {})
     this.attribute('my_obj', Object, { track_object_changes: true })
 
-    this.variant('my_str', function(value, args, record) {
+    this.variant('my_str', function(value, args) {
       return value.substr(0, args.size)
     })
   })
