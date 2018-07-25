@@ -47,7 +47,7 @@ Available methods in the `migration scope` are:
 
 ## createTable(name, options, fn)
 
-Creates a new table. The `options` objecz is optional, valid values are: 
+Creates a new table. The `options` object is optional, valid values are: 
 * **id** Set to `false` to disable the automatic creation of an `id` column with auto increment and primary key
 
 `fn` is a function which provides the `table scope`!
@@ -66,7 +66,7 @@ this.createTable('users', function(){
 })
 ```
 
-The `table scope` has a method vor every [data type](./definition.md#attributename-type-options). The first argument hast to be the `name` of the column, the second is an optional `options` object. Valid `options` are:
+The `table scope` has a method vor every [data type](./definition.md#attributename-type-options). The first argument has to be the `name` of the column, the second is an optional `options` object. Valid `options` are:
 * **primary**: Set to `true` for a primary key
 * **unique**: Set to `true` to use a uniq constraint
 * **default**: Set a default value
