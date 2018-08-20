@@ -1,6 +1,6 @@
 {
   "name": "openrecord",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "description": "Active record like ORM for nodejs",
   "license": "MIT",
   "keywords": [
@@ -82,7 +82,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "main": "./store",
-  "types": "./typing/openrecord.d.ts",
+  "types": "./types/index.d.ts",
   "directories": {
     "test": "./test"
   },

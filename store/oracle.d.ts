@@ -1,26 +1,14 @@
-declare module "openrecord" {
+declare module "openrecord/store/oracle" {
 
   interface StoreConfig {
-    /** Type of database or store you want to connect.
-     * Values are: `sqlite3`, `postgres`, `mysql`, `oracle`, `rest`, `ldap` or `activedirectory`
-     */
-    type: string
-
-    /** Path to the database file (sqlite3 only) */
-    file?: string
-
     /** Hostname or IP of the server running your database (postgres, mysql and oracle only) */
-    host?: string
+    host: string
     /** The database name (postgres, mysql and oracle only) */
-    database?: string
+    database: string
     /** Username for your database (postgres, mysql, oracle, ldap/activedirectory only) */
-    user?:  string
+    user:  string
     /** Password for your database (postgres, mysql, oracle, ldap/activedirectory only) */
-    password?:  string
-    /** URL to your backen (ldap/activedirectory and rest only) */
-    url?: string
-    /** The base DN of your ldap tree (ldap/activedirectory only) */
-    base?: string
+    password:  string
 
     /** Set to false if you don't want to connect to your database immediately (sqlite3, postgres, mysql and oracle only) */
     autoConnect?: boolean
@@ -75,7 +63,7 @@ declare module "openrecord" {
      * Creates a new record and saves it
      * @param data The data of the new record
      */
-    static create(data: object): Model
+    static create(data: object): Promise<Model>
 
     static chain(options?: {
       clone?: boolean
@@ -193,12 +181,6 @@ declare module "openrecord" {
        */
       exclude?: string[]
     }): string
-
-    // LDAP
-    static searchRoot(root: string, recursive?: boolean): typeof Collection
-    static searchScope(scope: string): typeof Collection
-    static recursive(recursiv: boolean): typeof Collection
-    static select(fields: string[]): typeof Collection
 
     // SQL
 
@@ -430,9 +412,6 @@ declare module "openrecord" {
      * Destroy a record
      */
     destroy(): Promise<void>
-
-    // LDAP
-    destroyAll(): Promise<void>
 
     /**
      * Deletes the record. beforeDestroy and afterDestroy want be called!
@@ -768,22 +747,6 @@ declare module "openrecord" {
     graphQLQueryResolver(resolver: object): this
     graphQLMutationResolver(resolver: object): this
 
-
-
-    // LDAP
-    /**
-     * Set the rdn prefix
-     * @param prefix The prefix
-     */
-    rdnPrefix(prefix: string): this
-    dn(record: Model): string
-    hasChildren(name: string, options: RelationOptions): this
-    hasParent(name: string, options: RelationOptions): this
-    isContainer(rdnPrefix: string): this
-
-
-    // REST
-    addBaseParam(name: string, value: any): this
 
     // SQL
     /**
