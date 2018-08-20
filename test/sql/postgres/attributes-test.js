@@ -12,7 +12,7 @@ describe('Postgres: all Attributes', function() {
         'CREATE EXTENSION IF NOT EXISTS hstore',
         'CREATE TABLE attribute_tests(id serial primary key, char_attribute  varchar(255), float_attribute float, integer_attribute  integer, text_attribute text, boolean_attribute boolean, binary_attribute bytea, date_attribute date, datetime_attribute timestamp without time zone, time_attribute time, hstore_attribute hstore)',
         'CREATE TABLE attribute_join_tests(attribute_test_id integer)',
-        'CREATE TABLE attribute_hstore_tests(name varchar(255), properties hstore)',
+        'CREATE TABLE attribute_hstore_tests(name varchar(255) primary key, properties hstore)',
         "INSERT INTO attribute_tests (char_attribute, float_attribute, integer_attribute, text_attribute, boolean_attribute, binary_attribute, date_attribute, datetime_attribute, time_attribute, hstore_attribute)VALUES('abcd', 2.3345, 3243, 'some text', true, 'some binary data', '2014-02-18', '2014-02-18 15:45:02', '15:45:01', hstore(ARRAY['key', 'value', 'nested', '{\\\"key\\\": \\\"value\\\"}']))",
         'INSERT INTO attribute_join_tests VALUES(3243)',
         "Insert into attribute_hstore_tests VALUES('A', 'foo=>A,bar=>2'::hstore), ('B', 'foo=>B'::hstore), ('c', 'foo=>c'::hstore), ('C', 'foo=>C,bar=>1'::hstore), ('A2', 'foo=>A2,bar=>A'::hstore)"
@@ -39,7 +39,9 @@ describe('Postgres: all Attributes', function() {
     store.Model('AttributeJoinTest', function() {
       this.belongsTo('attribute_test', { to: 'integer_attribute' })
     })
-    store.Model('AttributeHstoreTest', function() {})
+    store.Model('AttributeHstoreTest', function() {
+      this.attributes.name.primary = false
+    })
   })
 
   after(function(next) {
@@ -314,6 +316,20 @@ describe('Postgres: all Attributes', function() {
           records[4].name.should.be.equal('c')
         }
       )
+    })
+  })
+
+
+  it('create attributes by primary key string', function() {
+    return store.ready(function() {
+      var AttributeHstoreTest = store.Model('AttributeHstoreTest')
+      return AttributeHstoreTest.create([{name: 'Ax'}, {name: 'Bx', properties: {f: 2}}])
+      .then(result => {
+        return AttributeHstoreTest.where({name: 'Ax'})
+      })
+      .then(result => {
+        result.length.should.be.equal(1)
+      })
     })
   })
 })
