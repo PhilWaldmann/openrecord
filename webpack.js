@@ -1,7 +1,10 @@
 'use strict'
 
+var STORE
+
 function OpenRecordCachePlugin(store) {
   this.store = store
+  STORE = store
 }
 
 
@@ -56,7 +59,6 @@ OpenRecordCacheInfusionDependency.Template = class OpenRecordCacheInfusionDepend
       return new __webpack_require(1)(config)
     }
     */
-    
     source.replace(before[0], before[1], beforeCode)
     source.replace(after[0], after[1], afterCode)
   }
@@ -66,14 +68,14 @@ OpenRecordCacheInfusionDependency.Template = class OpenRecordCacheInfusionDepend
 
 
 OpenRecordCachePlugin.prototype.apply = function(compiler) {
-  var store = this.store
-  
+  var store = STORE
+
   function compilation(compilation, params) {
     compilation.dependencyFactories.set(OpenRecordCacheInfusionDependency, params.normalModuleFactory)
     compilation.dependencyTemplates.set(OpenRecordCacheInfusionDependency, new OpenRecordCacheInfusionDependency.Template())
 
     function parser(parser){
-      function callRequire(node){       
+      function callRequire(node){
         // and check if 'openrecord' or 'openrecord/store/...' was required
         if(node.arguments[0] && node.arguments[0].value && node.arguments[0].value.match(/^openrecord($|\/store\/)/)){
           // now we do the fancy webpack dance
@@ -89,7 +91,7 @@ OpenRecordCachePlugin.prototype.apply = function(compiler) {
         parser.hooks.call.for('require').tap('require', callRequire)
       }else{
         parser.plugin('call require', callRequire)
-      } 
+      }
     }
 
     if(params.normalModuleFactory.hooks){
@@ -100,30 +102,30 @@ OpenRecordCachePlugin.prototype.apply = function(compiler) {
     }else{
       params.normalModuleFactory.plugin('parser', parser)
     }
-    
   }
 
   function run(compiler, callback) {
-    store.ready(function(){
+    store.ready().then(function(){
       callback()
-      if(store.close) store.close()
     })
   }
 
-  function emit(compiler, callback) {
+  function done(stats, callback){
+    if(store.close) store.close()
     callback()
   }
 
   if(compiler.hooks){
-    compiler.hooks.compilation.tap('openrecord', compilation)    
+    compiler.hooks.compilation.tap('openrecord', compilation)
     compiler.hooks.run.tapAsync('openrecord', run)
-    compiler.hooks.emit.tapAsync('openrecord', emit)
+    // compiler.hooks.emit.tapAsync('openrecord', emit)
+    compiler.hooks.done.tapAsync('openrecord', done)
   }else{
     compiler.plugin('compilation', compilation)
     compiler.plugin('run', run)
-    compiler.plugin('emit', emit)
+    // compiler.plugin('emit', emit)
+    compiler.plugin('done', done)
   }
-  
 }
 
 module.exports = OpenRecordCachePlugin

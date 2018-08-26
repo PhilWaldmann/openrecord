@@ -109,7 +109,7 @@ describe('Webpack: Load (postgres)', function() {
     if (fs.existsSync(file)) fs.unlinkSync(file)
   })
 
-  it('successfully runs webpack with a sqlite3 store', function(next) {
+  it('successfully runs webpack with a postgres store', function(next) {
     webpack(
       {
         mode: 'production',
