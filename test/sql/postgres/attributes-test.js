@@ -10,12 +10,14 @@ describe('Postgres: all Attributes', function() {
       database,
       [
         'CREATE EXTENSION IF NOT EXISTS hstore',
-        'CREATE TABLE attribute_tests(id serial primary key, char_attribute  varchar(255), float_attribute float, integer_attribute  integer, text_attribute text, boolean_attribute boolean, binary_attribute bytea, date_attribute date, datetime_attribute timestamp without time zone, time_attribute time, hstore_attribute hstore)',
+        'CREATE TABLE attribute_tests(id serial primary key, char_attribute  varchar(255), float_attribute float, integer_attribute integer, small_integer_attribute smallint, big_integer_attribute bigint, text_attribute text, boolean_attribute boolean, binary_attribute bytea, date_attribute date, datetime_attribute timestamp without time zone, time_attribute time, hstore_attribute hstore)',
         'CREATE TABLE attribute_join_tests(attribute_test_id integer)',
         'CREATE TABLE attribute_hstore_tests(name varchar(255) primary key, properties hstore)',
+        'CREATE TABLE attribute_tsvector_tests(id serial primary key, search tsvector)',
         "INSERT INTO attribute_tests (char_attribute, float_attribute, integer_attribute, text_attribute, boolean_attribute, binary_attribute, date_attribute, datetime_attribute, time_attribute, hstore_attribute)VALUES('abcd', 2.3345, 3243, 'some text', true, 'some binary data', '2014-02-18', '2014-02-18 15:45:02', '15:45:01', hstore(ARRAY['key', 'value', 'nested', '{\\\"key\\\": \\\"value\\\"}']))",
         'INSERT INTO attribute_join_tests VALUES(3243)',
-        "Insert into attribute_hstore_tests VALUES('A', 'foo=>A,bar=>2'::hstore), ('B', 'foo=>B'::hstore), ('c', 'foo=>c'::hstore), ('C', 'foo=>C,bar=>1'::hstore), ('A2', 'foo=>A2,bar=>A'::hstore)"
+        "INSERT INTO attribute_hstore_tests VALUES('A', 'foo=>A,bar=>2'::hstore), ('B', 'foo=>B'::hstore), ('c', 'foo=>c'::hstore), ('C', 'foo=>C,bar=>1'::hstore), ('A2', 'foo=>A2,bar=>A'::hstore)",
+        "INSERT INTO attribute_tsvector_tests (search) VALUES('a fat cat sat on a mat and ate a fat rat'::tsvector), ('a:1 cute:2 cat:3 sat:4 on:5 a:6A mat:7 and:8 ate:9 a:10 cute:11 rat:12'::tsvector)"
       ],
       next
     )
@@ -42,6 +44,8 @@ describe('Postgres: all Attributes', function() {
     store.Model('AttributeHstoreTest', function() {
       this.attributes.name.primary = false
     })
+    store.Model('AttributeTsvectorTest', function() {
+    })
   })
 
   after(function(next) {
@@ -57,6 +61,8 @@ describe('Postgres: all Attributes', function() {
       attrs.should.have.property('char_attribute')
       attrs.should.have.property('float_attribute')
       attrs.should.have.property('integer_attribute')
+      attrs.should.have.property('small_integer_attribute')
+      attrs.should.have.property('big_integer_attribute')
       attrs.should.have.property('text_attribute')
       attrs.should.have.property('boolean_attribute')
       attrs.should.have.property('binary_attribute')
@@ -167,6 +173,8 @@ describe('Postgres: all Attributes', function() {
         char_attribute: 'aaaa',
         float_attribute: 1.00001,
         integer_attribute: 5555,
+        small_integer_attribute: 5556,
+        big_integer_attribute: 5557,
         text_attribute: 'text',
         boolean_attribute: true,
         binary_attribute: buffer,
@@ -179,6 +187,8 @@ describe('Postgres: all Attributes', function() {
           record.char_attribute.should.be.equal('aaaa')
           record.float_attribute.should.be.equal(1.00001)
           record.integer_attribute.should.be.equal(5555)
+          record.small_integer_attribute.should.be.equal(5556)
+          record.big_integer_attribute.should.be.equal(5557)
           record.text_attribute.should.be.equal('text')
           record.boolean_attribute.should.be.equal(true)
 
@@ -329,6 +339,42 @@ describe('Postgres: all Attributes', function() {
       })
       .then(result => {
         result.length.should.be.equal(1)
+      })
+    })
+  })
+
+  it('read tsvector', function(){
+    return store.ready(function(){
+      var AttributeTsvectorTest = store.Model('AttributeTsvectorTest')
+      return AttributeTsvectorTest.then(function(result){
+        result.length.should.be.equal(2)
+        result[0].search.should.be.eql({a:[],and:[],ate:[],cat:[],fat:[],mat:[],on:[],rat:[],sat:[]})
+        result[1].search.should.be.eql({a:['1','6A','10'],and:['8'],ate:['9'],cat:['3'],cute:['2','11'],mat:['7'],on:['5'],rat:['12'],sat:['4']})
+      })
+    })
+  })
+
+  it('search tsvector', function(){
+    return store.ready(function(){
+      var AttributeTsvectorTest = store.Model('AttributeTsvectorTest')
+      return AttributeTsvectorTest.where({search: 'cute & cat'})
+      .then(function(result){
+        result.length.should.be.equal(1)
+        result[0].search.should.be.eql({a:['1','6A','10'],and:['8'],ate:['9'],cat:['3'],cute:['2','11'],mat:['7'],on:['5'],rat:['12'],sat:['4']})
+      })
+    })
+  })
+
+  it('write tsvector', function(){
+    return store.ready(function(){
+      var AttributeTsvectorTest = store.Model('AttributeTsvectorTest')
+      return AttributeTsvectorTest.create({search: 'what a simple sentence'})
+      .then(function(){
+        return AttributeTsvectorTest.where({search: 'simple'})
+      })
+      .then(function(result){
+        result.length.should.be.equal(1)
+        result[0].search.should.be.eql({sentenc: ['4'], simpl: ['3']})
       })
     })
   })
