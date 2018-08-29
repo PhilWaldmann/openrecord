@@ -10,8 +10,8 @@ describe('Postgres: geometric Attributes', function() {
       database,
       [
         'CREATE EXTENSION postgis',
-        'CREATE TABLE attribute_tests(id serial primary key, point_attribute point, line_attribute line, lseg_attribute lseg, box_attribute box, path_attribute path, polygon_attribute polygon, circle_attribute circle)',
-        "INSERT INTO attribute_tests (point_attribute, line_attribute, lseg_attribute, box_attribute, path_attribute, polygon_attribute, circle_attribute)VALUES('(1,2)', '[(1,2),(4,5.88)]', '[(1.5,2),(6,3)]', '((3,2),(7,10.4))', '[(1,1),(10,10),(7.7,5),(5,7.7)]', '((0,0.3),(5,10),(10,5))', '<(0,0),6.33>')"
+        'CREATE TABLE attribute_tests(id serial primary key, point_attribute point, line_attribute line, lseg_attribute lseg, box_attribute box, path_attribute path, polygon_attribute polygon, circle_attribute circle, geog_attribute geography(POINT,4326))',
+        "INSERT INTO attribute_tests (point_attribute, line_attribute, lseg_attribute, box_attribute, path_attribute, polygon_attribute, circle_attribute, geog_attribute)VALUES('(1,2)', '[(1,2),(4,5.88)]', '[(1.5,2),(6,3)]', '((3,2),(7,10.4))', '[(1,1),(10,10),(7.7,5),(5,7.7)]', '((0,0.3),(5,10),(10,5))', '<(0,0),6.33>', 'SRID=4326;POINT(0 49)')"
       ],
       next
     )
@@ -47,6 +47,7 @@ describe('Postgres: geometric Attributes', function() {
       attrs.should.have.property('path_attribute')
       attrs.should.have.property('polygon_attribute')
       attrs.should.have.property('circle_attribute')
+      attrs.should.have.property('geog_attribute')
     })
   })
 
@@ -62,6 +63,7 @@ describe('Postgres: geometric Attributes', function() {
         record.path_attribute.should.be.eql([{x:1, y:1}, {x:10, y:10}, {x:7.7, y:5}, {x:5, y:7.7}])
         record.polygon_attribute.should.be.eql([{x:0, y:0.3}, {x:5, y:10}, {x:10, y:5}])
         record.circle_attribute.should.be.eql({x:0, y:0, radius:6.33})
+        record.geog_attribute.should.be.equal('0101000020E610000000000000000000000000000000804840')
       })
     })
   })
