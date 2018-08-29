@@ -37,6 +37,18 @@ if (process.env['ORACLE_HOME']) {
     'INSERT INTO "users"("login", "email") VALUES(\'phil\', \'phil@mail.com\')'
   ])
 
+  testOracle('attribute_format', [
+    'CREATE TABLE "users"("id" number(10), "user_login" TEXT, "secret_email_address" TEXT)',
+    'PRIMARY:users:id',
+    'CREATE TABLE "posts"("id" number(10), "user_id" INTEGER, "thread_id" INTEGER, "message" TEXT)',
+    'PRIMARY:posts:id',
+    'CREATE TABLE "threads"("id" number(10), "user_id" INTEGER, "title" TEXT)',
+    'PRIMARY:threads:id',
+    "INSERT INTO \"users\"(\"user_login\", \"secret_email_address\") VALUES('phil', 'phil@mail.com')",
+    'INSERT INTO "posts"("user_id", "thread_id", "message") VALUES(1, 1, \'first message\'), (1, 1, \'second\'), (1, 2, \'third\'), (2, 1, \'michls post\')',
+    'INSERT INTO "threads"("user_id", "title") VALUES(2, \'first thread\'), (1, \'second thread\')'
+  ])
+
   testOracle('autoload', [
     'CREATE TABLE "users"("id" INTEGER, "login" TEXT, "email" TEXT, "created_at" DATE)',
     'PRIMARY:users:id',

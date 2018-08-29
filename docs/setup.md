@@ -41,6 +41,8 @@ The `Store` constructor takes the following config parameter:
 * **autoSave**: Set the default value for `autoSave` on all [relations](./definition#relations)
 * **inflection**: OPENRECORD will take your model name and pluralizes it to get e.g. the table name with the help of the [inflection](https://github.com/dreamerslab/node.inflection) module  
   If you want to overwrite certain names, pass an object with the format `{'wrong name': 'right name'}`.
+* **externalAttributeName**: A function to convert field names into another format. e.g. from DB's snake_case to camelCase. The method takes a `string` and expects a `string` as return value.
+* **internalAttributeName**: Similar to `externalAttributeName`, but for the reverse
 * **plugins**: Array of plugins (See [Plugins](./plugins.md))
 * **models**: Array of models (See [Definition](./definition.md#model-definition))
 * **migrations**: Array of migrations (See [Migrations](./migrations.md))

@@ -22,6 +22,15 @@ testSQLite('attributes', [
   'INSERT INTO users(login, email) VALUES("phil", "phil@mail.com")'
 ])
 
+testSQLite('attribute_format', [
+  'CREATE TABLE users(id  INTEGER PRIMARY KEY AUTOINCREMENT, user_login TEXT NOT NULL, secret_email_address TEXT)',
+  'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',
+  'CREATE TABLE threads(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT)',
+  'INSERT INTO users(user_login, secret_email_address) VALUES("phil", "phil@mail.com")',
+  'INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, "first message"), (1, 1, "second"), (1, 2, "third"), (2, 1, "michls post")',
+  'INSERT INTO threads(user_id, title) VALUES(2, "first thread"), (1, "second thread")'
+])
+
 testSQLite('autoload', [
   'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, email TEXT, created_at TEXT)',
   'CREATE TABLE posts(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, thread_id INTEGER, message TEXT)',

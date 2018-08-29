@@ -1,6 +1,6 @@
 {
   "name": "openrecord",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Active record like ORM for nodejs",
   "license": "MIT",
   "keywords": [
