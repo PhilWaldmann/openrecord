@@ -1,6 +1,6 @@
 var Store = require('../../../store/postgres')
 
-describe.only('Postgres: geometric Attributes', function() {
+describe('Postgres: geometric Attributes', function() {
   var store
   var database = 'geometric_attributes_test'
 
@@ -9,6 +9,7 @@ describe.only('Postgres: geometric Attributes', function() {
     beforePG(
       database,
       [
+        'CREATE EXTENSION postgis',
         'CREATE TABLE attribute_tests(id serial primary key, point_attribute point, line_attribute line, lseg_attribute lseg, box_attribute box, path_attribute path, polygon_attribute polygon, circle_attribute circle)',
         "INSERT INTO attribute_tests (point_attribute, line_attribute, lseg_attribute, box_attribute, path_attribute, polygon_attribute, circle_attribute)VALUES('(1,2)', '[(1,2),(4,5.88)]', '[(1.5,2),(6,3)]', '((3,2),(7,10.4))', '[(1,1),(10,10),(7.7,5),(5,7.7)]', '((0,0.3),(5,10),(10,5))', '<(0,0),6.33>')"
       ],
