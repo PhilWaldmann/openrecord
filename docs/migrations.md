@@ -6,7 +6,7 @@ You write a migration the same way you would write a function style `model defin
 
 ```js
 // ./migrations/20180307172543_create_users.js
-module.exports = function(){
+module.exports = function migration20180307172543(){
   this.createTable('users', function(){
     this.string('login', {not_null: true})
     this.string('first_name')
@@ -14,6 +14,8 @@ module.exports = function(){
   })
 }
 ```
+
+!> Your migration function could be anonymouse, but be aware that OPENRECORD will create a hash based on the function body. This hash will be used to check if the migration was executed already. So if you change your migration after executing it, it will run a second time. So it's always better to give it a uniqe name. If you use the [Automatic Model Loading Plugin](./plugins.md#automatic-model-loading) it will take the filename!
 
 The name of your migration file is up to you, but it's recommended to add a timestamp or similar to the name. Because every migration will run only once (if successfull).  
 OPENRECORD will store all successfully finished migrations and won't execute them again! So if you want to add another field to your table, create a new migration:
