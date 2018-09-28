@@ -5,6 +5,8 @@
 [![Coverage Status](http://coveralls.io/repos/PhilWaldmann/openrecord/badge.png)](https://coveralls.io/r/PhilWaldmann/openrecord)
 [![npm package version](http://badge.fury.io/js/openrecord.png)](https://npmjs.org/package/openrecord)
 [![Package Quality](http://npm.packagequality.com/shield/openrecord.svg)](http://packagequality.com/#?package=openrecord)
+[![Code Quality: Javascript](https://img.shields.io/lgtm/grade/javascript/g/PhilWaldmann/openrecord.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/PhilWaldmann/openrecord/context:javascript)
+[![Total Alerts](https://img.shields.io/lgtm/alerts/g/PhilWaldmann/openrecord.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/PhilWaldmann/openrecord/alerts)
 
 OPENRECORD is an ActiveRecord inspired ORM for nodejs.
 
