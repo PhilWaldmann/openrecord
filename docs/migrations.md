@@ -50,7 +50,8 @@ Available methods in the `migration scope` are:
 ## createTable(name, options, fn)
 
 Creates a new table. The `options` object is optional, valid values are: 
-* **id** Set to `false` to disable the automatic creation of an `id` column with auto increment and primary key
+* **id**: Set to `false` to disable the automatic creation of an `id` column with auto increment and primary key
+* **comment**: Set a table comment (if supported by your database)
 
 `fn` is a function which provides the `table scope`!
 Within the `table scope` you can add columns to the table:
@@ -60,7 +61,7 @@ this.createTable('users', function(){
   // `this` => `table scope`
   this.string('login', {unique: true})
   this.integer('failed_login_count', {default: 0})
-  
+
   this.string('first_name')
   this.string('last_name')
   this.integer_array('role_ids') // Postgres only
@@ -72,7 +73,8 @@ The `table scope` has a method vor every [data type](./definition.md#attributena
 * **primary**: Set to `true` for a primary key
 * **unique**: Set to `true` to use a uniq constraint
 * **default**: Set a default value
-* **notnull**: Set a not null constraint
+* **not_null**: **notnull** or **null**: Set a not null constraint
+* **references**: Defines a foreign key for the given `table.fieldName` reference.
 * **comment**: Set a field comment (if supported by your database)
 
 ## renameTable(from, to)
@@ -82,6 +84,31 @@ Rename a table
 ## removeTable(table)
 
 Remove a table
+
+## createIndex(table, columns, options)
+
+create an index for one or multiple columns.  
+The `options` object is optional. Valid `options` are:
+* **name**: The name of the index
+* **type**: The index type
+
+## dropIndex(table, columns, options)
+
+removes an index.  
+The `options` object is optional. Valid `options` are:
+* **name**: The name of the index
+
+## createUniqueIndex(table, columns, options)
+
+create an uniqe index.  
+The `options` object is optional. Valid `options` are:
+* **name**: The name of the index
+
+## dropUniqueIndex(table, columns, options)
+
+removes an uniqe index.  
+The `options` object is optional. Valid `options` are:
+* **name**: The name of the index
 
 ## addColumn(table, fn){
 

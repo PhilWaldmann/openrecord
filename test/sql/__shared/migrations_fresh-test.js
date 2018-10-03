@@ -30,6 +30,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
       store.Model('AttributeTest', function() {})
       store.Model('CompoundPrimaryKey', function() {})
       store.Model('WithComment', function() {})
+      store.Model('WithReference', function() {})
+      store.Model('WithIndex', function() {})
     })
 
     it('are finished before ready() gets called', function() {
@@ -231,5 +233,23 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
       })
     })
 
+    it('reference is in place', function() {
+      return store.ready(function() {
+        var WithReference = store.Model('WithReference')
+        // no post with id 9999 in the db!
+        return WithReference.create({post_id: 9999})
+      })
+      .should.be.rejectedWith(store.SQLError)
+    })
+
+
+    it('uniqe index workds', function() {
+      return store.ready(function() {
+        var WithIndex = store.Model('WithIndex')
+        // no duplicate keys
+        return WithIndex.create([{foo: 1}, {foo: 1}])
+      })
+      .should.be.rejectedWith(Error)
+    })
   })
 }
