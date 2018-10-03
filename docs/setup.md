@@ -77,6 +77,10 @@ The following paths are available:
 * LDAP (Active Directory) `openrecord/store/activedirectory`
 
 
+# Close connection
+
+calling `store.close(callback)` will close your database connection.
+
 # Debug
 
 OPENRECORD uses the [debug](https://github.com/visionmedia/debug) module. Just add `DEBUG=openrecord:*` to your env variables and you'll get debug information.
