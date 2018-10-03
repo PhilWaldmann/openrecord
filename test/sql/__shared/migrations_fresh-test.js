@@ -222,5 +222,14 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
       })
     })
 
+    it('has column comments', function() {
+      return store.ready(function() {
+        var WithComment = store.Model('WithComment')
+        if(store.type === 'mysql' || store.type === 'postgres') {
+          WithComment.definition.attributes.foo.description.should.be.equal('foobar')
+        }
+      })
+    })
+
   })
 }

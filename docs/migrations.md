@@ -73,6 +73,7 @@ The `table scope` has a method vor every [data type](./definition.md#attributena
 * **unique**: Set to `true` to use a uniq constraint
 * **default**: Set a default value
 * **notnull**: Set a not null constraint
+* **comment**: Set a field comment (if supported by your database)
 
 ## renameTable(from, to)
 
