@@ -28,6 +28,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
       store.Model('Post', function() {})
       store.Model('Test', function() {})
       store.Model('AttributeTest', function() {})
+      store.Model('CompoundPrimaryKey', function() {})
+      store.Model('WithComment', function() {})
     })
 
     it('are finished before ready() gets called', function() {
@@ -208,5 +210,17 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
         })
       })
     })
+
+
+    it('has compound primary keys', function() {
+      return store.ready(function() {
+        var CompoundPrimaryKey = store.Model('CompoundPrimaryKey')
+
+        CompoundPrimaryKey.definition.attributes.foo.primary.should.be.equal(true)
+        CompoundPrimaryKey.definition.attributes.bar.primary.should.be.equal(true)
+        CompoundPrimaryKey.definition.primaryKeys.should.be.eql(['foo', 'bar'])
+      })
+    })
+
   })
 }
