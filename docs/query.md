@@ -95,7 +95,7 @@ OPENRECORD will query your datastore only two times:
 1. To get all sticky threads
 2. To get all posts that belongs to the previously loaded threads
 
-!> Accessing a relation via it's name (e.g. `threads[0].posts`) will always return a promise. If you use `include()` this promise will resolve instantly!  
+!> Accessing a relation via it's name (e.g. `threads[0].posts`) will always return a promise. If you have used `.include('posts')` the returned Promise from `threads[0].posts` is already resolved internally! So calling `threads[0].posts.then(...)` will resolve instantly.  
 If you need, you can access the preloaded results directly by adding a underscore: `threads[0]._posts`
 
 
@@ -283,3 +283,8 @@ const [users, totalCount] = await Promise.all([
 ```
 
 In the above example we use `clone()` to generate a new clone based on the previous temporary state.
+
+## toJSON
+
+Calling `result.toJSON()` will transform your record(s) to plain javascript objects (with all it's relations).  
+Therefore `JSON.stringify(result)` is the same as `JSON.stringify(result.toJSON())`  
