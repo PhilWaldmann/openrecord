@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "date-fns": "^1.29.0",
-    "debug": "^4.0.1",
+    "debug": "^4.1.0",
     "inflection": "~ 1.12.x",
     "knex": "^0.15.2",
     "validator": "^10.8.0"
@@ -71,7 +71,7 @@
     "mocha": "^5.2.0",
     "mocha-lcov-reporter": ">= 0.0.x",
     "mysql": "^2.16.0",
-    "pg": "^7.4.3",
+    "pg": "^7.5.0",
     "prettier": "^1.14.3",
     "restify": "^7.2.1",
     "semver": "^5.5.1",
