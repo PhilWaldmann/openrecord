@@ -39,6 +39,23 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
         this.hasMany('poly_things')
         this.hasMany('members', { through: 'poly_things', relation: 'member' })
         this.belongsTo('user', { store: 'IncludeRestStore', from: 'id' })
+
+        this.has('hasPosts', {
+          query: function(store, parentRecords){
+            const ids = parentRecords.map(function(r){return r.id})
+            const Post = store.Model('Post')
+            return Post.totalCount().group('user_id').where({user_id: ids})
+          },
+
+          convert: function(parent, records){
+            if(!records) return false
+            const mapping = {}
+            records.forEach(function(r){
+              mapping[r.user_id] = r.count > 0
+            })
+            return mapping[parent.id] || false
+          }
+        })
       })
       store.Model('Avatar', function() {
         this.belongsTo('user')
@@ -657,6 +674,30 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
             posts[0].length.should.be.equal(3)
             posts[1].length.should.be.equal(1)
             posts[2].length.should.be.equal(0)
+          })
+        })
+      })
+
+
+      it('use custom relation', function() {
+        return store.ready(function() {
+          var User = store.Model('User')
+          return User.include('hasPosts').then(function(users) {
+            users[0].hasPosts.should.be.equal(true)
+            users[1].hasPosts.should.be.equal(true)
+            users[2].hasPosts.should.be.equal(false)
+          })
+        })
+      })
+
+      it('use custom relation in nested include', function() {
+        return store.ready(function() {
+          var Post = store.Model('Post')
+          return Post.include({user: 'hasPosts'}).then(function(posts) {
+            posts[0]._user.hasPosts.should.be.equal(true)
+            posts[1]._user.hasPosts.should.be.equal(true)
+            posts[2]._user.hasPosts.should.be.equal(true)
+            posts[3]._user.hasPosts.should.be.equal(true)
           })
         })
       })

@@ -282,6 +282,31 @@ this.hasMany('unread_posts', {through: 'posts', relation: 'unread'})
 this.hasMany('unread')
 ```
 
+### "has"
+If you need to create a custom query to fetch your relational data:
+
+```js
+// models/User.js
+this.has('has_posts_written', {
+  query: function(store, parentRecords){
+    const ids = parentRecords.map(r => r.id)
+    const Post = store.Model('Post')
+    return Post.totalCount().group('user_id').where({user_id: ids})
+  },
+
+  convert: function(parent, records){
+    if(!records) return false
+    const result = records.find(r => r.user_id === parent.id)
+    if(!result) return false
+    return result.count > 0
+  }
+})
+```
+
+The `query` method will be called with the current `store` and a list of parent records. Return a Promise!  
+The `convert` method will be called for every parent record and will provide the result of your Promise in the second argument.
+Return the relational result for the given parent record!
+
 ## Scopes
 
 Scopes are a way to predefine conditions or add other functionality to your models.  
