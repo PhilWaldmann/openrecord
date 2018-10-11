@@ -270,19 +270,7 @@ The `options` parameter takes additional attributes:
 this.belongsToPolymorphic('children', {typeField: 'children_class'}) // if we have a model with a `children_class` and `children_id` fields
 ```
 
-### "hasManyThrough"
-There is no method like `hasManyThrough()`, but instead you could use `hasMany()` or `hasOne()` with the option `through`.
-
-```js
-// models/User.js
-this.hasMany('posts')
-this.hasMany('unread_posts', {through: 'posts', relation: 'unread'})
-
-// models/Post.js
-this.hasMany('unread')
-```
-
-### "has"
+### "has(name, options)"
 If you need to create a custom query to fetch your relational data:
 
 ```js
@@ -306,6 +294,19 @@ this.has('has_posts_written', {
 The `query` method will be called with the current `store` and a list of parent records. Return a Promise!  
 The `convert` method will be called for every parent record and will provide the result of your Promise in the second argument.
 Return the relational result for the given parent record!
+
+
+### "hasManyThrough"
+There is no method like `hasManyThrough()`, but instead you could use `hasMany()` or `hasOne()` with the option `through`.
+
+```js
+// models/User.js
+this.hasMany('posts')
+this.hasMany('unread_posts', {through: 'posts', relation: 'unread'})
+
+// models/Post.js
+this.hasMany('unread')
+```
 
 ## Scopes
 

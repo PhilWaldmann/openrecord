@@ -1,6 +1,6 @@
 {
   "name": "openrecord",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "description": "Active record like ORM for nodejs",
   "license": "MIT",
   "keywords": [
@@ -74,7 +74,7 @@
     "pg": "^7.5.0",
     "prettier": "^1.14.3",
     "restify": "^7.2.1",
-    "semver": "^5.5.1",
+    "semver": "^5.6.0",
     "should": "^13.2.3",
     "sqlite3": "^4.0.2",
     "webpack": "^4.20.2",
