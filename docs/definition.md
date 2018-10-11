@@ -295,6 +295,7 @@ The `query` method will be called with the current `store` and a list of parent 
 The `convert` method will be called for every parent record and will provide the result of your Promise in the second argument.
 Return the relational result for the given parent record!
 
+!> Note that joins (`join('has_posts_written')` **SQL only**) are not supported!
 
 ### "hasManyThrough"
 There is no method like `hasManyThrough()`, but instead you could use `hasMany()` or `hasOne()` with the option `through`.
