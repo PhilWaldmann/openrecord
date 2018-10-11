@@ -270,7 +270,7 @@ The `options` parameter takes additional attributes:
 this.belongsToPolymorphic('children', {typeField: 'children_class'}) // if we have a model with a `children_class` and `children_id` fields
 ```
 
-### "has(name, options)"
+### has(name, options)
 If you need to create a custom query to fetch your relational data:
 
 ```js
