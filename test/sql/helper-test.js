@@ -280,11 +280,47 @@ describe('SQL: Helper', function() {
       })
     })
 
-    it('works with snake case attribute names which include operator names', function() {
+    it('works with snake case attribute names which include operator name', function() {
       return store.ready(function() {
         var result = store.utils.toConditionList(
           { text_romanized_like: 'text' },
           ['text_romanized_like']
+        )
+
+        result.should.be.eql([
+          {
+            type: 'hash',
+            attribute: 'text_romanized_like',
+            operator: null,
+            value: 'text'
+          }
+        ])
+      })
+    })
+
+    it('works with multiple snake case attribute names which include operator name', function() {
+      return store.ready(function() {
+        var result = store.utils.toConditionList(
+          { text_romanized_like: 'text' },
+          ['text_romanized_like', 'text']
+        )
+
+        result.should.be.eql([
+          {
+            type: 'hash',
+            attribute: 'text_romanized_like',
+            operator: null,
+            value: 'text'
+          }
+        ])
+      })
+    })
+
+    it('works with multiple reversed snake case attribute names which include operator name', function() {
+      return store.ready(function() {
+        var result = store.utils.toConditionList(
+          { text_romanized_like: 'text' },
+          ['text', 'text_romanized_like']
         )
 
         result.should.be.eql([
