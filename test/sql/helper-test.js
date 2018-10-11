@@ -243,6 +243,61 @@ describe('SQL: Helper', function() {
       })
     })
 
+    it('works with basic operators', function() {
+      return store.ready(function() {
+        var User = store.Model('User')
+        var result = store.utils.toConditionList(
+          { login_like: 'phil' },
+          Object.keys(User.definition.attributes)
+        )
+
+        result.should.be.eql([
+          {
+            type: 'hash',
+            attribute: 'login',
+            operator: 'like',
+            value: 'phil'
+          }
+        ])
+      })
+    })
+
+    it('works with operators and snake case attribute names', function() {
+      return store.ready(function() {
+        var result = store.utils.toConditionList(
+          { text_romanized_like: 'text' },
+          ['text_romanized']
+        )
+
+        result.should.be.eql([
+          {
+            type: 'hash',
+            attribute: 'text_romanized',
+            operator: 'like',
+            value: 'text'
+          }
+        ])
+      })
+    })
+
+    it('works with snake case attribute names which include operator names', function() {
+      return store.ready(function() {
+        var result = store.utils.toConditionList(
+          { text_romanized_like: 'text' },
+          ['text_romanized_like']
+        )
+
+        result.should.be.eql([
+          {
+            type: 'hash',
+            attribute: 'text_romanized_like',
+            operator: null,
+            value: 'text'
+          }
+        ])
+      })
+    })
+
     it('works with a raw conditions', function() {
       return store.ready(function() {
         var User = store.Model('User')
