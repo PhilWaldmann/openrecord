@@ -106,13 +106,13 @@ OpenRecordCachePlugin.prototype.apply = function(compiler) {
 
   function run(compiler, callback) {
     store.ready().then(function(){
-      callback()
+      if(typeof callback === 'function') callback()
     })
   }
 
   function done(stats, callback){
     if(store.close) store.close()
-    callback()
+    if(typeof callback === 'function') callback()
   }
 
   if(compiler.hooks){
