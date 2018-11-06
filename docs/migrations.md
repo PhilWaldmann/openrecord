@@ -77,6 +77,54 @@ The `table scope` has a method vor every [data type](./definition.md#attributena
 * **references**: Defines a foreign key for the given `table.fieldName` reference.
 * **comment**: Set a field comment (if supported by your database)
 
+### type(typeName, fieldName, options)
+
+For custom types (e.g. [postgres enum](#enum))
+```js
+this.type('myCustomType', 'fieldname')
+```
+
+### enum(name, options)
+
+!> *sqlite3*, *mysql* and *oracle* only! For Postgres see [postgres enum](#enum)  
+
+Create a text field with constrains like an enum.
+```js
+this.enum('my_enum', {values: ['A', 'B', 'C']})
+```
+
+### polymorph(name)
+
+Is a helper method in connection with [polymorphic relations](./definition.md#relations). It will create two fields for you:
+```js
+this.integer(name + '_id')
+this.string(name + '_type')
+```
+
+### timestamp()
+
+Is a helper method in connection with the [timestamp plugin](./plugins.md#stampable). It will create two fields for you:
+```js
+this.datetime('created_at', { comment: 'Time of insert', default: 'NOW()' })
+this.datetime('updated_at', { comment: 'Time of last update', default: 'NOW()' })
+```
+
+### userstamp()
+
+Is a helper method in connection with the [timestamp plugin](./plugins.md#stampable). It will create two fields for you:
+```js
+this.integer('creator_id', { comment: 'Identifier of the creator ' })
+this.integer('updater_id', { comment: 'Identifier of the last modifier' })
+```
+
+### stampable()
+
+Will call both of the above funtions
+```js
+this.timestamp()
+this.userstamp()
+```
+
 ## renameTable(from, to)
 
 Rename a table
@@ -110,24 +158,29 @@ removes an uniqe index.
 The `options` object is optional. Valid `options` are:
 * **name**: The name of the index
 
-## addColumn(table, fn){
+## addColumn(table, fn)
 
 Adds one or multiple new columns to a table. `fn` provides the `table scope` like in `createTable(name, fn)`
 
-## renameColumn(table, from, to){
+## renameColumn(table, from, to)
 
 To rename a column
 
-## removeColumn(table, column){
+## removeColumn(table, column)
 
 To remove a column from a table
 
-## polymorph(name)
+## enum(name, values)
 
-Is a helper method in connection with [polymorphic relations](./definition.md#relations). It will create two fields for you:
+!> *postgres* only!  
+
+To create a new enum type.
+
 ```js
-this.integer(name + '_id')
-this.string(name + '_type')
+this.enum('my_type', ['A', 'B', 'C'])
+this.createTable('foo', function(){
+  this.type('my_type', 'bar')
+})
 ```
 
 ## raw(SQL)

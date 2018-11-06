@@ -3,7 +3,7 @@ test/
 coverage/
 
 npm-debug.log
-TODO
+TODO.md
 
 coverage.html
 .coveralls.yml

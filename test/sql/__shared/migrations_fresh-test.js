@@ -32,6 +32,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
       store.Model('WithComment', function() {})
       store.Model('WithReference', function() {})
       store.Model('WithIndex', function() {})
+      store.Model('WithEnum', function() {})
     })
 
     it('are finished before ready() gets called', function() {
@@ -213,13 +214,16 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
       })
     })
 
-
     it('has compound primary keys', function() {
       return store.ready(function() {
         var CompoundPrimaryKey = store.Model('CompoundPrimaryKey')
 
-        CompoundPrimaryKey.definition.attributes.foo.primary.should.be.equal(true)
-        CompoundPrimaryKey.definition.attributes.bar.primary.should.be.equal(true)
+        CompoundPrimaryKey.definition.attributes.foo.primary.should.be.equal(
+          true
+        )
+        CompoundPrimaryKey.definition.attributes.bar.primary.should.be.equal(
+          true
+        )
         CompoundPrimaryKey.definition.primaryKeys.should.be.eql(['foo', 'bar'])
       })
     })
@@ -227,29 +231,42 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
     it('has column comments', function() {
       return store.ready(function() {
         var WithComment = store.Model('WithComment')
-        if(store.type === 'mysql' || store.type === 'postgres') {
-          WithComment.definition.attributes.foo.description.should.be.equal('foobar')
+        if (store.type === 'mysql' || store.type === 'postgres') {
+          WithComment.definition.attributes.foo.description.should.be.equal(
+            'foobar'
+          )
         }
       })
     })
 
     it('reference is in place', function() {
-      return store.ready(function() {
-        var WithReference = store.Model('WithReference')
-        // no post with id 9999 in the db!
-        return WithReference.create({post_id: 9999})
-      })
-      .should.be.rejectedWith(store.SQLError)
+      return store
+        .ready(function() {
+          var WithReference = store.Model('WithReference')
+          // no post with id 9999 in the db!
+          return WithReference.create({ post_id: 9999 })
+        })
+        .should.be.rejectedWith(store.SQLError)
     })
 
-
     it('uniqe index workds', function() {
-      return store.ready(function() {
-        var WithIndex = store.Model('WithIndex')
-        // no duplicate keys
-        return WithIndex.create([{foo: 1}, {foo: 1}])
-      })
-      .should.be.rejectedWith(Error)
+      return store
+        .ready(function() {
+          var WithIndex = store.Model('WithIndex')
+          // no duplicate keys
+          return WithIndex.create([{ foo: 1 }, { foo: 1 }])
+        })
+        .should.be.rejectedWith(Error)
+    })
+
+    it('enum fields were created', function() {
+      return store
+        .ready(function() {
+          var WithEnum = store.Model('WithEnum')
+          // no duplicate keys
+          return WithEnum.create({ foo: 'something else' })
+        })
+        .should.be.rejectedWith(Error)
     })
   })
 }
