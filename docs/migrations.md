@@ -86,7 +86,7 @@ this.type('myCustomType', 'fieldname')
 
 ### enum(name, options)
 
-!> *sqlite3*, *mysql* and *oracle* only! For Postgres see [postgres enum](#enum)  
+!> For Postgres see [postgres enum](#enum)  
 
 Create a text field with constrains like an enum.
 ```js

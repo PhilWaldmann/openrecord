@@ -180,7 +180,7 @@ testPG('joins', [
 
 testPG('migrations_fresh', [])
 
-testMYSQL('group', [
+testPG('group', [
   'CREATE TABLE posts(id serial primary key, user_id INTEGER, thread_id INTEGER, message TEXT)',
   "INSERT INTO posts(user_id, thread_id, message) VALUES(1, 1, 'first'), (1, 1, 'second'), (3, 2, 'third'), (2, 2, 'first')"
 ])
