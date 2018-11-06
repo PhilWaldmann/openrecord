@@ -2,7 +2,7 @@ var path = require('path')
 
 var Store = require('../../../store/postgres')
 
-describe.only('Postgres: ENUM Attribute', function() {
+describe('Postgres: ENUM Attribute', function() {
   var store
   var database = 'enum_attributes_test'
 
