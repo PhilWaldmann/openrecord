@@ -259,14 +259,17 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
         .should.be.rejectedWith(Error)
     })
 
-    it('enum fields were created', function() {
-      return store
-        .ready(function() {
-          var WithEnum = store.Model('WithEnum')
-          // no duplicate keys
-          return WithEnum.create({ foo: 'something else' })
-        })
-        .should.be.rejectedWith(Error)
-    })
+    // mysql does not support/use CHECK constrains: https://dev.mysql.com/doc/refman/5.7/en/create-table.html
+    if (storeConf.type !== 'mysql') {
+      it('enum fields were created', function() {
+        return store
+          .ready(function() {
+            var WithEnum = store.Model('WithEnum')
+            // no duplicate keys
+            return WithEnum.create({ foo: 'something else' })
+          })
+          .should.be.rejectedWith(Error)
+      })
+    }
   })
 }
