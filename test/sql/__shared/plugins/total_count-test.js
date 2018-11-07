@@ -33,6 +33,15 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
       })
     })
 
+    it('ignores invalid field names', function() {
+      return store.ready(function() {
+        var User = store.Model('User')
+        return User.totalCount({}).then(function(count) {
+          count.should.be.equal(5)
+        })
+      })
+    })
+
     it('resets limit', function() {
       return store.ready(function() {
         var User = store.Model('User')
