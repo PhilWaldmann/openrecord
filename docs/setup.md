@@ -76,6 +76,22 @@ The following paths are available:
 * LDAP `openrecord/store/ldap`
 * LDAP (Active Directory) `openrecord/store/activedirectory`
 
+# Wait for the store to be ready!
+
+In order to user your [models](./definition.md#model-definition) you need to wait for the store to be ready!
+```js
+await store.ready()
+```
+
+?> The store will load your model attributes from your datastore (if not cached) and build your model classes - or enhance them if you use the `class` syntax. 
+
+
+If you specified `autoLoad: false` in your store config, you need to manually start a connection via ```js
+store.connect()
+await store.ready()
+```
+
+?> `store.ready()` returns a `Promise`, so you could use `store.ready().then(...)` instead of `async/await` if you like.
 
 # Close connection
 

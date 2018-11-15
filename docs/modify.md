@@ -2,6 +2,9 @@
 
 To modify data you could either [load records](./query.md) or change multiple records at once.
 
+But before you can start any operation you need to wait until the store is ready. To do so use the `store.ready()` method, which returns a `Promise` or accepts a callback as the first argument.  
+All examples below will assume that the store is ready!
+
 # Create new records
 
 To create a new record you could either use `create()` or `new()` with `save()`
@@ -10,6 +13,8 @@ To create a new record you could either use `create()` or `new()` with `save()`
 will automatically save the record to your datastore:
 
 ```js
+// dont forget: await store.ready()
+
 const user = await User.create({login: 'philipp'})
 console.log(user.id)
 ```

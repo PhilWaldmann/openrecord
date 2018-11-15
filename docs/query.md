@@ -3,7 +3,7 @@
 After you've [initialized your store](./setup.md) and [defined your models](./definition.md) you are ready to query your datastore.  
 
 But before you can start any operation you need to wait until the store is ready. To do so use the `store.ready()` method, which returns a `Promise` or accepts a callback as the first argument.  
-All examples below will assume that the store is ready.
+All examples below will assume that the store is ready!
 
 !> The following examples are using `async/await`, but you could always use a promise-style `.then(callback)`
 
@@ -13,6 +13,8 @@ To get a single record (by primary key) you have two methods: `find(id)` and `ge
 `find` will return `null` if it can't find data for the given `id`, `get` will throw a `RecordNotFoundError`.
 
 ```js
+// dont forget: await store.ready()
+
 const user = await User.find(1)
 ```
 
