@@ -86,7 +86,9 @@ await store.ready()
 ?> The store will load your model attributes from your datastore (if not cached) and build your model classes - or enhance them if you use the `class` syntax. 
 
 
-If you specified `autoLoad: false` in your store config, you need to manually start a connection via ```js
+If you specified `autoLoad: false` in your store config, you need to manually start a connection via 
+
+```js
 store.connect()
 await store.ready()
 ```
