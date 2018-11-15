@@ -25,12 +25,15 @@ The `Store` constructor takes the following config parameter:
 * **type**: Type of database or store you want to connect.  
   Values are: `sqlite3`, `postgres`, `mysql`, `oracle`, `rest`, `ldap`, `activedirectory`
 * **file**: Path to the database file (*sqlite3* only)
-* **host**: Hostname or IP of the server running your database (*postgres*, *mysql* and *oracle* only)
+* **host**: Hostname or IP of the server running your database (*postgres*, *mysql* and *oracle* only). _alias: hostname_
+* **port**: The port your server is listening to (*postgres*, *mysql* and *oracle* only).
 * **database**: The database name (*postgres*, *mysql* and *oracle* only)
-* **user**: Username for your database (*postgres*, *mysql*, *oracle*, *ldap/activedirectory* only)
+* **user**: Username for your database (*postgres*, *mysql*, *oracle*, *ldap/activedirectory* only). _alias: username_
 * **password**: Password for your database (*postgres*, *mysql*, *oracle*, *ldap/activedirectory* only)
 * **url**: URL to your backend (*ldap/activedirectory* and *rest* only)
 * **base**: The base DN of your ldap tree (*ldap/activedirectory* only)
+* **connection**: Set the connection object of [knex](https://knexjs.org/#Installation-client) directly. (*postgres*, *mysql*, *oracle*, *sqlite3* only)
+* **version**: Set the database version if needed. (*postgres*, *mysql* only)
 * **name**: The name of the store. Only needed if you use multiple stores and relations between them.
 * **global**: Set to `true` if you want your Models defined in the [global scope](https://nodejs.org/api/globals.html) (not recommended).
 * **globalPrefix**: Add a prefix to your model name (in combination with `global` only).
