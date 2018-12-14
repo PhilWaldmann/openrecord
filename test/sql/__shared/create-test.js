@@ -366,6 +366,25 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
             })
         })
       })
+
+      it('multiple create inside a single transaction - with a rollback', function() {
+        return store.ready(function() {
+          var Post = store.Model('Post')
+
+          return store.startTransaction(function(trx) {
+            return Promise.all([
+              Post.useTransaction(trx).create({ message: 'okay' }),
+              Post.useTransaction(trx).create({}) // invalid record
+            ])
+              .catch(function(error) {
+                return Post.useTransaction(trx).where({ message: 'okay' })
+              })
+              .then(function(result) {
+                result.length.should.be.equal(0)
+              })
+          })
+        })
+      })
     })
   })
 }
