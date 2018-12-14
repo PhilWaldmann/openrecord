@@ -106,7 +106,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
       })
     })
 
-    describe('update()', function() {
+    describe('update', function() {
       it('updates a single record', function() {
         return store.ready(function() {
           var User = store.Model('User')
@@ -120,6 +120,23 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
             })
             .then(function(philipp) {
               philipp.login.should.be.equal('philipp')
+              philipp.id.should.be.equal(4)
+            })
+        })
+      })
+
+      it('updates a single record via update()', function() {
+        return store.ready(function() {
+          var User = store.Model('User')
+          return User.find(4)
+            .then(function(admin) {
+              return admin.update({ login: 'philipp!!' })
+            })
+            .then(function() {
+              return User.where({ login: 'philipp!!' }).first()
+            })
+            .then(function(philipp) {
+              philipp.login.should.be.equal('philipp!!')
               philipp.id.should.be.equal(4)
             })
         })

@@ -190,6 +190,19 @@ user.posts.new({title: 'Awesome'})
 await user.save() // will only create the new post, because user has not changed!
 ```
 
+
+## update(data)
+
+Set multiple fields at once and also save the record. (just combines `set()` and `save()`)
+
+```js
+await user.update({
+  first_name: 'Philipp',
+  last_name: 'Waldmann'
+})
+```
+
+
 ## updateAll(data)
 !> *sqlite3*, *postgres*, *mysql* and *oracle* only!  
 
