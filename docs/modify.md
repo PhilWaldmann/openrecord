@@ -245,6 +245,17 @@ const valid = await user.isValid()
 console.log(valid) // outputs `true`
 ```
 
+
+## isNewRecord
+
+check if a record is new/persisted
+
+```js
+const user = await User.find(2)
+console.log(user.isNewRecord) // outputs `false`
+```
+
+
 # Remove records
 
 ## destroy()

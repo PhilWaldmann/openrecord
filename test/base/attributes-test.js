@@ -307,4 +307,25 @@ describe('Attributes', function() {
       next()
     })
   })
+
+  describe('isNewRecord', function() {
+    var user
+
+    before(function() {
+      user = new User({
+        my_str: 'phil'
+      })
+    })
+
+    it('returns true on a new record', function(next) {
+      user.isNewRecord.should.be.equal(true)
+      next()
+    })
+
+    it('returns false after save', function(next) {
+      user.__exists = true
+      user.isNewRecord.should.be.equal(false)
+      next()
+    })
+  })
 })
