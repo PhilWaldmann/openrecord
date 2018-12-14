@@ -376,7 +376,7 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
               Post.useTransaction(trx).create({ message: 'okay' }),
               Post.useTransaction(trx).create({}) // invalid record
             ])
-              .catch(function(error) {
+              .catch(function() {
                 return Post.useTransaction(trx).where({ message: 'okay' })
               })
               .then(function(result) {
