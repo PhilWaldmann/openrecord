@@ -81,7 +81,8 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
 
               return phil.destroy()
             })
-            .then(function() {
+            .then(function(phil) {
+              phil.__exists.should.be.equal(false)
               return User.find(1)
             })
             .then(function(phil) {
