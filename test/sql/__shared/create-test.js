@@ -367,22 +367,58 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
         })
       })
 
-      it('multiple create inside a single transaction - with a rollback', function() {
+      it('multiple creates inside a single transaction - with a rollback', function() {
         return store.ready(function() {
           var Post = store.Model('Post')
 
-          return store.startTransaction(function(trx) {
-            return Promise.all([
-              Post.useTransaction(trx).create({ message: 'okay' }),
-              Post.useTransaction(trx).create({}) // invalid record
-            ])
-              .catch(function() {
-                return Post.useTransaction(trx).where({ message: 'okay' })
+          return store
+            .startTransaction(function(trx) {
+              return Promise.all([
+                Post.useTransaction(trx).create({ message: 'okay' }),
+                Post.useTransaction(trx).create({}) // invalid record
+              ])
+            })
+            .catch(function() {
+              return Post.where({ message: 'okay' }).totalCount()
+            })
+            .then(function(result) {
+              result.should.be.equal(0)
+            })
+        })
+      })
+
+      it('multiple transactions transaction - with a rollback and commit', function() {
+        return store.ready(function() {
+          var Post = store.Model('Post')
+
+          return store
+            .startTransaction(function(trx) {
+              return Promise.all([
+                Post.useTransaction(trx).create({ message: 'okay' }),
+                Post.useTransaction(trx).create({ message: 'okay' }),
+                Post.useTransaction(trx).create({}) // invalid record
+              ])
+            })
+            .catch(function() {
+              return Post.where({ message: 'okay' }).totalCount()
+            })
+            .then(function(result) {
+              result.should.be.equal(0)
+            })
+            .then(function() {
+              return store.startTransaction(function(trx) {
+                return Promise.all([
+                  Post.useTransaction(trx).create({ message: 'okay2' }),
+                  Post.useTransaction(trx).create({ message: 'okay3' })
+                ])
               })
-              .then(function(result) {
-                result.length.should.be.equal(0)
-              })
-          })
+            })
+            .then(function() {
+              return Post.where({ message_like: 'okay' }).totalCount()
+            })
+            .then(function(result) {
+              result.should.be.equal(2)
+            })
         })
       })
     })
