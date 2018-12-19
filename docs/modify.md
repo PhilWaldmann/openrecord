@@ -190,6 +190,10 @@ user.posts.new({title: 'Awesome'})
 await user.save() // will only create the new post, because user has not changed!
 ```
 
+`save([options])` will take an optional `options` object:
+
+* `transaction`: save the record within the given transaction (See [transactions](#transactions))
+
 
 ## update(data)
 
@@ -201,6 +205,10 @@ await user.update({
   last_name: 'Waldmann'
 })
 ```
+
+`update(data [, options])` will take an optional `options` object as the second argument:
+
+* `transaction`: save the record within the given transaction (See [transactions](#transactions))
 
 
 ## updateAll(data)
@@ -215,6 +223,10 @@ await User.where({active: true}).updateAll({failed_login_count: 0})
 You can use almost any [query](./query.md) method to filter your records.
 
 !> Note, that no hooks will be executed!
+
+`updateAll(data [, options])` will take an optional `options` object as the second argument:
+
+* `transaction`: save the record within the given transaction (See [transactions](#transactions))
 
 ## hasChanges()
 
@@ -282,10 +294,20 @@ await user.destroy()
 
 If you have set `dependent` on a [relation](./definition.md#relations), all relational records will be removed or nullified as well.
 
+`destroy([options])` will take an optional `options` object as the second argument:
+
+* `transaction`: save the record within the given transaction (See [transactions](#transactions))
+
+
 ## delete()
 !> *sqlite3*, *postgres*, *mysql* and *oracle* only!  
 
 Does basically the same as `destroy`, but won't call any hooks and does not remove `dependent` [relations](./definition.md#relations)
+
+`delete([options])` will take an optional `options` object as the second argument:
+
+* `transaction`: save the record within the given transaction (See [transactions](#transactions))
+
 
 ## destroyAll()
 !> *sqlite3*, *postgres*, *mysql*, *oracle* and *ldap/activedirectory* only!  
@@ -299,8 +321,33 @@ await User.where({active: false}).destroyAll()
 Internally OPENRECORD will load all records and call `destroy()` on each.  
 So hooks are fired for every record!
 
+`destroyAll([options])` will take an optional `options` object as the second argument:
+
+* `transaction`: save the record within the given transaction (See [transactions](#transactions))
+
+
 ## deleteAll()
 !> *sqlite3*, *postgres*, *mysql* and *oracle* only!  
 
 It's the same as `destroyAll()` but without the initial record loading and without hooks and `dependent` [relations](./definition.md#relations).  
 A single delete query will be executed on your database.
+
+`deleteAll([options])` will take an optional `options` object as the second argument:
+
+* `transaction`: save the record within the given transaction (See [transactions](#transactions))
+
+
+# Transactions
+!> *sqlite3*, *postgres*, *mysql* and *oracle* only!  
+
+`startTransaction(callback)` will start a transaction.  
+`useTransaction(transaction)` will inject the transaction object into the query.
+
+```js
+await store.startTransaction(trx => {
+  return Promise.all([
+    Model1.useTransaction(trx).create({ valid: 12 }),
+    Model2.useTransaction(trx).create({ invalid: 'a validation error' })
+  ])
+})
+```
