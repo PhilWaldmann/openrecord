@@ -267,7 +267,7 @@ declare module "openrecord/store/sqlite3" {
 
     /**
      * Set a sort order
-     * @param columns Array of field fro the sort.
+     * @param columns Array of field names.
      * @param desc Optional: Set to `true` to order descent
      */
     static order(columns: string, desc: boolean): typeof Collection
