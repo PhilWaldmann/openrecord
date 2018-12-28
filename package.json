@@ -1,6 +1,6 @@
 {
   "name": "openrecord",
-  "version": "2.8.2",
+  "version": "2.8.3",
   "description": "Active record like ORM for nodejs",
   "license": "MIT",
   "keywords": [
@@ -41,10 +41,10 @@
   },
   "dependencies": {
     "date-fns": "^1.30.1",
-    "debug": "^4.1.0",
+    "debug": "^4.1.1",
     "inflection": "~ 1.12.x",
-    "knex": "^0.16.2",
-    "validator": "^10.9.0"
+    "knex": "^0.16.3",
+    "validator": "^10.10.0"
   },
   "devDependencies": {
     "async": "^2.6.1",
@@ -53,7 +53,7 @@
     "blanket": ">= 1.1.x",
     "coveralls": "^3.0.2",
     "docsify-cli": "^4.3.0",
-    "eslint": "^5.10.0",
+    "eslint": "^5.11.1",
     "eslint-config-digitalbits": "^1.0.4",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-html": "^5.0.0",
@@ -77,7 +77,7 @@
     "semver": "^5.6.0",
     "should": "^13.2.3",
     "sqlite3": "^4.0.4",
-    "webpack": "^4.27.1",
+    "webpack": "^4.28.2",
     "webpack-node-externals": "^1.7.2"
   },
   "main": "./store",
