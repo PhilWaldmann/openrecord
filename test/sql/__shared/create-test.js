@@ -33,6 +33,10 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
         })
 
         this.beforeSave(function() {
+          if (this.login === 'single_user_multi_create' && !this.isNewRecord) {
+            return Promise.reject(new Error('ERROR!!!'))
+          }
+
           this.save.should.be.a.Function()
           if (this.login === '_max') return Promise.reject(new Error('stop'))
         })
@@ -345,6 +349,18 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
             should.exist(result[1].id)
             should.exist(result[2].id)
           })
+        })
+      })
+
+      it('create multiple records at once', function() {
+        return store.ready(function() {
+          var User = store.Model('User')
+          return User.create([{ login: 'single_user_multi_create' }]).then(
+            function(result) {
+              result.length.should.be.equal(1)
+              should.exist(result[0].id)
+            }
+          )
         })
       })
 
