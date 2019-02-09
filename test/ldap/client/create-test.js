@@ -62,7 +62,7 @@ describe('LDAP Client: Create', function() {
         return User.create({ dn: 'cn=fifi2, ou=create, dc=test', age: 35 })
       })
       .should.be.rejectedWith(store.ValidationError, {
-        errors: { username: ['not valid'] }
+        errors: { username: ['should be present'] }
       })
   })
 
