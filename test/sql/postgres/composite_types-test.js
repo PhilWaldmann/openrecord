@@ -124,8 +124,8 @@ describe('Postgres: Composite Types', function() {
       return record.isValid(function(valid) {
         valid.should.be.equal(false)
         record.errors.toJSON().should.be.eql({
-          'composite_attribute.bar': ['not valid'],
-          'second_one.bar': ['not valid']
+          'composite_attribute.bar': ['should be present'],
+          'second_one.bar': ['should be present']
         })
       })
     })
@@ -141,8 +141,8 @@ describe('Postgres: Composite Types', function() {
       })
       .should.be.rejectedWith(store.ValidationError, {
         errors: {
-          'composite_attribute.bar': ['not valid'],
-          'second_one.bar': ['not valid']
+          'composite_attribute.bar': ['should be present'],
+          'second_one.bar': ['should be present']
         }
       })
   })
