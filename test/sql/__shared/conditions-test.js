@@ -56,10 +56,37 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
     })
 
     describe('find()', function() {
-      it('finds nothing', function() {
+      it('returns null on empry result', function() {
         return store.ready(function() {
           var User = store.Model('User')
           return User.find(99).exec(function(result) {
+            should.not.exist(result)
+          })
+        })
+      })
+
+      it('returns null if id === null', function() {
+        return store.ready(function() {
+          var User = store.Model('User')
+          return User.find(null).exec(function(result) {
+            should.not.exist(result)
+          })
+        })
+      })
+
+      it('returns null if id === undefined', function() {
+        return store.ready(function() {
+          var User = store.Model('User')
+          return User.find(undefined).exec(function(result) {
+            should.not.exist(result)
+          })
+        })
+      })
+
+      it('returns null if called without an argument', function() {
+        return store.ready(function() {
+          var User = store.Model('User')
+          return User.find().exec(function(result) {
             should.not.exist(result)
           })
         })
