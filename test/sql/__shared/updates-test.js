@@ -389,6 +389,27 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
             })
         })
       })
+
+
+      it('update multiple records with limit() and offset()', function() {
+        if (title === 'SQL (MySQL)') return Promise.resolve() // not supported in mysql <= 8.0
+        return store.ready(function() {
+          var User = store.Model('User')
+          return User.where({ id_gt: 1 }).limit(2).offset(1).order('id')
+            .updateAll({ 'E-Mail': 'uncensored' })
+            .then(function() {
+              return User.order('id')
+            })
+            .then(function(users) {
+              users[0].id.should.be.equal(1)
+              users[0]['E-Mail'].should.be.equal('phil@mail.com')
+              users[1]['E-Mail'].should.be.equal('censored')
+              users[2]['E-Mail'].should.be.equal('uncensored')
+              users[3]['E-Mail'].should.be.equal('uncensored')
+              users[4]['E-Mail'].should.be.equal('censored')
+            })
+        })
+      })
     })
   })
 }

@@ -125,6 +125,26 @@ module.exports = function(title, beforeFn, afterFn, storeConf) {
             .then(function(result) {
               result.should.be.equal(0)
             })
+        })        
+      })
+
+
+      it('delete multiple records with limit() and offset()', function() {
+        if (title === 'SQL (MySQL)') return Promise.resolve() // not supported in mysql <= 8.0
+        return store.ready(function() {
+          var Thread = store.Model('Thread')
+          var count
+          return Thread.count()
+          .then(function(_count){
+            count = _count
+            return Thread.limit(2).deleteAll()
+          })          
+          .then(function(){
+            return Thread.count()
+          })
+          .then(function(_count){
+            _count.should.be.equal(count - 2)
+          })
         })
       })
     })
