@@ -178,6 +178,8 @@ testPG('joins', [
   "INSERT INTO poly_things (member_id, member_type, user_id) VALUES (1, 'Post', 1), (1, 'Thread', 1), (2, 'Thread', 2), (1, 'Avatar', 2)"
 ])
 
+testPG('migration_helpers', [])
+
 testPG('migrations_fresh', [])
 
 testPG('group', [

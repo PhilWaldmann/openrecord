@@ -44,7 +44,7 @@ if (process.env['ORACLE_HOME']) {
     'PRIMARY:posts:id',
     'CREATE TABLE "threads"("id" number(10), "user_id" INTEGER, "title" TEXT)',
     'PRIMARY:threads:id',
-    "INSERT INTO \"users\"(\"user_login\", \"secret_email_address\") VALUES('phil', 'phil@mail.com')",
+    'INSERT INTO "users"("user_login", "secret_email_address") VALUES(\'phil\', \'phil@mail.com\')',
     'INSERT INTO "posts"("user_id", "thread_id", "message") VALUES(1, 1, \'first message\'), (1, 1, \'second\'), (1, 2, \'third\'), (2, 1, \'michls post\')',
     'INSERT INTO "threads"("user_id", "title") VALUES(2, \'first thread\'), (1, \'second thread\')'
   ])
@@ -211,6 +211,7 @@ if (process.env['ORACLE_HOME']) {
   //   "INSERT INTO poly_things (member_id, member_type, user_id) VALUES (1, 'Post', 1), (1, 'Thread', 1), (2, 'Thread', 2), (1, 'Avatar', 2)"
   // ])
   //
+  // testOracle('migration_helpers', [])
   //
   // testOracle('migrations_fresh', [])
   //

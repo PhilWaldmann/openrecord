@@ -79,6 +79,7 @@ describe('Postgres: Cache', function() {
         type: 'string',
         options: {
           description: null,
+          length: null,
           persistent: true,
           primary: false,
           notnull: false,
@@ -102,6 +103,7 @@ describe('Postgres: Cache', function() {
         type: 'composite',
         options: {
           description: null,
+          length: null,
           persistent: true,
           primary: false,
           notnull: false,
@@ -116,6 +118,7 @@ describe('Postgres: Cache', function() {
             type: 'integer',
             options: {
               description: null,
+              length: null,
               persistent: true,
               primary: false,
               notnull: false,
@@ -129,6 +132,7 @@ describe('Postgres: Cache', function() {
             type: 'string',
             options: {
               description: null,
+              length: null,
               persistent: true,
               primary: false,
               notnull: false,
