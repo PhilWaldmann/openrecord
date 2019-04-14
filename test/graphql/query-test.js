@@ -103,7 +103,7 @@ types.forEach(function(type) {
           errors: [
             {
               message:
-                'Field "author" argument "id" of type "Int!" is required but not provided.',
+                'Field "author" argument "id" of type "Int!" is required, but it was not provided.',
               locations: [{ line: 2, column: 9 }],
               path: undefined
             }
