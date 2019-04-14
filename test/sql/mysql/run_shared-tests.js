@@ -183,6 +183,8 @@ testMYSQL('joins', [
   "INSERT INTO poly_things (member_id, member_type, user_id) VALUES (1, 'Post', 1), (1, 'Thread', 1), (2, 'Thread', 2), (1, 'Avatar', 2)"
 ])
 
+testMYSQL('migration_helpers', [])
+
 testMYSQL('migrations_fresh', [])
 
 testMYSQL('migrations', [

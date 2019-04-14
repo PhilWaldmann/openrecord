@@ -6,6 +6,7 @@
         "type": "integer",
         "options": {
           "description": null,
+          "length": null,
           "persistent": true,
           "primary": true,
           "notnull": false,
@@ -19,6 +20,7 @@
         "type": "string",
         "options": {
           "description": null,
+          "length": null,
           "persistent": true,
           "primary": false,
           "notnull": false,
@@ -32,6 +34,7 @@
         "type": "string",
         "options": {
           "description": null,
+          "length": null,
           "persistent": true,
           "primary": false,
           "notnull": false,
@@ -49,6 +52,7 @@
         "type": "integer",
         "options": {
           "description": null,
+          "length": null,
           "persistent": true,
           "primary": true,
           "notnull": false,
@@ -62,6 +66,7 @@
         "type": "integer",
         "options": {
           "description": null,
+          "length": null,
           "persistent": true,
           "primary": false,
           "notnull": false,
@@ -75,6 +80,7 @@
         "type": "integer",
         "options": {
           "description": null,
+          "length": null,
           "persistent": true,
           "primary": false,
           "notnull": false,
@@ -88,6 +94,7 @@
         "type": "string",
         "options": {
           "description": null,
+          "length": null,
           "persistent": true,
           "primary": false,
           "notnull": false,

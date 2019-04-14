@@ -183,6 +183,8 @@ testSQLite('joins', [
   'INSERT INTO poly_things (member_id, member_type) VALUES (1, "Post"), (1, "Thread"), (2, "Thread"), (1, "Avatar")'
 ])
 
+testSQLite('migration_helpers', [])
+
 testSQLite('migrations_fresh', [])
 
 testSQLite('migrations', [
