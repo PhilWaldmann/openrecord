@@ -385,7 +385,9 @@ The `attribute` methods takes a third `options` argument object with the followi
 * **readable**: Make the attribute readable (e.g. `record.my_attribute`). Default true
 * **default**: Add a default value
 * **track_object_changes**: Track changes of a nested object. For objects only
-
+* **persistent**: If the attribute is stored inside your database. Default false
+* **primary**: If the attribute is a primary key. Default false
+  
 ### setter(name, fn)
 Instead of defining an attribute, you could also define just a setter.
 
