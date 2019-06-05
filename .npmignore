@@ -10,6 +10,7 @@ coverage.html
 .npmignore
 .travis.yml
 .eslintrc.js
+test.js
 logo.png
 Makefile
 CODE_OF_CONDUCT.md

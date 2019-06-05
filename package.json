@@ -73,11 +73,11 @@
     "mysql": "^2.17.1",
     "pg": "^7.11.0",
     "prettier": "^1.17.1",
-    "restify": "^8.3.2",
+    "restify": "^8.3.3",
     "semver": "^6.1.1",
     "should": "^13.2.3",
     "sqlite3": "^4.0.8",
-    "webpack": "^4.32.2",
+    "webpack": "^4.33.0",
     "webpack-node-externals": "^1.7.2"
   },
   "main": "./store",
