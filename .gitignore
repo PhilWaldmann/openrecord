@@ -12,3 +12,4 @@ coverage.html
 .coveralls.yml
 
 test/**/*.sqlite3
+.DS_Store
