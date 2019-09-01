@@ -7,7 +7,7 @@ E.g. a [SQLite3](https://sqlite.org) database file:
 const Store = require('openrecord')
 
 const store = new Store({
-  type: 'sqlite3'
+  type: 'sqlite3',
   file: './my-posts-db.sqlite3',
   autoLoad: true
 })
