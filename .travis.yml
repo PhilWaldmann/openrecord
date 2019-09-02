@@ -30,7 +30,7 @@ before_install:
   - sqlplus -V
   - psql --version
   - mysql --version
-  - yarn add oracledb --ignore-engines
+  - npm i oracledb
 
 node_js:
   - "8"
