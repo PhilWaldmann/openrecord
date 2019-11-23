@@ -2,7 +2,7 @@ const Store = require('../../../store/oracle')
 const cache = require('../../fixtures/cache/oracle.json')
 
 if (process.env['ORACLE_HOME']) {
-  describe.skip('Oracle: Cache', function() {
+  describe('Oracle: Cache', function() {
     var store
     var database = 'cache_test'
 
