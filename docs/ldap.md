@@ -13,9 +13,12 @@ const store = new Store({
   url: 'ldap://0.0.0.0:1389', // ldap or ldaps
   base: 'dc=test', // the root to start all queries
   user: 'cn=root', // the path of the user you want to connect as
-  password: 'secret' // the users password
+  password: 'secret', // the users password
+  maxConnections: 10, // default 10
+  tlsOptions: {} // see http://ldapjs.org/client.html
 })
 ```
+
 
 ## Model definition
 
