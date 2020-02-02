@@ -410,7 +410,9 @@ describe('SQL: Conditions', function() {
       it('has conditions', function() {
         return store.ready(function() {
           var User = store.Model('User')
-          var Chained = User.where('login = :login', { login: 'phil' }).where('foo = bar')
+          var Chained = User.where('login = :login', { login: 'phil' }).where(
+            'foo = bar'
+          )
           Chained.getInternal('conditions').length.should.be.equal(2)
         })
       })
@@ -420,7 +422,7 @@ describe('SQL: Conditions', function() {
       it('with the same condition twice', function() {
         return store.ready(function() {
           var User = store.Model('User')
-          var Chained = User.where({login: 'phil'}).where({login: 'phil'})
+          var Chained = User.where({ login: 'phil' }).where({ login: 'phil' })
           Chained.getInternal('conditions').length.should.be.equal(1)
         })
       })
@@ -428,7 +430,7 @@ describe('SQL: Conditions', function() {
       it('has the different conditions', function() {
         return store.ready(function() {
           var User = store.Model('User')
-          var Chained = User.where({login: 'phil'}).where({login: 'michl'})
+          var Chained = User.where({ login: 'phil' }).where({ login: 'michl' })
           Chained.getInternal('conditions').length.should.be.equal(2)
         })
       })

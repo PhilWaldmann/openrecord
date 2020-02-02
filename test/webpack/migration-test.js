@@ -77,7 +77,9 @@ describe('Webpack: With migrations (sqlite3)', function() {
     const store = require(path.join(__dirname, bundleName))(database, true)
     store.cache.should.not.be.eql({})
     return store.ready(function() {
-      store.Model('user').definition.attributes.should.have.keys('id', 'login', 'first_name')
+      store
+        .Model('user')
+        .definition.attributes.should.have.keys('id', 'login', 'first_name')
     })
   })
 
