@@ -102,6 +102,23 @@ await store.ready()
 
 calling `store.close(callback)` will close your database connection.
 
+# Error Classes
+
+openrecord has some error classes like `ValidationError` or `RecordNotFoundError`.
+You can access them e.g. via `store.ValidationError`.  
+
+Here is a list of all error classes:
+* `UnknownAttributeError`: will be thrown if you use `variant()` for an unknown attribute.
+* `UnknownAttributeTypeError`: will be thrown if define an `attribute()` with an unknown type.
+* `MissingConvertFunctionError`: will be thrown if use the `convert()` function and didn't define a callback function.
+* `UnknownConvertAttributeError`: will be thrown if use the `convert()` function and use an unknown attribute.
+* `ValidationError`: will be thrown if use `save()` and your record is invalid.
+* `RecordNotFoundError`: will be thrown if you use `get()` or `expectResult()` and no result was found.
+* `UnknownInterceptorError`: will be thrown if you use `callInterceptors()` with an unknown interceptor.
+* `NoCallbackError`: will be thrown if you use `validates()` without a callback function.
+* `UnknownStoreTypeError`: will be thrown if create a store with an unknown store type.
+* `SQLError`: will be thrown on any SQL error.
+
 # Debug
 
 OPENRECORD uses the [debug](https://github.com/visionmedia/debug) module. Just add `DEBUG=openrecord:*` to your env variables and you'll get debug information.
