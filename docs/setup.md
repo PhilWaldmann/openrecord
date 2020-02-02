@@ -32,6 +32,7 @@ The `Store` constructor takes the following config parameter:
 * **password**: Password for your database (*postgres*, *mysql*, *oracle*, *ldap/activedirectory* only)
 * **url**: URL to your backend (*ldap/activedirectory* and *rest* only)
 * **base**: The base DN of your ldap tree (*ldap/activedirectory* only)
+* **socketPath**: The path to the unix socket (*mysql* only)
 * **connection**: Set the connection object of [knex](https://knexjs.org/#Installation-client) directly. (*postgres*, *mysql*, *oracle*, *sqlite3* only)
 * **version**: Set the database version if needed. (*postgres*, *mysql* only)
 * **name**: The name of the store. Only needed if you use multiple stores and relations between them.
