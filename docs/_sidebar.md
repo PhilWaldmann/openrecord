@@ -7,6 +7,8 @@
   * [Modify](modify.md)
   * [Context](context.md)
 
+* **[LDAP](ldap.md)**
+* 
 * **[GraphQL](graphql.md)**
 
 * **[Webpack](webpack.md)**
