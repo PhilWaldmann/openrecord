@@ -728,9 +728,8 @@ declare module "openrecord/store/mysql" {
      * @param field The field to validate
      * @param options The options
      */
-    validatesNumericalityOf(field: string, options: ValidatesNumericalityOfOptions)
-    validatesNumericalityOf(field: string[], options: ValidatesNumericalityOfOptions)
-
+    validatesNumericalityOf(field: string, options: ValidatesNumericalityOfOptions): this
+    validatesNumericalityOf(field: string[], options: ValidatesNumericalityOfOptions): this 
 
 
 
